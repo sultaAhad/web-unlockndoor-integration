@@ -1,0 +1,476 @@
+@font-face {
+	font-family: "Montserrat-Bold";
+	src: url("../fonts/Montserrat-Bold.ttf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Montserrat-SemiBold";
+	src: url("../fonts/Montserrat-SemiBold.ttf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Montserrat-Medium";
+	src: url("../fonts/Montserrat-Medium.ttf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Montserrat-Regular";
+	src: url("../fonts/Montserrat-Regular.ttf");
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Montserrat-Light";
+	src: url("../Fonts/Montserrat-Light.ttf");
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Universal-Serif";
+	src: url("../fonts/Universal-Serif.ttf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "TomatoGrotesk-Bold";
+	src: url("../fonts/TomatoGrotesk-Bold.otf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "TomatoGrotesk-SemiBold";
+	src: url("../fonts/TomatoGrotesk-SemiBold.otf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "TomatoGrotesk-Medium";
+	src: url("../fonts/TomatoGrotesk-Medium.otf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "TomatoGrotesk-Regular";
+	src: url("../fonts/TomatoGrotesk-Regular.otf");
+	font-display: swap;
+	font-style: normal;
+}
+@font-face {
+	font-family: "TomatoGrotesk-Light";
+	src: url("../fonts/TomatoGrotesk-Light.otf");
+	font-display: swap;
+	font-style: normal;
+}
+:root {
+	/* Heading Font Start Here */
+	--secondary-regular-font: "Montserrat-Regular";
+	--secondary-medium-font: "Montserrat-Medium";
+	--secondary-bold-font: "Montserrat-Bold";
+	--secondary-semibold-font: "Montserrat-SemiBold";
+	--secondary-light-font: "Montserrat-light";
+	--primary-Universal-font: "Universal-Serif";
+	--secondary-secondregular-font: "TomatoGrotesk-Regular";
+	--secondary-secondmedium-font: "TomatoGrotesk-Medium";
+	--secondary-secondbold-font: "TomatoGrotesk-Bold";
+	--secondary-secondsemibold-font: "TomatoGrotesk-SemiBold";
+	--secondary-secondlight-font: "TomatoGrotesk-Light";
+
+}
+/* Fonts family */
+.secondary-secondlight-font {
+	font-family: var(--secondary-secondlight-font);
+}
+.secondary-secondregular-font {
+	font-family: var(--secondary-secondregular-font);
+}
+.secondary-secondmedium-font {
+	font-family: var(--secondary-secondmedium-font);
+}
+.secondary-secondbold-font {
+	font-family: var(--secondary-secondbold-font);
+}
+.secondary-secondsemibold-font {
+	font-family: var(--secondary-secondsemibold-font);
+}
+.primary-Serif-font {
+	font-family: var(--primary-Universal-font);
+}
+.secondary-regular-font {
+	font-family: var(--secondary-regular-font);
+}
+
+.secondary-light-font {
+	font-family: var(--secondary-light-font);
+}
+
+.secondary-medium-font {
+	font-family: var(--secondary-medium-font);
+}
+.secondary-bold-font {
+	font-family: var(--secondary-bold-font);
+}
+.secondary-semibold-font {
+	font-family: var(--secondary-semibold-font);
+}
+/* Fonts family  */
+
+/* Fonts sizes  */
+.level-1 {
+	font-size: 50px;
+}
+
+.level-2 {
+	font-size: 45px;
+}
+
+.level-3 {
+	font-size: 40px;
+}
+
+.level-4 {
+	font-size: 38px;
+}
+.level-5 {
+	font-size: 28px;
+}
+.level-6 {
+	font-size: 25px;
+}
+.level-7 {
+	font-size: 21px;
+}
+.level-8 {
+	font-size: 15px;
+}
+.level-9 {
+	font-size: 13px;
+}
+.level-10 {
+	font-size: 11px;
+}
+.level-11 {
+	font-size: 9px;
+}
+.level-12 {
+	font-size: 8px;
+}
+@media (max-width: 1400px) {
+	p {
+		font-size: 15px;
+	}
+	.level-1 {
+		font-size: 45px;
+	}
+
+	.level-2 {
+		font-size: 40px;
+	}
+
+	.level-3 {
+		font-size: 35px;
+	}
+
+	.level-4 {
+		font-size: 30px;
+	}
+	.level-5 {
+		font-size: 25px;
+	}
+	.level-6 {
+		font-size: 22px;
+	}
+	.level-7 {
+		font-size: 19px;
+	}
+	.level-8 {
+		font-size: 13px;
+	}
+	.level-9 {
+		font-size: 12px;
+	}
+	.level-10 {
+		font-size: 11px;
+	}
+}
+@media (max-width: 1024px) {
+	.level-1 {
+		font-size: 35px;
+	}
+
+	.level-2 {
+		font-size: 30px;
+	}
+
+	.level-3 {
+		font-size: 23px;
+	}
+
+	.level-4 {
+		font-size: 20px;
+	}
+	.level-5 {
+		font-size: 19px;
+	}
+
+	.level-6 {
+		font-size: 14px;
+	}
+
+	.level-7 {
+		font-size: 13px;
+	}
+
+	.level-8 {
+		font-size: 12px;
+	}
+	.usd-btn {
+		width: 150px;
+	}
+}
+@media (max-width: 912px) {
+	.level-1 {
+		font-size: 60px;
+	}
+
+	.level-2 {
+		font-size: 35px;
+	}
+
+	.level-3 {
+		font-size: 32px;
+	}
+
+	.level-4 {
+		font-size: 25px;
+	}
+
+	.level-5-lg {
+		font-size: 24px;
+	}
+	.level-5 {
+		font-size: 20px;
+	}
+
+	.level-6 {
+		font-size: 22px;
+	}
+
+	.level-7 {
+		font-size: 21px;
+	}
+
+	.level-8 {
+		font-size: 14px;
+	}
+	.usd-btn {
+		width: 150px;
+	}
+}
+@media (max-width: 576px) {
+	.level-1 {
+		font-size: 32px !important;
+	}
+
+	.level-2 {
+		font-size: 27px !important;
+	}
+
+	.level-3 {
+		font-size: 21px !important;
+	}
+
+	.level-4 {
+		font-size: 19px !important;
+	}
+
+	.level-5-lg {
+		font-size: 18px !important;
+	}
+	.level-5 {
+		font-size: 17px !important;
+	}
+
+	.level-6 {
+		font-size: 18px !important;
+	}
+
+	.level-7 {
+		font-size: 14px !important;
+	}
+
+	.level-8 {
+		font-size: 15px !important;
+	}
+}
+@media (max-width: 281px) {
+	.level-1 {
+		font-size: 25px !important;
+	}
+
+	.level-2 {
+		font-size: 22px !important;
+	}
+
+	.level-3 {
+		font-size: 17px !important;
+	}
+
+	.level-4 {
+		font-size: 15px !important;
+	}
+
+	.level-5-lg {
+		font-size: 14px !important;
+	}
+	.level-5 {
+		font-size: 13px !important;
+	}
+
+	.level-6 {
+		font-size: 14px !important;
+	}
+
+	.level-7 {
+		font-size: 11px !important;
+	}
+
+	.level-8 {
+		font-size: 11px !important;
+	}
+}
+
+/* Fonts sizes  */
+/* pagination */
+.pagination-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.page-item.active button {
+	background-color: var(--extra-color-1);
+	color: white;
+}
+.page-item button {
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	background-color: transparent;
+	color: #898183;
+	font-family: var(--secondary-regular-font);
+	width: 40px;
+	height: 40px;
+	border-radius: 80px !important;
+}
+
+.page-item button:hover {
+	background-color: #f1f1f1;
+	color: #007bff;
+}
+.right-0 {
+	right: 0;
+}
+.btn i {
+	font-size: 14px;
+	color: #fff;
+	font-weight: 900;
+}
+button.btn.arrow {
+	padding: 0;
+	height: 30px;
+	width: 30px;
+}
+/* select */
+/* Dropdown wrapper to position arrow */
+.styled-select-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.styled-select {
+	appearance: none;
+	background-color: #4a3a3a;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	outline: none;
+	width: 170px;
+	font-family: "Montserrat-Regular";
+}
+
+/* Custom arrow using Font Awesome */
+.styled-select-wrapper::after {
+	content: "\f078"; /* Font Awesome down arrow */
+	font-family: "Font Awesome 5 Free"; /* Use the correct Font Awesome font family */
+	font-weight: 900; /* Ensure the icon uses solid style */
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #fff; /* Arrow color */
+	pointer-events: none; /* Ensures arrow isn't clickable */
+}
+
+.styled-select:hover {
+	background-color: #5a4a4a; /* Slightly lighter shade on hover */
+}
+/* red color */
+.red-wrapper {
+	color: #eb3a3a !important;
+}
+.green-wrapper {
+	color: #6ae930 !important;
+}
+
+/* table */
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: transparent; /* Transparent background for the entire table */
+	color: #333; /* Text color for better readability */
+}
+
+.table thead {
+	background-color: transparent;
+	color: #000;
+}
+.table > :not(caption) > * > * {
+	background-color: transparent;
+	border-bottom: 1px solid #5a4f52;
+}
+.table th,
+.table td {
+	padding: 25px;
+	text-align: center;
+}
+
+.table tbody tr {
+	transition: background-color 0.3s ease;
+}
+
+.table th {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.table td {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.table img {
+	max-width: 100%;
+	height: auto;
+}
+.focus_none {
+	box-shadow: none !important;
+}

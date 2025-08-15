@@ -1,0 +1,615 @@
+.edit-profile-form {
+  /* background: linear-gradient(135deg, #210a41, #6b2d77); */
+  /* min-height: 100vh; */
+  /* display: flex;
+    justify-content: center;
+    align-items: center; */
+  padding: 0 20px;
+}
+
+.form-container {
+  /* background: #1e1e2e; */
+  color: white;
+  /* padding: 30px; */
+  border-radius: 12px;
+  width: 100%;
+  /* max-width: 400px; */
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); */
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* .profile-icon {
+    background: #444;
+    padding: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+  } */
+.pro_img img {
+  width: 100%;
+  height: 100px;
+}
+
+/* .upload-photo-btn {
+    background: linear-gradient(45deg, #ff007c, #ff4c4c);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  } */
+
+form .form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.edit-profile-form form select,
+.edit-profile-form textarea,
+.text_box textarea,
+form button {
+  width: 100%;
+  padding: 13px;
+  border: unset;
+  background: #ffffff42;
+  color: white;
+  border-radius: 9px;
+  font-size: 14px;
+  font-family: 'TomatoGrotesk-SemiBold';
+  resize: none;
+}
+
+.form-group input::placeholder {
+  font-family: 'TomatoGrotesk-SemiBold';
+
+}
+
+.edit-profile-form form input::placeholder,
+.edit-profile-form textarea::placeholder {
+  font-family: 'TomatoGrotesk-medium';
+  color: white;
+}
+
+form input:focus,
+form select:focus {
+  outline: none !important;
+  border: 1px solid #CF1090 !important;
+  background: #413959 !important;
+}
+
+.form-group.input-wrapper textarea.form_input-2:focus {
+  outline: none;
+  border: 1px solid #CF1090;
+  background: #413959;
+}
+
+.edit-profile-form .form-check-input:checked {
+  background-color: white;
+  border-color: transparent;
+}
+
+.edit-profile-form .form-check-input:checked[type=radio] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23ff007c'/%3e%3c/svg%3e");
+}
+
+.range-slider {
+  margin-bottom: 20px;
+}
+
+.range-slider input[type="range"] {
+  width: 100%;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.chip {
+  background: #ffffff0d;
+  padding: 8px 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  margin-top: 6px;
+  font-family: "TomatoGrotesk-Medium";
+}
+
+.span_font {
+  font-size: 15px;
+  font-family: 'TomatoGrotesk-Regular';
+  font-weight: 100;
+  text-transform: capitalize;
+}
+
+.chip span {
+  font-size: 14px;
+  margin-left: 8px;
+  cursor: pointer;
+  color: #fff;
+  position: relative;
+  bottom: 10px;
+  left: 10px;
+}
+
+.upload-section input[type="file"] {
+  background: none;
+  border: none;
+}
+
+.submit-btn {
+  background: linear-gradient(45deg, #ff007c, #ff4c4c);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.profile_dv {
+  background-color: #00000017;
+  padding: 40px;
+  border-radius: 10px;
+}
+
+.user_img img {
+  width: 100%;
+  height: 1110px;
+}
+
+.user_img2 img {
+  width: 100%;
+  height: 1490px;
+}
+
+.uploader {
+  background-color: rgba(255, 255, 255, 0.21);
+  position: relative;
+  border-radius: 15px !important;
+}
+
+.uploader_file {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.custom_datePicker,
+.react-datepicker-wrapper {
+  width: 100% !important;
+}
+
+.form-check-input {
+  width: 1em;
+  height: 1em;
+  margin-top: .25em;
+  vertical-align: top;
+  background-color: transparent !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: 1px solid #fff !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+.label_span {
+  /* font-size: 13px; */
+  font-family: 'TomatoGrotesk-Regular';
+  color: #ffffff4d;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /* Remove default styling */
+  appearance: none;
+  height: 20px;
+  /* Size of the slider thumb */
+  width: 20px;
+  /* Size of the slider thumb */
+  border-radius: 50%;
+  /* Rounded thumb */
+  background: #fff;
+  /* Thumb color */
+  border: 2px solid #9c1648;
+  /* Thumb border */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  /* Optional shadow */
+}
+
+.range-slider input[type="range"]::-moz-range-thumb {
+  /* For Firefox */
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #9c1648;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-slider-section {
+  color: #fff;
+  margin: 50px 0px 20px auto;
+}
+
+
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.custom-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: linear-gradient(to right, #feeeee 0%, #d875aa 50%, #9C1648 100%);
+  border-radius: 5px;
+  outline: none;
+  pointer-events: all;
+}
+
+.custom-slider_two {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  background: #9C1648;
+  border-radius: 5px;
+  outline: none;
+  pointer-events: all;
+}
+
+.custom_number h5 {
+  font-family: 'TomatoGrotesk-SemiBold';
+}
+
+.custom-slider-secn label {
+  font-weight: 500;
+}
+
+.women_bid_modal .modal-body::-webkit-scrollbar {
+  width: 0px;
+  height: 8px;
+  background-color: #aaa;
+  /* or add it to the track */
+}
+
+.custom_number h5 {
+  font-size: 14px;
+  font-family: 'TomatoGrotesk-Regular';
+}
+
+.custom-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, #ff4684, #c471ed);
+  border-radius: 5px;
+  outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  border: 3px solid #ffffff;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 50%;
+  clip-path: polygon(50% 0%,
+      /* top center */
+      100% 0%,
+      /* top right */
+      100% 80%,
+      /* right before triangle */
+      60% 80%,
+      /* right of triangle base */
+      50% 100%,
+      /* triangle tip */
+      40% 80%,
+      /* left of triangle base */
+      0% 80%,
+      /* bottom left before triangle */
+      0% 0%
+      /* top left */
+    );
+}
+
+.custom-slider::-moz-range-thumb {
+  background-color: #ffffff;
+  border: 3px solid #ffffff;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 50%;
+  clip-path: polygon(50% 0%,
+      100% 0%,
+      100% 80%,
+      60% 80%,
+      50% 100%,
+      40% 80%,
+      0% 80%,
+      0% 0%);
+}
+
+
+
+.upload-section label {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-family: 'TomatoGrotesk-SemiBold';
+}
+
+.slider-value {
+  position: absolute;
+  top: -40px;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background: #9C1648;
+  padding: 5px 10px;
+  border-radius: 15px;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.slider-labels span {
+  color: #fff;
+}
+
+input.custom-slider:before {
+  content: "";
+  display: flex;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: #fff;
+  border-radius: 50%;
+  left: 0px;
+  top: 2px;
+}
+
+input.custom-slider:after {
+  content: "";
+  display: flex;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: #fff;
+  border-radius: 50%;
+  right: 0px;
+  top: 2px;
+}
+
+/* .user_img3 img{
+  height: 1180px;
+} */
+.user_img img {
+  width: 100%;
+  height: 2120px;
+}
+
+.submit_signup_btn {
+  font-size: 16px;
+  padding: 18px 20px;
+  text-transform: capitalize;
+  font-family: 'TomatoGrotesk-Regular' !important;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.wt-wpsd:focus {
+  background: transparent;
+  color: #4b5563;
+}
+
+.profile_img {
+  position: absolute;
+  top: 22px;
+  right: 30px;
+}
+
+.women_bid_upload input {
+  opacity: 0;
+  font-size: 10px;
+  padding: 0px;
+  position: absolute;
+  left: 163px;
+}
+
+.edit-profile-form h2 {
+  font-family: "TomatoGrotesk-Bold";
+}
+
+.register_from .form select {
+  padding: 10px !important;
+}
+
+.options_Wrapper span {
+  color: #715E77;
+  font-family: "TomatoGrotesk-SemiBold";
+}
+
+.form-container select option {
+  /* background-color: #ffffff42; */
+  color: black;
+  text-transform: capitalize;
+}
+
+/* new */
+.stepper-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.step-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.step-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #6b7280;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 29px;
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  border-color: #ffffff;
+  color: #ffffff;
+  background: linear-gradient(90deg,
+      rgba(158, 66, 230, 1) 0%,
+      rgba(157, 44, 151, 1) 48%,
+      rgba(156, 29, 98, 1) 70%,
+      rgba(156, 22, 72, 1) 100%);
+  box-shadow: 0 0 15px rgb(158 66 230), 0 0 25px rgb(157 44 151 / 73%);
+}
+
+
+.step-circle.inactive {
+  border-color: #6b7280;
+  color: #6b7280;
+}
+
+.step-connector {
+  width: 100px;
+  height: 2px;
+  background-color: #4b5563;
+  transition: background-color 0.3s ease;
+  position: relative;
+  left: 10px;
+  top: -10px;
+}
+
+.step-connector.active {
+  background-color: #ffffff;
+}
+
+span.step-label {
+  position: relative;
+  left: 10px;
+  top: 6px;
+  color: #6b7280;
+}
+
+span.step-label.active {
+  color: #fff;
+}
+
+/* Add this to your main CSS file */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 3, 36, 0.5);
+  /* Semi-transparent dark background */
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  /* For Safari support */
+}
+
+
+.modal-content.wrapper-model-dd {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  padding: 2rem;
+  border-radius: 10px;
+  z-index: 1001;
+  overflow-y: auto;
+}
+
+.wrapper-hideen {
+  border-radius: 14px ! important;
+}
+
+.border-radius-www .modal-content {
+  border-radius: 20px;
+}
+
+.border-radius-www .btn-primary:hover {
+  /* color: #9c1648; */
+  background-color: unset;
+  border-color: unset;
+}
+
+.border-radius-www .modal-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: calc(.3rem - 1px);
+  border-top-right-radius: calc(.3rem - 1px);
+  padding: 0;
+  border-bottom: none;
+}
+
+.border-radius-www .modal-header .btn-close {
+  position: relative;
+  right: 20px;
+  top: 15px;
+  z-index: 11111;
+}
+
+.arrowcolor {
+  color: #9C1648 !important;
+  font-size: 20px !important;
+}

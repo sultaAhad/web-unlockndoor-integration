@@ -1,0 +1,66 @@
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 10px 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.card-left-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.bottom-icon {
+    font-size: 18px;
+    color: #444;
+    padding: 8px;
+    background: #f0f0f0;
+    border-radius: 20%;
+    transition: 0.3s;
+}
+
+.comment-icon {
+    color: #9C1648;
+}
+
+.video-icon {
+    color: #9C1648;
+}
+
+.card-right-actions {
+    display: flex;
+    position: relative;
+    width: 150px;
+}
+
+.view-profile-btn {
+    background-color: #9E45F2;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 15px 0px 0px 15px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    box-shadow: 0px 0px 7px 2px #a13c62;
+}
+.view-profile-btn:hover {
+    color: #fff;
+}
+
+.profile-thumb {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    right: 5px;
+    bottom: -4px;
+}
+.btn-write {
+    border-radius: 90px ! important;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+}
