@@ -14,6 +14,7 @@ import OtpModal from "./OtpModal";
 import NewPasswordModal from "./NewPasswordModal";
 import CategoryModal from "./CategoryModal";
 import { Button } from "react-bootstrap";
+import { useSettingContentQuery } from "../../network/services/HelpServices";
 
 function Header() {
 	const [showModal1, setShowModal1] = useState(false); // Role selection
@@ -64,6 +65,13 @@ function Header() {
 
 	const isProfilePage = profilePages.has(currentPath);
 
+	const { data: SettingpageContent, isLoading } = useSettingContentQuery();
+		const settingPageData = SettingpageContent?.response?.data;
+	
+		if (isLoading) {
+			return <div>Loading...</div>;
+		}
+
 	return (
 		<>
 			{/* Header Section  */}
@@ -74,7 +82,7 @@ function Header() {
 							<div className="wrapper">
 								<div className="img_wrapper">
 									<Link to="/">
-										<img src={web_new_logo} className="img-fluid" />
+										<img src={settingPageData?.logo_url} className="img-fluid" />
 									</Link>
 								</div>
 							</div>
@@ -92,7 +100,7 @@ function Header() {
 										<Link to="/#realitysec">Testimonials </Link>
 									</li>
 									<li>
-										<Link to="/#contectus">Contact Us</Link>
+										<Link to="/#contactus">Contact Us</Link>
 									</li>
 								</ul>
 							</div>

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
-import { CONTENT, FAQS, SETTING, TESTEMONIAL } from "../../utils/endpoints";
+import { CONTECT_US, CONTENT, FAQS, SETTING, TESTEMONIAL } from "../../utils/endpoints";
 
 const HelpServices = createApi({
 	reducerPath: "HelpServices",
@@ -42,6 +42,14 @@ const HelpServices = createApi({
 				method: "GET",
 			}),
 		}),
+		// ✅ New POST API for Contact Us
+		sendContactQuery: build.mutation({
+			query: (data) => ({
+				url: CONTECT_US,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -51,4 +59,5 @@ export const {
 	useFaqsContentQuery,
 	useTestemonialContentQuery,
 	useSettingContentQuery,
+	useSendContactQueryMutation,
 } = HelpServices;

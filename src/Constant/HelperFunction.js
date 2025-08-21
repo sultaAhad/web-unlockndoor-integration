@@ -441,3 +441,44 @@ export const validateChangePasswordMan = (values, setErrors) => {
 	setErrors(errors);
 	return isValid;
 };
+
+
+// src/validation/ContactValidation.js
+export const validateContactForm = (values, setErrors) => {
+  let isValid = true;
+  const errors = {};
+
+  if (!values.first_name.trim()) {
+    errors.first_name = ["First name is required"];
+    isValid = false;
+  }
+
+  if (!values.last_name.trim()) {
+    errors.last_name = ["Last name is required"];
+    isValid = false;
+  }
+
+  if (!values.phone.trim()) {
+    errors.phone = ["Phone number is required"];
+    isValid = false;
+  } else if (!/^[0-9]{7,15}$/.test(values.phone)) {
+    errors.phone = ["Enter a valid phone number"];
+    isValid = false;
+  }
+
+  if (!values.email.trim()) {
+    errors.email = ["Email is required"];
+    isValid = false;
+  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+    errors.email = ["Enter a valid email"];
+    isValid = false;
+  }
+
+  if (!values.message.trim()) {
+    errors.message = ["Message is required"];
+    isValid = false;
+  }
+
+  setErrors(errors);
+  return isValid;
+};

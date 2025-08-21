@@ -3,11 +3,15 @@ export const CONTENT = "homepage-content";
 
 export const FAQS = "faq";
 
-export const TESTEMONIAL = "testimonials";
+export const TESTEMONIAL = "testimonial";
 
 export const SETTING = "site-settings";
 
 export const GALLERY = "gallery";
+
+// contect us
+
+export const CONTECT_US = "contact/send-contact-query";
 
 //  Auth endpoint
 

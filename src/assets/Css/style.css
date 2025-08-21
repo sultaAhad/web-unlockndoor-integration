@@ -662,7 +662,7 @@ button.main-wrapper-btn-wrap {
 	right: -465px;
 }
 
-.love_head.love_head_6 {
+.love_head.love_head_5 {
 	position: absolute;
 	bottom: 30px;
 	right: -640px;
@@ -976,10 +976,19 @@ button.main-wrapper-btn-wrap {
 	opacity: 0.75;
 	color: #ffffff;
 }
-
+.map_img {
+    width: 20px;
+}
+img.img-fluid.mb-3.wrapperlogo {
+    width: 80px;
+    height: 90px;
+    object-fit: scale-down;
+}
 .reality_sec .boy_img_wrapper img {
-	width: 100%;
-	border-radius: 20px;
+    width: 100%;
+    border-radius: 20px;
+    height: 710px;
+    object-fit: cover;
 }
 
 .reality_sec .reality_head h2 {
@@ -1750,13 +1759,13 @@ li.bullet_Wrapper.wrapper-bullet {
 	padding: 13px;
 }
 
-.love_head.love_head_5 {
+/* .love_head.love_head_5 {
 	position: absolute;
 	bottom: -70px;
 	right: -490px;
-}
+} */
 
-.love_number.love_number_5 h1 {
+/* .love_number.love_number_5 h1 {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -1764,7 +1773,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	position: relative;
 	left: -134px;
 	top: -26px;
-}
+} */
 
 .leddd {
 	position: relative;
@@ -2323,12 +2332,19 @@ li.bullet_Wrapper.wrapper-bullet {
 
 /* Image Styling */
 .people_img-sec .img_wrapper img {
-	width: 100%;
-	max-width: 100%;
-	height: auto;
-	border-radius: 12px;
+    width: 100%;
+    max-width: 100%;
+    height: 280px;
+    border-radius: 12px;
+    object-fit: fill;
 }
-
+.people_img-sec .img_wrapper video{
+	 width: 100%;
+    max-width: 100%;
+    height: 280px;
+    border-radius: 12px;
+    object-fit: fill;
+}
 /* Modal Css  */
 
 /* Base checkmark style */
@@ -2681,7 +2697,7 @@ select.form-select.form-control.custom-select-arrow {
 		bottom: 505px;
 	}
 
-	.love_head.love_head_6 {
+	.love_head.love_head_5 {
 		position: absolute;
 		bottom: 25px;
 		right: -667px;
@@ -2837,7 +2853,7 @@ select.form-select.form-control.custom-select-arrow {
 		right: -558px;
 	}
 
-	.love_head.love_head_6 {
+	.love_head.love_head_5 {
 		position: absolute;
 		bottom: 30px;
 		right: -667px;

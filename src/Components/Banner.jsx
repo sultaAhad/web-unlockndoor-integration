@@ -15,7 +15,6 @@ function Banner() {
 
 	const { data: homePageContent, isLoading } = useHomeContentQuery();
 	const HomePageData = homePageContent?.data?.sectionOne;
-	console.log(homePageContent);
 
 	return (
 		<section className="banner_sec py-5" ref={ref}>

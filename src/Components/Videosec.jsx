@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { playbtn, videos, videpoimgwra } from "../Constant/Index";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { playbtn } from "../Constant/Index";
+import { useHomeContentQuery } from "../network/services/HelpServices";
 
 function Videosec() {
 	const controls = useAnimation();
@@ -37,6 +40,10 @@ function Videosec() {
 		setShowModal(false);
 	};
 
+	// API se video laa rahe hain
+	const { data: homePageContent, isLoading } = useHomeContentQuery();
+	const videoUrl = homePageContent?.data?.sectionFour?.video_url;
+
 	return (
 		<>
 			<motion.section
@@ -50,30 +57,43 @@ function Videosec() {
 					<div className="row">
 						<div className="col-md-12">
 							<div className="video_dv position-relative">
-								<img
-									src={videpoimgwra}
-									alt="video preview"
-									className="img-fluid w-100 radius-8"
-								/>
-								<div
-									className="video_icon"
-									style={{
-										position: "absolute",
-										top: "50%",
-										left: "50%",
-										transform: "translate(-50%, -50%)",
-										cursor: "pointer",
-									}}
-									onClick={openModal}
-								>
-									<div className="play-btn-wave">
-										<img
-											src={playbtn}
-											alt="play button"
-											className="img-fluid"
+								{isLoading ? (
+									<Skeleton
+										height={400}
+										borderRadius={8}
+										style={{ width: "100%" }}
+									/>
+								) : (
+									<>
+										<video
+											src={videoUrl}
+											className="img-fluid w-100 radius-8"
+											muted
+											loop
+											playsInline
 										/>
-									</div>
-								</div>
+										{/* Play btn overlay */}
+										<div
+											className="video_icon"
+											style={{
+												position: "absolute",
+												top: "50%",
+												left: "50%",
+												transform: "translate(-50%, -50%)",
+												cursor: "pointer",
+											}}
+											onClick={openModal}
+										>
+											<div className="play-btn-wave">
+												<img
+													src={playbtn}
+													alt="play button"
+													className="img-fluid"
+												/>
+											</div>
+										</div>
+									</>
+								)}
 							</div>
 						</div>
 					</div>
@@ -119,7 +139,7 @@ function Videosec() {
 
 					<video
 						ref={videoRef}
-						src={videos}
+						src={videoUrl}
 						controls
 						style={{ width: "90%", maxWidth: "800px" }}
 						onClick={(e) => e.stopPropagation()} // prevent closing modal on video click
