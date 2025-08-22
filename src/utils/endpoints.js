@@ -13,6 +13,9 @@ export const GALLERY = "gallery";
 
 export const CONTECT_US = "contact/send-contact-query";
 
+export const SEND_SUBSCRIPTION = "subscription/send-subscription-query";
+
+
 //  Auth endpoint
 
 export const LOGIN_MAN = `register`;
@@ -29,4 +32,6 @@ export const LOGIN_CHANGEPASSWORDMAN = `change-password`;
 
 // profile man
 
-export const UPDATE_PROFILE = `update-profile`;
+// Endpoints
+export const MAN_SIGNUP = `auth-men/register-men`;
+export const MAN_LOGIN = `auth-men/login-men`;

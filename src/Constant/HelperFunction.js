@@ -1,107 +1,99 @@
 // man register validation
-export const validateMenRegistration = (
-	registerman,
-	setFormErrors,
-	chips = [],
-) => {
-	let isValid = true;
-	let errors = {};
+export const validateMenRegistration = (registerman, setFormErrors, chips = []) => {
+    let isValid = true;
+    let errors = {};
 
-	// Name
-	if (!registerman?.name?.trim()) {
-		errors.name = ["Name is required"];
-		isValid = false;
-	}
+    // Name
+    if (!registerman?.name?.trim()) {
+        errors.name = ["Name is required"];
+        isValid = false;
+    }
 
-	// Email
-	if (!registerman?.email?.trim()) {
-		errors.email = ["Email is required"];
-		isValid = false;
-	} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerman.email)) {
-		errors.email = ["Invalid email format"];
-		isValid = false;
-	}
+    // Email
+    if (!registerman?.email?.trim()) {
+        errors.email = ["Email is required"];
+        isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerman.email)) {
+        errors.email = ["Invalid email format"];
+        isValid = false;
+    }
 
-	// Phone Number
-	if (!registerman?.phone_number?.trim()) {
-		errors.phone_number = ["Phone number is required"];
-		isValid = false;
-	} else if (!/^\d{10}$/.test(registerman.phone_number)) {
-		errors.phone_number = ["Phone number must be 10 digits"];
-		isValid = false;
-	}
+    // Phone Number
+    if (!registerman?.phone?.trim()) {
+        errors.phone = ["Phone number is required"];
+        isValid = false;
+    } else if (!/^\d{10}$/.test(registerman.phone)) {
+        errors.phone = ["Phone number must be 10 digits"];
+        isValid = false;
+    }
 
-	// Date of Birth
-	if (!registerman?.dob) {
-		errors.dob = ["Date of birth is required"];
-		isValid = false;
-	}
+    // Date of Birth
+    if (!registerman?.date_of_birth) {
+        errors.date_of_birth = ["Date of birth is required"];
+        isValid = false;
+    }
 
-	// Password
-	if (!registerman?.password?.trim()) {
-		errors.password = ["Password is required"];
-		isValid = false;
-	}
+    // Password
+    if (!registerman?.password?.trim()) {
+        errors.password = ["Password is required"];
+        isValid = false;
+    }
+    // Occupation
+    if (!registerman?.occupation?.trim()) {
+        errors.occupation = ["Occupation is required"];
+        isValid = false;
+    }
 
-	// Password Confirmation
-	if (!registerman?.password_confirmation?.trim()) {
-		errors.password_confirmation = ["Please confirm your password"];
-		isValid = false;
-	} else if (registerman.password !== registerman.password_confirmation) {
-		errors.password_confirmation = ["Passwords do not match"];
-		isValid = false;
-	}
+    // Annual Income
+    if (!registerman?.income?.trim()) {
+        errors.income = ["Annual income is required"];
+        isValid = false;
+    }
 
-	// Occupation
-	if (!registerman?.occupation?.trim()) {
-		errors.occupation = ["Occupation is required"];
-		isValid = false;
-	}
+    // Message
+    if (!registerman?.message?.trim()) {
+        errors.message = ["Message is required"];
+        isValid = false;
+    }
 
-	// Annual Income
-	if (!registerman?.annual_income?.trim()) {
-		errors.annual_income = ["Annual income is required"];
-		isValid = false;
-	}
+    // Can Pay
+    if (!registerman?.can_pay?.trim()) {
+        errors.can_pay = ["Please specify if you can pay"];
+        isValid = false;
+    }
 
-	// Purpose
-	if (!registerman?.purpose?.trim()) {
-		errors.purpose = ["Purpose is required"];
-		isValid = false;
-	}
+    // Skills (from chips)
+    if (!chips || chips.length === 0) {
+        errors.skills = ["At least one skill is required"];
+        isValid = false;
+    }
 
-	// Talent/Skills
-	if (!chips || chips.length === 0) {
-		errors.talent_skills = ["At least one talent or skill is required"];
-		isValid = false;
-	}
+    // Profile Image
+    if (!registerman?.profile_image) {
+        errors.profile_image = ["Profile image is required"];
+        isValid = false;
+    }
 
-	// Stage of Relationship
-	if (!registerman?.stage_of_relationship?.trim()) {
-		errors.stage_of_relationship = ["Stage of relationship is required"];
-		isValid = false;
-	}
+    // Cover Image
+    if (!registerman?.cover_image) {
+        errors.cover_image = ["Cover image is required"];
+        isValid = false;
+    }
 
-	// Message
-	if (!registerman?.message?.trim()) {
-		errors.message = ["Message is required"];
-		isValid = false;
-	}
+    // Images Array
+    if (!registerman?.images || registerman.images.length === 0) {
+        errors.images = ["At least one image is required"];
+        isValid = false;
+    }
 
-	// Profile Picture
-	if (!registerman?.profile_picture) {
-		errors.profile_picture = ["Profile picture is required"];
-		isValid = false;
-	}
+    // Videos Array
+    if (!registerman?.videos || registerman.videos.length === 0) {
+        errors.videos = ["At least one video is required"];
+        isValid = false;
+    }
 
-	// Cover Photo
-	if (!registerman?.cover_photo) {
-		errors.cover_photo = ["Cover photo is required"];
-		isValid = false;
-	}
-
-	setFormErrors(errors);
-	return isValid;
+    setFormErrors(errors);
+    return isValid;
 };
 // female register validation
 export const validateFemaleRegistration = (
@@ -445,24 +437,49 @@ export const validateChangePasswordMan = (values, setErrors) => {
 
 // src/validation/ContactValidation.js
 export const validateContactForm = (values, setErrors) => {
+	let isValid = true;
+	const errors = {};
+
+	if (!values.first_name.trim()) {
+		errors.first_name = ["First name is required"];
+		isValid = false;
+	}
+
+	if (!values.last_name.trim()) {
+		errors.last_name = ["Last name is required"];
+		isValid = false;
+	}
+
+	if (!values.phone.trim()) {
+		errors.phone = ["Phone number is required"];
+		isValid = false;
+	} else if (!/^[0-9]{7,15}$/.test(values.phone)) {
+		errors.phone = ["Enter a valid phone number"];
+		isValid = false;
+	}
+
+	if (!values.email.trim()) {
+		errors.email = ["Email is required"];
+		isValid = false;
+	} else if (!/\S+@\S+\.\S+/.test(values.email)) {
+		errors.email = ["Enter a valid email"];
+		isValid = false;
+	}
+
+	if (!values.message.trim()) {
+		errors.message = ["Message is required"];
+		isValid = false;
+	}
+
+	setErrors(errors);
+	return isValid;
+};
+export const validateSubscriptionForm = (values, setErrors) => {
   let isValid = true;
   const errors = {};
 
-  if (!values.first_name.trim()) {
-    errors.first_name = ["First name is required"];
-    isValid = false;
-  }
-
-  if (!values.last_name.trim()) {
-    errors.last_name = ["Last name is required"];
-    isValid = false;
-  }
-
-  if (!values.phone.trim()) {
-    errors.phone = ["Phone number is required"];
-    isValid = false;
-  } else if (!/^[0-9]{7,15}$/.test(values.phone)) {
-    errors.phone = ["Enter a valid phone number"];
+  if (!values.name.trim()) {
+    errors.name = ["Name is required"];
     isValid = false;
   }
 
@@ -474,11 +491,21 @@ export const validateContactForm = (values, setErrors) => {
     isValid = false;
   }
 
-  if (!values.message.trim()) {
-    errors.message = ["Message is required"];
+  if (!values.phone.trim()) {
+    errors.phone = ["Phone number is required"];
+    isValid = false;
+  } else if (!/^[0-9]{10,15}$/.test(values.phone)) {
+    errors.phone = ["Phone must be between 10 and 15 digits"];
+    isValid = false;
+  }
+
+  if (!values.interest.trim()) {
+    errors.interest = ["Please select Male or Female"];
     isValid = false;
   }
 
   setErrors(errors);
   return isValid;
 };
+
+

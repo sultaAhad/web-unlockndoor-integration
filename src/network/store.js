@@ -7,8 +7,8 @@ import authReducer from "../network/reducers/AuthReducer";
 // Services
 import HelpServices from "./services/HelpServices";
 import AuthServices from "./services/AuthServices";
-import ManProfile from "./services/ManProfile"; // ✅ Must match the named export
 import GalleryApi from "./services/GalleryApi";
+import ManAuth from "./services/ManAuth";
 
 const store = configureStore({
 	reducer: {
@@ -16,7 +16,7 @@ const store = configureStore({
 		[HelpServices.reducerPath]: HelpServices.reducer,
 		[AuthServices.reducerPath]: AuthServices.reducer,
 		[GalleryApi.reducerPath]: GalleryApi.reducer,
-		[ManProfile.reducerPath]: ManProfile.reducer,
+		[ManAuth.reducerPath]: ManAuth.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
@@ -25,7 +25,7 @@ const store = configureStore({
 			HelpServices.middleware,
 			AuthServices.middleware,
 			GalleryApi.middleware,
-			ManProfile.middleware,
+			ManAuth.middleware,
 		]),
 });
 

@@ -13,8 +13,6 @@ import ForgotPasswordModal from "./ForgotPasswordModal";
 import OtpModal from "./OtpModal";
 import NewPasswordModal from "./NewPasswordModal";
 import CategoryModal from "./CategoryModal";
-import { Button } from "react-bootstrap";
-import { useSettingContentQuery } from "../../network/services/HelpServices";
 
 function Header() {
 	const [showModal1, setShowModal1] = useState(false); // Role selection
@@ -59,18 +57,21 @@ function Header() {
 		"/setting-notification",
 	]);
 
-	const [showcategoryModal, setShowcategoryModal] = useState(false);
-	const handlecategoryClose = () => setShowcategoryModal(false);
-	const handlecategoryShow = () => setShowcategoryModal(true);
-
 	const isProfilePage = profilePages.has(currentPath);
 
-	const { data: SettingpageContent, isLoading } = useSettingContentQuery();
-		const settingPageData = SettingpageContent?.response?.data;
-	
-		if (isLoading) {
-			return <div>Loading...</div>;
-		}
+	// Category Modal state
+	const [showCategoryModal, setShowCategoryModal] = useState(false);
+	const [selectedGender, setSelectedGender] = useState("");
+
+	const handleCategoryShow = (gender) => {
+		setSelectedGender(gender); // "male" or "female"
+		setShowCategoryModal(true);
+	};
+
+	const handleCategoryClose = () => {
+		setShowCategoryModal(false);
+		setSelectedGender("");
+	};
 
 	return (
 		<>
@@ -82,7 +83,11 @@ function Header() {
 							<div className="wrapper">
 								<div className="img_wrapper">
 									<Link to="/">
-										<img src={settingPageData?.logo_url} className="img-fluid" />
+										<img
+											src={web_new_logo}
+											className="img-fluid"
+											alt="logo"
+										/>
 									</Link>
 								</div>
 							</div>
@@ -97,7 +102,7 @@ function Header() {
 										<Link to="/#about-section">About Us</Link>
 									</li>
 									<li>
-										<Link to="/#realitysec">Testimonials </Link>
+										<Link to="/#realitysec">Testimonials</Link>
 									</li>
 									<li>
 										<Link to="/#contactus">Contact Us</Link>
@@ -106,42 +111,41 @@ function Header() {
 							</div>
 						</div>
 						<div className="col-lg-4 col-md-5">
-							<div className="header_button_wrapper">
-								<Button
-									onClick={handlecategoryShow}
-									to="#"
-									className=" btn-bgtransparent under-line"
-									// data-bs-toggle="modal"
-									// data-bs-target="#exampleModal"
+							<div className="header_button_wrapper d-flex gap-2">
+								{/* Men Button */}
+								<button
+									onClick={() => handleCategoryShow("male")}
+									className="btn-bgtransparent under-line"
 								>
-									<span>
-										<img
-											src={outline1}
-											alt="outline1"
-											className="img-fluid pe-2"
-										/>
-									</span>{" "}
+									<img
+										src={outline1}
+										alt="Men"
+										className="img-fluid pe-2"
+									/>
 									Men
-								</Button>
-								<Button
-									onClick={handlecategoryShow}
-									to="#"
+								</button>
+
+								{/* Women Button */}
+								<button
+									onClick={() => handleCategoryShow("female")}
 									className="border wrapper-anchor"
-									// data-bs-toggle="modal"
-									// data-bs-target="#exampleModal"
 								>
-									<span>
-										<img src={outline2} alt="outline2" />
-									</span>
-									women
-								</Button>
+									<img
+										src={outline2}
+										alt="Women"
+										className="img-fluid pe-2"
+									/>
+									Women
+								</button>
+
+								{/* Profile / Login */}
 								{!isProfilePage ? (
 									<Link
 										className="border only_for_img wrapper-anchor"
 										onClick={() => setShowModal1(true)}
 									>
 										<span>
-											<img src={person_img} alt="outline2" />
+											<img src={person_img} alt="Profile" />
 										</span>
 									</Link>
 								) : (
@@ -149,7 +153,7 @@ function Header() {
 										<span>
 											<img
 												src={men_profile}
-												alt="outline2"
+												alt="Profile"
 												className="wrapper-bug"
 											/>
 										</span>
@@ -199,10 +203,11 @@ function Header() {
 				onClose={() => setShowModal5(false)}
 			/>
 
+			{/* Category Modal */}
 			<CategoryModal
-				showcategoryModal={showcategoryModal}
-				handlecategoryClose={handlecategoryClose}
-				setShowcategoryModal={setShowcategoryModal}
+				showcategoryModal={showCategoryModal}
+				handlecategoryClose={handleCategoryClose}
+				defaultGender={selectedGender}
 			/>
 		</>
 	);
