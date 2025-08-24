@@ -1,100 +1,75 @@
 // man register validation
-export const validateMenRegistration = (registerman, setFormErrors, chips = []) => {
-    let isValid = true;
-    let errors = {};
+// src/Constant/HelperFunction.js
+// src/Constant/HelperFunction.js
+export const validateMenRegistration = (registerman, step) => {
+	const errors = {};
 
-    // Name
-    if (!registerman?.name?.trim()) {
-        errors.name = ["Name is required"];
-        isValid = false;
-    }
+	// Step 1: Personal Info
+	if (step === 0) {
+		if (!registerman.name?.trim()) errors.name = ["Name is required"];
 
-    // Email
-    if (!registerman?.email?.trim()) {
-        errors.email = ["Email is required"];
-        isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerman.email)) {
-        errors.email = ["Invalid email format"];
-        isValid = false;
-    }
+		if (!registerman.email?.trim()) {
+			errors.email = ["Email is required"];
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerman.email)) {
+			errors.email = ["Enter a valid email"];
+		}
 
-    // Phone Number
-    if (!registerman?.phone?.trim()) {
-        errors.phone = ["Phone number is required"];
-        isValid = false;
-    } else if (!/^\d{10}$/.test(registerman.phone)) {
-        errors.phone = ["Phone number must be 10 digits"];
-        isValid = false;
-    }
+		if (!registerman.phone?.trim()) {
+			errors.phone = ["Phone number is required"];
+		} else if (!/^\d{7,15}$/.test(registerman.phone)) {
+			errors.phone = ["Enter a valid phone number"];
+		}
+		if (!registerman.nationality?.trim())
+			errors.nationality = ["Nationality is required"];
+		if (!registerman.date_of_birth) {
+			errors.date_of_birth = ["Date of Birth is required"];
+		}
 
-    // Date of Birth
-    if (!registerman?.date_of_birth) {
-        errors.date_of_birth = ["Date of birth is required"];
-        isValid = false;
-    }
+		if (!registerman.password) {
+			errors.password = ["Password is required"];
+		} else if (registerman.password.length < 6) {
+			errors.password = ["Password must be at least 6 characters"];
+		}
 
-    // Password
-    if (!registerman?.password?.trim()) {
-        errors.password = ["Password is required"];
-        isValid = false;
-    }
-    // Occupation
-    if (!registerman?.occupation?.trim()) {
-        errors.occupation = ["Occupation is required"];
-        isValid = false;
-    }
+		if (!registerman.profile_image) {
+			errors.profile_image = ["Profile image is required"];
+		}
+		if (!registerman.can_pay) errors.can_pay = ["Please select if you can pay"];
+	}
 
-    // Annual Income
-    if (!registerman?.income?.trim()) {
-        errors.income = ["Annual income is required"];
-        isValid = false;
-    }
+	// Step 2: Occupation & Skills
+	if (step === 1) {
+		if (!registerman.occupation?.trim())
+			errors.occupation = ["Occupation is required"];
 
-    // Message
-    if (!registerman?.message?.trim()) {
-        errors.message = ["Message is required"];
-        isValid = false;
-    }
+		if (!registerman.income?.trim()) {
+			errors.income = ["Income is required"];
+		}
 
-    // Can Pay
-    if (!registerman?.can_pay?.trim()) {
-        errors.can_pay = ["Please specify if you can pay"];
-        isValid = false;
-    }
+		if (!registerman.skills || registerman.skills.length === 0) {
+			errors.skills = ["At least one skill is required"];
+		}
+	}
 
-    // Skills (from chips)
-    if (!chips || chips.length === 0) {
-        errors.skills = ["At least one skill is required"];
-        isValid = false;
-    }
+	// Step 3: Media & Message
+	if (step === 2) {
+		if (!registerman.cover_image)
+			errors.cover_image = ["Cover image is required"];
 
-    // Profile Image
-    if (!registerman?.profile_image) {
-        errors.profile_image = ["Profile image is required"];
-        isValid = false;
-    }
+		if (!registerman.images || registerman.images.length < 5) {
+			errors.images = ["At least 5 images are required"];
+		}
 
-    // Cover Image
-    if (!registerman?.cover_image) {
-        errors.cover_image = ["Cover image is required"];
-        isValid = false;
-    }
+		if (!registerman.videos || registerman.videos.length < 2) {
+			errors.videos = ["At least 2 videos are required"];
+		}
 
-    // Images Array
-    if (!registerman?.images || registerman.images.length === 0) {
-        errors.images = ["At least one image is required"];
-        isValid = false;
-    }
+		if (!registerman.message?.trim()) errors.message = ["Message is required"];
+	}
 
-    // Videos Array
-    if (!registerman?.videos || registerman.videos.length === 0) {
-        errors.videos = ["At least one video is required"];
-        isValid = false;
-    }
-
-    setFormErrors(errors);
-    return isValid;
+	return errors;
 };
+
 // female register validation
 export const validateFemaleRegistration = (
 	registerfemale,
@@ -434,7 +409,6 @@ export const validateChangePasswordMan = (values, setErrors) => {
 	return isValid;
 };
 
-
 // src/validation/ContactValidation.js
 export const validateContactForm = (values, setErrors) => {
 	let isValid = true;
@@ -475,37 +449,35 @@ export const validateContactForm = (values, setErrors) => {
 	return isValid;
 };
 export const validateSubscriptionForm = (values, setErrors) => {
-  let isValid = true;
-  const errors = {};
+	let isValid = true;
+	const errors = {};
 
-  if (!values.name.trim()) {
-    errors.name = ["Name is required"];
-    isValid = false;
-  }
+	if (!values.name.trim()) {
+		errors.name = ["Name is required"];
+		isValid = false;
+	}
 
-  if (!values.email.trim()) {
-    errors.email = ["Email is required"];
-    isValid = false;
-  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = ["Enter a valid email"];
-    isValid = false;
-  }
+	if (!values.email.trim()) {
+		errors.email = ["Email is required"];
+		isValid = false;
+	} else if (!/\S+@\S+\.\S+/.test(values.email)) {
+		errors.email = ["Enter a valid email"];
+		isValid = false;
+	}
 
-  if (!values.phone.trim()) {
-    errors.phone = ["Phone number is required"];
-    isValid = false;
-  } else if (!/^[0-9]{10,15}$/.test(values.phone)) {
-    errors.phone = ["Phone must be between 10 and 15 digits"];
-    isValid = false;
-  }
+	if (!values.phone.trim()) {
+		errors.phone = ["Phone number is required"];
+		isValid = false;
+	} else if (!/^[0-9]{10,15}$/.test(values.phone)) {
+		errors.phone = ["Phone must be between 10 and 15 digits"];
+		isValid = false;
+	}
 
-  if (!values.interest.trim()) {
-    errors.interest = ["Please select Male or Female"];
-    isValid = false;
-  }
+	if (!values.interest.trim()) {
+		errors.interest = ["Please select Male or Female"];
+		isValid = false;
+	}
 
-  setErrors(errors);
-  return isValid;
+	setErrors(errors);
+	return isValid;
 };
-
-

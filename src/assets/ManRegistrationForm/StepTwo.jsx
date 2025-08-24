@@ -4,9 +4,10 @@ import {
 	innerpages2,
 	right_arrow,
 } from "../../Constant/Index";
+import { Link } from "react-router-dom";
 
-const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
-	const [chips, setChips] = useState(formData.skills || []);
+const StepTwo = ({ formData, setFormData, next, formErrors }) => {
+	const [chips, setChips] = useState(formData.talents || []);
 
 	const sliderLabels = {
 		0: "10k",
@@ -18,16 +19,19 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 
 	const [rangeValue, setRangeValue] = useState(
 		Object.keys(sliderLabels).find(
-			(key) => sliderLabels[key] === formData.income,
-		) || 50,
+			(key) => sliderLabels[key] === formData.annualIncome
+		) || 50
 	);
 
 	useEffect(() => {
-		setFormData((prev) => ({ ...prev, skills: chips }));
+		setFormData((prev) => ({ ...prev, talents: chips }));
 	}, [chips]);
 
 	useEffect(() => {
-		setFormData((prev) => ({ ...prev, income: sliderLabels[rangeValue] }));
+		setFormData((prev) => ({
+			...prev,
+			annualIncome: sliderLabels[rangeValue],
+		}));
 	}, [rangeValue]);
 
 	const handleAddChip = (chip) => {
@@ -46,7 +50,7 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 		setFormData((prev) => ({ ...prev, [name]: value }));
 
 		const foundKey = Object.keys(sliderLabels).find(
-			(key) => sliderLabels[key] === value,
+			(key) => sliderLabels[key] === value
 		);
 		if (foundKey) setRangeValue(Number(foundKey));
 	};
@@ -80,8 +84,9 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 										<div className="form-group mb-3">
 											<input
 												type="text"
-												name="occupation"
+												required
 												placeholder="Occupation"
+												name="occupation"
 												value={formData.occupation || ""}
 												onChange={handleInputChange}
 												className="form-control"
@@ -97,30 +102,33 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 										<div className="form-group mb-3">
 											<input
 												type="text"
-												name="income"
+												required
 												placeholder="What is your annual income"
-												value={formData.income || ""}
+												name="annualIncome"
+												value={formData.annualIncome || ""}
 												onChange={handleInputChange}
 												className="form-control"
 											/>
-											{formErrors?.income && (
+											{formErrors?.annual_income && (
 												<p className="mt-2 text-danger">
-													{formErrors.income[0]}
+													{formErrors.annual_income[0]}
 												</p>
 											)}
 										</div>
 
 										{/* Slider */}
 										<div className="custom-slider-section mb-3">
-											<input
-												type="range"
-												min="0"
-												max="100"
-												step="25"
-												value={rangeValue}
-												onChange={(e) => setRangeValue(Number(e.target.value))}
-												className="custom-slider"
-											/>
+											<div className="slider-wrapper">
+												<input
+													type="range"
+													min="0"
+													max="100"
+													step="25"
+													value={rangeValue}
+													onChange={(e) => setRangeValue(Number(e.target.value))}
+													className="custom-slider"
+												/>
+											</div>
 											<div className="slider-labels d-flex justify-content-between">
 												<span>10k</span>
 												<span>25k</span>
@@ -130,11 +138,11 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 											</div>
 										</div>
 
-										{/* Skills / Chips */}
+										{/* Chips */}
 										<div className="form-group mb-3">
 											<input
 												type="text"
-												placeholder="Enter your talents/skills and press Enter"
+												placeholder="What are your talents and skills?"
 												onKeyDown={(e) => {
 													if (e.key === "Enter") {
 														e.preventDefault();
@@ -144,9 +152,9 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 												}}
 												className="form-control"
 											/>
-											{formErrors?.skills && (
+											{formErrors?.talent_skills && (
 												<p className="mt-2 text-danger">
-													{formErrors.skills[0]}
+													{formErrors.talent_skills[0]}
 												</p>
 											)}
 											<div className="chips mt-2">
@@ -161,18 +169,20 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 											</div>
 										</div>
 
-										{/* Buttons */}
-										<div className="d-flex justify-content-between mt-3">
-											<button
-												type="button"
-												className="btn btn-secondary"
-												onClick={prev}
-											>
-												Previous
-											</button>
-											<button type="submit" className="btn btn-primary">
-												Next
-											</button>
+										{/* Submit */}
+										<div className="submit_profile_btn position-relative">
+											<Link>
+												<button
+													type="submit"
+													onClick={handleSubmit}
+													className="mt-2 border text-start submit_signup_btn btn btn-primary"
+												>
+													Next
+												</button>
+											</Link>
+											<div className="profile_img">
+												<img src={right_arrow} alt="" />
+											</div>
 										</div>
 									</form>
 								</div>

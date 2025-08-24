@@ -2,121 +2,180 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
-import StepThree from "./StepThree";
+import StepThree from "./Stepthree";
 import { validateMenRegistration } from "../../Constant/HelperFunction";
 import { useManSignupMutation } from "../../network/services/ManAuth";
+import { useDispatch } from "react-redux";
+import { setUserToken } from "../../network/reducers/AuthReducer";
 
 const Stepper = () => {
+	const steps = [1, 2, 3];
 	const [step, setStep] = useState(0);
 	const [formErrors, setFormErrors] = useState({});
+	const dispatch = useDispatch();
+
 	const [registerman, setRegisterMan] = useState({
+		nationality: "",
 		name: "",
 		email: "",
 		phone: "",
-		date_of_birth: null,
+		date_of_birth: "",
 		password: "",
-		password_confirmation: "",
 		occupation: "",
 		income: "",
-		message: "",
 		can_pay: "",
 		skills: [],
 		profile_image: null,
 		cover_image: null,
 		images: [],
 		videos: [],
+		message: "",
 	});
 
-	const [manSignup, result] = useManSignupMutation();
+	const [manSignup, response] = useManSignupMutation();
 
-	const next = () => setStep((prev) => prev + 1);
-	const prev = () => setStep((prev) => prev - 1);
+	const next = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
+	const prev = () => setStep((prev) => Math.max(prev - 1, 0));
 
-	const handleSubmit = () => {
-		if (
-			validateMenRegistration(registerman, setFormErrors, registerman.skills)
-		) {
-			const formData = new FormData();
+	const handleNext = () => {
+		const errors = validateMenRegistration(registerman, step);
+		if (Object.keys(errors).length > 0) {
+			setFormErrors(errors);
+			return;
+		}
+		setFormErrors({});
+		next();
+	};
 
-			formData.append("user_type", "male");
-			formData.append("name", registerman.name);
-			formData.append("email", registerman.email);
-			formData.append("phone", registerman.phone);
-			formData.append(
-				"date_of_birth",
-				registerman.date_of_birth
-					? registerman.date_of_birth.toISOString().split("T")[0]
-					: ""
-			);
-			formData.append("password", registerman.password);
-			formData.append("occupation", registerman.occupation);
-			formData.append("income", registerman.income);
-			formData.append("message", registerman.message);
-			formData.append("can_pay", registerman.can_pay);
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
-			registerman.skills.forEach((skill, index) =>
-				formData.append(`skills[${index}]`, skill)
-			);
+		const errors = validateMenRegistration(registerman, step);
+		if (Object.keys(errors).length > 0) {
+			setFormErrors(errors);
+			return;
+		}
+		setFormErrors({});
 
-			if (registerman.profile_image)
-				formData.append("profile_image", registerman.profile_image);
-			if (registerman.cover_image)
-				formData.append("cover_image", registerman.cover_image);
+		const data = new FormData();
+		Object.keys(registerman).forEach((key) => {
+			const value = registerman[key];
+			if (Array.isArray(value)) {
+				// For files or string arrays
+				value.forEach((item) => {
+					data.append(key, item instanceof File ? item : item);
+				});
+			} else if (value instanceof File) {
+				data.append(key, value);
+			} else {
+				data.append(key, value ?? "");
+			}
+		});
 
-			registerman.images.forEach((img, index) =>
-				formData.append(`images[${index}]`, img)
-			);
-			registerman.videos.forEach((vid, index) =>
-				formData.append(`videos[${index}]`, vid)
-			);
-
-			manSignup(formData);
-		} else {
-			Swal.fire("Error", "Please fix the errors in the form!", "error");
+		try {
+			await manSignup(data).unwrap();
+		} catch (err) {
+			console.error("API Error:", err);
 		}
 	};
 
-	// Monitor API response
+	// SweetAlert for success/error
 	useEffect(() => {
-		if (result?.isSuccess) {
-			Swal.fire(
-				"Success",
-				result?.data?.message || "Registered successfully!",
-				"success"
-			);
-		} else if (result?.isError) {
-			const msg =
-				result?.error?.data?.message || "Something went wrong!";
-			Swal.fire("Error", msg, "error");
+		if (response?.isSuccess) {
+			dispatch(setUserToken(response?.data?.data));
+
+			Swal.fire({
+				title: "Success",
+				text: response?.data?.message || "Registration successful",
+				icon: "success",
+				confirmButtonText: "OK",
+			}).then(() => {
+				// reset form after success
+				setRegisterMan({
+					nationality: "",
+					name: "",
+					email: "",
+					phone: "",
+					date_of_birth: "",
+					password: "",
+					occupation: "",
+					income: "",
+					can_pay: "",
+					skills: [],
+					profile_image: null,
+					cover_image: null,
+					images: [],
+					videos: [],
+					message: "",
+				});
+				setStep(0);
+			});
 		}
-	}, [result]);
+
+		if (response?.isError) {
+			const errorData = response?.error?.data;
+			let errorMessage = errorData?.message || "An error occurred";
+
+			if (errorData?.errors) {
+				const backendErrors = Object.values(errorData.errors).flat().join("\n");
+				errorMessage = backendErrors;
+			}
+
+			Swal.fire({
+				title: "Error",
+				text: errorMessage,
+				icon: "error",
+				confirmButtonText: "OK",
+			});
+		}
+	}, [response, dispatch]);
 
 	return (
-		<div>
-			{/* Stepper UI */}
-			<div className="stepper-nav mb-4">
-				<div>Step {step} of 3</div>
+		<>
+			{/* Stepper progress UI */}
+			<div className="stepper-container mb-4">
+				{steps.map((s, index) => (
+					<div key={index} className="step-wrapper">
+						<div className="step-content">
+							<div
+								className={`step-circle ${
+									step >= index ? "active" : "inactive"
+								}`}
+							>
+								{index + 1}
+							</div>
+							<span className={`step-label ${step >= index ? "active" : ""}`}>
+								Step
+							</span>
+						</div>
+						{index < steps.length - 1 && (
+							<div
+								className={`step-connector ${step > index ? "active" : ""}`}
+							/>
+						)}
+					</div>
+				))}
 			</div>
 
-			{/* Render steps */}
-			{step === 1 && (
+			{/* Step forms */}
+			{step === 0 && (
 				<StepOne
 					formData={registerman}
 					setFormData={setRegisterMan}
-					next={next}
+					next={handleNext}
 					formErrors={formErrors}
 				/>
 			)}
-			{step === 2 && (
+			{step === 1 && (
 				<StepTwo
 					formData={registerman}
 					setFormData={setRegisterMan}
-					next={next}
+					next={handleNext}
 					prev={prev}
 					formErrors={formErrors}
 				/>
 			)}
-			{step === 3 && (
+			{step === 2 && (
 				<StepThree
 					formData={registerman}
 					setFormData={setRegisterMan}
@@ -125,7 +184,7 @@ const Stepper = () => {
 					formErrors={formErrors}
 				/>
 			)}
-		</div>
+		</>
 	);
 };
 
