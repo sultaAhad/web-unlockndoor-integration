@@ -1,5 +1,3 @@
-// man register validation
-// src/Constant/HelperFunction.js
 // src/Constant/HelperFunction.js
 export const validateMenRegistration = (registerman, step) => {
 	const errors = {};
@@ -69,167 +67,84 @@ export const validateMenRegistration = (registerman, step) => {
 
 	return errors;
 };
+export const validateWomenRegistration = (registerWomen, step) => {
+	const errors = {};
 
-// female register validation
-export const validateFemaleRegistration = (
-	registerfemale,
-	setFormErrors,
-	galleryImages,
-	introVideos,
-	chips = [], // talent_skills
-) => {
-	let isValid = true;
-	let errors = {};
+	// Step 1: Personal Info
+	if (step === 0) {
+		if (!registerWomen.name?.trim()) errors.name = ["Name is required"];
 
-	console.log("registerfemale:", registerfemale); // Log the form data
-	console.log("chips:", chips); // Log the chips (skills)
+		if (!registerWomen.email?.trim()) {
+			errors.email = ["Email is required"];
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerWomen.email)) {
+			errors.email = ["Enter a valid email"];
+		}
 
-	// Name
-	if (!registerfemale?.name?.trim()) {
-		errors.name = ["Name is required"];
-		isValid = false;
+		if (!registerWomen.phone?.trim()) {
+			errors.phone = ["Phone number is required"];
+		} else if (!/^\d{7,15}$/.test(registerWomen.phone)) {
+			errors.phone = ["Enter a valid phone number"];
+		}
+
+		if (!registerWomen.date_of_birth) {
+			errors.date_of_birth = ["Date of Birth is required"];
+		}
+
+		if (!registerWomen.password) {
+			errors.password = ["Password is required"];
+		} else if (registerWomen.password.length < 6) {
+			errors.password = ["Password must be at least 6 characters"];
+		}
+
+		if (!registerWomen.profile_image) {
+			errors.profile_image = ["Profile image is required"];
+		}
+		if (!registerWomen.height) errors.height = ["Please select the Height"];
+		
+		if (!registerWomen.hair_color) errors.hair_color = ["Please select the Hair Color"];
+
 	}
 
-	// Email
-	if (!registerfemale?.email?.trim()) {
-		errors.email = ["Email is required"];
-		isValid = false;
-	} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerfemale.email)) {
-		errors.email = ["Invalid email format"];
-		isValid = false;
+	// Step 2: Occupation & Skills
+	if (step === 1) {
+		if (!registerWomen.occupation?.trim())
+			errors.occupation = ["Occupation is required"];
+
+		if (!registerWomen.nationality?.trim())
+			errors.nationality = ["Nationality is required"];
+
+		if (!registerWomen.address?.trim())
+			errors.address = ["Adress is required"];
+
+		if (!registerWomen.income?.trim()) {
+			errors.income = ["Income is required"];
+		}
+
+		if (!registerWomen.skills || registerWomen.skills.length === 0) {
+			errors.skills = ["At least one skill is required"];
+		}
 	}
 
-	// Phone Number
-	if (!registerfemale?.phone_number?.trim()) {
-		errors.phone_number = ["Phone number is required"];
-		isValid = false;
-	} else if (!/^\d{10}$/.test(registerfemale.phone_number)) {
-		errors.phone_number = ["Phone number must be 10 digits"];
-		isValid = false;
+	// Step 3: Media & Message
+	if (step === 2) {
+		if (!registerWomen.cover_image)
+			errors.cover_image = ["Cover image is required"];
+
+		if (!registerWomen.images || registerWomen.images.length < 5) {
+			errors.images = ["At least 5 images are required"];
+		}
+
+		if (!registerWomen.videos || registerWomen.videos.length < 2) {
+			errors.videos = ["At least 2 videos are required"];
+		}
+
+		if (!registerWomen.message?.trim()) errors.message = ["Message is required"];
 	}
 
-	// Date of Birth
-	if (!registerfemale?.dob) {
-		errors.dob = ["Date of birth is required"];
-		isValid = false;
-	}
-
-	// Password
-	if (!registerfemale?.password?.trim()) {
-		errors.password = ["Password is required"];
-		isValid = false;
-	}
-
-	// Password Confirmation
-	if (!registerfemale?.password_confirmation?.trim()) {
-		errors.password_confirmation = ["Please confirm your password"];
-		isValid = false;
-	} else if (registerfemale.password !== registerfemale.password_confirmation) {
-		errors.password_confirmation = ["Passwords do not match"];
-		isValid = false;
-	}
-
-	// Occupation
-	if (!registerfemale?.occupation?.trim()) {
-		errors.occupation = ["Occupation is required"];
-		isValid = false;
-	}
-
-	// Nationality
-	if (!registerfemale?.nationality?.trim()) {
-		errors.nationality = ["Nationality is required"];
-		isValid = false;
-	}
-
-	// Height
-	if (!registerfemale?.height?.trim()) {
-		errors.height = ["Height is required"];
-		isValid = false;
-	}
-
-	// Hair Color
-	if (!registerfemale?.hair_color?.trim()) {
-		errors.hair_color = ["Hair color is required"];
-		isValid = false;
-	}
-
-	// Eye Color
-	if (!registerfemale?.eye_color?.trim()) {
-		errors.eye_color = ["Eye color is required"];
-		isValid = false;
-	}
-
-	// Body Type
-	if (!registerfemale?.body_type?.trim()) {
-		errors.body_type = ["Body type is required"];
-		isValid = false;
-	}
-
-	// Other Platforms
-	if (!registerfemale?.other_platforms?.trim()) {
-		errors.other_platforms = ["Other platforms info is required"];
-		isValid = false;
-	}
-
-	// Reside in USA
-	if (registerfemale?.reside_in_usa === undefined) {
-		errors.reside_in_usa = ["Please indicate if you reside in the USA"];
-		isValid = false;
-	}
-
-	// Already in a Relationship
-	if (registerfemale?.already_in_relationship === undefined) {
-		errors.already_in_relationship = [
-			"Please indicate if you're already in a relationship",
-		];
-		isValid = false;
-	}
-
-	// Purpose (renamed to your_purpose)
-	if (!registerfemale?.your_purpose?.trim()) {
-		errors.your_purpose = ["Purpose is required"];
-		isValid = false;
-	}
-
-	// License/Passport
-	if (!registerfemale?.licence_passport) {
-		errors.licence_passport = ["License or passport is required"];
-		isValid = false;
-	}
-
-	// Talent/Skills
-	if (!chips || chips.length === 0) {
-		errors.talent_skills = ["At least one talent or skill is required"];
-		isValid = false;
-	}
-
-	// Profile Picture
-	if (!registerfemale?.profile_picture) {
-		errors.profile_picture = ["Profile picture is required"];
-		isValid = false;
-	}
-
-	// Cover Photo
-	if (!registerfemale?.cover_photo) {
-		errors.cover_photo = ["Cover photo is required"];
-		isValid = false;
-	}
-
-	if (!introVideos || introVideos.length < 2) {
-		errors.intro_video = ["Please upload at least 2 videos."];
-		isValid = false;
-	}
-
-	if (!galleryImages || galleryImages.length < 5) {
-		errors.gallery_images = ["Please upload at least 5 images."];
-		isValid = false;
-	}
-
-	// Set errors and return isValid
-	setFormErrors(errors);
-	console.log("Validation errors:", errors); // Log errors
-	return isValid;
+	return errors;
 };
+
+
 export const validatelogin = (login, setLoginErrors) => {
 	let isValid = true;
 	let errors = {};

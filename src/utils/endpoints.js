@@ -35,3 +35,7 @@ export const LOGIN_CHANGEPASSWORDMAN = `change-password`;
 // Endpoints
 export const MAN_SIGNUP = `auth-men/register-men`;
 export const MAN_LOGIN = `auth-men/login-men`;
+
+// Endpoints
+export const WOMEN_SIGNUP = `auth-women/register-women`;
+export const WOMEN_LOGIN = `auth-women/login-women`;

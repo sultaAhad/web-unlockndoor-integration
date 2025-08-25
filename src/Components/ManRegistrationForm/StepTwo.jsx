@@ -162,17 +162,30 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 										</div>
 
 										{/* Buttons */}
-										<div className="d-flex justify-content-between mt-3">
-											<button
-												type="button"
-												className="btn btn-secondary"
-												onClick={prev}
-											>
-												Previous
-											</button>
-											<button type="submit" className="btn btn-primary">
-												Next
-											</button>
+										<div className="d-flex justify-content-between align-content-center mt-3 gap-3">
+											<div className="submit_profile_btn position-relative d-flex align-items-center w-100">
+												<button
+													type="button"
+													className="mt-2 w-100 border text-start submit_signup_btn btn btn-primary"
+													onClick={prev}
+												>
+													Previous
+												</button>
+												<div className="profile_img ms-2">
+													<img src={right_arrow} alt="next" />
+												</div>
+											</div>
+											<div className="submit_profile_btn position-relative d-flex align-items-center w-100">
+												<button
+													type="submit"
+													className="mt-2 w-100 border text-start submit_signup_btn btn btn-primary"
+												>
+													Next
+												</button>
+												<div className="profile_img ms-2">
+													<img src={right_arrow} alt="next" />
+												</div>
+											</div>
 										</div>
 									</form>
 								</div>

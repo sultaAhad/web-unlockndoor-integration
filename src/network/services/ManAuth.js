@@ -22,18 +22,30 @@ export const ManAuth = createApi({
 			query: (data) => ({
 				url: MAN_SIGNUP,
 				method: "POST",
-				body: data, // FormData or JSON depending on your backend
+				body: data,
 			}),
 		}),
 		manLogin: build.mutation({
 			query: (credentials) => ({
 				url: MAN_LOGIN,
 				method: "POST",
-				body: credentials, // Usually JSON { email, password }
+				body: credentials,
 			}),
+		}),
+		// ✅ Dummy Selfie verify
+		verifySelfie: build.mutation({
+			queryFn: async (formData, _queryApi, _extraOptions, fetchWithBQ) => {
+				await new Promise((res) => setTimeout(res, 1000));
+				return { data: { message: "✅ Selfie verified (dummy)" } };
+			},
 		}),
 	}),
 });
 
-export const { useManSignupMutation, useManLoginMutation } = ManAuth;
+export const {
+	useManSignupMutation,
+	useManLoginMutation,
+	useVerifySelfieMutation,
+} = ManAuth;
+
 export default ManAuth;

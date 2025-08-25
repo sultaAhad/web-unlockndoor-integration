@@ -35,7 +35,7 @@ const StepFormWomen = () => {
               <div className="min-h-screen bg-gradient-to-br from-[#150328] to-[#390837] text-white p-4">
                 <div className="max-w-5xl mx-auto mt-10 bg-[#2d033b] rounded-xl shadow-xl p-6">
                   <Stepper currentStep={step} />
-                  <div className="mt-6">
+                  {/* <div className="mt-6">
                     {step === 1 && (
                       <StepOne
                         formData={formData}
@@ -59,7 +59,7 @@ const StepFormWomen = () => {
                         handleSubmit={handleSubmit}
                       />
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
