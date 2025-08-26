@@ -1,52 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Get userData from localStorage when the app first loads
-const userToken =
-	window.localStorage.getItem("userData") &&
-	JSON.parse(window.localStorage.getItem("userData"));
+const userData = localStorage.getItem("userData")
+	? JSON.parse(localStorage.getItem("userData"))
+	: null;
+
+const initialState = {
+	userToken: userData?.token || "",
+	user: userData?.user || null,
+};
 
 const AuthReducer = createSlice({
-	name: "authReducer",
-	initialState: {
-		userToken: userToken ? userToken?.token : "",
-		user: userToken ? userToken?.user : "",
-	},
+	name: "auth",
+	initialState,
 	reducers: {
 		setUserToken: (state, action) => {
-			console.log("setUserToken Payload:", action.payload); // 👈 LOG PAYLOAD
+			const { user, token, remember } = action.payload;
+			if (token) state.userToken = token;
+			if (user) state.user = user;
 
-			// If token exists in the payload, set it in the state and localStorage
-			if (action?.payload?.token) {
-				state.userToken = action?.payload?.token;
-
-				// Save token and user data together in localStorage
-				const updatedData = {
-					token: action.payload.token, // Set token
-					user: state.user, // Preserve existing user data
-				};
-				localStorage.setItem("userData", JSON.stringify(updatedData));
+			if (remember) {
+				localStorage.setItem(
+					"userData",
+					JSON.stringify({
+						token: token || state.userToken,
+						user: user || state.user,
+					}),
+				);
 			}
-
-			// If user exists in the payload, set the user in the state and localStorage
-			if (action?.payload?.user) {
-				state.user = action?.payload?.user;
-
-				// Save token and updated user data together in localStorage
-				const updatedData = {
-					token: state.userToken, // Preserve existing token
-					user: action.payload.user, // Set user
-				};
-				localStorage.setItem("userData", JSON.stringify(updatedData));
-			}
+			console.log("✅ User logged in:", state);
 		},
-		setlogoutUser: (state) => {
+		setLogoutUser: (state) => {
 			state.userToken = "";
-			state.user = "";
-			state.discount = {};
+			state.user = null;
 			localStorage.removeItem("userData");
+			console.log("🔴 User logged out");
 		},
 	},
 });
 
-export const { setUserToken, setlogoutUser, setDiscount } = AuthReducer.actions;
+export const { setUserToken, setLogoutUser } = AuthReducer.actions;
 export default AuthReducer.reducer;

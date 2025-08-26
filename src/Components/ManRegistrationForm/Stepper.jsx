@@ -5,19 +5,19 @@ import { setUserToken } from "../../network/reducers/AuthReducer";
 import { useManSignupMutation } from "../../network/services/ManAuth";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
-import StepThree from "./Stepthree";
+import StepThree from "./StepThree";
 import { validateMenRegistration } from "../../Constant/HelperFunction";
-import SelfieModal from "../SelfieModal";
-import ManPackagesTab from "../ManPackagesTab";
+import LoginModal from "../Header/LoginModal";
 
 const Stepper = () => {
 	const steps = [1, 2, 3];
 	const [step, setStep] = useState(0);
 	const [formErrors, setFormErrors] = useState({});
-	const [showSelfie, setShowSelfie] = useState(false);
-	const [showPackages, setShowPackages] = useState(false);
+	const [showLogin, setShowLogin] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 
 	const dispatch = useDispatch();
+
 	const [registerman, setRegisterMan] = useState({
 		nationality: "",
 		name: "",
@@ -37,6 +37,7 @@ const Stepper = () => {
 	});
 
 	const [manSignup, response] = useManSignupMutation();
+
 	const next = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
 	const prev = () => setStep((prev) => Math.max(prev - 1, 0));
 
@@ -52,20 +53,20 @@ const Stepper = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		if (submitting) return;
+		setSubmitting(true);
+
 		const errors = validateMenRegistration(registerman, step);
 		if (Object.keys(errors).length > 0) {
 			setFormErrors(errors);
+			setSubmitting(false);
 			return;
 		}
-		setFormErrors({});
 
 		const data = new FormData();
 		Object.keys(registerman).forEach((key) => {
 			const value = registerman[key];
-			if (Array.isArray(value))
-				value.forEach((item) =>
-					data.append(key, item instanceof File ? item : item),
-				);
+			if (Array.isArray(value)) value.forEach((item) => data.append(key, item));
 			else if (value instanceof File) data.append(key, value);
 			else data.append(key, value ?? "");
 		});
@@ -74,18 +75,20 @@ const Stepper = () => {
 			await manSignup(data).unwrap();
 		} catch (err) {
 			console.error(err);
+			setSubmitting(false);
 		}
 	};
 
+	// Registration response
 	useEffect(() => {
 		if (response?.isSuccess) {
-			dispatch(setUserToken(response?.data?.data));
 			Swal.fire({
 				title: "Success",
 				text: response?.data?.message || "Registration successful",
 				icon: "success",
 				confirmButtonText: "OK",
-			}).then(() => setTimeout(() => setShowSelfie(true), 100));
+			}).then(() => setShowLogin(true)); // registration ke baad login modal
+			setSubmitting(false);
 		}
 
 		if (response?.isError) {
@@ -99,90 +102,45 @@ const Stepper = () => {
 				icon: "error",
 				confirmButtonText: "OK",
 			});
+			setSubmitting(false);
 		}
-	}, [response, dispatch]);
-
-	// Callback after selfie verification
-	const handleSelfieVerified = () => {
-		setShowSelfie(false);
-		setShowPackages(true);
-	};
+	}, [response]);
 
 	return (
 		<>
-			{!showSelfie && !showPackages && (
-				<div>
-					<div className="stepper-container mb-4">
-						{steps.map((s, index) => (
-							<div key={index} className="step-wrapper">
-								<div className="step-content">
-									<div
-										className={`step-circle ${
-											step >= index ? "active" : "inactive"
-										}`}
-									>
-										{index + 1}
-									</div>
-									<span
-										className={`step-label ${step >= index ? "active" : ""}`}
-									>
-										Step
-									</span>
-								</div>
-								{index < steps.length - 1 && (
-									<div
-										className={`step-connector ${step > index ? "active" : ""}`}
-									/>
-								)}
-							</div>
-						))}
-					</div>
+			<div className="stepper-container mb-4">
+				{step === 0 && (
+					<StepOne
+						formData={registerman}
+						setFormData={setRegisterMan}
+						next={handleNext}
+						formErrors={formErrors}
+					/>
+				)}
+				{step === 1 && (
+					<StepTwo
+						formData={registerman}
+						setFormData={setRegisterMan}
+						next={handleNext}
+						prev={prev}
+						formErrors={formErrors}
+					/>
+				)}
+				{step === 2 && (
+					<StepThree
+						formData={registerman}
+						setFormData={setRegisterMan}
+						prev={prev}
+						handleSubmit={handleSubmit}
+						formErrors={formErrors}
+						submitting={submitting}
+					/>
+				)}
+			</div>
 
-					{step === 0 && (
-						<StepOne
-							formData={registerman}
-							setFormData={setRegisterMan}
-							next={handleNext}
-							formErrors={formErrors}
-						/>
-					)}
-					{step === 1 && (
-						<StepTwo
-							formData={registerman}
-							setFormData={setRegisterMan}
-							next={handleNext}
-							prev={prev}
-							formErrors={formErrors}
-						/>
-					)}
-					{step === 2 && (
-						<StepThree
-							formData={registerman}
-							setFormData={setRegisterMan}
-							prev={prev}
-							handleSubmit={handleSubmit}
-							formErrors={formErrors}
-						/>
-					)}
-				</div>
-			)}
-
-			{/* Selfie Modal */}
-			{showSelfie && (
-				<SelfieModal
-					isOpen={showSelfie}
-					onClose={() => setShowSelfie(false)}
-					profileImage={registerman.profile_image}
-					onVerified={handleSelfieVerified}
-				/>
-			)}
-
-			{/* Man Packages Modal */}
-			{showPackages && (
-				<ManPackagesTab
-					isOpen={showPackages}
-					onClose={() => setShowPackages(false)}
-				/>
+			{/* Login Modal */}
+			{showLogin && (
+				<LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
 			)}
 		</>
 	);

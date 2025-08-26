@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import Swal from "sweetalert2";
 import { useVerifySelfieMutation } from "../network/services/ManAuth";
 
-const SelfieModal = ({ profileImage, isOpen, onClose, onVerified }) => {
+const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 	const webcamRef = useRef(null);
 	const [preview, setPreview] = useState(null);
 	const [verifySelfie, { isLoading }] = useVerifySelfieMutation();
@@ -15,15 +15,8 @@ const SelfieModal = ({ profileImage, isOpen, onClose, onVerified }) => {
 	if (!isOpen) return null;
 
 	const capture = () => {
-		if (!webcamRef.current) {
-			Swal.fire("Error", "Webcam not ready", "error");
-			return;
-		}
 		const imageSrc = webcamRef.current.getScreenshot();
-		if (!imageSrc) {
-			Swal.fire("Error", "Failed to capture image", "error");
-			return;
-		}
+		if (!imageSrc) return Swal.fire("Error", "Capture failed", "error");
 		setPreview(imageSrc);
 	};
 
@@ -38,20 +31,17 @@ const SelfieModal = ({ profileImage, isOpen, onClose, onVerified }) => {
 	};
 
 	const handleVerify = async () => {
-		if (!preview) {
-			Swal.fire("Error", "Please capture your selfie first!", "error");
-			return;
-		}
+		if (!preview) return Swal.fire("Error", "Capture selfie first", "error");
+
 		try {
 			const selfieFile = base64ToFile(preview, "selfie.jpg");
 			const formData = new FormData();
-			formData.append("profile_image", profileImage);
 			formData.append("selfie", selfieFile);
 
 			const res = await verifySelfie(formData).unwrap();
 
 			Swal.fire("Success", res.message, "success").then(() => {
-				onVerified?.(); // ✅ call Stepper callback
+				onVerified?.();
 				setPreview(null);
 			});
 		} catch (err) {
@@ -102,48 +92,66 @@ const SelfieModal = ({ profileImage, isOpen, onClose, onVerified }) => {
 						</div>
 					</>
 				)}
-			</div>
 
-			<style jsx>{`
-				.modal-overlay {
-					position: fixed;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					background: rgba(0, 0, 0, 0.5);
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					z-index: 9999;
-				}
-				.modal-box {
-					background: #fff;
-					padding: 20px;
-					border-radius: 10px;
-					max-width: 500px;
-					width: 90%;
-					text-align: center;
-					position: relative;
-				}
-				.modal-close {
-					position: absolute;
-					top: 10px;
-					right: 15px;
-					background: transparent;
-					border: none;
-					font-size: 24px;
-					cursor: pointer;
-				}
-				.webcam {
-					width: 100%;
-					height: auto;
-					border-radius: 10px;
-				}
-				.btn-group button {
-					margin: 0 5px;
-				}
-			`}</style>
+				<style jsx>{`
+					.modal-overlay {
+						position: fixed;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						background: rgba(0, 0, 0, 0.6);
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						z-index: 9999;
+					}
+					.modal-box {
+						background: #fff;
+						padding: 25px;
+						border-radius: 12px;
+						max-width: 450px;
+						width: 90%;
+						text-align: center;
+						position: relative;
+						box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+					}
+					.modal-close {
+						position: absolute;
+						top: 10px;
+						right: 15px;
+						background: transparent;
+						border: none;
+						font-size: 26px;
+						cursor: pointer;
+					}
+					.webcam {
+						width: 100%;
+						height: auto;
+						border-radius: 10px;
+						border: 2px solid #ccc;
+					}
+					.btn-group button {
+						margin: 0 5px;
+						padding: 8px 16px;
+						border: none;
+						border-radius: 6px;
+						cursor: pointer;
+					}
+					.btn-red {
+						background: #f44336;
+						color: #fff;
+					}
+					.btn-green {
+						background: #4caf50;
+						color: #fff;
+					}
+					.btn-blue {
+						background: #2196f3;
+						color: #fff;
+					}
+				`}</style>
+			</div>
 		</div>
 	);
 };
