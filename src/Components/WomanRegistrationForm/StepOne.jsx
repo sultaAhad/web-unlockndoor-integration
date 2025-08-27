@@ -112,6 +112,11 @@ const StepOne = ({ formData, setFormData, next }) => {
 													onChange={handleInputChange}
 													className="form-control"
 												/>
+												{formErrors?.name && (
+													<p className="mt-2 text-danger">
+														{formErrors.name[0]}
+													</p>
+												)}
 											</div>
 											<div className="form-group mb-3">
 												<input
@@ -123,6 +128,11 @@ const StepOne = ({ formData, setFormData, next }) => {
 													onChange={handleInputChange}
 													className="form-control"
 												/>
+												{formErrors?.email && (
+													<p className="mt-2 text-danger">
+														{formErrors.email[0]}
+													</p>
+												)}
 											</div>
 											<div className="form-group mb-3">
 												<input
@@ -134,10 +144,15 @@ const StepOne = ({ formData, setFormData, next }) => {
 													onChange={handleInputChange}
 													className="form-control"
 												/>
+												{formErrors?.phone && (
+													<p className="mt-2 text-danger">
+														{formErrors.phone[0]}
+													</p>
+												)}
 											</div>
-											<div className="form-group position-relative mb-3">
+											<div className="form-group position-relative mb-4">
 												<DatePicker
-													selected={formData.dateOfBirth || null}
+													selected={dateOfBirth}
 													onChange={handleDateChange}
 													placeholderText="Date Of Birth (DOB must match the ID given)"
 													dateFormat="dd/MM/yyyy"
@@ -145,7 +160,6 @@ const StepOne = ({ formData, setFormData, next }) => {
 													maxDate={new Date()}
 													showYearDropdown
 													scrollableYearDropdown
-													required
 												/>
 												<div
 													className="input_icons"
@@ -157,6 +171,11 @@ const StepOne = ({ formData, setFormData, next }) => {
 												>
 													<img src={solar_calendar} alt="calendar" />
 												</div>
+												{formErrors?.date_of_birth && (
+													<p className="mt-2 text-danger">
+														{formErrors.date_of_birth[0]}
+													</p>
+												)}
 											</div>
 											<div className="form-group mb-3">
 												<input
@@ -168,6 +187,11 @@ const StepOne = ({ formData, setFormData, next }) => {
 													onChange={handleInputChange}
 													className="form-control"
 												/>
+												{formErrors?.Height && (
+													<p className="mt-2 text-danger">
+														{formErrors.Height[0]}
+													</p>
+												)}
 											</div>
 											<div className="form-group mb-3">
 												<input
@@ -179,6 +203,11 @@ const StepOne = ({ formData, setFormData, next }) => {
 													onChange={handleInputChange}
 													className="form-control"
 												/>
+												{formErrors?.HairColor && (
+													<p className="mt-2 text-danger">
+														{formErrors.HairColor[0]}
+													</p>
+												)}
 											</div>
 											<div className="form-group password_input position-relative mb-3">
 												<input

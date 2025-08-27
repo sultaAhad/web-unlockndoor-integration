@@ -12,12 +12,9 @@ const Stepper = ({ currentStep }) => {
 	const steps = [1, 2, 3];
 	const [step, setStep] = useState(0);
 	const [formErrors, setFormErrors] = useState({});
-	const [showSelfie, setShowSelfie] = useState(false);
-	const [showPackages, setShowPackages] = useState(false);
 
 	const dispatch = useDispatch();
 	const [registerWomen, setRegisterWomen] = useState({
-		nationality: "",
 		name: "",
 		email: "",
 		phone: "",
@@ -25,7 +22,13 @@ const Stepper = ({ currentStep }) => {
 		password: "",
 		occupation: "",
 		income: "",
-		can_pay: "",
+		nationality: "",
+		height: "",
+		hair_color: "",
+		address: "",
+		body_type: "",
+		occupation: "",
+		income: "",
 		skills: [],
 		profile_image: null,
 		cover_image: null,
