@@ -90,12 +90,17 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 
 	return (
 		<>
-			<Modal show={show} centered onHide={onClose}>
+			<Modal
+				show={show}
+				centered
+				onHide={onClose}
+				className="border-radius-www"
+			>
 				<Modal.Header closeButton></Modal.Header>
 				<Modal.Body className="p-4">
 					<div className="login_modal_all">
 						<div className="login_head1">
-							<h3>Login</h3>
+							<h3 className="secondary-semibold-font">Login</h3>
 							<h5>Welcome Back</h5>
 						</div>
 
@@ -110,7 +115,10 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 											setLogin({ ...login, email: e.target.value })
 										}
 									/>
-									{loginErrors?.email && <small>{loginErrors.email[0]}</small>}
+									<div className="login_icon_dv">
+										<i className="fa fa-envelope" />
+									</div>
+									{loginErrors?.email && <small className="mt-2 text-danger">{loginErrors.email[0]}</small>}
 								</div>
 
 								<div className="login_password">
@@ -122,32 +130,47 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 											setLogin({ ...login, password: e.target.value })
 										}
 									/>
-									<span onClick={togglePasswordVisibility}>
-										{showPassword ? "Hide" : "Show"}
-									</span>
+									<div
+										className="login_icon_dv"
+										style={{ cursor: "pointer" }}
+										onClick={togglePasswordVisibility}
+									>
+										<i
+											className={`fa ${
+												showPassword ? "fa-eye" : "fa-eye-slash"
+											}`}
+										/>
+									</div>
 									{loginErrors?.password && (
-										<small>{loginErrors.password[0]}</small>
+										<small className="mt-2 text-danger">{loginErrors.password[0]}</small>
 									)}
 								</div>
 							</div>
 
 							<div className="remember_dv">
-								<label>
+								<div className="remeber">
 									<input
 										type="checkbox"
 										checked={rememberMe}
 										onChange={(e) => setRememberMe(e.target.checked)}
 									/>{" "}
-									Remember me
-								</label>
-								<a href="#" onClick={onForgotPassword}>
-									Forgot Password?
-								</a>
+									<label>Remember me</label>
+								</div>
+								<div className="forgot_pass">
+									<a href="#" onClick={onForgotPassword}>
+										Forgot Password?
+									</a>
+								</div>
 							</div>
-
-							<button type="submit" disabled={response.isLoading}>
-								{response.isLoading ? "Signing In..." : "Sign In"}
-							</button>
+							<div className="login_btn">
+								<button
+									className="mt-2 border text-center d-flex align-items-center justify-content-center submit_signup_btn"
+									type="submit"
+									disabled={response.isLoading}
+								>
+									{response.isLoading ? "Signing In..." : "Sign In"}
+								</button>
+							</div>
 						</form>
 					</div>
 				</Modal.Body>

@@ -112,21 +112,25 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 
 										{/* Slider */}
 										<div className="custom-slider-section mb-3">
-											<input
-												type="range"
-												min="0"
-												max="100"
-												step="25"
-												value={rangeValue}
-												onChange={(e) => setRangeValue(Number(e.target.value))}
-												className="custom-slider"
-											/>
-											<div className="slider-labels d-flex justify-content-between">
-												<span>10k</span>
-												<span>25k</span>
-												<span>50k</span>
-												<span>75k</span>
-												<span>100k+</span>
+											<div className="slider-wrapper">
+												<input
+													type="range"
+													min="0"
+													max="100"
+													step="25"
+													value={rangeValue}
+													onChange={(e) =>
+														setRangeValue(Number(e.target.value))
+													}
+													className="custom-slider"
+												/>
+												<div className="slider-labels d-flex justify-content-between">
+													<span>10k</span>
+													<span>25k</span>
+													<span>50k</span>
+													<span>75k</span>
+													<span>100k+</span>
+												</div>
 											</div>
 										</div>
 

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import Stepper from "../../Components/WomanRegistrationForm/Stepper";
-import StepThree from "../../Components/WomanRegistrationForm/Stepthree";
-import StepTwo from "../../Components/WomanRegistrationForm/StepTwo";
-import StepOne from "../../Components/WomanRegistrationForm/StepOne";
 import Footer from "../../Components/Footer";
 import Header from "../../Components/Header/Header";
 

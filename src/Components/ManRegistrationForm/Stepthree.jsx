@@ -67,6 +67,7 @@ const StepThree = ({
 		files.map((file, idx) => (
 			<div
 				key={idx}
+				className="mt-2"
 				style={{
 					display: "inline-block",
 					position: "relative",
@@ -75,15 +76,13 @@ const StepThree = ({
 			>
 				{type === "videos" ? (
 					<video
-						width={100}
-						height={100}
+						className="wrapper-img-video-beck"
 						controls
 						src={URL.createObjectURL(file)}
 					/>
 				) : (
 					<img
-						width={100}
-						height={100}
+						className="wrapper-img-video-beck"
 						src={URL.createObjectURL(file)}
 						alt="preview"
 					/>
@@ -101,6 +100,7 @@ const StepThree = ({
 						width: "20px",
 						height: "20px",
 					}}
+					className="position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
 					onClick={() => removeFile(idx, type)}
 				>
 					✖

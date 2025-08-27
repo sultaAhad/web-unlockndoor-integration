@@ -64,17 +64,34 @@ const Stepper = () => {
 		}
 
 		const data = new FormData();
+
 		Object.keys(registerman).forEach((key) => {
 			const value = registerman[key];
-			if (Array.isArray(value)) value.forEach((item) => data.append(key, item));
-			else if (value instanceof File) data.append(key, value);
-			else data.append(key, value ?? "");
+
+			if (key === "images" || key === "videos") {
+				// ✅ append as array of files
+				value.forEach((file) => data.append(`${key}[]`, file));
+			} else if (key === "skills" && Array.isArray(value)) {
+				// ✅ backend wants skills as string (comma separated)
+				data.append("skills", value.join(","));
+			} else if (value instanceof File) {
+				data.append(key, value);
+			} else {
+				data.append(key, value ?? "");
+			}
 		});
+
+		// 🔍 Debugging: check what is going in FormData
+		console.log("🚀 FormData entries:");
+		for (let [k, v] of data.entries()) {
+			console.log(k, v);
+		}
 
 		try {
 			await manSignup(data).unwrap();
 		} catch (err) {
-			console.error(err);
+			console.error("API Error:", err);
+		} finally {
 			setSubmitting(false);
 		}
 	};
@@ -82,6 +99,7 @@ const Stepper = () => {
 	// Registration response
 	useEffect(() => {
 		if (response?.isSuccess) {
+			dispatch(setUserToken(response?.data?.data));
 			Swal.fire({
 				title: "Success",
 				text: response?.data?.message || "Registration successful",
@@ -104,39 +122,60 @@ const Stepper = () => {
 			});
 			setSubmitting(false);
 		}
-	}, [response]);
+	}, [response, dispatch]);
 
 	return (
 		<>
-			<div className="stepper-container mb-4">
-				{step === 0 && (
-					<StepOne
-						formData={registerman}
-						setFormData={setRegisterMan}
-						next={handleNext}
-						formErrors={formErrors}
-					/>
-				)}
-				{step === 1 && (
-					<StepTwo
-						formData={registerman}
-						setFormData={setRegisterMan}
-						next={handleNext}
-						prev={prev}
-						formErrors={formErrors}
-					/>
-				)}
-				{step === 2 && (
-					<StepThree
-						formData={registerman}
-						setFormData={setRegisterMan}
-						prev={prev}
-						handleSubmit={handleSubmit}
-						formErrors={formErrors}
-						submitting={submitting}
-					/>
-				)}
+			<div className="stepper-container">
+				{steps.map((s, index) => (
+					<div key={index} className="step-wrapper">
+						<div className="step-content">
+							<div
+								className={`step-circle ${
+									step >= index ? "active" : "inactive"
+								}`}
+							>
+								{s}
+							</div>
+							<span className={`step-label ${step >= index ? "active" : ""}`}>
+								Step
+							</span>
+						</div>
+						{index < steps.length - 1 && (
+							<div
+								className={`step-connector ${step > index ? "active" : ""}`}
+							/>
+						)}
+					</div>
+				))}
 			</div>
+			{step === 0 && (
+				<StepOne
+					formData={registerman}
+					setFormData={setRegisterMan}
+					next={handleNext}
+					formErrors={formErrors}
+				/>
+			)}
+			{step === 1 && (
+				<StepTwo
+					formData={registerman}
+					setFormData={setRegisterMan}
+					next={handleNext}
+					prev={prev}
+					formErrors={formErrors}
+				/>
+			)}
+			{step === 2 && (
+				<StepThree
+					formData={registerman}
+					setFormData={setRegisterMan}
+					prev={prev}
+					handleSubmit={handleSubmit}
+					formErrors={formErrors}
+					submitting={submitting}
+				/>
+			)}
 
 			{/* Login Modal */}
 			{showLogin && (
