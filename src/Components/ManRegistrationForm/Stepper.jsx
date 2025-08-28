@@ -1,3 +1,4 @@
+// components/StepperMale.js
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
@@ -6,19 +7,20 @@ import { useManSignupMutation } from "../../network/services/ManAuth";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
-import { validateMenRegistration } from "../../Constant/HelperFunction";
 import LoginModal from "../Header/LoginModal";
+import SelfieModal from "../SelfieModal";
+import { validateMenRegistration } from "../../Constant/HelperFunction";
 
-const Stepper = () => {
+const StepperMale = () => {
 	const steps = [1, 2, 3];
 	const [step, setStep] = useState(0);
 	const [formErrors, setFormErrors] = useState({});
-	const [showLogin, setShowLogin] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
-
+	const [showLogin, setShowLogin] = useState(false);
+	const [showSelfie, setShowSelfie] = useState(false);
 	const dispatch = useDispatch();
 
-	const [registerman, setRegisterMan] = useState({
+	const [registerMan, setRegisterMan] = useState({
 		nationality: "",
 		name: "",
 		email: "",
@@ -42,8 +44,8 @@ const Stepper = () => {
 	const prev = () => setStep((prev) => Math.max(prev - 1, 0));
 
 	const handleNext = () => {
-		const errors = validateMenRegistration(registerman, step);
-		if (Object.keys(errors).length > 0) {
+		const errors = validateMenRegistration(registerMan, step);
+		if (Object.keys(errors).length) {
 			setFormErrors(errors);
 			return;
 		}
@@ -56,102 +58,85 @@ const Stepper = () => {
 		if (submitting) return;
 		setSubmitting(true);
 
-		const errors = validateMenRegistration(registerman, step);
-		if (Object.keys(errors).length > 0) {
+		const errors = validateMenRegistration(registerMan, step);
+		if (Object.keys(errors).length) {
 			setFormErrors(errors);
 			setSubmitting(false);
 			return;
 		}
 
 		const data = new FormData();
-
-		Object.keys(registerman).forEach((key) => {
-			const value = registerman[key];
-
-			if (key === "images" || key === "videos") {
-				// ✅ append as array of files
-				value.forEach((file) => data.append(`${key}[]`, file));
-			} else if (key === "skills" && Array.isArray(value)) {
-				// ✅ backend wants skills as string (comma separated)
-				data.append("skills", value.join(","));
-			} else if (value instanceof File) {
-				data.append(key, value);
-			} else {
-				data.append(key, value ?? "");
-			}
+		data.append("user_type", "male");
+		Object.keys(registerMan).forEach((key) => {
+			const value = registerMan[key];
+			if (key === "images" || key === "videos")
+				value.forEach((f) => data.append(`${key}[]`, f));
+			else if (key === "skills") data.append("skills", value.join(","));
+			else if (value instanceof File) data.append(key, value);
+			else data.append(key, value ?? "");
 		});
-
-		// 🔍 Debugging: check what is going in FormData
-		console.log("🚀 FormData entries:");
-		for (let [k, v] of data.entries()) {
-			console.log(k, v);
-		}
 
 		try {
 			await manSignup(data).unwrap();
 		} catch (err) {
-			console.error("API Error:", err);
+			console.error(err);
 		} finally {
 			setSubmitting(false);
 		}
 	};
 
-	// Registration response
 	useEffect(() => {
 		if (response?.isSuccess) {
-			dispatch(setUserToken(response?.data?.data));
+			const apiData = response?.data?.data.men;
+			const token = response?.data?.data.token;
+
+			dispatch(setUserToken({ user: apiData, token, remember: true }));
+
 			Swal.fire({
 				title: "Success",
 				text: response?.data?.message || "Registration successful",
 				icon: "success",
-				confirmButtonText: "OK",
-			}).then(() => setShowLogin(true)); // registration ke baad login modal
-			setSubmitting(false);
+			}).then(() => setShowLogin(true));
 		}
 
 		if (response?.isError) {
-			const errorData = response?.error?.data;
-			let errorMessage = errorData?.message || "An error occurred";
-			if (errorData?.errors)
-				errorMessage = Object.values(errorData.errors).flat().join("\n");
-			Swal.fire({
-				title: "Error",
-				text: errorMessage,
-				icon: "error",
-				confirmButtonText: "OK",
-			});
-			setSubmitting(false);
+			const errData = response?.error?.data;
+			let msg = errData?.message || "Error occurred";
+			if (errData?.errors)
+				msg = Object.values(errData.errors).flat().join("\n");
+			Swal.fire({ title: "Error", text: msg, icon: "error" });
 		}
 	}, [response, dispatch]);
+
+	const handleSelfieVerified = () => {
+		setShowSelfie(false);
+	};
 
 	return (
 		<>
 			<div className="stepper-container">
-				{steps.map((s, index) => (
-					<div key={index} className="step-wrapper">
+				{steps.map((s, i) => (
+					<div key={i} className="step-wrapper">
 						<div className="step-content">
 							<div
-								className={`step-circle ${
-									step >= index ? "active" : "inactive"
-								}`}
+								className={`step-circle ${step >= i ? "active" : "inactive"}`}
 							>
 								{s}
 							</div>
-							<span className={`step-label ${step >= index ? "active" : ""}`}>
+							<span className={`step-label ${step >= i ? "active" : ""}`}>
 								Step
 							</span>
 						</div>
-						{index < steps.length - 1 && (
-							<div
-								className={`step-connector ${step > index ? "active" : ""}`}
-							/>
+						{i < steps.length - 1 && (
+							<div className={`step-connector ${step > i ? "active" : ""}`} />
 						)}
 					</div>
 				))}
 			</div>
+
 			{step === 0 && (
 				<StepOne
-					formData={registerman}
+					formData={registerMan}
 					setFormData={setRegisterMan}
 					next={handleNext}
 					formErrors={formErrors}
@@ -159,7 +144,7 @@ const Stepper = () => {
 			)}
 			{step === 1 && (
 				<StepTwo
-					formData={registerman}
+					formData={registerMan}
 					setFormData={setRegisterMan}
 					next={handleNext}
 					prev={prev}
@@ -168,7 +153,7 @@ const Stepper = () => {
 			)}
 			{step === 2 && (
 				<StepThree
-					formData={registerman}
+					formData={registerMan}
 					setFormData={setRegisterMan}
 					prev={prev}
 					handleSubmit={handleSubmit}
@@ -177,12 +162,14 @@ const Stepper = () => {
 				/>
 			)}
 
-			{/* Login Modal */}
-			{showLogin && (
-				<LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
-			)}
+			<LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
+			<SelfieModal
+				isOpen={showSelfie}
+				onClose={() => setShowSelfie(false)}
+				onVerified={handleSelfieVerified}
+			/>
 		</>
 	);
 };
 
-export default Stepper;
+export default StepperMale;

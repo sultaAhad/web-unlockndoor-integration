@@ -4,27 +4,44 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { setUserToken } from "../../network/reducers/AuthReducer";
 import { useManLoginMutation } from "../../network/services/ManAuth";
+import { useWomenLoginMutation } from "../../network/services/WomanAuth";
 import { validatelogin } from "../../Constant/HelperFunction";
 import SelfieModal from "../SelfieModal";
 import ManPackagesTab from "../ManPackagesTab";
+import { useNavigate } from "react-router-dom";
+import WomenselfieModel from "../WomenselfieModel";
+import PackageSelectionModal from "../PackageSelectionModal";
 
 const LoginModal = ({ show, onClose, onForgotPassword }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const userToken = useSelector((state) => state.auth.userToken);
 
-	const [showPassword, setShowPassword] = useState(false);
-	const [login, setLogin] = useState({ email: "", password: "" });
+	// Active Tab: male or female
+	const [activeTab, setActiveTab] = useState("male");
+
+	// Form states
+	const [maleLogin, setMaleLogin] = useState({ email: "", password: "" });
+	const [femaleLogin, setFemaleLogin] = useState({ email: "", password: "" });
 	const [loginErrors, setLoginErrors] = useState({});
 	const [rememberMe, setRememberMe] = useState(false);
+
+	// Password visibility
+	const [showPassword, setShowPassword] = useState(false);
+
+	// Modals
 	const [showSelfie, setShowSelfie] = useState(false);
 	const [showPackages, setShowPackages] = useState(false);
+	const [showWomenSelfie, setShowWomenSelfie] = useState(false);
+	const [showWomenPackage, setShowWomenPackage] = useState(false);
 
-	const [manLogin, response] = useManLoginMutation();
+	// API mutations
+	const [manLogin, manResponse] = useManLoginMutation();
+	const [womenLogin, womenResponse] = useWomenLoginMutation();
 
-	// ✅ Prevent login modal if user already logged in
+	// Close login modal if already logged in
 	useEffect(() => {
 		if (userToken) {
-			console.log("🔹 User already logged in:", userToken);
 			onClose();
 		}
 	}, [userToken]);
@@ -33,43 +50,74 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (!validatelogin(login, setLoginErrors)) return;
+		const currentLogin = activeTab === "male" ? maleLogin : femaleLogin;
+
+		if (!validatelogin(currentLogin, setLoginErrors)) return;
 
 		const formData = new FormData();
-		formData.append("email", login.email);
-		formData.append("password", login.password);
+		formData.append("email", currentLogin.email);
+		formData.append("password", currentLogin.password);
 
-		manLogin(formData);
+		if (activeTab === "male") manLogin(formData);
+		else womenLogin(formData);
 	};
 
+	// Handle API responses
 	useEffect(() => {
-		if (response?.isSuccess) {
-			const apiData = response?.data?.response?.data;
+		const response = activeTab === "male" ? manResponse : womenResponse;
 
-			if (!apiData?.men || !apiData?.token) {
+		if (response?.isSuccess) {
+			const apiData =
+				activeTab === "male"
+					? response?.data?.response?.data?.men
+					: response?.data?.response?.data?.women;
+			const token = response?.data?.response?.data?.token;
+
+			if (!apiData || !token) {
 				Swal.fire("Error", "Invalid response format", "error");
 				return;
 			}
 
 			dispatch(
 				setUserToken({
-					user: apiData.men,
-					token: apiData.token,
+					user: apiData,
+					token: token,
 					remember: rememberMe,
 				}),
 			);
-
-			console.log("✅ Login Success, Redux + localStorage updated");
-
-			setLogin({ email: "", password: "" });
-			setLoginErrors({});
-			onClose();
 
 			Swal.fire(
 				"Success",
 				response?.data?.message || "Login successful",
 				"success",
-			).then(() => setShowSelfie(true));
+			).then(() => {
+				// Male flow
+				if (activeTab === "male") {
+					if (apiData.selfie_verified && apiData.package) {
+						navigate("/profile");
+					} else if (!apiData.selfie_verified) {
+						setShowSelfie(true);
+					} else if (!apiData.package) {
+						setShowPackages(true);
+					}
+				}
+				// Female flow
+				else {
+					if (apiData.selfie_verified && apiData.package) {
+						navigate("/women-profile");
+					} else if (!apiData.selfie_verified) {
+						setShowWomenSelfie(true);
+					} else if (!apiData.package) {
+						setShowWomenPackage(true);
+					}
+				}
+			});
+
+			// Reset form
+			if (activeTab === "male") setMaleLogin({ email: "", password: "" });
+			else setFemaleLogin({ email: "", password: "" });
+
+			onClose();
 		}
 
 		if (response?.isError) {
@@ -81,11 +129,16 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 				"Login failed";
 			Swal.fire("Error", errorMessage, "error");
 		}
-	}, [response]);
+	}, [manResponse, womenResponse, activeTab]);
 
 	const handleSelfieVerified = () => {
 		setShowSelfie(false);
 		setShowPackages(true);
+	};
+
+	const handleWomenSelfieVerified = () => {
+		setShowWomenSelfie(false);
+		setShowWomenPackage(true);
 	};
 
 	return (
@@ -104,36 +157,77 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 							<h5>Welcome Back</h5>
 						</div>
 
+						{/* Tabs */}
+						<div className="login-tabs mb-3 d-flex justify-content-center">
+							<button
+								type="button"
+								className={`tab-btn ${activeTab === "male" ? "active" : ""}`}
+								onClick={() => setActiveTab("male")}
+							>
+								Male
+							</button>
+							<button
+								type="button"
+								className={`tab-btn ${activeTab === "female" ? "active" : ""}`}
+								onClick={() => setActiveTab("female")}
+							>
+								Female
+							</button>
+						</div>
+
 						<form onSubmit={handleSubmit}>
 							<div className="login_input">
 								<div className="login_email">
 									<input
 										type="email"
 										placeholder="Email"
-										value={login.email}
+										value={
+											activeTab === "male" ? maleLogin.email : femaleLogin.email
+										}
 										onChange={(e) =>
-											setLogin({ ...login, email: e.target.value })
+											activeTab === "male"
+												? setMaleLogin({ ...maleLogin, email: e.target.value })
+												: setFemaleLogin({
+														...femaleLogin,
+														email: e.target.value,
+												  })
 										}
 									/>
 									<div className="login_icon_dv">
 										<i className="fa fa-envelope" />
 									</div>
-									{loginErrors?.email && <small className="mt-2 text-danger">{loginErrors.email[0]}</small>}
+									{loginErrors?.email && (
+										<small className="mt-2 text-danger">
+											{loginErrors.email[0]}
+										</small>
+									)}
 								</div>
 
 								<div className="login_password">
 									<input
 										type={showPassword ? "text" : "password"}
 										placeholder="Password"
-										value={login.password}
+										value={
+											activeTab === "male"
+												? maleLogin.password
+												: femaleLogin.password
+										}
 										onChange={(e) =>
-											setLogin({ ...login, password: e.target.value })
+											activeTab === "male"
+												? setMaleLogin({
+														...maleLogin,
+														password: e.target.value,
+												  })
+												: setFemaleLogin({
+														...femaleLogin,
+														password: e.target.value,
+												  })
 										}
 									/>
 									<div
 										className="login_icon_dv"
 										style={{ cursor: "pointer" }}
-										onClick={togglePasswordVisibility}
+										onClick={() => togglePasswordVisibility()}
 									>
 										<i
 											className={`fa ${
@@ -142,12 +236,14 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 										/>
 									</div>
 									{loginErrors?.password && (
-										<small className="mt-2 text-danger">{loginErrors.password[0]}</small>
+										<small className="mt-2 text-danger">
+											{loginErrors.password[0]}
+										</small>
 									)}
 								</div>
 							</div>
 
-							<div className="remember_dv">
+							<div className="remember_dv d-flex justify-content-between align-items-center">
 								<div className="remeber">
 									<input
 										type="checkbox"
@@ -162,13 +258,24 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 									</a>
 								</div>
 							</div>
-							<div className="login_btn">
+
+							<div className="login_btn mt-3">
 								<button
-									className="mt-2 border text-center d-flex align-items-center justify-content-center submit_signup_btn"
+									className="submit_signup_btn w-100 main-wrapper-btn-wrap mt-2 border text-center px-3 gradient-button"
 									type="submit"
-									disabled={response.isLoading}
+									disabled={
+										activeTab === "male"
+											? manResponse.isLoading
+											: womenResponse.isLoading
+									}
 								>
-									{response.isLoading ? "Signing In..." : "Sign In"}
+									{activeTab === "male"
+										? manResponse.isLoading
+											? "Signing In..."
+											: "Sign In"
+										: womenResponse.isLoading
+										? "Signing In..."
+										: "Sign In"}
 								</button>
 							</div>
 						</form>
@@ -176,6 +283,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 				</Modal.Body>
 			</Modal>
 
+			{/* Male Modals */}
 			{showSelfie && (
 				<SelfieModal
 					isOpen={showSelfie}
@@ -183,11 +291,25 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 					onVerified={handleSelfieVerified}
 				/>
 			)}
-
 			{showPackages && (
 				<ManPackagesTab
-					show={showPackages}
-					handleClose={() => setShowPackages(false)}
+					isOpen={showPackages}
+					onClose={() => setShowPackages(false)}
+				/>
+			)}
+
+			{/* Female Modals */}
+			{showWomenSelfie && (
+				<WomenselfieModel
+					isOpen={showWomenSelfie}
+					onClose={() => setShowWomenSelfie(false)}
+					onVerified={handleWomenSelfieVerified}
+				/>
+			)}
+			{showWomenPackage && (
+				<PackageSelectionModal
+					isOpen={showWomenPackage}
+					onClose={() => setShowWomenPackage(false)}
 				/>
 			)}
 		</>

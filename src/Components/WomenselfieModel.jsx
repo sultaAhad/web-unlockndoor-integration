@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import Swal from "sweetalert2";
 import { useVerifySelfieMutation } from "../network/services/ManAuth";
 
-const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
+const WomenselfieModel = ({ isOpen, onClose, user, onVerified }) => {
 	const webcamRef = useRef(null);
 	const [preview, setPreview] = useState(null);
 	const [verifySelfie, { isLoading }] = useVerifySelfieMutation();
@@ -159,4 +159,4 @@ const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
 	);
 };
 
-export default SelfieModal;
+export default WomenselfieModel;

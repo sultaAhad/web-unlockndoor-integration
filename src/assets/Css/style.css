@@ -90,8 +90,8 @@ body {
 }
 
 /* For Chrome, Safari, Edge, Opera */
-input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
@@ -99,7 +99,7 @@ input[type='number']::-webkit-inner-spin-button {
 .wrapper-bg-good {
 	background: transparent !important;
 	box-shadow: unset !important;
-	border: 1px solid #9C1648 ! important;
+	border: 1px solid #9c1648 !important;
 	padding: 9px 22px !important;
 }
 
@@ -115,20 +115,20 @@ input[type='number']::-webkit-inner-spin-button {
 
 .wrapper-deletetrash {
 	width: 100%;
-	height: unset ! important;
-	object-fit: fill ! important;
-	border-radius: unset ! important;
+	height: unset !important;
+	object-fit: fill !important;
+	border-radius: unset !important;
 }
 
 /* For Firefox */
-input[type='number'] {
+input[type="number"] {
 	-moz-appearance: textfield;
 }
 
 /* background.css */
 
 .inner-bg {
-	background-image: url('/src/assets/img/innerpages1.png');
+	background-image: url("/src/assets/img/innerpages1.png");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -177,11 +177,13 @@ input[type='number'] {
 	border-style: solid;
 	border-radius: 50em;
 	background: #9e42e6;
-	background: linear-gradient(90deg,
-			rgba(158, 66, 230, 1) 0%,
-			rgba(157, 44, 151, 1) 48%,
-			rgba(156, 29, 98, 1) 70%,
-			rgba(156, 22, 72, 1) 100%);
+	background: linear-gradient(
+		90deg,
+		rgba(158, 66, 230, 1) 0%,
+		rgba(157, 44, 151, 1) 48%,
+		rgba(156, 29, 98, 1) 70%,
+		rgba(156, 22, 72, 1) 100%
+	);
 	border: 0 !important;
 	box-shadow: 0px 0px 9px rgba(250, 160, 0, 0.35);
 }
@@ -310,7 +312,7 @@ img.wrapper-bug {
 }
 
 button.main-wrapper-btn-wrap {
-	padding: 10px 40px ! important;
+	padding: 10px 40px !important;
 	border-radius: 10px;
 }
 
@@ -371,7 +373,9 @@ button.main-wrapper-btn-wrap {
 	height: 1em;
 	padding: 0.25em 0.25em;
 	color: #fff;
-	background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%239C1648'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+	background: transparent
+		url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%239C1648'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
+		center/1em auto no-repeat;
 	border: 0;
 	border-radius: 0.25rem;
 	opacity: 0.5;
@@ -977,23 +981,23 @@ button.main-wrapper-btn-wrap {
 	color: #ffffff;
 }
 .map_img {
-    width: 20px;
+	width: 20px;
 }
 .wrapper-img-video-beck {
-    width: 100%;
-    height: 70px;
-    object-fit: fill;
+	width: 100%;
+	height: 70px;
+	object-fit: fill;
 }
 img.img-fluid.mb-3.wrapperlogo {
-    width: 80px;
-    height: 90px;
-    object-fit: scale-down;
+	width: 80px;
+	height: 90px;
+	object-fit: scale-down;
 }
 .reality_sec .boy_img_wrapper img {
-    width: 100%;
-    border-radius: 20px;
-    height: 710px;
-    object-fit: cover;
+	width: 100%;
+	border-radius: 20px;
+	height: 710px;
+	object-fit: cover;
 }
 
 .reality_sec .reality_head h2 {
@@ -1258,7 +1262,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	font-family: "TomatoGrotesk-Bold";
 }
 .remo_time_input input {
-    background: #F3F3F3;
+	background: #f3f3f3;
 }
 
 .specialist_Sec {
@@ -1296,7 +1300,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	box-shadow: 0px 0px 9px rgba(250, 160, 0, 0.35);
 }
 
-.btn-check:focus+.btn-primary,
+.btn-check:focus + .btn-primary,
 .btn-primary:focus {
 	color: #fff;
 	background-color: transparent;
@@ -1513,7 +1517,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	outline: 0;
 	box-shadow: unset !important;
 	outline: none;
-	border-color: #CF1090;
+	border-color: #cf1090;
 	background: #413959;
 }
 
@@ -1521,7 +1525,6 @@ li.bullet_Wrapper.wrapper-bullet {
 
 /* Dancing Animation  */
 @keyframes dance1 {
-
 	0%,
 	100% {
 		transform: translateY(0);
@@ -1533,7 +1536,6 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 @keyframes dance2 {
-
 	0%,
 	100% {
 		transform: rotate(0);
@@ -1545,7 +1547,6 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 @keyframes dance3 {
-
 	0%,
 	100% {
 		transform: scale(1);
@@ -1557,7 +1558,6 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 @keyframes dance4 {
-
 	0%,
 	100% {
 		transform: translateX(0);
@@ -1569,7 +1569,6 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 @keyframes dance5 {
-
 	0%,
 	100% {
 		transform: skew(0deg);
@@ -1581,7 +1580,6 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 @keyframes dance6 {
-
 	0%,
 	100% {
 		transform: translateY(0);
@@ -1709,12 +1707,12 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 .get-started-btn {
-	background: #000 ! important;
-	color: #fff ! important;
+	background: #000 !important;
+	color: #fff !important;
 }
 
 .man-btn {
-	background: #fff ! important;
+	background: #fff !important;
 	color: #9c2683 !important;
 }
 
@@ -1876,9 +1874,9 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 .wrapper-centered-wrapppp:hover {
-	color: #9c1648 ! important;
+	color: #9c1648 !important;
 	background-color: unset;
-	border: 1px solid #9c1648 ! important;
+	border: 1px solid #9c1648 !important;
 }
 
 .pack_tab_btn a {
@@ -2068,12 +2066,12 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 .offer-btn:hover {
-	background-color: #9C1648;
+	background-color: #9c1648;
 	color: #fff;
 }
 
 .offer-btn:focus {
-	background-color: #9C1648;
+	background-color: #9c1648;
 	color: #fff;
 }
 
@@ -2083,7 +2081,7 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 .bg-incoming {
-	border-radius: 20px 20px 0px 20px ! important;
+	border-radius: 20px 20px 0px 20px !important;
 }
 
 .sub_img img {
@@ -2118,7 +2116,7 @@ li.bullet_Wrapper.wrapper-bullet {
 
 .wrapper-navigate-main {
 	display: flex;
-	width: 150px ! important;
+	width: 150px !important;
 	align-items: center;
 	justify-content: center;
 	gap: 12px;
@@ -2285,8 +2283,6 @@ li.bullet_Wrapper.wrapper-bullet {
 	padding: 15px;
 }
 
-
-
 .our_faq_sec .faq_wrapper {
 	padding: 51px;
 	height: 760px;
@@ -2337,18 +2333,18 @@ li.bullet_Wrapper.wrapper-bullet {
 
 /* Image Styling */
 .people_img-sec .img_wrapper img {
-    width: 100%;
-    max-width: 100%;
-    height: 280px;
-    border-radius: 12px;
-    object-fit: fill;
+	width: 100%;
+	max-width: 100%;
+	height: 280px;
+	border-radius: 12px;
+	object-fit: fill;
 }
-.people_img-sec .img_wrapper video{
-	 width: 100%;
-    max-width: 100%;
-    height: 280px;
-    border-radius: 12px;
-    object-fit: fill;
+.people_img-sec .img_wrapper video {
+	width: 100%;
+	max-width: 100%;
+	height: 280px;
+	border-radius: 12px;
+	object-fit: fill;
 }
 /* Modal Css  */
 
@@ -2365,12 +2361,12 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 /* On hover */
-.pricing_modal input[type="radio"]:hover+.checkmark {
+.pricing_modal input[type="radio"]:hover + .checkmark {
 	background-color: #ccc;
 }
 
 /* When checked */
-.pricing_modal input[type="radio"]:checked+.checkmark {
+.pricing_modal input[type="radio"]:checked + .checkmark {
 	background-color: #fff;
 }
 
@@ -2387,7 +2383,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	background-color: var(--color-1);
 }
 
-.pricing_modal input[type="radio"]:checked+.checkmark::after {
+.pricing_modal input[type="radio"]:checked + .checkmark::after {
 	display: block;
 }
 
@@ -2468,7 +2464,6 @@ li.bullet_Wrapper.wrapper-bullet {
 	background: #b8000a;
 }
 
-
 /* Category Modal Css  */
 
 .category_modal .form-control {
@@ -2479,7 +2474,6 @@ li.bullet_Wrapper.wrapper-bullet {
 	border: 1px solid transparent;
 	border-radius: 15px;
 	padding: 14px 20px;
-
 }
 
 select.form-select.form-control.custom-select-arrow {
@@ -2599,11 +2593,146 @@ select.form-select.form-control.custom-select-arrow {
 }
 
 .wrapper-mmm {
-	box-shadow: unset ! important;
+	box-shadow: unset !important;
 }
 
 .height-wrapper {
 	height: 100%;
+}
+
+/*  */
+/* Container for male/female login tabs */
+.login-tabs {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+.login-tabs .tab-btn {
+	position: relative;
+	padding: 10px 25px;
+	font-size: 16px;
+	font-family: TomatoGrotesk-Regular, sans-serif;
+	text-transform: capitalize;
+	color: #fff;
+	background: transparent;
+	border: 2px solid transparent;
+	border-radius: 12px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 0 10px rgba(156, 22, 72, 0.6);
+}
+
+.login-tabs .tab-btn.active {
+	color: #fff;
+	font-weight: 600;
+}
+
+.login-tabs .tab-btn.active::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	padding: 2px; /* border width */
+	border-radius: 12px;
+	background: linear-gradient(to right, #ff3cac, #784ba0); /* gradient */
+	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	z-index: -1;
+}
+
+.login_btn .submit_signup_btn::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	padding: 2px;
+	border-radius: 12px;
+	background: linear-gradient(to right, #ff3cac, #784ba0);
+	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	z-index: -1;
+}
+
+.login_btn .submit_signup_btn:hover {
+	transform: scale(1.05);
+	box-shadow: 0 0 25px rgba(156, 22, 72, 0.8);
+}
+
+/* Align forgot password and remember me */
+.remember_dv {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 15px;
+}
+
+.remember_dv .remeber input[type="checkbox"] {
+	margin-right: 5px;
+}
+
+.login_password {
+	position: relative;
+}
+
+.login_password .login_icon_dv {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #999;
+}
+
+/* Modal inner container */
+.login_modal_all {
+	padding: 15px;
+}
+
+.login_head1 h3 {
+	font-size: 22px;
+	font-weight: 600;
+}
+
+.login_head1 h5 {
+	font-size: 16px;
+	font-weight: 400;
+	margin-top: 5px;
+}
+/* Tabs container */
+.login-tabs {
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	margin-bottom: 20px;
+}
+
+/* Base tab button */
+.login-tabs .tab-btn {
+	padding: 10px 25px;
+	font-size: 16px;
+	font-family: TomatoGrotesk-Regular, sans-serif;
+	border: 2px solid #fff;
+	border-radius: 12px;
+	background-color: transparent;
+	color: #000;
+	cursor: pointer;
+	position: relative;
+	transition: all 0.3s ease;
+}
+
+/* Active tab with gradient */
+.login-tabs .tab-btn.active {
+	color: #fff;
+	font-weight: 600;
+	background: linear-gradient(to right, #ff3cac, #784ba0);
+	border: none;
+	box-shadow: 0 0 15px rgba(156, 22, 72, 0.8);
+}
+
+/* Optional: hover effect */
+.login-tabs .tab-btn:hover {
+	transform: scale(1.05);
 }
 
 @media (max-width: 1367px) {

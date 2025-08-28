@@ -15,7 +15,6 @@ export const CONTECT_US = "contact/send-contact-query";
 
 export const SEND_SUBSCRIPTION = "subscription/send-subscription-query";
 
-
 //  Auth endpoint
 
 export const LOGIN_MAN = `register`;
@@ -35,6 +34,9 @@ export const LOGIN_CHANGEPASSWORDMAN = `change-password`;
 // Endpoints
 export const MAN_SIGNUP = `auth-men/register-men`;
 export const MAN_LOGIN = `auth-men/login-men`;
+export const MAN_SELFIE = `auth-men/verify-selfie`;
+export const GET_MANPACKAGES = `package`;
+export const PURCHASE_PACKAGES = `auth-men/men-purchase-package`;
 
 // Endpoints
 export const WOMEN_SIGNUP = `auth-women/register-women`;

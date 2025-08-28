@@ -83,11 +83,7 @@ function Header() {
 							<div className="wrapper">
 								<div className="img_wrapper">
 									<Link to="/">
-										<img
-											src={web_new_logo}
-											className="img-fluid"
-											alt="logo"
-										/>
+										<img src={web_new_logo} className="img-fluid" alt="logo" />
 									</Link>
 								</div>
 							</div>
@@ -117,11 +113,7 @@ function Header() {
 									onClick={() => handleCategoryShow("male")}
 									className="btn-bgtransparent under-line"
 								>
-									<img
-										src={outline1}
-										alt="Men"
-										className="img-fluid pe-2"
-									/>
+									<img src={outline1} alt="Men" className="img-fluid pe-2" />
 									Men
 								</button>
 
@@ -130,11 +122,7 @@ function Header() {
 									onClick={() => handleCategoryShow("female")}
 									className="border wrapper-anchor"
 								>
-									<img
-										src={outline2}
-										alt="Women"
-										className="img-fluid pe-2"
-									/>
+									<img src={outline2} alt="Women" className="img-fluid pe-2" />
 									Women
 								</button>
 

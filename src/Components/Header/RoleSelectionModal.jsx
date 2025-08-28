@@ -16,7 +16,9 @@ const RoleSelectionModal = ({ show, onClose, onLoginClick }) => {
 				<Modal.Header closeButton></Modal.Header>
 				<Modal.Body>
 					<div className="header_modal_all">
-						<h4 className="mb-0 secondary-secondsemibold-font level-7">Please Select Your Role</h4>
+						<h4 className="mb-0 secondary-secondsemibold-font level-7">
+							Please Select Your Role
+						</h4>
 						<p>
 							Lorem ipsum dolor sit amet, consect adipiscing elit, sed sit dolor
 						</p>
@@ -38,7 +40,9 @@ const RoleSelectionModal = ({ show, onClose, onLoginClick }) => {
 								</Button>
 							</Link>
 						</div>
-						<h6 className="mt-2 mb-2 secondary-secondsemibold-font">Already have an account? </h6>
+						<h6 className="mt-2 mb-2 secondary-secondsemibold-font">
+							Already have an account?{" "}
+						</h6>
 						<Button
 							className="main-wrapper-btn-wrap mt-2 border text-center px-3 gradient-button"
 							variant="secondary"

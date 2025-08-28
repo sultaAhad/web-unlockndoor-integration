@@ -65,6 +65,8 @@ const Stepper = () => {
 		}
 
 		const data = new FormData();
+		data.append("user_type", "female"); // ✅ Tell backend this is a female user
+
 		Object.keys(registerWomen).forEach((key) => {
 			const value = registerWomen[key];
 
@@ -143,7 +145,9 @@ const Stepper = () => {
 					<div key={index} className="step-wrapper">
 						<div className="step-content">
 							<div
-								className={`step-circle ${step >= index ? "active" : "inactive"}`}
+								className={`step-circle ${
+									step >= index ? "active" : "inactive"
+								}`}
 							>
 								{s}
 							</div>
