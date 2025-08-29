@@ -50,9 +50,10 @@ const ManPackagesTab = ({ isOpen, onClose }) => {
 										<button
 											className="btn rounded-pill py-3 px-4 bg-white font_reg text-capitalize font_level4"
 											onClick={() => {
-												onClose(); // modal close
+												console.log("👉 Package Selected:", pack);
+												onClose();
 												navigate("/man-subscription", {
-													state: { selected: pack }, // only selected package
+													state: { selected: pack },
 												});
 											}}
 										>

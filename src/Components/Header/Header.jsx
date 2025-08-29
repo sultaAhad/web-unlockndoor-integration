@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
 	web_new_logo,
 	outline1,
@@ -21,47 +22,12 @@ function Header() {
 	const [showModal4, setShowModal4] = useState(false); // OTP
 	const [showModal5, setShowModal5] = useState(false); // New Password
 
-	const location = useLocation();
-	const currentPath = location.pathname.toLowerCase();
-
-	const profilePages = new Set([
-		"/profile",
-		"/followers",
-		"/editprofile",
-		"/following",
-		"/mygroups",
-		"/creategroup",
-		"/editgroup",
-		"/my-events",
-		"/create-event",
-		"/event-detail",
-		"/event-registered",
-		"/event-editdetail",
-		"/member-profile",
-		"/event-group-detail",
-		"/event-edit-group",
-		"/joined-groups",
-		"/join-group-detail",
-		"/my-orders",
-		"/my-order-details",
-		"/my-membership",
-		"/my-address",
-		"/add-new-address",
-		"/edit-address",
-		"/become-squard-leader",
-		"/chat-profile",
-		"/setting",
-		"/setting-payment",
-		"/setting-payment-detail",
-		"/setting-password",
-		"/setting-notification",
-	]);
-
-	const isProfilePage = profilePages.has(currentPath);
-
-	// Category Modal state
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
 	const [selectedGender, setSelectedGender] = useState("");
+
+	// ✅ Get user from Redux
+	const { user } = useSelector((state) => state.auth);
+	console.log("🔵 Redux User from Header:", user);
 
 	const handleCategoryShow = (gender) => {
 		setSelectedGender(gender); // "male" or "female"
@@ -75,7 +41,7 @@ function Header() {
 
 	return (
 		<>
-			{/* Header Section  */}
+			{/* Header Section */}
 			<section className="header_sec pt-2">
 				<div className="container">
 					<div className="row align-items-center">
@@ -127,7 +93,7 @@ function Header() {
 								</button>
 
 								{/* Profile / Login */}
-								{!isProfilePage ? (
+								{!user ? (
 									<Link
 										className="border only_for_img wrapper-anchor"
 										onClick={() => setShowModal1(true)}
@@ -137,10 +103,13 @@ function Header() {
 										</span>
 									</Link>
 								) : (
-									<Link className="only_for_img ">
+									<Link
+										className="only_for_img"
+										to={user.gender === "male" ? "/profile" : "/women-profiles"}
+									>
 										<span>
 											<img
-												src={men_profile}
+												src={user.profile_image_url || men_profile}
 												alt="Profile"
 												className="wrapper-bug"
 											/>

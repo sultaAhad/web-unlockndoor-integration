@@ -15,20 +15,19 @@ const AuthReducer = createSlice({
 	initialState,
 	reducers: {
 		setUserToken: (state, action) => {
-			const { user, token, remember } = action.payload;
+			const { user, token, remember, gender } = action.payload;
 			if (token) state.userToken = token;
-			if (user) state.user = user;
+			if (user) state.user = { ...user, gender };
 
 			if (remember) {
 				localStorage.setItem(
 					"userData",
 					JSON.stringify({
 						token: token || state.userToken,
-						user: user || state.user,
+						user: { ...user, gender } || state.user,
 					}),
 				);
 			}
-			console.log("✅ User logged in:", state);
 		},
 		setLogoutUser: (state) => {
 			state.userToken = "";

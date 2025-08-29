@@ -71,6 +71,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 				activeTab === "male"
 					? response?.data?.response?.data?.men
 					: response?.data?.response?.data?.women;
+
 			const token = response?.data?.response?.data?.token;
 
 			if (!apiData || !token) {
@@ -91,18 +92,15 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 				response?.data?.message || "Login successful",
 				"success",
 			).then(() => {
-				// Male flow
 				if (activeTab === "male") {
 					if (apiData.selfie_verified && apiData.package) {
-						navigate("/profile");
+						navigate("/profile"); // dono true → direct profile
 					} else if (!apiData.selfie_verified) {
-						setShowSelfie(true);
+						setShowSelfie(true); // sirf selfie missing → selfie modal only
 					} else if (!apiData.package) {
-						setShowPackages(true);
+						setShowPackages(true); // sirf package missing → package modal
 					}
-				}
-				// Female flow
-				else {
+				} else {
 					if (apiData.selfie_verified && apiData.package) {
 						navigate("/women-profile");
 					} else if (!apiData.selfie_verified) {
@@ -133,12 +131,26 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 
 	const handleSelfieVerified = () => {
 		setShowSelfie(false);
-		setShowPackages(true);
+		const apiData = manResponse?.data?.response?.data?.men;
+
+		if (apiData?.package) {
+			// agar package already true hai → direct navigate
+			navigate("/profile");
+		} else {
+			// agar package false hai → tabhi package modal kholna
+			setShowPackages(true);
+		}
 	};
 
 	const handleWomenSelfieVerified = () => {
 		setShowWomenSelfie(false);
-		setShowWomenPackage(true);
+		const apiData = womenResponse?.data?.response?.data?.women;
+
+		if (apiData?.package) {
+			navigate("/women-profile");
+		} else {
+			setShowWomenPackage(true);
+		}
 	};
 
 	return (

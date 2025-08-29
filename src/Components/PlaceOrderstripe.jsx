@@ -1,3 +1,5 @@
+// PlaceOrderstripe.jsx
+
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -10,9 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "./SweetAlert/Alert";
 import { setUserToken } from "../network/reducers/AuthReducer";
 import { usePurchasePackageMutation } from "../network/services/ManAuth";
+import { useNavigate } from "react-router-dom";
 
+// ✅ Stripe key
 const stripePromise = loadStripe(
-	"pk_test_51RRIAeQHmmlpbdza7QcTulKemL1qsjpT3HQP2mppu5ibXUGkcSd2IQrrM20hTHXMnY4s8I2zgahqL8ENMDoHLnUo00VCIvEHb9",
+	"pk_test_51PCJCF1n4j2NN6BKEbuBZqPcxk017JADLY9sKJRmV9BmYdRzKiBpqvkaOJdeP6dmz081n9QNC8BEbKaBMVRjM4E000c6bwOLuD",
 );
 
 const CheckoutForm = ({
@@ -24,18 +28,20 @@ const CheckoutForm = ({
 	const { userToken } = useSelector((state) => state.auth);
 	const stripe = useStripe();
 	const elements = useElements();
+	const navigate = useNavigate(); // ✅ add navigate
 
 	const [cardError, setCardError] = useState("");
 	const [payButton, setPayButton] = useState(true);
 
 	const [purchasePackage, response] = usePurchasePackageMutation();
 
-	// Success handler
+	// ✅ Handle success
 	useEffect(() => {
 		if (response?.isSuccess) {
 			setShowSuccessModal(true);
 			console.log("✅ Purchase Success Response:", response.data);
 
+			// update redux user
 			if (response?.data?.user) {
 				dispatch(
 					setUserToken({
@@ -45,10 +51,15 @@ const CheckoutForm = ({
 					}),
 				);
 			}
+
+			// ✅ navigate after short delay
+			setTimeout(() => {
+				navigate("/profile");
+			}, 1500);
 		}
 	}, [response?.isSuccess]);
 
-	// Error handler
+	// ✅ Handle error
 	useEffect(() => {
 		if (response?.isError) {
 			console.error("❌ Purchase Error:", response.error);
@@ -63,13 +74,12 @@ const CheckoutForm = ({
 		}
 	}, [response?.isError]);
 
+	// ✅ Submit handler
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!stripe || !elements) return;
 
-		// Guard: no package selected
 		if (!checkedTerm?.id) {
-			console.warn("⚠️ No package selected before checkout!");
 			Alert({
 				iconStyle: "error",
 				title: "Error",
@@ -79,29 +89,28 @@ const CheckoutForm = ({
 			return;
 		}
 
-		console.log("💳 Submitting payment for package:", checkedTerm);
-
 		const cardElement = elements.getElement(CardElement);
 		const payload = await stripe.createToken(cardElement);
 
 		if (payload.error) {
 			setCardError(payload.error.message);
-			console.error("❌ Stripe Token Error:", payload.error);
 			cardElement.clear();
+			console.error("❌ Stripe Token Error:", payload.error);
 			return;
 		}
 
 		if (payload?.token?.id) {
 			setCardError("");
-			console.log("✅ Stripe Token Generated:", payload.token.id);
 
 			const formData = new FormData();
 			formData.set("stripe_token", payload.token.id);
 			formData.set("package_id", checkedTerm.id);
 
-			console.log("📤 Sending package data to API:", checkedTerm.id);
+			console.log("📦 Sending Purchase Request =>", {
+				stripe_token: payload.token.id,
+				package_id: checkedTerm.id,
+			});
 
-			// Call API
 			purchasePackage(formData);
 			cardElement.clear();
 		}
