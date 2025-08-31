@@ -13,6 +13,7 @@ import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import Aos from "aos";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
+import Swal from "sweetalert2";
 
 // ✅ Redux
 import { useDispatch } from "react-redux";

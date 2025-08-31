@@ -90,7 +90,14 @@ const StepperMale = () => {
 			const apiData = response?.data?.data.men;
 			const token = response?.data?.data.token;
 
-			dispatch(setUserToken({ user: apiData, token, remember: true }));
+			dispatch(
+				setUserToken({
+					user: apiData,
+					token,
+					remember: true,
+					gender: "male", // ✅ pass gender
+				}),
+			);
 
 			Swal.fire({
 				title: "Success",

@@ -84,6 +84,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 					user: apiData,
 					token: token,
 					remember: rememberMe,
+					gender: activeTab === "male" ? "male" : "female", // ✅ explicit
 				}),
 			);
 

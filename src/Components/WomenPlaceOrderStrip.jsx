@@ -1,5 +1,4 @@
-// PlaceOrderstripe.jsx
-
+// WomenPlaceOrderStrip.jsx
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -28,7 +27,7 @@ const CheckoutForm = ({
 	const { userToken } = useSelector((state) => state.auth);
 	const stripe = useStripe();
 	const elements = useElements();
-	const navigate = useNavigate(); // ✅ add navigate
+	const navigate = useNavigate();
 
 	const [cardError, setCardError] = useState("");
 	const [payButton, setPayButton] = useState(true);
@@ -41,7 +40,6 @@ const CheckoutForm = ({
 			setShowSuccessModal(true);
 			console.log("✅ Purchase Success Response:", response.data);
 
-			// update redux user
 			if (response?.data?.user) {
 				dispatch(
 					setUserToken({
@@ -52,13 +50,21 @@ const CheckoutForm = ({
 				);
 			}
 
-			// ✅ navigate after short delay
+			// ✅ navigate to women-profiles instead of /profile
 			setTimeout(() => {
 				navigate("/women-profiles");
 			}, 1500);
 		}
-	}, [response?.isSuccess]);
+	}, [
+		response?.isSuccess,
+		dispatch,
+		navigate,
+		setShowSuccessModal,
+		userToken,
+		response?.data,
+	]);
 
+	// ✅ Handle error
 	// ✅ Handle error
 	useEffect(() => {
 		if (response?.isError) {
@@ -74,13 +80,16 @@ const CheckoutForm = ({
 					icon: "error",
 				});
 
+				// Navigate after short delay
 				setTimeout(() => {
 					setShowSuccessModal(false);
-					navigate("/profile");
+					navigate("/women-profiles");
 				}, 2000);
+
 				return;
 			}
 
+			// ❌ Other errors => show alert
 			Alert({
 				iconStyle: "error",
 				title: "Error",
@@ -171,7 +180,7 @@ const CheckoutForm = ({
 	);
 };
 
-const PlaceOrderstripe = ({
+const WomenPlaceOrderStrip = ({
 	checkedTerm,
 	showSuccessModal,
 	setShowSuccessModal,
@@ -185,4 +194,4 @@ const PlaceOrderstripe = ({
 	</Elements>
 );
 
-export default PlaceOrderstripe;
+export default WomenPlaceOrderStrip;
