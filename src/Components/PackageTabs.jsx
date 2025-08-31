@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Swal from "sweetalert2"; // <-- Added Swal
+import { useSelector } from "react-redux"; // <-- Added Redux selector
 import {
 	blacktick,
 	outline1,
@@ -8,68 +10,35 @@ import {
 	tick_circle,
 } from "../Constant/Index";
 import { Link } from "react-router-dom";
+import { useGetMenPackagesQuery } from "../network/services/ManAuth";
+import PlaceOrderstripe from "./PlaceOrderstripe";
 
 const PackageTabs = () => {
 	const [activeTab, setActiveTab] = useState("women");
 	const [selectedPackage, setSelectedPackage] = useState(null);
-	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [showPackageModal, setShowPackageModal] = useState(false);
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+	// ✅ Redux selector to check login
+	const userToken = useSelector((state) => state.auth.userToken);
+
+	const { data, isLoading, error } = useGetMenPackagesQuery();
+	const packages = data?.response?.data?.women || [];
+	const packagesman = data?.response?.data?.men || [];
 
 	const packagesData = {
-		men: [
-			{
-				title: " Free Tier",
-				price: "No Payment Required",
-				benefits: [
-					"Swipe/Like up to 10 Profiles per Day",
-					"View Pictures of Women",
-					"View Videos for the first 10 Seconds",
-				],
-			},
-			{
-				title: "One-Time Payment",
-				price: "$29.95",
-				benefits: [
-					"Sponsor Date Feature – Send offers for sponsored dates to women",
-					"Access to Female Videos – View videos uploaded by all female users",
-				],
-			},
-		],
-		women: [
-			{
-				title: "Silver Package – ",
-				price: "$29.95",
-				duration: "1 Month",
-				benefits: ["Upload Pictures", "Upload Videos", "Chat Messaging"],
-				firstclass: "firstclass",
-			},
-			{
-				title: "Gold Package – ",
-				price: "$195",
-				duration: "90 days",
-				benefits: [
-					"Upload Pictures",
-					"Upload Videos",
-					"Chat Messaging",
-					"Video Calling",
-				],
-				secondclass: "secondclass",
-			},
-			{
-				title: "Platinum Package – ",
-				price: "$275",
-				duration: "30 Days",
-				benefits: [
-					"15 Sponsored Dates (Women can choose a fixed amount to be paid for the date, or receive offers from interested men. Amounts range from $200 to $2,000.)",
-					"Upload Pictures",
-					"Upload Videos",
-					"Chat Messaging",
-					"Video Calling",
-				],
-				thirdclass: "thirdclass",
-			},
-		],
+		women: packages.map((pkg) => ({
+			...pkg,
+			benefits: JSON.parse(pkg.description || "[]"),
+		})),
+		men: packagesman.map((pkg) => ({
+			...pkg,
+			benefits: JSON.parse(pkg.description || "[]"),
+		})),
 	};
+
+	if (isLoading) return <p>Loading packages...</p>;
+	if (error) return <p>Error loading packages</p>;
 
 	const cardVariants = {
 		hidden: { opacity: 0, y: 50 },
@@ -83,6 +52,7 @@ const PackageTabs = () => {
 	return (
 		<section className="pack_sec py-5">
 			<div className="container">
+				{/* Tabs Header */}
 				<div className="row">
 					<div className="col-md-6">
 						<h2 className="main-heading">Packages</h2>
@@ -125,95 +95,109 @@ const PackageTabs = () => {
 					</div>
 				</div>
 
+				{/* Packages Cards */}
 				<div className="row mt-3 justify-content-center">
 					<AnimatePresence mode="wait">
-						{packagesData[activeTab].map((packageData, index) => (
-							<motion.div
-								className="col-md-4"
-								key={index}
-								variants={cardVariants}
-								initial="hidden"
-								animate="visible"
-								custom={index}
-								exit={{ opacity: 0, y: 30 }}
-							>
-								<div
-									className={`package_card height-wrapper px-3 py-4 main_bg rounded ${
-										packageData.firstclass ??
-										packageData.secondclass ??
-										packageData.thirdclass ??
-										""
-									}`}
+						{packagesData[activeTab].map((packageData, index) => {
+							const cssClasses = ["firstclass", "secondclass", "thirdclass"];
+							const cssClass = cssClasses[index % cssClasses.length];
+
+							return (
+								<motion.div
+									className="col-md-4"
+									key={index}
+									variants={cardVariants}
+									initial="hidden"
+									animate="visible"
+									custom={index}
+									exit={{ opacity: 0, y: 30 }}
 								>
-									<div className="pack_heading  text-center px-3  py-3  border-bottom3">
-										{activeTab === "men" ? (
-											<>
-												<h3 className="text-white font_semibold font_level3">
-													{packageData.title}
-												</h3>
-												<p className="text-white font_reg font_level4 mb-0">
-													{packageData.price}
-												</p>
-											</>
-										) : (
-											<>
-												<h3 className="text-white font_semibold font_level3">
-													{packageData.title} {packageData.price}
-												</h3>
-												<p className="text-white font_reg font_level4 mb-0">
-													{packageData.duration}
-												</p>
-											</>
-										)}
-									</div>
-									<div className="pack_bullets">
-										<ul className="ps-0 py-3">
-											{packageData.benefits.map((benefit, i) => (
-												<li
-													key={i}
-													className="bullet_Wrapper wrapper-bullet align-items-baseline  py-2"
-												>
-													<div className="row">
-														<div className="col-lg-2">
-															<div className="bullet_img">
-																<img
-																	src={activeTab === "men" ? tick : blacktick}
-																	alt=""
-																	className="img-fluid"
-																/>
+									{/* Card */}
+									<div
+										className={`package_card ${
+											activeTab === "women" ? "women-card" : "men-card"
+										} text-white p-3 rounded ${cssClass}`}
+									>
+										<div className="pack_heading text-center px-3 py-3 border-bottom3">
+											<h3 className="text-white font_semibold font_level3">
+												{packageData.title}{" "}
+												{activeTab === "women" ? `- $${packageData.price}` : ""}
+											</h3>
+											<p className="text-white font_reg font_level4 mb-0">
+												{activeTab === "women"
+													? `${packageData.duration} Days`
+													: packageData.price
+													? `$${packageData.price}`
+													: "Free"}
+											</p>
+										</div>
+
+										<div className="pack_bullets">
+											<ul className="ps-0 py-3">
+												{packageData.benefits.map((benefit, i) => (
+													<li
+														key={i}
+														className="bullet_Wrapper wrapper-bullet align-items-baseline py-2"
+													>
+														<div className="row">
+															<div className="col-lg-2">
+																<div className="bullet_img">
+																	<img
+																		src={
+																			activeTab === "women" ? blacktick : tick
+																		}
+																		alt=""
+																		className="img-fluid"
+																	/>
+																</div>
+															</div>
+															<div className="col-lg-10 ps-0">
+																<div className="bullet_point text-white font_reg font_level4">
+																	{benefit}
+																</div>
 															</div>
 														</div>
-														<div className="col-lg-10 ps-0">
-															<div className="bullet_point text-white font_reg font_level4">
-																{benefit}
-															</div>
-														</div>
-													</div>
-												</li>
-											))}
-										</ul>
+													</li>
+												))}
+											</ul>
+										</div>
+
+										<div className="pack_btn d-flex justify-content-center">
+											{/* ✅ Updated onClick with login check */}
+											<button
+												className="btn get-started-btn rounded-pill py-3 px-4 bg-white font_reg text-capitalize font_level4"
+												onClick={() => {
+													if (userToken) {
+														// User logged in
+														console.log("User logged in ✅");
+														console.log("Active Tab:", activeTab); // men/women
+														setSelectedPackage(packageData);
+														setShowPackageModal(true);
+													} else {
+														// User not logged in
+														Swal.fire({
+															icon: "error",
+															title: "Login Required",
+															text: "Please login to continue with the payment.",
+															confirmButtonText: "OK",
+														});
+														console.log("User not logged in ❌");
+														console.log("Active Tab:", activeTab); // men/women
+													}
+												}}
+											>
+												Get Started
+											</button>
+										</div>
 									</div>
-									<div className="pack_btn d-flex justify-content-center">
-										<button
-											className={`btn get-started-btn rounded-pill py-3 px-4 bg-white font_reg text-capitalize font_level4 ${
-												activeTab === "men" ? "man-btn" : ""
-											}`}
-											onClick={() => {
-												setSelectedPackage(packageData);
-												setShowPackageModal(true);
-											}}
-										>
-											Get Started
-										</button>
-									</div>
-								</div>
-							</motion.div>
-						))}
+								</motion.div>
+							);
+						})}
 					</AnimatePresence>
 				</div>
 			</div>
 
-			{/* Modal for Subscription Details */}
+			{/* Package Modal with Stripe */}
 			<AnimatePresence>
 				{showPackageModal && selectedPackage && (
 					<motion.div
@@ -233,28 +217,34 @@ const PackageTabs = () => {
 								transition={{ duration: 0.3 }}
 							>
 								<div className="modal-body">
-									{/* Cancel icon top-right */}
 									<button
 										type="button"
 										className="btn-close position-absolute top-0 end-0 m-3"
 										aria-label="Close"
 										onClick={() => setShowPackageModal(false)}
 									></button>
-									<div className="women_bid_body">
-										<div className="main_modal_detail">
-											<div className="heading_modal">
-												<h3 className="font_semibold font_level3 text-black">
-													Subscription Detail
-												</h3>
-											</div>
-											<div className="modal_detail border-bottom py-2 d-flex justify-content-between">
-												<h4 className="font_semibold font_level4 text-black">
-													{selectedPackage.title}
-												</h4>
-												<h4 className="font_semibold font_level4 text-black">
-													{selectedPackage.price}
-												</h4>
-											</div>
+
+									<div
+										className={`modal_body_stripe ${
+											activeTab === "women" ? "women-modal" : "men-modal"
+										}`}
+									>
+										<div className="heading_modal">
+											<h3 className="font_semibold font_level3 text-black">
+												Subscription Detail
+											</h3>
+										</div>
+										<div className="modal_detail border-bottom py-2 d-flex justify-content-between">
+											<h4 className="font_semibold font_level4 text-black">
+												{selectedPackage.title}
+											</h4>
+											<h4 className="font_semibold font_level4 text-black">
+												{selectedPackage.price
+													? `$${selectedPackage.price}`
+													: "Free"}
+											</h4>
+										</div>
+										{selectedPackage.price && (
 											<div className="modal_detail border-bottom">
 												<div className="border-bottom py-2">
 													<h4 className="font_semibold font_level4 text-black">
@@ -263,57 +253,22 @@ const PackageTabs = () => {
 												</div>
 												<div className="text-end py-2">
 													<h4 className="font_semibold font_level4 text-black">
-														{selectedPackage.price} /Month
+														${selectedPackage.price} /Month
 													</h4>
 												</div>
 											</div>
-										</div>
+										)}
 
-										<div className="remo_time_input offer_modal ">
-											<label htmlFor="bidAmount">Card Details</label>
-											<div className="form-group">
-												<input
-													type="text"
-													className="my-2 form-control"
-													placeholder="Name On Card"
-												/>
-												<input
-													type="text"
-													className="my-2 form-control"
-													placeholder="Card Number"
-												/>
-												<div className="form_group row">
-													<div className="col-md-6">
-														<input
-															type="text"
-															className="my-2 form-control"
-															placeholder="CVC"
-														/>
-													</div>
-													<div className="col-md-6">
-														<input
-															type="text"
-															className="my-2 form-control"
-															placeholder="MM/YY"
-														/>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="mss py-3">
-									<div className="wome_modal_fooetr_button">
-										<button
-											type="button"
-											className="btn btn-secondary border w-100"
-											onClick={() => {
-												setShowPackageModal(false);
-												setShowSuccessModal(true);
-											}}
-										>
-											Pay Now
-										</button>
+										{selectedPackage.price && (
+											<PlaceOrderstripe
+												checkedTerm={selectedPackage}
+												showSuccessModal={showSuccessModal}
+												setShowSuccessModal={setShowSuccessModal}
+												redirectPath={
+													activeTab === "women" ? "/women-profiles" : "/profile"
+												}
+											/>
+										)}
 									</div>
 								</div>
 							</motion.div>
@@ -336,13 +291,12 @@ const PackageTabs = () => {
 						<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 							<div className="modal-content bg-transparent border-none">
 								<div className="modal-head d-flex border-none justify-content-center">
-									{/* Close Button Top Right */}
 									<button
 										type="button"
 										className="btn-close position-absolute top-0 end-0 m-2 z-1"
 										aria-label="Close"
 										onClick={() => setShowSuccessModal(false)}
-									></button>{" "}
+									></button>
 									<div className="congrat_img position-relative top-0">
 										<img src={tick_circle} alt="" className="img-fluid" />
 									</div>
@@ -354,18 +308,11 @@ const PackageTabs = () => {
 									exit={{ y: 30, opacity: 0 }}
 								>
 									<h3 className="font_semibold font_level3 text-black mt-3">
-										Congratulation
+										Congratulations
 									</h3>
 									<p className="font_reg font_level4 text-dark">
-										Payment has been successfully Completed
+										Payment has been successfully completed
 									</p>
-									<button
-										type="button"
-										className="btn btn-success mt-3 btn btn-secondary border w-100"
-										onClick={() => setShowSuccessModal(false)}
-									>
-										Go Back
-									</button>
 								</motion.div>
 							</div>
 						</div>

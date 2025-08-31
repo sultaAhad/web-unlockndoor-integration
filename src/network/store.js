@@ -1,5 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { persistStore } from "redux-persist";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 // Slices
 import authReducer from "../network/reducers/AuthReducer";
@@ -11,15 +12,29 @@ import GalleryApi from "./services/GalleryApi";
 import ManAuth from "./services/ManAuth";
 import WomenAuth from "./services/WomanAuth";
 
+// ✅ combine all reducers
+const rootReducer = combineReducers({
+	auth: authReducer,
+	[HelpServices.reducerPath]: HelpServices.reducer,
+	[AuthServices.reducerPath]: AuthServices.reducer,
+	[GalleryApi.reducerPath]: GalleryApi.reducer,
+	[ManAuth.reducerPath]: ManAuth.reducer,
+	[WomenAuth.reducerPath]: WomenAuth.reducer,
+});
+
+// ✅ persist config
+const persistConfig = {
+	key: "root",
+	storage,
+	whitelist: ["auth"], // sirf auth persist karna hai
+};
+
+// ✅ persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// ✅ store
 const store = configureStore({
-	reducer: {
-		auth: authReducer, // ✅ consistent name
-		[HelpServices.reducerPath]: HelpServices.reducer,
-		[AuthServices.reducerPath]: AuthServices.reducer,
-		[GalleryApi.reducerPath]: GalleryApi.reducer,
-		[ManAuth.reducerPath]: ManAuth.reducer,
-		[WomenAuth.reducerPath]: WomenAuth.reducer,
-	},
+	reducer: persistedReducer,
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: false,
@@ -32,5 +47,6 @@ const store = configureStore({
 		]),
 });
 
+// ✅ persistor
 export const persistor = persistStore(store);
 export default store;
