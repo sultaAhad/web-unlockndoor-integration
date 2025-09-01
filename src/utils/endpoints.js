@@ -31,13 +31,20 @@ export const LOGIN_CHANGEPASSWORDMAN = `change-password`;
 
 // profile man
 
-// Endpoints
+// Endpoints man
 export const MAN_SIGNUP = `auth-men/register-men`;
 export const MAN_LOGIN = `auth-men/login-men`;
 export const MAN_SELFIE = `auth-men/verify-selfie`;
 export const GET_MANPACKAGES = `package`;
 export const PURCHASE_PACKAGES = `auth-men/men-purchase-package`;
+export const EDIT_PROFILE_MAN = `auth-men/update-men/8`;
+export const MAN_LIKE_WOMEN = `auth-men/like-women`;
+export const OFFER_DATE = `auth-men/offer-date`;
+export const MAN_DELETE_IMAGES = `auth-men/delete-image`;
+export const MAN_DELETE_VIDEO = `auth-men/delete-video`;
+export const MAN_UPDATE_IMAGE = `auth-men/update-profile-image`;
 
-// Endpoints
+// Endpoints women
 export const WOMEN_SIGNUP = `auth-women/register-women`;
 export const WOMEN_LOGIN = `auth-women/login-women`;
+export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;

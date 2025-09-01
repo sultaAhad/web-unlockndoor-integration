@@ -10,8 +10,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Alert from "./SweetAlert/Alert";
 import { setUserToken } from "../network/reducers/AuthReducer";
-import { usePurchasePackageMutation } from "../network/services/ManAuth";
 import { useNavigate } from "react-router-dom";
+import { usePurchasePackageWomenMutation } from "../network/services/WomanAuth";
 
 // ✅ Stripe key
 const stripePromise = loadStripe(
@@ -32,7 +32,7 @@ const CheckoutForm = ({
 	const [cardError, setCardError] = useState("");
 	const [payButton, setPayButton] = useState(true);
 
-	const [purchasePackage, response] = usePurchasePackageMutation();
+	const [purchasePackage, response] = usePurchasePackageWomenMutation();
 
 	// ✅ Handle success
 	useEffect(() => {
@@ -50,7 +50,7 @@ const CheckoutForm = ({
 				);
 			}
 
-			// ✅ navigate to women-profiles instead of /profile
+			// ✅ navigate to women-profiles
 			setTimeout(() => {
 				navigate("/women-profiles");
 			}, 1500);
@@ -64,7 +64,6 @@ const CheckoutForm = ({
 		response?.data,
 	]);
 
-	// ✅ Handle error
 	// ✅ Handle error
 	useEffect(() => {
 		if (response?.isError) {
@@ -129,6 +128,7 @@ const CheckoutForm = ({
 		if (payload?.token?.id) {
 			setCardError("");
 
+			// ✅ Use FormData (if backend expects multipart)
 			const formData = new FormData();
 			formData.set("stripe_token", payload.token.id);
 			formData.set("package_id", checkedTerm.id);
