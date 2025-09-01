@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
 import {
+	CHANGE_COVER_IMAGE,
+	CHANGE_PROFILE_IMAGE,
 	LOGIN_CHANGEPASSWORD,
 	LOGIN_CHANGEPASSWORDMAN,
 	LOGIN_FORGETPASSWORD,
@@ -16,7 +18,8 @@ const AuthServices = createApi({
 		baseUrl: BASE_URL,
 		prepareHeaders: (headers, { getState }) => {
 			const reducers = getState();
-			const token = reducers?.authReducer?.userToken;
+			// const token = reducers?.authReducer?.userToken;
+			const token = localStorage.getItem("token");
 			headers.set("Accept", "application/json");
 
 			// ✅ Send Authorization header if token exists
@@ -70,6 +73,20 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+		manupUatepPofileImage: build.mutation({
+			query: (data) => ({
+				url: CHANGE_PROFILE_IMAGE,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		updateManCoverImage: build.mutation({
+			query: (data) => ({
+				url: CHANGE_COVER_IMAGE,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -81,5 +98,7 @@ export const {
 	useForgetRegisterMutation,
 	useOtpRegisterMutation,
 	useChangepasswordRegisterMutation,
-	useManchangepasswordRegisterMutation, // ✅ Correct casing
+	useManchangepasswordRegisterMutation,
+	useManupUatepPofileImageMutation,
+	useUpdateManCoverImageMutation,
 } = AuthServices;

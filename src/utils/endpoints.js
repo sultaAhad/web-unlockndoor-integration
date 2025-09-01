@@ -47,6 +47,10 @@ export const MAN_UPDATE_COVER_IMAGE = `auth-men/update-cover-image`;
 export const MAN_SEND_MASSAGE = `auth-men/send-message`;
 export const MAN_UPGRADE_PACKAGES = `auth-men/upgrade-men-package`;
 export const MAN_WITHDREW_DATE = `auth-men/withdraw-date`;
+export const CHANGE_PROFILE_IMAGE = `auth-men/update-profile-image`;
+export const CHANGE_COVER_IMAGE = `auth-men/update-cover-image`;
+
+
 // GET API MAN
 export const MAN_MATCHED_PRIFILE = `auth-men/matched-profiles`;
 export const MAN_SPONSORED_DATES = `auth-men/sponsored-dates`;

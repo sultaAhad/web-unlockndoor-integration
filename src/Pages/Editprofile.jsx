@@ -23,6 +23,7 @@ function Editprofile() {
 	const [selectedOption, setSelectedOption] = useState(""); // Radio button state
 	const [text, setText] = useState(""); // Textarea state
 
+
 	// Handle chip addition
 	const handleAddChip = (chip) => {
 		if (chip && !chips.includes(chip)) {
