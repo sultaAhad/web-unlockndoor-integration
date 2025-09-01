@@ -6,6 +6,19 @@ import {
 	MAN_SELFIE,
 	PURCHASE_PACKAGES,
 	GET_MANPACKAGES,
+	EDIT_PROFILE_MAN,
+	MAN_UPDATE_IMAGE,
+	MAN_UPDATE_COVER_IMAGE,
+	MAN_DELETE_IMAGES,
+	MAN_DELETE_VIDEO,
+	MAN_LIKE_WOMEN,
+	MAN_SEND_MASSAGE,
+	OFFER_DATE,
+	MAN_WITHDREW_DATE,
+	MAN_DATA,
+	MAN_FEMALE_MEMBERSHIP,
+	MAN_SPONSORED_DATES,
+	MAN_MATCHED_PRIFILE,
 } from "../../utils/endpoints";
 
 export const ManAuth = createApi({
@@ -20,6 +33,7 @@ export const ManAuth = createApi({
 		},
 	}),
 	endpoints: (build) => ({
+		// ✅ Authentication
 		manSignup: build.mutation({
 			query: (data) => ({
 				url: MAN_SIGNUP,
@@ -41,6 +55,8 @@ export const ManAuth = createApi({
 				body: formData,
 			}),
 		}),
+
+		// ✅ Packages
 		getMenPackages: build.query({
 			query: () => ({
 				url: GET_MANPACKAGES,
@@ -52,8 +68,106 @@ export const ManAuth = createApi({
 				url: PURCHASE_PACKAGES,
 				method: "POST",
 				body: formData,
-				// ❌ No Content-Type, browser will set multipart/form-data automatically
-				headers: {},
+				headers: {}, // Let browser set multipart/form-data automatically
+			}),
+		}),
+		upgradePackage: build.mutation({
+			query: (data) => ({
+				url: MAN_UPGRADE_PACKAGES,
+				method: "POST",
+				body: data,
+			}),
+		}),
+
+		// ✅ Profile
+		editProfile: build.mutation({
+			query: (data) => ({
+				url: EDIT_PROFILE_MAN,
+				method: "PUT",
+				body: data,
+			}),
+		}),
+		updateProfileImage: build.mutation({
+			query: (formData) => ({
+				url: MAN_UPDATE_IMAGE,
+				method: "POST",
+				body: formData,
+			}),
+		}),
+		updateCoverImage: build.mutation({
+			query: (formData) => ({
+				url: MAN_UPDATE_COVER_IMAGE,
+				method: "POST",
+				body: formData,
+			}),
+		}),
+		deleteImage: build.mutation({
+			query: (id) => ({
+				url: `${MAN_DELETE_IMAGES}/${id}`,
+				method: "DELETE",
+			}),
+		}),
+		deleteVideo: build.mutation({
+			query: (id) => ({
+				url: `${MAN_DELETE_VIDEO}/${id}`,
+				method: "DELETE",
+			}),
+		}),
+
+		// ✅ Social Interactions
+		likeWoman: build.mutation({
+			query: (data) => ({
+				url: MAN_LIKE_WOMEN,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		sendMessage: build.mutation({
+			query: (data) => ({
+				url: MAN_SEND_MASSAGE,
+				method: "POST",
+				body: data,
+			}),
+		}),
+
+		// ✅ Dating
+		offerDate: build.mutation({
+			query: (data) => ({
+				url: OFFER_DATE,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		withdrawDate: build.mutation({
+			query: (data) => ({
+				url: MAN_WITHDREW_DATE,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		// ✅ New GET APIs
+		getMatchedProfiles: build.query({
+			query: () => ({
+				url: MAN_MATCHED_PRIFILE,
+				method: "GET",
+			}),
+		}),
+		getSponsoredDates: build.query({
+			query: () => ({
+				url: MAN_SPONSORED_DATES,
+				method: "GET",
+			}),
+		}),
+		getFemaleMembership: build.query({
+			query: () => ({
+				url: MAN_FEMALE_MEMBERSHIP,
+				method: "GET",
+			}),
+		}),
+		getManData: build.query({
+			query: () => ({
+				url: MAN_DATA,
+				method: "GET",
 			}),
 		}),
 	}),
@@ -65,6 +179,20 @@ export const {
 	useVerifySelfieMutation,
 	useGetMenPackagesQuery,
 	usePurchasePackageMutation,
+	useUpgradePackageMutation,
+	useEditProfileMutation,
+	useUpdateProfileImageMutation,
+	useUpdateCoverImageMutation,
+	useDeleteImageMutation,
+	useDeleteVideoMutation,
+	useLikeWomanMutation,
+	useSendMessageMutation,
+	useOfferDateMutation,
+	useWithdrawDateMutation,
+	useGetMatchedProfilesQuery,
+	useGetSponsoredDatesQuery,
+	useGetFemaleMembershipQuery,
+	useGetManDataQuery,
 } = ManAuth;
 
 export default ManAuth;

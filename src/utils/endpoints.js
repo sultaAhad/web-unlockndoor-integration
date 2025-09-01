@@ -43,6 +43,15 @@ export const OFFER_DATE = `auth-men/offer-date`;
 export const MAN_DELETE_IMAGES = `auth-men/delete-image`;
 export const MAN_DELETE_VIDEO = `auth-men/delete-video`;
 export const MAN_UPDATE_IMAGE = `auth-men/update-profile-image`;
+export const MAN_UPDATE_COVER_IMAGE = `auth-men/update-cover-image`;
+export const MAN_SEND_MASSAGE = `auth-men/send-message`;
+export const MAN_UPGRADE_PACKAGES = `auth-men/upgrade-men-package`;
+export const MAN_WITHDREW_DATE = `auth-men/withdraw-date`;
+// GET API MAN
+export const MAN_MATCHED_PRIFILE = `auth-men/matched-profiles`;
+export const MAN_SPONSORED_DATES = `auth-men/sponsored-dates`;
+export const MAN_FEMALE_MEMBERSHIP = `auth-men/female-members`;
+export const MAN_DATA = `auth-men/men-data`;
 
 // Endpoints women
 export const WOMEN_SIGNUP = `auth-women/register-women`;
