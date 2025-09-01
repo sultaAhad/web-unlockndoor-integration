@@ -92,7 +92,7 @@ const StepperMale = () => {
 
 			dispatch(
 				setUserToken({
-					user,
+					user: apiData,
 					token,
 					remember: true,
 					gender: "male", // ✅ pass gender
