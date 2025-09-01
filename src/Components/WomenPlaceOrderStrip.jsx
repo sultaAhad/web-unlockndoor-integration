@@ -49,6 +49,7 @@ const CheckoutForm = ({
 					}),
 				);
 			}
+			localStorage.setItem("hasPackage", "true");
 
 			// ✅ navigate to women-profiles
 			setTimeout(() => {

@@ -51,7 +51,7 @@ const CheckoutForm = ({
 					}),
 				);
 			}
-
+			localStorage.setItem("hasPackage", "true");
 			// ✅ navigate after short delay
 			setTimeout(() => {
 				navigate("/women-profiles");
