@@ -3,6 +3,7 @@ import WomenselfieModel from "../Components/WomenselfieModel";
 import SelfieModal from "../Components/SelfieModal";
 import ManPackagesTab from "../Components/ManPackagesTab";
 import PackageSelectionModal from "../Components/PackageSelectionModal";
+import { Navigate } from "react-router-dom";
 
 export function checkMiddleware(
   Component,
