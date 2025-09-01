@@ -2,35 +2,19 @@ import React, { useEffect, useState } from "react";
 import "../../assets/Css/profile.css";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
-import {
-	bid_five,
-	bid_four,
-	bid_one,
-	bid_six,
-	bid_three,
-	bid_two,
-	edit,
-	innerpages1,
-	massagewrapper,
-	matchprofile1,
-	matchprofile2,
-	matchprofile3,
-	matchprofile4,
-	matchprofile5,
-	matchprofile6,
-	matchprofile7,
-	mchat,
-	message,
-	notification,
-} from "../../Constant/Index";
+import { mchat, innerpages1 } from "../../Constant/Index";
 import AOS from "aos";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import VideoChatModal from "../../Components/ChatModals/videoChatModal";
 import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
 import OfferModal from "./OfferModal";
+import { useGetFemaleMembershipQuery } from "../../network/services/ManAuth";
+
+// 🔹 Import RTK Query hook
 
 function Femalemembers() {
 	// Modals
@@ -38,724 +22,148 @@ function Femalemembers() {
 	const [showPayModal, setShowPayModal] = useState(false);
 	const [showThankModal, setShowThankModal] = useState(false);
 	const [showVideoChatModal, setShowVideoChatModal] = useState(false);
-	// Reoffer Modal States
-	// Reoffer Modal
 	const [showofferModal, setShowofferModal] = useState(false);
 
 	const handleofferClose = () => setShowofferModal(false);
 	const handleofferShow = () => setShowofferModal(true);
 
+	// 🟢 Redux user
+	const authUser = useSelector((state) => state.auth.user);
+	console.log("🟢 Current Redux User:", authUser);
+
+	// 🟢 API Call with RTK Query
+	const { data, isLoading, isError } = useGetFemaleMembershipQuery();
+
+	// Safely extract members
+	const members = data?.response?.data?.Women || [];
+	console.log(members);
+
+	// 🟢 Feature check
+	const checkFeatureAccess = (feature) => {
+		const pkg = authUser?.package || authUser?.membership || "";
+		if (!pkg) return false;
+
+		if (pkg.toLowerCase().includes("silver")) {
+			return feature === "chat";
+		}
+		if (pkg.toLowerCase().includes("gold")) {
+			return feature === "chat" || feature === "video";
+		}
+		if (pkg.toLowerCase().includes("platinum")) {
+			return true;
+		}
+		return false;
+	};
+
 	useEffect(() => {
 		AOS.init({ duration: 1000, once: true });
 	}, []);
 
-	const handleModal = (type) => {
-		if (type === "video") {
-			setShowVideoChatModal(true);
-		} else {
-			setShowPricingModal(true);
-		}
-	};
 	useEffect(() => {
-			document.body.style.backgroundImage = `url(${innerpages1})`;
-			document.body.style.backgroundSize = "cover";
-			document.body.style.backgroundPosition = "center";
-			document.body.style.minHeight = "100vh";
-	
-			return () => {
-				document.body.style.backgroundImage = "";
-			};
-		}, []);
+		document.body.style.backgroundImage = `url(${innerpages1})`;
+		document.body.style.backgroundSize = "cover";
+		document.body.style.backgroundPosition = "center";
+		document.body.style.minHeight = "100vh";
+
+		return () => {
+			document.body.style.backgroundImage = "";
+		};
+	}, []);
+
+	if (isLoading) return <p className="text-center">Loading...</p>;
+	if (isError)
+		return <p className="text-center text-danger">Failed to load members.</p>;
+
 	return (
 		<>
 			<Header />
 
 			<section className="profile_sec" data-aos="fade-up">
 				<div className="container">
-					<div className="row">
-						<div className="col-md-12 pb-5">
-							<div className="profile_banner_img">
-								<div className="account_access_dv">
-									<div className="notify_edit_dv">
-										<ul>
-											<Link
-												className="text-decoration-none text-white secondary-secondregular-font"
-												to="/chat"
-											>
-												<li className="wrapper-navigate-main position-relative">
-													<img src={massagewrapper} /> <span>Message</span>
-													<span className="number_move_dv">21</span>
-												</li>
-											</Link>
-											<Link to="/men-notifications">
-												<li className="position-relative">
-													<img src={notification} alt="Notification" />
-													<span className="number_move_dv">19</span>
-												</li>
-											</Link>
-											<Link to="/man-settings">
-												<li>
-													<img src={edit} alt="Edit" />
-												</li>
-											</Link>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div className="col-md-12 pt-5 for-extra-space1 mt-4">
-							<ProfileNavbartwo />
-						</div>
-					</div>
+					<ProfileNavbartwo />
 				</div>
 			</section>
 
 			<section className="videos_sec" data-aos="fade-right">
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge silver">Silver</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-								</div>
-								<img src={bid_one} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<Link to="/woman-details">
-									<div className="card-footer text-white text-decoration-none">
-										<h4>Tina Smith</h4>
-										<p>California, USA</p>
-									</div>
-								</Link>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<div className="wrapper-dash">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</div>
-									</div>
-									<div className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						{members.map((member) => {
+							const badge = member.package?.slug
+								? member.package.slug.replace("-package", "").toUpperCase()
+								: "N/A";
 
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge gold">Gold</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={bid_two} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Lisa Brown</h4>
-									<p>New York, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<div className="wrapper-dash">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</div>
-									</div>
-									<div className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+							return (
+								<div key={member.id} className="col-lg-4 col-md-6 mb-4">
+									<div className="profile-card">
+										<span className={`card-badge ${badge.toLowerCase()}`}>
+											{badge}
+										</span>
 
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge platinum">Platinum</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("video");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra3">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleofferShow(); // NOT reoffer
-											}}
-										>
-											<i className="fa-solid fa-heart-circle-plus heart-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={bid_three} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Emily Davis</h4>
-									<p>Texas, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
+										<div className="card-icons">
+											{/* Chat */}
+											<div
+												className={`icon-circle ${
+													!checkFeatureAccess("chat") ? "disabled" : ""
+												}`}
+											>
+												<Link to={checkFeatureAccess("chat") ? "/chat" : "#"}>
+													<img src={mchat} alt="chat" />
+												</Link>
 											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge silver">Silver</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-								</div>
-								<img src={bid_four} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Tina Smith</h4>
-									<p>California, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
 
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge gold">Gold</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={bid_five} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Lisa Brown</h4>
-									<p>New York, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
+											{/* Video */}
+											<div
+												className={`icon-circle ${
+													!checkFeatureAccess("video") ? "disabled" : ""
+												}`}
+											>
+												<Link
+													to="#"
+													onClick={(e) => {
+														e.preventDefault();
+														if (checkFeatureAccess("video")) {
+															setShowVideoChatModal(true);
+														}
+													}}
+												>
+													<i className="fa-solid fa-video"></i>
+												</Link>
 											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
 
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge platinum">Platinum</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("video");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra3">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleofferShow(); // NOT reoffer
-											}}
-										>
-											<i className="fa-solid fa-heart-circle-plus heart-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={matchprofile2} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Emily Davis</h4>
-									<p>Texas, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
+											{/* Offer */}
+											<div
+												className={`icon-circle ${
+													!checkFeatureAccess("offer") ? "disabled" : ""
+												}`}
+											>
+												<Link
+													to="#"
+													onClick={(e) => {
+														e.preventDefault();
+														if (checkFeatureAccess("offer")) {
+															handleofferShow();
+														}
+													}}
+												>
+													<i className="fa-solid fa-heart-circle-plus"></i>
+												</Link>
 											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
 										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge silver">Silver</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-								</div>
-								<img src={matchprofile4} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Tina Smith</h4>
-									<p>California, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
 
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge gold">Gold</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={matchprofile3} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Lisa Brown</h4>
-									<p>New York, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
+										<img
+											src={member.profile_image_url}
+											alt="profile"
+											className="card-image"
+										/>
 
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge platinum">Platinum</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("video");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra3">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleofferShow(); // NOT reoffer
-											}}
-										>
-											<i className="fa-solid fa-heart-circle-plus heart-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={matchprofile3} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Emily Davis</h4>
-									<p>Texas, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
+										<div className="card-footer">
+											<h4>{member.name}</h4>
+											<p>{member.nationality || member.address}</p>
 										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge silver">Silver</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
 									</div>
 								</div>
-								<img src={matchprofile5} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Tina Smith</h4>
-									<p>California, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
-
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge gold">Gold</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link to="/chat">
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={matchprofile6} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Lisa Brown</h4>
-									<p>New York, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
-
-						<div className="col-lg-4 col-md-6 mb-4">
-							<div className="profile-card">
-								<span className="card-badge platinum">Platinum</span>
-								<div className="card-icons">
-									<div className="icon-circle iconwra1">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("pricing");
-											}}
-										>
-											<img
-												src={mchat}
-												className="img-fluid d-widht-wr"
-												alt=""
-											/>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra2">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleModal("video");
-											}}
-										>
-											<i className="fa-solid fa-video video-icon"></i>
-										</Link>
-									</div>
-									<div className="icon-circle iconwra3">
-										<Link
-											to="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handleofferShow(); // NOT reoffer
-											}}
-										>
-											<i className="fa-solid fa-heart-circle-plus heart-icon"></i>
-										</Link>
-									</div>
-								</div>
-								<img src={matchprofile7} alt="profile" className="card-image" />
-								<div className="play-button">
-									<i className="fa-solid fa-play"></i>
-								</div>
-								<div className="card-footer">
-									<h4>Emily Davis</h4>
-									<p>Texas, USA</p>
-								</div>
-								<div className="card-actions">
-									<div>
-										<span className="like-count me-0 ms-1">200</span>
-										<Link className="wrapper-dash" to="/woman-details">
-											<div className="icon-circle linear-bg">
-												<i className="fa-solid fa-heart"></i>
-											</div>
-										</Link>
-									</div>
-									<Link className="wrapper-dash">
-										<div className="icon-circle">
-											<i className="fa-solid fa-xmark close-icon"></i>
-										</div>
-									</Link>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div className="row">
-						<div className="col-lg-2 mx-auto">
-							<button className="btn-write secondary-medium-font load-more-wrapper rounded-0 d-flex align-items-center justify-content-center extra-bg-1 border-none">
-								Load More
-							</button>
-						</div>
+							);
+						})}
 					</div>
 				</div>
 			</section>

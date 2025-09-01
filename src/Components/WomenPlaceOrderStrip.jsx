@@ -33,6 +33,7 @@ const CheckoutForm = ({
 	const [payButton, setPayButton] = useState(true);
 
 	const [purchasePackage, response] = usePurchasePackageWomenMutation();
+	console.log(response);
 
 	// ✅ Handle success
 	useEffect(() => {
