@@ -1,0 +1,1428 @@
+{
+	"info": {
+		"_postman_id": "80f3477b-2610-4146-b69b-f9f691c28ac1",
+		"name": "UnlockNDoors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "36772486"
+	},
+	"item": [
+		{
+			"name": "Homepage",
+			"item": [
+				{
+					"name": "Content",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{local_url}}homepage-content"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contact Us",
+			"item": [
+				{
+					"name": "Send Query",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "dgs",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "qsdf",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "svfdfefef@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "35345345354",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "sdf",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{local_url}}contact/send-contact-query"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Audience Demographics",
+			"item": [
+				{
+					"name": "Send Query",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "jack",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "jackie@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "234234234232",
+									"type": "text"
+								},
+								{
+									"key": "interest",
+									"value": "ssd",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "women",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{local_url}}subscription/send-subscription-query"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Testimonial",
+			"item": [
+				{
+					"name": "Testimonial",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_url}}testimonial"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FAQ",
+			"item": [
+				{
+					"name": "FAQ",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{live_url}}faq"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Men",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "asdaasd",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jasda@yopmail.com",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "43234234",
+											"type": "text"
+										},
+										{
+											"key": "nationality",
+											"value": "American",
+											"type": "text"
+										},
+										{
+											"key": "date_of_birth",
+											"value": "21-07-2001",
+											"type": "text"
+										},
+										{
+											"key": "occupation",
+											"value": "dev",
+											"type": "text"
+										},
+										{
+											"key": "income",
+											"value": "3000",
+											"type": "text"
+										},
+										{
+											"key": "can_pay",
+											"value": "300",
+											"type": "text"
+										},
+										{
+											"key": "skills",
+											"value": "swimming,footballer",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "kcndjv",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin123",
+											"type": "text"
+										},
+										{
+											"key": "profile_image",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-ff6b-41b0-9759-e97ffae9fe66"
+										},
+										{
+											"key": "cover_image",
+											"type": "file",
+											"src": "postman-cloud:///1f05e71a-97f8-4f30-b60c-17a2215793c1"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": [
+												"postman-cloud:///1f05e71a-97f8-4f30-b60c-17a2215793c1",
+												"postman-cloud:///1f05e718-fb1e-4080-81c5-e710c5eca8a2",
+												"postman-cloud:///1f05e718-ff6b-41b0-9759-e97ffae9fe66",
+												"postman-cloud:///1f05e719-06bb-4aa0-9943-7a3f8abda6c9",
+												"postman-cloud:///1f05e719-055e-48b0-a201-43fc28177930"
+											]
+										},
+										{
+											"key": "videos[]",
+											"type": "file",
+											"src": "postman-cloud:///1f0609fc-2a07-4e90-875a-5ed4c0acb135"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/register-men"
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": ""
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "kalli@yopmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin@123",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/login-men"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Women",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jammy",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jammsdfy@yopmail.com",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "35345345354",
+											"type": "text"
+										},
+										{
+											"key": "nationality",
+											"value": "sdf",
+											"type": "text"
+										},
+										{
+											"key": "date_of_birth",
+											"value": "2025-07-11",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin1234",
+											"type": "text"
+										},
+										{
+											"key": "height",
+											"value": "6.5",
+											"type": "text"
+										},
+										{
+											"key": "hair_color",
+											"value": "Brown",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "123, Backlen street, NY, USA.",
+											"type": "text"
+										},
+										{
+											"key": "body_type",
+											"value": "slim",
+											"type": "text"
+										},
+										{
+											"key": "occupation",
+											"value": "Backend Developer",
+											"type": "text"
+										},
+										{
+											"key": "income",
+											"value": "20,000",
+											"type": "text"
+										},
+										{
+											"key": "skills",
+											"value": "Footballer, cricketer",
+											"type": "text"
+										},
+										{
+											"key": "profile_image",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-fb1e-4080-81c5-e710c5eca8a2"
+										},
+										{
+											"key": "cover_images",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-ff6b-41b0-9759-e97ffae9fe66"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": "postman-cloud:///1f05e719-055e-48b0-a201-43fc28177930"
+										},
+										{
+											"key": "videos[]",
+											"type": "file",
+											"src": [
+												"postman-cloud:///1f061822-9261-4610-85ce-2f18d56156f1",
+												"postman-cloud:///1f0609fc-2a07-4e90-875a-5ed4c0acb135"
+											]
+										}
+									]
+								},
+								"url": "{{live_url}}auth-women/register-women"
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "kalli@yopmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/login-women"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Packages",
+			"item": [
+				{
+					"name": "Packages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_url}}package"
+					},
+					"response": []
+				},
+				{
+					"name": "Men Package Purchase",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTBiYzJjMTNkZWZkN2QyNTYyNmYwZWYwN2I0ZjliZWZmY2E4Y2JjYmU3MjEwMDhhY2RiYWZiYjJhNDQ4ZTVlMjdjYTAwYjVhMmJhODZlMDYiLCJpYXQiOjE3NTMyOTU5NjUuNDQ4OTg5LCJuYmYiOjE3NTMyOTU5NjUuNDQ4OTkzLCJleHAiOjE3ODQ4MzE5NjUuNDI4NjcxLCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.ZRhRLTW9sfUP1U_6QRBU0EJbaPp3XC8g36dQEazdWwv31gfvuryfjKO299ipqdn_EqVykcNAYNA84Q1PiC9_oJoJqqJD-4Ro1qYAuiWHttSZI05VMNet6DWFfGcJxyTMqb9CDTsodOM-RST3W_QhBPaqecuo9kTnEpz-2Nv5b54Z9OA4VnyYxu4dU_P2JtMsomwZAABSoMkSe33pdgbhVXDFaexpWrzRj5AdjVr6ojfQi2JmOaJ-7axxfILui6lcJyTS4ZAWM7tHEmrCDC5x5Yo0_hnEw_jNuNb__GDEidJ-NI7aNkz89jsavXaSYGOonwP4DEWG2kpa185E5u4j-4sKYa9VmFAMZPOF5jOJFFDq7NmIhphhLikpYPh0N7zOO31hkrXBD3n5_F6ntRhUSOY8XdZMbj1VLEjnUkRh971azp3DqrMuXicPG5NAavTTx0PjTqcM3BtC5A-kNrXZUxvq63mbMYArouuThM-fFwLZDbJMFd3emZl8I8baLGTdn_6v2g7k3cclWOs7a9Ehj2HpCWebziY0hyQw1W34zVoL9wAOGVpjMLLuBFk0-LgLYu0x3KYjOK4SntrVk11wFhScR30dbY_evHTs7ZjmPZHtojX7oO9nsiR7M0AHADgUHTqCuhzsFxJ5B8NzzGPzABJlcwFMmdEOZYgWn3ROFhI"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "stripe_token",
+									"value": "tok_1Ro7ns1n4j2NN6BKJ3AZFVUr",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{local_url}}auth-men/men-purchase-package"
+					},
+					"response": []
+				},
+				{
+					"name": "Women Package Purchase",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzY3N2Y3NGRhODVhYTYzMGMwZWE5ODFiYjFiN2Q0MTQ1ZjZmOTVkNzliYmMyOTBlNTI5M2VmNzMzZDY3MGUyODg5MTA5ZjI1NDU0ZGEzNjAiLCJpYXQiOjE3NTMyOTczOTEuMDQ3ODI5LCJuYmYiOjE3NTMyOTczOTEuMDQ3ODMzLCJleHAiOjE3ODQ4MzMzOTEuMDM1MDcyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.t1fiEaQsXesrDP1sUzCQqQbOV9qLS6aWus8nmRKr4E0mv8COBSe-ddykLQ_CYfa84Yc6PmiZ8XMyhinYL2euSiHHY5qwDre5NRTOA-gcoTkhxL3d-wPt-VQrWtILpEE1alO_qFAuQnJfm2AMPk6K2lb0GTrsKn6SeXVdWDCo030f2mO1tqiauMsgUosxetuYtuX2A-m-b5a4O9taEdxpqSPI-k7PP1l78hh4P8LVKpfy6xt9Oban-UOw7kMd4hnX-H3Zj2rTXWmds3qSh83ET2uv3kWjXeB-2lhSkWcObNedeFWi8J_HmKKqQ2El_KKlIVyT25TwWnYrK41PCCvuJAzBhvivNdffLR4dF3gtHd_tuxxgWyynfFZsAKdv8QsKt5RAlr8SLrVfy2xXu7__oqf8UH93DNwgcodwzXZ-Y0EaeHD6Dzv6S91YnwEZhEHQnLkWBCn4mZ6JKuSwy7HQ94alaecBgKFrtFy6JRXyj05ok5tZrhfb5ZWTWlxrkLkGHy_TSF8sdeYUG2JQOtdJA2r8rJa2a11zJ55ipR2JfrXAx_uv08e_pdqIue29BFvgY_UVXI8cI7SgJ3K19WAldkMTwiYORHT8WwpxMIdqCFCekzh60DEkT56NlkToosiiCWxpioJRrx3G5AOUC-z-aDN8zPgt9dmNjynR1WO_ZYo"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "stripe_token",
+									"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{local_url}}auth-women/women-purchase-package"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gallery",
+			"item": [
+				{
+					"name": "Gallery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_url}}gallery"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Men",
+					"item": [
+						{
+							"name": "Men Data",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDBlZGJkODI0MjZjODExZWE2OGU2Zjc5Yjc4YWQyMmQyNmUzNjRiNTJiZGMwMmQ3MzZkYTc0OGMwN2ZkNDZkNmRjYzg0MGI0NGJlMjM4NzUiLCJpYXQiOjE3NTM0NjgwMTguNTU4MDE5LCJuYmYiOjE3NTM0NjgwMTguNTU4MDIzLCJleHAiOjE3ODUwMDQwMTguNTQwMTEyLCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.C3-kCKzmf7KzCTWt95MiD2scMqWgvNR_2OyzbRE5zKylz9pUWajkX2BF5473-vk-s5xkjnvhd6dXVrruTA7mjRdRR_o1wK85KmKvtGmbQiwyjqMLaojZc6h6Vx_Qf8ACVccdcvVDncg4t4ceCqGH58ZMpu6skd6Nl1oMcU4WRdm3amOCOKpDSG5So2_h9j3s7oj-Bl_AqVk_cH3i_CFObuXKKC9DBlqdE0GOh2cn70TtaOXugqll0KrAIBaBUJG8K9YhaTDpK_dYJjnjuRN7nvOqxKCbYufndgyqitl2PU5hm0mrfMBT2FsUA92_z99apoCr_2RmmPv0iVdNfDCojLKGrPtrPq0PuNQXf_wp2Y9AWXX_1-j2k5ssNn4tsRX_rVt30bpfog7EX2tNrSSfx2EOe2sBtgt4bP6WoZczKNhu8uHtkyNiy6PZax8pK3YTgNRuf1OkPSLeAVrtwCK389MrkvBE52Wr_EyM2Z6-mnVuyam1YboNf5acgFtXAzdoM36c3biP9B4Lw3p7a6YoStkDvQsAvWASKhlKSyhPwKtXrMBJlHOCALArklyNTyJLPNbrPleHrNDkwHXgm9MG9GYGWw-vKup2fnEXA0_J65J75kS3yE2obkAtyRwotg1JYxwKvcBuXPjH3a7HmnXG_fJxK6Vnwx_gyYMZ4turWnQ"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "stripe_token",
+											"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/men-data"
+							},
+							"response": []
+						},
+						{
+							"name": "Female Members",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzIwNTY5ZmU2ZThhOGU4MjI3NjAyNjI2MTdiYzc4ZjJkOTYyOTBiMGM4ZGQzNmUzMzJmYWRkNmNjZTdlYWYyYzA5MTc3MjliN2I3YjI1N2MiLCJpYXQiOjE3NTUwOTUzNDIuNjI2OCwibmJmIjoxNzU1MDk1MzQyLjYyNjgwNywiZXhwIjoxNzg2NjMxMzQyLjI5NDM5NSwic3ViIjoiOCIsInNjb3BlcyI6W119.fdJRqI8HyAtIwFsf7rRC4iycT3M-ohu5JqW6maZgON6_SvdvTtNaSGcNXbOtDMPrFFaZEY8nz8hryKUm5I0ex02J71-zLAFTuoulz2mzJcMxwXX12QeGLyUIDaIFIu7-vSNzik8ipAsgckAEkL-PbL321o7zKxqD2GsKoTDGav9IGFVHr9cdk3KxsMqLa14CL44PjWB7UoSC_wPGPHdNEW_l5W-cX5woAh1g11o3vWMDU0WBlhrP3GvFvlcq43tqeLHr4dV1MqtVRHnvD00lBleg7SJRQBZcxBkbGP3ELciKsArCpy2pb5f6iFWw8hd6GsYu94q-YFeXkWg8SaW4cj8B6ub5ix_vD8hMY_OYB5y_tzDHKL9r5ywt4J9mAVUYz_Ugc0U3wh-1jfYt_uqAmLvBM0INc2BX75yUdy9WCIm0mhMy5meYa2JQc0ZDzVcUkWLfR4SqW9tkNv4wFSpd52DawcUS36eELFMKzQ99ISp798DvntjhXYfFEpJmnkfEIGY8sy8g1bzv07d9vd_ff5AUhBJixyzy_xktGr8UtEovDiop-oc-Fg0YDmP1-scZPoXFQdc4FEHPDSwi1FI7yT0DZ9MztXUeLOQ36DguujSFILGe_t2FC4NB0l7HPhs9pPApN9KgOkLyPv73NVcbyA8zgf5Di2cvfSbOfLvzmXs"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "stripe_token",
+											"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/female-members"
+							},
+							"response": []
+						},
+						{
+							"name": "Sponsored Dates",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODg3YzZhNDg5NzVhMDUwZjQ0NWJlZDc0OGJkNTFhMmViMGI0OWI1MjIyMjUwY2Y1N2FlNzJiNTIyODc5YzMzOWUwYzRmZTllZjdmMGEwNTMiLCJpYXQiOjE3NTM3MTA1NTAuNDc3MjM5LCJuYmYiOjE3NTM3MTA1NTAuNDc3MjQyLCJleHAiOjE3ODUyNDY1NTAuNDY4MzM1LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.fBOBHjKSId4eC0AWE2Q_xihnZDlwChYF3_hQ8lLCvnJK3KQlqt-wb-hMxQhg0H_x_ZyY2eyFUn6smsJc241cGCkCmp96e9eZSR3GjV0hOXNLMmmfdoCA4LxUpLm1nUgfJ4Uqm48Tz0NYnYlILmG5QI7TjLlR0yzAyWyGEaE-Y2TPnMWO88CJ8yEEEHW7_8RsKW9KjnqdEVxpThj1xuWZsmBqBf0DnJD9z-VDwIwHC7bEFiIlQ07x8CTX_Pe9lRglGw6XJpgWtPM7J6CTvpXwvpGLWxbPkf2BfrYcVNrJYwiM2c99yn8f9FTfc4Juja-bKpO0O02U5gE4bUcgqoa8Lai7vtg4e_F5fc6JlViNxrSakaWMANibwil0vvccCCoXUh37f48lhlFCNMpW6kWBqomflabv8QZqsSY910-J6etpsGQb21JXRrt3ZapN6baY8oQMbkpe_2fzhUyHjX23xXa5N8np4UAfdNsILHpI2qc7bRS4nTm5c9MAYsHQKGUjteLMLD9_wRVWX6szFvBv243e76arviPdxq-vYDnXYmkTWmUQ2jvhG3UTk4a-U91tyX5IUk8eVlYT4eZXTcoCkDgQXCNWUVIC5lxItSYGcqC8EbJzPxiTCBRukQfc7XBv2Kxnp52_Rj4Oolr0rNcsFmEuPVhVmIc9_8RTF9X0_eI"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "stripe_token",
+											"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/sponsored-dates"
+							},
+							"response": []
+						},
+						{
+							"name": "Matched Profiles",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjdmNWZjOGU1YmIxYTVjMDkzYWNlNDBkZmY4MzBiYWZhYzdiOTViZDY1MmVjOTQ3ZjAxN2FkNzc2NmJjY2NjNmZmNDUxODlkNDUxYzM2ZTgiLCJpYXQiOjE3NTM0NTEwMTIuNzY5NTg2LCJuYmYiOjE3NTM0NTEwMTIuNzY5NTg5LCJleHAiOjE3ODQ5ODcwMTIuNzQ5NjE3LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.bupBt9pE0TndEMWPqk4Fv4MGJ6syGm3YTdLUnXQN5k7VMWqz_B4tCJAyPsfiPVuL5umk_aRimTQSOhVzu7SWX8NoNwxhF4pD9P1t7c8PksM42wMcpa1fwmkeXK9AiBTBlq28E7s8UDotimLWQmVl3cE1h-v7T-yq14YWiOe4jWG8ieIArcFgwNeG1icf1VeIpJPWi9KFTD73Ff14M-iKeRBVCS1zS3rqg9sTHpWFw1qngvHUQ5NhSjHUuOMqz-ZNk36uXSF5Ewk2SeqacpVrLrCw3nbRC6py39zyxKUZQ7_6nIN2h0sDHmUfNiuNhb6yS-fvn2e1FuFr5G8T9F7m5GioajxureFuNC1yvg6uYrBcPmHLSlP-GjRPvTEBPRggHfUZeBfIorUJk3kfW5XzCJvMa7flnvQsj0mUNf-mFQoQcM4b_61UYb7PKRsO8oDDrZFKJ7hmcKF2MA-4LGES013EWyLWm5x0S2ZiabdkGXT9YbFcmvwZZgMcJ9HzynyDbuPdlRr5GNsHWG9hiINDYNkboDlSUpjy09jsxSb0yEjiZzF-QGdsZuQymAiGMJVEPT4Cyv1pVlGArMuB7f2dlZd6mrdguPGC8vMDqRiCo_j6j0sbELIeWMFnvTIg93r2JhKwNuMO-RhZtUKePpJkUIKTLORUOJc4s2yBGtbmujY"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "stripe_token",
+											"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/matched-profiles"
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGNhZjhmM2E3ZjQ0OWUwYTYzMzRmNmU0OTcxZTgyMWE3NTQ1ODVkZGE3ZmIwNDQwNzM0ODVhNGYwMDk1MmMyNzkxMWRlOWRlZDE1ZmI1ZWMiLCJpYXQiOjE3NTM0Njk2NTIuNDc4OTkyLCJuYmYiOjE3NTM0Njk2NTIuNDc4OTk1LCJleHAiOjE3ODUwMDU2NTIuNDY3ODUxLCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.QAfGYD0Qbit6qbGD2miDZgkyFK7T5pD54uhMBC8gl5AiroXljQGL57eWDv88hzKqNcEmzuDOYO8veA6qK9Ck3clNv0x8MPXopxRHkERmya6pzXB4oFPLZEIvihghFrpk61ky2E1x7SWHnUpYFad4f4I9W1ka_UmrJHr6BozyYd94NX2b9Ki_xsmRkqY14ZmnzY7gPu2YEfG0OEh2I4r6bfCseTShB0xMj1iGkRZEfvf0XA8QIg_SJheZmVGZswDcwSz7SgpszMRNpsFnspzhoE6MG_p5s9wIo9Fl6cjhibEF-b_asPdu2tBinlcNxXJrr9L7O7gQCImeHYbGo5TZ9sFsm9-tv4AaBj6fUUvAaUOp-Nr54tM750dhyiY1B8xNRmZkj9A_gpEkD77SbjX8eTHfdD8UN9N32mAHL6Zn2JV2DyBWAoNLcBJPx2IO45-9o817VMaL6anRzsWOq9-hxhBaykj7Y-5fRc0Uwx2pQQWZA89vAwKAS5sAU4u9JlnmW3-hs1YW5owBrDyi7d2xQJHaCtz1f6NPEkl1yV4RxH0KVTfUusN6SX04hO0C1jKBzQPYjKSbp-g6cWfuhgbfytqYFG-FzJuAoqIr2u6avgcG5j7bfmILYPMR1PeCLobWs6QRVy7fp-OHoXrPSm1pgYUkn6RzR6WAXVun6tqJLbQ"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "asdaasd",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "kalli@yopmail.com",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "43234234",
+											"type": "text"
+										},
+										{
+											"key": "nationality",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "date_of_birth",
+											"value": "21-07-2001",
+											"type": "text"
+										},
+										{
+											"key": "occupation",
+											"value": "dev",
+											"type": "text"
+										},
+										{
+											"key": "income",
+											"value": "3000",
+											"type": "text"
+										},
+										{
+											"key": "can_pay",
+											"value": "30",
+											"type": "text"
+										},
+										{
+											"key": "skills",
+											"value": "swimming,footballer",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "kcndjv",
+											"type": "text"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-fb1e-4080-81c5-e710c5eca8a2"
+										},
+										{
+											"key": "videos[]",
+											"type": "file",
+											"src": [
+												"postman-cloud:///1f061822-9261-4610-85ce-2f18d56156f1",
+												"postman-cloud:///1f0609fc-2a07-4e90-875a-5ed4c0acb135"
+											]
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/update-men/8"
+							},
+							"response": []
+						},
+						{
+							"name": "Like Women",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTJhYzRmZGJlYTJhMTNjZTIzZWM3NTBmMDk1NTdkY2YwZjA3NzIxNmVkMGE4NGE1MDcxOTkxMDYwNTUzNzgxMjViNTI3OWQ1M2M1OWNkM2IiLCJpYXQiOjE3NTM0NzE0NzUuNTc1NTUzLCJuYmYiOjE3NTM0NzE0NzUuNTc1NTU3LCJleHAiOjE3ODUwMDc0NzUuNTYxODExLCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.R-Vr4dNALg_PTWbP7dHJp7GDxwKP7QQor4zcKaYHazamFFpTp8waHj45HDs3LDsLIAiwvUmJmj22Gmp-t5m7hN6LYlVvLpFZlXMDqqDAQsaW2fNmGWvf4wZKSZoF42CHdREn9LksPxf5vTabXn9gAb8tasQJJZ9vboWdPaHcmdA381XtISmKE98PYoomqnfKLSLRJAsQJVcTVnrjBvH3v-G9cragvHz0E_M-FDTMYcnbT2nXqtyUSal_mBplsA6sKRCUs8IUnB2VM7leWhVV3MK0ItP5x0csqUPPyLc7lnsA5G7pY1AO9dTHH0mo4dz7HaohAlunz6Xa_S25HuQzmAxR4_E8UH7kQXI7kaKDXOxrh1eqiHdvja1uV4sCSd33XMUs-O401DwEMucViJxpZl-ApyGkBkWiZzbfNSJotsw2C0qLMxYGzpif3ydn2PSeLk6icJbCR5G-SGBsMS3UW1vrSi9L5K1B4yPG-sFEQp3L1Ds6awzwV_b6NagKJZ8OftFfoJAmf8EUZqW5GDrUdrfsPNm5Jj4ElKvsOQmSu6_PY5K7CWXImE3fnQLkUCbZC5UWwWMuXlnQGfysoPl0yL1pto_rrkp3jwo943zz5w2MG2IFUo-WeS6YSscMlj_0SjzuGLrIVLxNu--ydAD9aJohmIomJgq15yYM3hOUOtI"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "liked_id",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/like-women"
+							},
+							"response": []
+						},
+						{
+							"name": "Offer Date",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODg3YzZhNDg5NzVhMDUwZjQ0NWJlZDc0OGJkNTFhMmViMGI0OWI1MjIyMjUwY2Y1N2FlNzJiNTIyODc5YzMzOWUwYzRmZTllZjdmMGEwNTMiLCJpYXQiOjE3NTM3MTA1NTAuNDc3MjM5LCJuYmYiOjE3NTM3MTA1NTAuNDc3MjQyLCJleHAiOjE3ODUyNDY1NTAuNDY4MzM1LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.fBOBHjKSId4eC0AWE2Q_xihnZDlwChYF3_hQ8lLCvnJK3KQlqt-wb-hMxQhg0H_x_ZyY2eyFUn6smsJc241cGCkCmp96e9eZSR3GjV0hOXNLMmmfdoCA4LxUpLm1nUgfJ4Uqm48Tz0NYnYlILmG5QI7TjLlR0yzAyWyGEaE-Y2TPnMWO88CJ8yEEEHW7_8RsKW9KjnqdEVxpThj1xuWZsmBqBf0DnJD9z-VDwIwHC7bEFiIlQ07x8CTX_Pe9lRglGw6XJpgWtPM7J6CTvpXwvpGLWxbPkf2BfrYcVNrJYwiM2c99yn8f9FTfc4Juja-bKpO0O02U5gE4bUcgqoa8Lai7vtg4e_F5fc6JlViNxrSakaWMANibwil0vvccCCoXUh37f48lhlFCNMpW6kWBqomflabv8QZqsSY910-J6etpsGQb21JXRrt3ZapN6baY8oQMbkpe_2fzhUyHjX23xXa5N8np4UAfdNsILHpI2qc7bRS4nTm5c9MAYsHQKGUjteLMLD9_wRVWX6szFvBv243e76arviPdxq-vYDnXYmkTWmUQ2jvhG3UTk4a-U91tyX5IUk8eVlYT4eZXTcoCkDgQXCNWUVIC5lxItSYGcqC8EbJzPxiTCBRukQfc7XBv2Kxnp52_Rj4Oolr0rNcsFmEuPVhVmIc9_8RTF9X0_eI"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "women_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "date",
+											"value": "2025-07-28",
+											"type": "text"
+										},
+										{
+											"key": "time",
+											"value": "14:00",
+											"type": "text"
+										},
+										{
+											"key": "offer_price",
+											"value": "200",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/offer-date"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNWEwOGYzODczN2U0YzkyNTcxOTBhMjA5M2VkMGNhYzY4ODYzZDhiMjUwNjM3MTI3OGJmOTZkMjQxMWVmYjQxMTYxMjkyNmRkNjlhMThkNjYiLCJpYXQiOjE3NTM3MTU4NjEuNTUxMjMzLCJuYmYiOjE3NTM3MTU4NjEuNTUxMjQsImV4cCI6MTc4NTI1MTg2MS4zNjA4NTQsInN1YiI6IjgiLCJzY29wZXMiOltdfQ.UZCNq38MOgJLjKL5gFMBgGmKE8n_Ahy7t089-vSalOZVYgKaCTE1wy86YSkliHcPUME_Ue5Qk2Bwh271_Jc7s6YaiAqU-H7iJJGNOuIegvJiXktIQADWw6gRQCWpz2tnD3hgvK6lDc-ftT2TXl_TKgGGglWNy_BkclghTpVCmLuwxpGGMa4cuyVzmTmmW5w6nK2UCyqhkroZy-oWpN6y43qfYGfaAu7AGsUxwLFcOezHQWXzrkqL8sfG56M670Wufe_NX66QAqRobM1ZhXyrm58QmJRkceMAcySAW_ZynzAh3CBDI5QLUMOa3wgWqKxZ_RzxRAJe6sCmyGnKFiNUTJsM1_tHfHgWbdkj9snqUvTjpyj8OKCWx3Gx7Swbz1IvLQTyCSCwGZwhGJASN_dqeFlmVS8z9tvKV4OqXNrEmKORNWH-ONj-7JgDMtyGvjMdQrXlv1qVhDx3Xf3YH96ympww00mPckTMfeJ058Txk6w9V92OD8i4YghJwTqB0YhyRCQWqoYy-ncyfODYYhHg8Qfyd3a3YkcZueQCEXcjYpHB4Vz_Z1kg3bgVP39UcEO1zAZ70HyMqY0yGAKcVz0FOT3cMAs_Y6vVr_NKOQfS_Tgf7F3kjpRcmSgG-klTRl53wT7VCXZAhCfANWPnGoHltJEyko7PcqRLaMuZdPz1e6M"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"value": "image_0-1753470918.jpg",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/delete-image"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Video",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNWEwOGYzODczN2U0YzkyNTcxOTBhMjA5M2VkMGNhYzY4ODYzZDhiMjUwNjM3MTI3OGJmOTZkMjQxMWVmYjQxMTYxMjkyNmRkNjlhMThkNjYiLCJpYXQiOjE3NTM3MTU4NjEuNTUxMjMzLCJuYmYiOjE3NTM3MTU4NjEuNTUxMjQsImV4cCI6MTc4NTI1MTg2MS4zNjA4NTQsInN1YiI6IjgiLCJzY29wZXMiOltdfQ.UZCNq38MOgJLjKL5gFMBgGmKE8n_Ahy7t089-vSalOZVYgKaCTE1wy86YSkliHcPUME_Ue5Qk2Bwh271_Jc7s6YaiAqU-H7iJJGNOuIegvJiXktIQADWw6gRQCWpz2tnD3hgvK6lDc-ftT2TXl_TKgGGglWNy_BkclghTpVCmLuwxpGGMa4cuyVzmTmmW5w6nK2UCyqhkroZy-oWpN6y43qfYGfaAu7AGsUxwLFcOezHQWXzrkqL8sfG56M670Wufe_NX66QAqRobM1ZhXyrm58QmJRkceMAcySAW_ZynzAh3CBDI5QLUMOa3wgWqKxZ_RzxRAJe6sCmyGnKFiNUTJsM1_tHfHgWbdkj9snqUvTjpyj8OKCWx3Gx7Swbz1IvLQTyCSCwGZwhGJASN_dqeFlmVS8z9tvKV4OqXNrEmKORNWH-ONj-7JgDMtyGvjMdQrXlv1qVhDx3Xf3YH96ympww00mPckTMfeJ058Txk6w9V92OD8i4YghJwTqB0YhyRCQWqoYy-ncyfODYYhHg8Qfyd3a3YkcZueQCEXcjYpHB4Vz_Z1kg3bgVP39UcEO1zAZ70HyMqY0yGAKcVz0FOT3cMAs_Y6vVr_NKOQfS_Tgf7F3kjpRcmSgG-klTRl53wT7VCXZAhCfANWPnGoHltJEyko7PcqRLaMuZdPz1e6M"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "video",
+											"value": "video_1-1753720942.mp4",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/delete-video"
+							},
+							"response": []
+						},
+						{
+							"name": "Change Profile Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTU3N2M5MjZhOTA4ODljNGI4NDYyNDA2NTQ1MzYzOTVjMzNkYzBmNmYyZTczOWFlNzg2ZjAwNzQzM2NiZDZjOWNmNmRjNWZkNWIzZmI3ZTkiLCJpYXQiOjE3NTM3MjQ2NTguMTgyNTk4LCJuYmYiOjE3NTM3MjQ2NTguMTgyNjA0LCJleHAiOjE3ODUyNjA2NTcuOTg3ODQyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.hpioi3qHgMwe3L_H_pj5xQyM663PcnHjoKl7p4XbGMwadBN5mtu10RL-0ObACRGPxLbM6BJVpRfBl7c72GGvVJ4IOBhF7j3lsOAKJPOzqvd5FJyCFIKg-KkSGwW9CEDQ4Ha-0RSWiCv5eVIoiEWqN7QVmkAHKuO_etaharUNaY-w00YuYgUPOwOjYYZHvxINjqHAxRHM617OB8352byIGcJnBx5TvxSy1yOLzORlctKOa9z6rjFVja-nHrywIt0nJOJxL4ZtRgOF41ABts1tmf-UeDTzkcUGT18TSSVXykLuFVqXAjhtGH7-Y1m7t9_5VRguOAxKXg-pyflGigtXaYJgr1uIQ9kL0NjAxLBsM-Hlq9UHvHhfsz6dG08JatlUotbuozA-6MLWgfcmmHngb9GzCqs3_hFTefiFTYTRt4F7spT9eANk0I_q9Y5jSJ93iOM4Zgdml6XIz5Q3yeeNtoMIHrRjVtLHTbuSihmZEWVrYgocWTQqcXElp2LxAW5L1dtk8tkL7N7yZuG1DsJjcE87ymSyjNdeRNbcDGUjBZvblnl1tm3i6JvToMyzGGyYOXd_mk7Zb-Sp-QfNJa37LeSUhTdy5A0jG6-7yz9ZRz5ayTWNV0a835ZQji3b9d1I66sMcGsUX-N8ds3NGUtWL6eseKsfIwvfjyP_MuwtKbY"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_image",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-aedc-48c0-bcb9-1b95f3d8e195"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local_url}}auth-men/update-profile-image",
+									"host": [
+										"{{local_url}}auth-men"
+									],
+									"path": [
+										"update-profile-image"
+									],
+									"query": [
+										{
+											"key": "profile_image",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Cover Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGIwMWQyZjc1YWRjNDJiNzQ1MDk0NDg4ZjA1NTcwZWUxZTk1YzIxYjY4OWEzZDA2M2VlMjcwNGQ2ZmQyZTk3N2JjNGIwZWQzMTkwMjQ0NDMiLCJpYXQiOjE3NTM3OTExNDguNTMzNzcsIm5iZiI6MTc1Mzc5MTE0OC41MzM3NzgsImV4cCI6MTc4NTMyNzE0OC41MjA0MjcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.bWf4yZZydLAFHmet0Hl-bj4Z2tb2rRP5P5x35liCNbS6EMILTP6Xs7TrUeY4uLan_fsSxxt9zOS7hBUCdN6azuJLT3a-oP-0oXcAU-FMOPsUfQvQdFWEcBvSdfi1OcGyDSGo8JrtZIV5O2AAE1Efk7p9w28rC560KJ4Ko-G2DBRewXijYiFidUfWAboXAAlbvoZDGt9M2XZWuFjHT65wz1oyaW7EGKFAKrjJsrGP42XjgYnWv3abqjnt7OhDXQ4E9ujtKcvW3_B96SNzXkdy0xhXtZ8JbkRyNNkZeJc_b28C79YaEyU073WjlgePwqk-YuotIP5NKka1z_qVksX3uqeKJMPa3bA0gxdGA_OA2uUm0Y9ii9FK6fXQRslgkEOSiE_-ArmwDhSpuVbWKF-YNGp-CP7TtbwabXE24qSpDNf_4H0UkPrikVX_RMx8XEksUthpXnxW8jLm8Q6qIHn4QbYbLve0MkamLxZiv6gTVZ1XESbR49mwQwTeohIw7pDmpWwVfsDbt2Hwlii4uQPlLBsh0_i3CTwqtZwXqquX5d52NHPOxzUygonPmfdIC36AlqHzsS6IEPBii09f1SExmAS_Dokt9KbM6SyetBNBO4Aa3p_2V4nnZHhLb3vnInnfeZ7THqpQZtDKCJL2lYiNko7sgH7U9aYpsigIEKsvExA"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cover_image",
+											"type": "file",
+											"src": "postman-cloud:///1f05e71a-97f8-4f30-b60c-17a2215793c1"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/update-cover-image"
+							},
+							"response": []
+						},
+						{
+							"name": "Send Message",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "from_id",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "from_type",
+											"value": "Men",
+											"type": "text"
+										},
+										{
+											"key": "to_id",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "to_type",
+											"value": "Women",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "Hello",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/send-message"
+							},
+							"response": []
+						},
+						{
+							"name": "Upgrade Package",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTI2MmIxMGU3MzhiODZlMGJhNzY0ZWM5YmY5MTA1ZmIyYzVjMTlmZWI1NTkzOGJmODkwNWNmOGNlYzliZGVjMzlkZDliNTk0NjUwODcyZjciLCJpYXQiOjE3NTM0NDkyOTcuNTU0NzY5LCJuYmYiOjE3NTM0NDkyOTcuNTU0NzcyLCJleHAiOjE3ODQ5ODUyOTcuMjc5NjAzLCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.Fk0tpbsJLV8LGvR87vOYNliHJUYpNhquhJtrrE3h0bWDJT62HJ04WbxVn0Oc9rZ6n1oK5fZacnBrjhF0bjcIjyNDdqle9l9zq_nj3W0yx2xvf5tOAeAUx1G4L6uzbgdG_0u8Uuuag8pr_Z7FdVO_G9diPdEWJmwyAdnUNui3o4YFq2istBG205nqraiPnPryEWB9Y5_xpCr3hHcV-BkD2VrQb_WHMI2DX2QHubjAcJQmnJzIMz6wkdaXFf9SARG4w2zVqa4Z9_cC4mbPleJah0KO6MgvVPJmbyDtkbLT16AccPYwVz0O103ygdwFZB7wtNfF1HvDMJc_Uz9UTKx2SY9Q0NcCKyZgZekw6Yfp2fQwiYKqxbm0aRnDhep7U-aM3Ogmp5p8nDBurgXhi5K51qkldF3yfKEAMlWA_ECDAGphQ3j8Abb-vramQMWRgy_7QNN9HxB4bCAuIpTlu7p2QCUl6bChothexivc6up6WhzZQm-JrW6ahO56HubrV2c6nhbiDYEhmL2LH5595uK2ELZcWuNN9YFSKZt7IOyWqos3XHc_DfHA-g5S3yPL6KalylKn6yoRIJ7E4EO4CK1N2GrW4b2kyQX2_k6Vg1Wf0gc6GnnsSpxCn-LjhhdYjKHEio47ceIv2HWO-B7EIGDEBmJXxd7DgLZNdcRetAsOua4"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "stripe_token",
+											"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/upgrade-men-package"
+							},
+							"response": []
+						},
+						{
+							"name": "Withdraw Date",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTQxYWFhZWQxODgxNTY3Mjg5NWVkMDg2ODJkN2I1Mjk5OGRmZDY0Y2Y4NzM5OTJkYjkzMzZiMTllZGM0MWMxYzUzMzU0ZmU3YmFmMTI5NzMiLCJpYXQiOjE3NTUxODc4MzIuNDY0MjQ5LCJuYmYiOjE3NTUxODc4MzIuNDY0MjUzLCJleHAiOjE3ODY3MjM4MzIuMTIyOTYzLCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.Y5eY7BWXMokljTjW-olC8rJ8eflbKqspEUL1fePOVTVoDsgQhhRxS2-KOSGhsH4qjrjszEHcRyMiGJCj5i5e3zNFar4HDZuWbS18IzE7T8EoaWiopPScbKcEJ7_Io9rr8g31aUPnFUH3wI6ALvRgoo96cozCqmphp5QHaK-ZtUosdDxqK2ilbOEaGkfAAWmgHYc5rXPTR3gkzskuD3J6hU4WeSBmxamioL7DA6b4NemTuYXQ4rpc3l0hFiEj4kGk5fCUm57gz2srtRI6QTANwBuBNT_pSql5GsYlazoWK4FA1Zw7421Aq538hkqafHRMhhIgRZps4HTxKCl8XlKZ1iwuOZ-iL2RteQzByKx5mzSYu4742lwd15LohNUdHWZjb5W9_BUegPsCz3TzqNpwM2mWVMZ-QMC8BP48G_O9JnFwf2PE9cK6ApbDkaEH1umLUTayLN13CngHFuguUwREjeXNy0xSffNpdRGLQtro5dFzAdvpy3Sy4PcaRuHOsQZ4WP3YxFlrrQ3D7wYfUmii_7uM7d-eCIFNmOeN2TlfbqUOrsBZspfY4pEbRzcF3ED_JmApnM9P4wV6dldyTXT43qmJ0HsvhOkrCiewFSIKvfj1ZBoqJhdUjY31M3IKXUiJ6NzqTIP0bZQY4Br9KKlRpByMTG9gakJqm9iDPbaCoeg"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "date_id",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-men/withdraw-date"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Women",
+					"item": [
+						{
+							"name": "Women Data",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzY3N2Y3NGRhODVhYTYzMGMwZWE5ODFiYjFiN2Q0MTQ1ZjZmOTVkNzliYmMyOTBlNTI5M2VmNzMzZDY3MGUyODg5MTA5ZjI1NDU0ZGEzNjAiLCJpYXQiOjE3NTMyOTczOTEuMDQ3ODI5LCJuYmYiOjE3NTMyOTczOTEuMDQ3ODMzLCJleHAiOjE3ODQ4MzMzOTEuMDM1MDcyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.t1fiEaQsXesrDP1sUzCQqQbOV9qLS6aWus8nmRKr4E0mv8COBSe-ddykLQ_CYfa84Yc6PmiZ8XMyhinYL2euSiHHY5qwDre5NRTOA-gcoTkhxL3d-wPt-VQrWtILpEE1alO_qFAuQnJfm2AMPk6K2lb0GTrsKn6SeXVdWDCo030f2mO1tqiauMsgUosxetuYtuX2A-m-b5a4O9taEdxpqSPI-k7PP1l78hh4P8LVKpfy6xt9Oban-UOw7kMd4hnX-H3Zj2rTXWmds3qSh83ET2uv3kWjXeB-2lhSkWcObNedeFWi8J_HmKKqQ2El_KKlIVyT25TwWnYrK41PCCvuJAzBhvivNdffLR4dF3gtHd_tuxxgWyynfFZsAKdv8QsKt5RAlr8SLrVfy2xXu7__oqf8UH93DNwgcodwzXZ-Y0EaeHD6Dzv6S91YnwEZhEHQnLkWBCn4mZ6JKuSwy7HQ94alaecBgKFrtFy6JRXyj05ok5tZrhfb5ZWTWlxrkLkGHy_TSF8sdeYUG2JQOtdJA2r8rJa2a11zJ55ipR2JfrXAx_uv08e_pdqIue29BFvgY_UVXI8cI7SgJ3K19WAldkMTwiYORHT8WwpxMIdqCFCekzh60DEkT56NlkToosiiCWxpioJRrx3G5AOUC-z-aDN8zPgt9dmNjynR1WO_ZYo"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "stripe_token",
+											"value": "tok_1RoOII1n4j2NN6BK9eWoZ293",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/women-data"
+							},
+							"response": []
+						},
+						{
+							"name": "Male Members",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWQ2OWQ5ODAxY2Y4YjViZjk0MGJmMDMxOTA3MTU3MTAxMjgyODg2NDBjNmNhNzQ5ZjA5NjNhY2ZhODY1ODZmMTNmMWI4MWQ4ZjRhZmU2N2YiLCJpYXQiOjE3NTM3MDAyODUuOTc4NjEsIm5iZiI6MTc1MzcwMDI4NS45Nzg2MTUsImV4cCI6MTc4NTIzNjI4NS43NTMzNzQsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.l-QQJ0jPwhrIytr36pAjhbMERAvkWWnWa-D6XyZXavfLcYFGLjQFfsn8RKgLj4hwPT0oiWAW2-0oV8w3RQgoQctFzd8RO8jSxQ_DHMNigbudeV-o2cf8Pz4w7sMUh-jwnfXKNDAo55edIXPkltpHOjq5tE06rGpyeowVxXkhiRdgvBB6hAgjckxmlYl0VRh8bFcn7D5fnb7eoW3I_yfI5VMKbPZjPVZnAZtIAtjD7MEd4o8fzPzIDQwcCYWZuejwUBT2h_98o1-4W2nsCxZVa9ZgVn2k6gJffvQ55eUJFiUbo50QUsu2g4y1-ErO1pyzlv3saf5ZhTMUuVUe-03RgwgDIEAYKhpdsTD7V0qCKgISwKL6FmZzy_v9skeJdOZ6PpySuRlxB3gXL0hNbqf_jbnHZVfq8X5vPxs7SxNmAXjITkYRu7tWRNxIL15-nz89bxDWWyHqrKOmXU65JqUzVYyeY_oIV_bz_EzoDOVZs6WNCdj_MRDFxp-kfiUcW4kazUHd9PfM57CfNKcyEVDKeri9P1yISFevUh12FaCvN551YBLIfZd7nnRXi2xTmbtBilgG5n0hmG2XwhQ4LL0oH3Fo0fPDw9gpXJ1ovdLB0CyRDDVSnAFaCxJKT29vAglbAH7Nu4wmnD-B7mfzw7ew9jpQp-qZWr1t4ImxrC2R044"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{local_url}}auth-women/male-members"
+							},
+							"response": []
+						},
+						{
+							"name": "Matched Profiles",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGIwMWQyZjc1YWRjNDJiNzQ1MDk0NDg4ZjA1NTcwZWUxZTk1YzIxYjY4OWEzZDA2M2VlMjcwNGQ2ZmQyZTk3N2JjNGIwZWQzMTkwMjQ0NDMiLCJpYXQiOjE3NTM3OTExNDguNTMzNzcsIm5iZiI6MTc1Mzc5MTE0OC41MzM3NzgsImV4cCI6MTc4NTMyNzE0OC41MjA0MjcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.bWf4yZZydLAFHmet0Hl-bj4Z2tb2rRP5P5x35liCNbS6EMILTP6Xs7TrUeY4uLan_fsSxxt9zOS7hBUCdN6azuJLT3a-oP-0oXcAU-FMOPsUfQvQdFWEcBvSdfi1OcGyDSGo8JrtZIV5O2AAE1Efk7p9w28rC560KJ4Ko-G2DBRewXijYiFidUfWAboXAAlbvoZDGt9M2XZWuFjHT65wz1oyaW7EGKFAKrjJsrGP42XjgYnWv3abqjnt7OhDXQ4E9ujtKcvW3_B96SNzXkdy0xhXtZ8JbkRyNNkZeJc_b28C79YaEyU073WjlgePwqk-YuotIP5NKka1z_qVksX3uqeKJMPa3bA0gxdGA_OA2uUm0Y9ii9FK6fXQRslgkEOSiE_-ArmwDhSpuVbWKF-YNGp-CP7TtbwabXE24qSpDNf_4H0UkPrikVX_RMx8XEksUthpXnxW8jLm8Q6qIHn4QbYbLve0MkamLxZiv6gTVZ1XESbR49mwQwTeohIw7pDmpWwVfsDbt2Hwlii4uQPlLBsh0_i3CTwqtZwXqquX5d52NHPOxzUygonPmfdIC36AlqHzsS6IEPBii09f1SExmAS_Dokt9KbM6SyetBNBO4Aa3p_2V4nnZHhLb3vnInnfeZ7THqpQZtDKCJL2lYiNko7sgH7U9aYpsigIEKsvExA"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{local_url}}auth-women/matched-profiles"
+							},
+							"response": []
+						},
+						{
+							"name": "Like Men",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWQ2OWQ5ODAxY2Y4YjViZjk0MGJmMDMxOTA3MTU3MTAxMjgyODg2NDBjNmNhNzQ5ZjA5NjNhY2ZhODY1ODZmMTNmMWI4MWQ4ZjRhZmU2N2YiLCJpYXQiOjE3NTM3MDAyODUuOTc4NjEsIm5iZiI6MTc1MzcwMDI4NS45Nzg2MTUsImV4cCI6MTc4NTIzNjI4NS43NTMzNzQsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.l-QQJ0jPwhrIytr36pAjhbMERAvkWWnWa-D6XyZXavfLcYFGLjQFfsn8RKgLj4hwPT0oiWAW2-0oV8w3RQgoQctFzd8RO8jSxQ_DHMNigbudeV-o2cf8Pz4w7sMUh-jwnfXKNDAo55edIXPkltpHOjq5tE06rGpyeowVxXkhiRdgvBB6hAgjckxmlYl0VRh8bFcn7D5fnb7eoW3I_yfI5VMKbPZjPVZnAZtIAtjD7MEd4o8fzPzIDQwcCYWZuejwUBT2h_98o1-4W2nsCxZVa9ZgVn2k6gJffvQ55eUJFiUbo50QUsu2g4y1-ErO1pyzlv3saf5ZhTMUuVUe-03RgwgDIEAYKhpdsTD7V0qCKgISwKL6FmZzy_v9skeJdOZ6PpySuRlxB3gXL0hNbqf_jbnHZVfq8X5vPxs7SxNmAXjITkYRu7tWRNxIL15-nz89bxDWWyHqrKOmXU65JqUzVYyeY_oIV_bz_EzoDOVZs6WNCdj_MRDFxp-kfiUcW4kazUHd9PfM57CfNKcyEVDKeri9P1yISFevUh12FaCvN551YBLIfZd7nnRXi2xTmbtBilgG5n0hmG2XwhQ4LL0oH3Fo0fPDw9gpXJ1ovdLB0CyRDDVSnAFaCxJKT29vAglbAH7Nu4wmnD-B7mfzw7ew9jpQp-qZWr1t4ImxrC2R044"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "liked_id",
+											"value": "8",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/like-men"
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTU3N2M5MjZhOTA4ODljNGI4NDYyNDA2NTQ1MzYzOTVjMzNkYzBmNmYyZTczOWFlNzg2ZjAwNzQzM2NiZDZjOWNmNmRjNWZkNWIzZmI3ZTkiLCJpYXQiOjE3NTM3MjQ2NTguMTgyNTk4LCJuYmYiOjE3NTM3MjQ2NTguMTgyNjA0LCJleHAiOjE3ODUyNjA2NTcuOTg3ODQyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.hpioi3qHgMwe3L_H_pj5xQyM663PcnHjoKl7p4XbGMwadBN5mtu10RL-0ObACRGPxLbM6BJVpRfBl7c72GGvVJ4IOBhF7j3lsOAKJPOzqvd5FJyCFIKg-KkSGwW9CEDQ4Ha-0RSWiCv5eVIoiEWqN7QVmkAHKuO_etaharUNaY-w00YuYgUPOwOjYYZHvxINjqHAxRHM617OB8352byIGcJnBx5TvxSy1yOLzORlctKOa9z6rjFVja-nHrywIt0nJOJxL4ZtRgOF41ABts1tmf-UeDTzkcUGT18TSSVXykLuFVqXAjhtGH7-Y1m7t9_5VRguOAxKXg-pyflGigtXaYJgr1uIQ9kL0NjAxLBsM-Hlq9UHvHhfsz6dG08JatlUotbuozA-6MLWgfcmmHngb9GzCqs3_hFTefiFTYTRt4F7spT9eANk0I_q9Y5jSJ93iOM4Zgdml6XIz5Q3yeeNtoMIHrRjVtLHTbuSihmZEWVrYgocWTQqcXElp2LxAW5L1dtk8tkL7N7yZuG1DsJjcE87ymSyjNdeRNbcDGUjBZvblnl1tm3i6JvToMyzGGyYOXd_mk7Zb-Sp-QfNJa37LeSUhTdy5A0jG6-7yz9ZRz5ayTWNV0a835ZQji3b9d1I66sMcGsUX-N8ds3NGUtWL6eseKsfIwvfjyP_MuwtKbY"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "asdaasd",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "kalli@yopmail.com",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "4323423424",
+											"type": "text"
+										},
+										{
+											"key": "nationality",
+											"value": "American",
+											"type": "text"
+										},
+										{
+											"key": "date_of_birth",
+											"value": "21-07-2001",
+											"type": "text"
+										},
+										{
+											"key": "occupation",
+											"value": "dev",
+											"type": "text"
+										},
+										{
+											"key": "height",
+											"value": "6",
+											"type": "text"
+										},
+										{
+											"key": "hair_color",
+											"value": "brown",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "askncja",
+											"type": "text"
+										},
+										{
+											"key": "body_type",
+											"value": "slim",
+											"type": "text"
+										},
+										{
+											"key": "income",
+											"value": "3000",
+											"type": "text"
+										},
+										{
+											"key": "skills",
+											"value": "swimming,footballer",
+											"type": "text"
+										},
+										{
+											"key": "images[]",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-fb1e-4080-81c5-e710c5eca8a2"
+										},
+										{
+											"key": "videos[]",
+											"type": "file",
+											"src": [
+												"postman-cloud:///1f061822-9261-4610-85ce-2f18d56156f1",
+												"postman-cloud:///1f0609fc-2a07-4e90-875a-5ed4c0acb135"
+											]
+										},
+										{
+											"key": "cover_images[]",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/update-women/1"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTU3N2M5MjZhOTA4ODljNGI4NDYyNDA2NTQ1MzYzOTVjMzNkYzBmNmYyZTczOWFlNzg2ZjAwNzQzM2NiZDZjOWNmNmRjNWZkNWIzZmI3ZTkiLCJpYXQiOjE3NTM3MjQ2NTguMTgyNTk4LCJuYmYiOjE3NTM3MjQ2NTguMTgyNjA0LCJleHAiOjE3ODUyNjA2NTcuOTg3ODQyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.hpioi3qHgMwe3L_H_pj5xQyM663PcnHjoKl7p4XbGMwadBN5mtu10RL-0ObACRGPxLbM6BJVpRfBl7c72GGvVJ4IOBhF7j3lsOAKJPOzqvd5FJyCFIKg-KkSGwW9CEDQ4Ha-0RSWiCv5eVIoiEWqN7QVmkAHKuO_etaharUNaY-w00YuYgUPOwOjYYZHvxINjqHAxRHM617OB8352byIGcJnBx5TvxSy1yOLzORlctKOa9z6rjFVja-nHrywIt0nJOJxL4ZtRgOF41ABts1tmf-UeDTzkcUGT18TSSVXykLuFVqXAjhtGH7-Y1m7t9_5VRguOAxKXg-pyflGigtXaYJgr1uIQ9kL0NjAxLBsM-Hlq9UHvHhfsz6dG08JatlUotbuozA-6MLWgfcmmHngb9GzCqs3_hFTefiFTYTRt4F7spT9eANk0I_q9Y5jSJ93iOM4Zgdml6XIz5Q3yeeNtoMIHrRjVtLHTbuSihmZEWVrYgocWTQqcXElp2LxAW5L1dtk8tkL7N7yZuG1DsJjcE87ymSyjNdeRNbcDGUjBZvblnl1tm3i6JvToMyzGGyYOXd_mk7Zb-Sp-QfNJa37LeSUhTdy5A0jG6-7yz9ZRz5ayTWNV0a835ZQji3b9d1I66sMcGsUX-N8ds3NGUtWL6eseKsfIwvfjyP_MuwtKbY"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"value": "image_0-1753725184.jpg",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/delete-image"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Video",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTU3N2M5MjZhOTA4ODljNGI4NDYyNDA2NTQ1MzYzOTVjMzNkYzBmNmYyZTczOWFlNzg2ZjAwNzQzM2NiZDZjOWNmNmRjNWZkNWIzZmI3ZTkiLCJpYXQiOjE3NTM3MjQ2NTguMTgyNTk4LCJuYmYiOjE3NTM3MjQ2NTguMTgyNjA0LCJleHAiOjE3ODUyNjA2NTcuOTg3ODQyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.hpioi3qHgMwe3L_H_pj5xQyM663PcnHjoKl7p4XbGMwadBN5mtu10RL-0ObACRGPxLbM6BJVpRfBl7c72GGvVJ4IOBhF7j3lsOAKJPOzqvd5FJyCFIKg-KkSGwW9CEDQ4Ha-0RSWiCv5eVIoiEWqN7QVmkAHKuO_etaharUNaY-w00YuYgUPOwOjYYZHvxINjqHAxRHM617OB8352byIGcJnBx5TvxSy1yOLzORlctKOa9z6rjFVja-nHrywIt0nJOJxL4ZtRgOF41ABts1tmf-UeDTzkcUGT18TSSVXykLuFVqXAjhtGH7-Y1m7t9_5VRguOAxKXg-pyflGigtXaYJgr1uIQ9kL0NjAxLBsM-Hlq9UHvHhfsz6dG08JatlUotbuozA-6MLWgfcmmHngb9GzCqs3_hFTefiFTYTRt4F7spT9eANk0I_q9Y5jSJ93iOM4Zgdml6XIz5Q3yeeNtoMIHrRjVtLHTbuSihmZEWVrYgocWTQqcXElp2LxAW5L1dtk8tkL7N7yZuG1DsJjcE87ymSyjNdeRNbcDGUjBZvblnl1tm3i6JvToMyzGGyYOXd_mk7Zb-Sp-QfNJa37LeSUhTdy5A0jG6-7yz9ZRz5ayTWNV0a835ZQji3b9d1I66sMcGsUX-N8ds3NGUtWL6eseKsfIwvfjyP_MuwtKbY"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "video",
+											"value": "video_1-1753725199.mp4",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/delete-video"
+							},
+							"response": []
+						},
+						{
+							"name": "Change Profile Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTU3N2M5MjZhOTA4ODljNGI4NDYyNDA2NTQ1MzYzOTVjMzNkYzBmNmYyZTczOWFlNzg2ZjAwNzQzM2NiZDZjOWNmNmRjNWZkNWIzZmI3ZTkiLCJpYXQiOjE3NTM3MjQ2NTguMTgyNTk4LCJuYmYiOjE3NTM3MjQ2NTguMTgyNjA0LCJleHAiOjE3ODUyNjA2NTcuOTg3ODQyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.hpioi3qHgMwe3L_H_pj5xQyM663PcnHjoKl7p4XbGMwadBN5mtu10RL-0ObACRGPxLbM6BJVpRfBl7c72GGvVJ4IOBhF7j3lsOAKJPOzqvd5FJyCFIKg-KkSGwW9CEDQ4Ha-0RSWiCv5eVIoiEWqN7QVmkAHKuO_etaharUNaY-w00YuYgUPOwOjYYZHvxINjqHAxRHM617OB8352byIGcJnBx5TvxSy1yOLzORlctKOa9z6rjFVja-nHrywIt0nJOJxL4ZtRgOF41ABts1tmf-UeDTzkcUGT18TSSVXykLuFVqXAjhtGH7-Y1m7t9_5VRguOAxKXg-pyflGigtXaYJgr1uIQ9kL0NjAxLBsM-Hlq9UHvHhfsz6dG08JatlUotbuozA-6MLWgfcmmHngb9GzCqs3_hFTefiFTYTRt4F7spT9eANk0I_q9Y5jSJ93iOM4Zgdml6XIz5Q3yeeNtoMIHrRjVtLHTbuSihmZEWVrYgocWTQqcXElp2LxAW5L1dtk8tkL7N7yZuG1DsJjcE87ymSyjNdeRNbcDGUjBZvblnl1tm3i6JvToMyzGGyYOXd_mk7Zb-Sp-QfNJa37LeSUhTdy5A0jG6-7yz9ZRz5ayTWNV0a835ZQji3b9d1I66sMcGsUX-N8ds3NGUtWL6eseKsfIwvfjyP_MuwtKbY"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_image",
+											"type": "file",
+											"src": "postman-cloud:///1f05e718-fb1e-4080-81c5-e710c5eca8a2"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/update-profile-image"
+							},
+							"response": []
+						},
+						{
+							"name": "Change Cover Image",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGIwMWQyZjc1YWRjNDJiNzQ1MDk0NDg4ZjA1NTcwZWUxZTk1YzIxYjY4OWEzZDA2M2VlMjcwNGQ2ZmQyZTk3N2JjNGIwZWQzMTkwMjQ0NDMiLCJpYXQiOjE3NTM3OTExNDguNTMzNzcsIm5iZiI6MTc1Mzc5MTE0OC41MzM3NzgsImV4cCI6MTc4NTMyNzE0OC41MjA0MjcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.bWf4yZZydLAFHmet0Hl-bj4Z2tb2rRP5P5x35liCNbS6EMILTP6Xs7TrUeY4uLan_fsSxxt9zOS7hBUCdN6azuJLT3a-oP-0oXcAU-FMOPsUfQvQdFWEcBvSdfi1OcGyDSGo8JrtZIV5O2AAE1Efk7p9w28rC560KJ4Ko-G2DBRewXijYiFidUfWAboXAAlbvoZDGt9M2XZWuFjHT65wz1oyaW7EGKFAKrjJsrGP42XjgYnWv3abqjnt7OhDXQ4E9ujtKcvW3_B96SNzXkdy0xhXtZ8JbkRyNNkZeJc_b28C79YaEyU073WjlgePwqk-YuotIP5NKka1z_qVksX3uqeKJMPa3bA0gxdGA_OA2uUm0Y9ii9FK6fXQRslgkEOSiE_-ArmwDhSpuVbWKF-YNGp-CP7TtbwabXE24qSpDNf_4H0UkPrikVX_RMx8XEksUthpXnxW8jLm8Q6qIHn4QbYbLve0MkamLxZiv6gTVZ1XESbR49mwQwTeohIw7pDmpWwVfsDbt2Hwlii4uQPlLBsh0_i3CTwqtZwXqquX5d52NHPOxzUygonPmfdIC36AlqHzsS6IEPBii09f1SExmAS_Dokt9KbM6SyetBNBO4Aa3p_2V4nnZHhLb3vnInnfeZ7THqpQZtDKCJL2lYiNko7sgH7U9aYpsigIEKsvExA"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cover_images",
+											"type": "file",
+											"src": "postman-cloud:///1f05e71a-97f8-4f30-b60c-17a2215793c1"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/update-cover-image"
+							},
+							"response": []
+						},
+						{
+							"name": "Change Date Status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMTI5NTY2ODkyOGRhZDg4YjlkYTc1MGI3NmQwNjczYTIyMmJkYjcwMzliMzg1NTk3ZWIyN2JhNmE2NTQ0MjZkMmQ4MGVmNzcxYjJjZTRmZWUiLCJpYXQiOjE3NTUxOTUyMzIuNTY4NzA2LCJuYmYiOjE3NTUxOTUyMzIuNTY4NzEsImV4cCI6MTc4NjczMTIzMi41NTM3NzYsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.d7bl-c-p_tLpUuf1GZfKyf4PddsJYk3dn1qc29EeDuLUmGAf37KymY-8QsAkz4TWw7UXy1BbTNNobjUQ5s9IYVBBOCSrFICMszpgQxbaeIuSX0zeMQ34rJyki9L9VJSmoQGQQDC4Om-kCGPWkLbh-DJLz0k5f_v6gCnKU41hvjBJvzgkT9mRIvAVXHgvqfImZPVsvrcmw43DweD9EZlYvWR-diRKardtigIpJvQbzBKBYoM8aMbef4dNsey0A7IYYOU9HuxpU7uIct0_vcCKs6BRI8iZKwbXN70kin-yY5jx5MR6MUTxMsafu6uJxtgR44fXc-hD1hrZfUSRfXu28csZNQHEmgQnJ8ZVHuFp8XHxNoGGJqEQiK49lNtno4NfCcS6uaJhWX7kupmx5U7BNny162tyALgdhVsJt4F--04IuSBdErBHZtoVPHVYu6TAaTEL4zO7tSGqhvPFE936JjNXrctWbIVR716Hjwk7C9XkFdVoxKDlcrUJX0quAK-pwfsqlsa_iJxjpHZoHPLQCwQJUeBPkktF6JE8DJDOFy4cfFtw3BGMcn6vy75DDQPCmPmYN--G8ccqyt_bbKOaow3pnxV0MWJacAqvhG2keqTXTL_I1ekhdxzvaQaZQnM0-x1thxYcM--UqD2JeKwTfZBINpzJf3lm0wC7XsMydVk"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "date_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "status",
+											"value": "rejected",
+											"type": "text"
+										},
+										{
+											"key": "reason",
+											"value": "I want more money",
+											"type": "text"
+										},
+										{
+											"key": "counter_price",
+											"value": "300",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{local_url}}auth-women/change-date-status"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "SiteSettings",
+			"item": [
+				{
+					"name": "SiteSettings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{live_url}}site-settings"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Privacy Policy",
+			"item": [
+				{
+					"name": "privacy-policy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_url}}privacy-policy"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Help and Supports",
+			"item": [
+				{
+					"name": "Help and Support",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_url}}help-and-support"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Terms and Condition",
+			"item": [
+				{
+					"name": "Terms and Condition",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{local_url}}terms-and-condition"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local_url",
+			"value": "http://localhost:8080/unlock-the-door-api-web/public/api/",
+			"type": "string"
+		},
+		{
+			"key": "live_url",
+			"value": "https://unlock-n-door-api-web.developer-ourbase-camp.com/api/",
+			"type": "string"
+		}
+	]
+}
