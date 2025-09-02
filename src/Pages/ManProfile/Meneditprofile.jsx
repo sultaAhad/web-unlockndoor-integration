@@ -5,479 +5,506 @@ import Aos from "aos";
 import {
 	calenderwrapper1,
 	edit,
-	innerpages1,
-	manproimage2,
-	manproimage3,
 	massagewrapper,
-	message,
 	notification,
-	solar_calendar,
 	uploader_icon,
 } from "../../Constant/Index";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useSelector } from "react-redux";
 import {
 	useManupUatepPofileImageMutation,
 	useUpdateManCoverImageMutation,
 } from "../../network/services/AuthServices";
-import { useGetManDataQuery } from "../../network/services/ManAuth";
 
 function Meneditprofile() {
 	const { user } = useSelector((state) => state.auth);
+	const navigate = useNavigate();
 
-	const [dateOfBirth, setDateOfBirth] = useState(new Date());
-	const [chips, setChips] = useState(["Gaming", "Movies", "Sports"]);
-	const [text, setText] = useState(""); // Textarea state
-	const [bannerImage, setBannerImage] = useState(user?.cover_image_url);
-	const [profileImage, setProfileImage] = useState(user?.profile_image_url);
-	const [videos, setVideos] = useState([]);
-	const [galleryImages, setGalleryImages] = useState([]);
+	// ✅ Normalize API data
+	const parsedSkills = user?.skills
+		? Array.isArray(user.skills)
+			? user.skills
+			: user.skills.split(",").map((s) => s.trim())
+		: [];
 
-	const [manupUatepPofileImage, { loadingProfileUpload }] =
-		useManupUatepPofileImageMutation();
-	const [updateManCoverImage, { loadingCoverUpload }] =
-		useUpdateManCoverImageMutation();
+	const parsedImages =
+		typeof user?.images === "string"
+			? JSON.parse(user.images)
+			: user?.images || [];
 
-	const bannerInputRef = useRef(null);
-	const profileInputRef = useRef(null);
+	const parsedVideos =
+		typeof user?.videos === "string"
+			? JSON.parse(user.videos)
+			: user?.videos || [];
 
 	const [form, setForm] = useState({
 		name: user?.name || "",
 		email: user?.email || "",
-		income: user?.income || "",
-		date_of_birth: user?.date_of_birth || "",
-		skills: user?.skills || [],
+		annual_income: user?.income || "",
+		date_of_birth: user?.date_of_birth ? new Date(user.date_of_birth) : null,
+		skills: parsedSkills,
 		message: user?.message || "",
 		occupation: user?.occupation || "",
-		height: user?.height || "",
+		nationality: user?.nationality || "",
 		bannerImage: user?.cover_image_url || null,
 		profileImage: user?.profile_image_url || null,
-		galleryImages: [],
-		videos: [],
+		images: user?.images_urls || [],
+		videos: user?.videos_urls || [],
 	});
 
-	const handleBannerChange = (e) => {
+	const [formErrors, setFormErrors] = useState({});
+
+	const [manupUatepPofileImage] = useManupUatepPofileImageMutation();
+	const [updateManCoverImage] = useUpdateManCoverImageMutation();
+
+	const bannerInputRef = useRef(null);
+	const profileInputRef = useRef(null);
+
+	// ===== Banner Upload =====
+	const handleBannerChange = async (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			var formData = new FormData();
+			const formData = new FormData();
 			formData.append("cover_image", file);
-			updateManCoverImage(formData);
+			await updateManCoverImage(formData);
+			setForm((prev) => ({ ...prev, bannerImage: URL.createObjectURL(file) }));
 		}
 	};
 
-	const handleProfileChange = (e) => {
+	// ===== Profile Upload =====
+	const handleProfileChange = async (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			var formData = new FormData();
+			const formData = new FormData();
 			formData.append("profile_image", file);
-			manupUatepPofileImage(formData);
+			await manupUatepPofileImage(formData);
+			setForm((prev) => ({ ...prev, profileImage: URL.createObjectURL(file) }));
 		}
 	};
 
+	// ===== Skills =====
 	const handleAddChip = (chip) => {
-		if (chip && !chips.includes(chip)) {
-			// setChips([...chips, chip]);
-			setForm((prev) => ({
-				...prev,
-				skills: [...prev.skills, chip],
-			}));
+		if (chip && !form.skills.includes(chip)) {
+			setForm((prev) => ({ ...prev, skills: [...prev.skills, chip] }));
 		}
 	};
 
-	// Handle chip removal
 	const handleRemoveChip = (chip) => {
-		//   setChips(chips.filter((c) => c !== chip));
 		setForm((prev) => ({
 			...prev,
 			skills: prev.skills.filter((c) => c !== chip),
 		}));
 	};
 
+	// ===== Upload files =====
 	const handleFileChange = (e, type) => {
 		const selectedFiles = Array.from(e.target.files);
-		if (type === "gallery") {
-			setGalleryImages((prev) => [...prev, ...selectedFiles]);
-		} else if (type === "videos") {
-			setVideos((prev) => [...prev, ...selectedFiles]);
-		}
+		const urls = selectedFiles.map((file) => URL.createObjectURL(file));
+
+		setForm((prev) => ({
+			...prev,
+			[type]: [...prev[type], ...urls],
+		}));
 	};
 
 	const removeFile = (index, type) => {
-		switch (type) {
-			case "gallery":
-				setGalleryImages(galleryImages.filter((_, i) => i !== index));
-				break;
-			case "videos":
-				setVideos(videos.filter((_, i) => i !== index));
-				break;
-			default:
-				break;
-		}
+		setForm((prev) => ({
+			...prev,
+			[type]: prev[type].filter((_, i) => i !== index),
+		}));
 	};
 
-	const renderPreviews = (files, type) => (
-		<div className="preview-container d-flex flex-wrap gap-3 mt-2">
-			{files.map((file, index) => (
-				<div key={index} className="position-relative">
-					{type === "videos" ? (
-						<video
-							src={URL.createObjectURL(file)}
-							width={100}
-							height={100}
-							controls
-							className="rounded object-cover"
-						/>
-					) : (
-						<img
-							src={URL.createObjectURL(file)}
-							alt="preview"
-							width={100}
-							height={100}
-							className="rounded object-cover"
-						/>
-					)}
-					<button
-						type="button"
-						className="position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
-						style={{ width: 20, height: 20, fontSize: 14 }}
-						onClick={() => removeFile(index, type)}
-					>
-						✖
-					</button>
-				</div>
-			))}
-		</div>
-	);
+	// ===== Validation =====
+	const validateForm = () => {
+		const errors = {};
+
+		if (!form.name?.trim()) errors.name = "Name is required";
+		if (!form.email?.trim()) {
+			errors.email = "Email is required";
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+			errors.email = "Enter a valid email";
+		}
+		if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
+		if (!form.occupation?.trim()) errors.occupation = "Occupation is required";
+		if (!form.annual_income?.trim())
+			errors.annual_income = "Annual income is required";
+		if (!form.skills.length) errors.skills = "At least one skill is required";
+		if (!form.message?.trim()) errors.message = "Message is required";
+		if (!form.bannerImage) errors.bannerImage = "Cover image is required";
+		if (!form.profileImage) errors.profileImage = "Profile image is required";
+		if (form.images.length < 5)
+			errors.images = "At least 5 images are required";
+		if (form.videos.length < 2)
+			errors.videos = "At least 2 videos are required";
+
+		return errors;
+	};
+
+	// ===== Submit =====
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const errors = validateForm();
+		if (Object.keys(errors).length > 0) {
+			setFormErrors(errors);
+			return;
+		}
+		console.log("Final Data:", form);
+		navigate("/profile");
+	};
 
 	useEffect(() => {
-		Aos.init({ duration: 1000, once: true }); // Initialize AOS with options
+		Aos.init({ duration: 1000, once: true });
 	}, []);
-	//   useEffect(() => {
-	//     document.body.style.backgroundImage = `url(${innerpages1})`;
-	//     document.body.style.backgroundSize = "cover";
-	//     document.body.style.backgroundPosition = "center";
-	//     document.body.style.minHeight = "100vh";
-
-	//     return () => {
-	//       document.body.style.backgroundImage = "";
-	//     };
-	//   }, []);
-
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setForm((prev) => ({ ...prev, [name]: value }));
-	};
 
 	return (
 		<>
 			<Header />
 
+			{/* Banner + Profile */}
 			<section className="profile_sec pt-5 pb-5" data-aos="fade-up">
 				<div className="container">
-					<div className="row">
-						<div className="col-md-12 pb-5">
-							<div className="profile_banner_img">
-								<div className="position-relative">
-									<img
-										src={form?.bannerImage}
-										className="img-fluid banner_img"
-										alt="Banner"
+					<div className="profile_banner_img position-relative">
+						<img
+							src={form.bannerImage}
+							className="img-fluid banner_img"
+							alt="Banner"
+						/>
+						<div className="camera-wrapper-pp position-absolute bottom-0 right-0 m-3">
+							<button
+								type="button"
+								className="btn p-0"
+								onClick={() => bannerInputRef.current.click()}
+							>
+								<i className="fa-solid fa-camera"></i>
+							</button>
+							<input
+								type="file"
+								ref={bannerInputRef}
+								onChange={handleBannerChange}
+								accept="image/*"
+								hidden
+							/>
+						</div>
+
+						<div className="profile_img_div">
+							<div className="position-relative text-center">
+								<img
+									src={form.profileImage}
+									className="img-fluid profile_imgg"
+									alt="Profile"
+								/>
+								<div className="camera-wrapper-pp wrapp-camera-po position-absolute bottom-50">
+									<button
+										type="button"
+										className="btn p-0"
+										onClick={() => profileInputRef.current.click()}
+									>
+										<i className="fa-solid fa-camera"></i>
+									</button>
+									<input
+										type="file"
+										ref={profileInputRef}
+										onChange={handleProfileChange}
+										accept="image/*"
+										hidden
 									/>
-									<div className="camera-wrapper-pp position-absolute bottom-0 right-0 m-3">
-										<button
-											type="button"
-											className="btn p-0"
-											onClick={() => bannerInputRef.current.click()}
-										>
-											<i className="fa-solid fa-camera"></i>
-										</button>
-										<input
-											type="file"
-											ref={bannerInputRef}
-											onChange={handleBannerChange}
-											accept="image/*"
-											hidden
-										/>
-									</div>
 								</div>
-
-								<div className="profile_img_div">
-									<div className="position-relative text-center">
-										<img
-											src={form?.profileImage}
-											className="img-fluid profile_imgg"
-											alt="Profile"
-										/>
-										<div className="camera-wrapper-pp wrapp-camera-po position-absolute bottom-50">
-											<button
-												type="button"
-												className="btn p-0"
-												onClick={() => profileInputRef.current.click()}
-											>
-												<i className="fa-solid fa-camera"></i>
-											</button>
-											<input
-												type="file"
-												ref={profileInputRef}
-												onChange={handleProfileChange}
-												accept="image/*"
-												hidden
-											/>
-										</div>
-										<h5>John Smith</h5>
-									</div>
-								</div>
-
-								<div className="account_access_dv">
-									<div className="notify_edit_dv">
-										<ul>
-											<Link
-												className="text-decoration-none text-white secondary-secondregular-font"
-												to="/chat-women"
-											>
-												<li className="wrapper-navigate-main position-relative">
-													<img src={massagewrapper} /> <span>Message</span>
-													<span className="number_move_dv">21</span>
-												</li>
-											</Link>
-											<Link to="/men-notifications">
-												<li className="position-relative">
-													<img src={notification} alt="Notification" />
-													<span className="number_move_dv">19</span>
-												</li>
-											</Link>
-											<Link to="/man-settings">
-												<li>
-													<img src={edit} alt="Edit" />
-												</li>
-											</Link>
-										</ul>
-									</div>
-								</div>
+								<h5>{form?.name || "John Smith"}</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			{/* ============================== */}
-
+			{/* Edit Form */}
 			<div className="register_sec py-5">
 				<div className="container">
 					<div className="profile_dv">
-						<div className="row">
-							<div className="col-md-12">
-								<div className="edit-profile-form">
-									<div className="form-container">
-										<form>
-											<div className="row form_control_all">
-												<div className="col-md-4">
-													<div className="form-group">
-														<input
-															type="text"
-															placeholder="Your Name"
-															required
-															name="name"
-															value={form?.name}
-															onChange={handleChange}
-														/>
-													</div>
-												</div>
-												<div className="col-md-4">
-													<div className="form-group position-relative">
-														<DatePicker
-															selected={form?.date_of_birth}
-															onChange={handleChange}
-															name="date_of_birth"
-															placeholderText="Date Of Birth (DOB must match the ID given)"
-															dateFormat="dd/MM/yyyy"
-															className="custom_datePicker"
-														/>
-														<div className="input_icons">
-															<img src={calenderwrapper1} alt="" />
-														</div>
-													</div>
-												</div>
-												<div className="col-md-4">
-													<div className="form-group">
-														<input
-															type="Purpose"
-															placeholder="Purpose"
-															required
-															name="purpose"
-															value={form?.purpose}
-															onChange={handleChange}
-														/>
-													</div>
-												</div>
-												<div className="col-md-4">
-													<div className="form-group">
-														<input
-															type="Annual Income"
-															placeholder="Annual Income"
-															required
-															name="annual_income"
-															value={form?.annual_income}
-															onChange={handleChange}
-														/>
-													</div>
-												</div>
-												<div className="col-md-4">
-													<div className="form-group">
-														<input
-															type="Height"
-															placeholder="Height"
-															required
-															name="height"
-															value={form?.height}
-															onChange={handleChange}
-														/>
-													</div>
-												</div>
-												<div className="col-md-4">
-													{/* Chips */}
-													<div className="form-group">
-														<input
-															type="text"
-															placeholder="what are your talents and skills?"
-															onKeyDown={(e) => {
-																if (e.key === "Enter") {
-																	e.preventDefault();
-																	handleAddChip(e.target.value);
-																	e.target.value = "";
-																}
-															}}
-														/>
-													</div>{" "}
-												</div>
-												<div className="col-md-4">
-													<div className="form-group">
-														<textarea
-															style={{ borderRadius: "10px" }}
-															className="form_input-2 input_border w-100"
-															rows="4"
-															value={text}
-															placeholder="Message"
-															onChange={handleChange}
-															name="message"
-														/>
-													</div>
-												</div>
+						<form onSubmit={handleSubmit}>
+							<div className="row form_control_all">
+								{/* Name */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input
+											type="text"
+											placeholder="Your Name"
+											name="name"
+											value={form.name}
+											onChange={(e) =>
+												setForm((prev) => ({ ...prev, name: e.target.value }))
+											}
+										/>
+										{formErrors.name && (
+											<p className="text-danger">{formErrors.name}</p>
+										)}
+									</div>
+								</div>
 
-												<div className="col-md-4">
-													<div className="form-group">
-														<input
-															type="Occupation"
-															placeholder="Occupation"
-															required
-															name="occupation"
-															value={form?.occupation}
-															onChange={handleChange}
-														/>
-													</div>
-												</div>
-												<div className="col-lg-4">
-													<div className="form-group">
-														<div className="chips">
-															{/* {form.skills.map((chip) => (
-                                <div key={chip} className="chip">
-                                  {chip}
-                                  <span onClick={() => handleRemoveChip(chip)}>
-                                    &times;
-                                  </span>
-                                </div>
-                              ))} */}
-														</div>
-													</div>
-												</div>
-												{/* Gallery Images Upload */}
-												<div className="col-md-4">
-													<div className="form-group upload-section mt-2">
-														<label>Upload 5 pictures minimum</label>
-														<div className="uploader py-3 rounded mt-2">
-															<div className="upload_pic text-center">
-																<div className="content_uploader">
-																	<img
-																		src={uploader_icon}
-																		alt=""
-																		className="img-fluid"
-																	/>
-																	<p className="secondary-secondsemibold-font">
-																		Upload here
-																	</p>
-																</div>
-															</div>
-															<input
-																type="file"
-																accept="image/*"
-																multiple
-																className="uploader_file"
-																onChange={(e) => handleFileChange(e, "gallery")}
-															/>
-														</div>
+								{/* Email */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input type="email" value={form.email} disabled />
+									</div>
+								</div>
 
-														{form.galleryImages.length > 0 &&
-															renderPreviews(form.galleryImages, "gallery")}
-														<div className="col-lg-10">
-															<label className="mt-1">
-																Note :{" "}
-																<span className="label_span">
-																	make sure you got the best of your
-																	attractiveness and qualities{" "}
-																</span>
-															</label>
-														</div>
-													</div>
-												</div>
+								{/* DOB */}
+								<div className="col-md-4">
+									<div className="form-group position-relative">
+										<DatePicker
+											selected={form.date_of_birth}
+											onChange={(date) =>
+												setForm((prev) => ({ ...prev, date_of_birth: date }))
+											}
+											placeholderText="Date Of Birth"
+											dateFormat="dd/MM/yyyy"
+											className="custom_datePicker"
+										/>
+										<div className="input_icons">
+											<img src={calenderwrapper1} alt="" />
+										</div>
+										{formErrors.date_of_birth && (
+											<p className="text-danger">{formErrors.date_of_birth}</p>
+										)}
+									</div>
+								</div>
+								{/* Nationalty */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input
+											type="text"
+											placeholder="Nationality "
+											value={form.nationality}
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													nationality: e.target.value,
+												}))
+											}
+										/>
+										{formErrors.nationality && (
+											<p className="text-danger">{formErrors.nationality}</p>
+										)}
+									</div>
+								</div>
+								{/* Occupation */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input
+											type="text"
+											placeholder="Occupation"
+											value={form.occupation}
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													occupation: e.target.value,
+												}))
+											}
+										/>
+										{formErrors.occupation && (
+											<p className="text-danger">{formErrors.occupation}</p>
+										)}
+									</div>
+								</div>
 
-												{/* Videos Upload */}
-												<div className="col-md-4">
-													<div className="form-group upload-section mt-2">
-														<label>introduction video at least 2 </label>
-														<div className="uploader py-3 rounded mt-2">
-															<div className="upload_pic text-center">
-																<div className="content_uploader">
-																	<img
-																		src={uploader_icon}
-																		alt=""
-																		className="img-fluid"
-																	/>
-																	<p className="secondary-secondsemibold-font">
-																		Upload here
-																	</p>
-																</div>
-															</div>
-															<input
-																type="file"
-																accept="video/*"
-																multiple
-																className="uploader_file"
-																onChange={(e) => handleFileChange(e, "videos")}
-															/>
-														</div>
-														{form.videos.length > 0 &&
-															renderPreviews(form.videos, "videos")}
-													</div>
+								{/* Income */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input
+											type="text"
+											placeholder="Annual Income"
+											value={form.annual_income}
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													annual_income: e.target.value,
+												}))
+											}
+										/>
+										{formErrors.annual_income && (
+											<p className="text-danger">{formErrors.annual_income}</p>
+										)}
+									</div>
+								</div>
+
+								{/* Skills */}
+								<div className="col-lg-4">
+									<div className="form-group">
+										<input
+											type="text"
+											placeholder="Add a skill and press Enter"
+											onKeyDown={(e) => {
+												if (e.key === "Enter") {
+													e.preventDefault();
+													handleAddChip(e.target.value);
+													e.target.value = "";
+												}
+											}}
+										/>
+										<div className="chips d-flex gap-2 flex-wrap mt-2">
+											{form.skills.map((chip) => (
+												<div
+													key={chip}
+													className="chip px-2 py-1 border rounded bg-light"
+												>
+													{chip}
+													<span
+														className="ms-2 chipwwww text-danger"
+														onClick={() => handleRemoveChip(chip)}
+														style={{ cursor: "pointer" }}
+													>
+														&times;
+													</span>
 												</div>
-												<div className="col-md-4 align-content-center">
-													<Link to="/profile">
-														{" "}
-														<button
-															type="submit"
-															className=" border radius-8 secondary-regular-font"
-														>
-															Save
-														</button>
-													</Link>
+											))}
+										</div>
+										{formErrors.skills && (
+											<p className="text-danger">{formErrors.skills}</p>
+										)}
+									</div>
+								</div>
+
+								{/* Message */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<textarea
+											style={{ borderRadius: "10px" }}
+											rows="4"
+											value={form.message}
+											className="form_input-21 input_border w-100"
+											placeholder="Message"
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													message: e.target.value,
+												}))
+											}
+										/>
+										{formErrors.message && (
+											<p className="text-danger">{formErrors.message}</p>
+										)}
+									</div>
+								</div>
+								{/* Save Button */}
+								<div className="col-md-4 align-content-center">
+									{" "}
+									<button
+										type="submit"
+										className="border radius-8 secondary-regular-font"
+									>
+										Save
+									</button>
+								</div>
+								{/* Images */}
+								<div className="col-md-4">
+									<div className="form-group upload-section mt-2">
+										<label className="text-white">
+											Upload 5 pictures minimum
+										</label>
+										<div className="uploader py-3 rounded mt-2">
+											<div className="upload_pic text-center">
+												<div className="content_uploader">
+													<img
+														src={uploader_icon}
+														alt=""
+														className="img-fluid"
+													/>
+													<p className="secondary-secondsemibold-font text-white">
+														Upload here
+													</p>
 												</div>
 											</div>
-											{/* Input Fields */}
-										</form>
+											<input
+												type="file"
+												accept="image/*"
+												multiple
+												onChange={(e) => handleFileChange(e, "images")}
+											/>
+										</div>
+										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
+											{form.images.map((img, i) => (
+												<div key={i} className="position-relative">
+													<img
+														src={img}
+														width={100}
+														height={100}
+														alt="gallery"
+													/>
+													<button
+														type="button"
+														onClick={() => removeFile(i, "images")}
+														className="position-absolute top-0 end-0 bg-danger text-white border-0 rounded-circle"
+														style={{ width: 20, height: 20 }}
+													>
+														✖
+													</button>
+												</div>
+											))}
+										</div>
+										<div class="col-lg-10">
+											<label class="mt-1 text-white">
+												Note :{" "}
+												<span class="label_span">
+													make sure you got the best of your attractiveness and
+													qualities{" "}
+												</span>
+											</label>
+										</div>
+										{formErrors.images && (
+											<p className="text-danger">{formErrors.images}</p>
+										)}
+									</div>
+								</div>
+
+								{/* Videos */}
+								<div className="col-md-4">
+									<div className="form-group upload-section mt-2">
+										<label className="text-white">
+											Upload at least 2 introduction videos
+										</label>
+										<div className="uploader py-3 rounded mt-2">
+											<div className="upload_pic text-center">
+												<div className="content_uploader">
+													<img
+														src={uploader_icon}
+														alt=""
+														className="img-fluid"
+													/>
+													<p className="secondary-secondsemibold-font text-white">
+														Upload here
+													</p>
+												</div>
+											</div>
+											<input
+												type="file"
+												accept="video/*"
+												multiple
+												onChange={(e) => handleFileChange(e, "videos")}
+											/>
+										</div>
+
+										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
+											{form.videos.map((vid, i) => (
+												<div key={i} className="position-relative">
+													<video src={vid} width={120} height={100} controls />
+													<button
+														type="button"
+														onClick={() => removeFile(i, "videos")}
+														className="position-absolute top-0 end-0 bg-danger text-white border-0 rounded-circle"
+														style={{ width: 20, height: 20 }}
+													>
+														✖
+													</button>
+												</div>
+											))}
+										</div>
+										{formErrors.videos && (
+											<p className="text-danger">{formErrors.videos}</p>
+										)}
 									</div>
 								</div>
 							</div>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>

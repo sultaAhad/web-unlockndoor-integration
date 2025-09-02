@@ -2654,7 +2654,26 @@ select.form-select.form-control.custom-select-arrow {
 	mask-composite: exclude;
 	z-index: -1;
 }
-
+.chip .chipwwww {
+	font-size: 14px;
+	margin-left: 8px;
+	cursor: pointer;
+	color: #fff;
+	position: relative;
+	bottom: 7px;
+	left: 3px;
+}
+textarea.form_input-21 {
+	width: 100%;
+	padding: 13px;
+	border: unset;
+	background: #ffffff42;
+	color: white;
+	border-radius: 9px;
+	font-size: 14px;
+	font-family: "TomatoGrotesk-SemiBold";
+	resize: none;
+}
 .login_btn .submit_signup_btn:hover {
 	transform: scale(1.05);
 	box-shadow: 0 0 25px rgba(156, 22, 72, 0.8);
