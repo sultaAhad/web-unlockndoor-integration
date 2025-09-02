@@ -18,9 +18,8 @@ const StepFormMan = () => {
 	const next = () => setStep((prev) => Math.min(prev + 1, 3));
 	const back = () => setStep((prev) => Math.max(prev - 1, 1));
 	const handleSubmit = () => {
-		console.log("Final Data:", formData);
-		alert("Form submitted!");
-	};
+    alert("Form submitted!");
+  };
 
 	return (
 		<>

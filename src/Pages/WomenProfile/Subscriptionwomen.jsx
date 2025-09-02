@@ -21,12 +21,10 @@ const Subscriptionwomen = () => {
 
 	useEffect(() => {
 		if (initialSelected) {
-			console.log("🎯 Selected Package from Navigate:", initialSelected);
-			setSelectedPackage(initialSelected);
-		} else {
-			// ✅ redirect back if no package is selected
-			navigate("/");
-		}
+      setSelectedPackage(initialSelected);
+    } else {
+      navigate("/");
+    }
 	}, [initialSelected, navigate]);
 
 	useEffect(() => {

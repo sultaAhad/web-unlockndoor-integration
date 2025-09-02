@@ -39,7 +39,6 @@ const CheckoutForm = ({
 	useEffect(() => {
 		if (response?.isSuccess) {
 			setShowSuccessModal(true);
-			console.log("✅ Purchase Success Response:", response.data);
 
 			// update redux user
 			if (response?.data?.user) {
@@ -124,10 +123,6 @@ const CheckoutForm = ({
 			formData.set("stripe_token", payload.token.id);
 			formData.set("package_id", checkedTerm.id);
 
-			console.log("📦 Sending Purchase Request =>", {
-				stripe_token: payload.token.id,
-				package_id: checkedTerm.id,
-			});
 
 			purchasePackage(formData);
 			cardElement.clear();

@@ -22,7 +22,6 @@ function Journeyoflove() {
 
   const { data: homePageContent, isLoading } = useHomeContentQuery();
   const HomePageData = homePageContent?.data?.sectionTwo;
-  console.log(homePageContent)
 
   const handlePause = () => sliderRef.current?.slickPause();
   const handlePlay = () => sliderRef.current?.slickPlay();

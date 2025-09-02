@@ -168,22 +168,17 @@ const PackageTabs = () => {
 												className="btn get-started-btn rounded-pill py-3 px-4 bg-white font_reg text-capitalize font_level4"
 												onClick={() => {
 													if (userToken) {
-														// User logged in
-														console.log("User logged in ✅");
-														console.log("Active Tab:", activeTab); // men/women
-														setSelectedPackage(packageData);
-														setShowPackageModal(true);
-													} else {
-														// User not logged in
-														Swal.fire({
-															icon: "error",
-															title: "Login Required",
-															text: "Please login to continue with the payment.",
-															confirmButtonText: "OK",
-														});
-														console.log("User not logged in ❌");
-														console.log("Active Tab:", activeTab); // men/women
-													}
+                            setSelectedPackage(packageData);
+                            setShowPackageModal(true);
+                          } else {
+                            // User not logged in
+                            Swal.fire({
+                              icon: "error",
+                              title: "Login Required",
+                              text: "Please login to continue with the payment.",
+                              confirmButtonText: "OK",
+                            });
+                          }
 												}}
 											>
 												Get Started

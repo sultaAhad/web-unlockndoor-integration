@@ -44,53 +44,53 @@ function AppRoutes() {
 	const isHomePage = location.pathname === "/";
 
 	return (
-		<div className="">
-			<ScrollToTop />
-			<Routes>
-				{/* Main Pages */}
-				<Route path="/" element={<Home />} />
-				<Route path="/terms-condition" element={<Termscondition />} />
-				<Route path="/privacy-policy" element={<Privacypolicy />} />
-				<Route path="/help-support" element={<Helpsupport />} />
+    <div className="">
+      <ScrollToTop />
+      <Routes>
+        {/* Main Pages */}
+        <Route path="/" element={<Home />} />
+        <Route path="/terms-condition" element={<Termscondition />} />
+        <Route path="/privacy-policy" element={<Privacypolicy />} />
+        <Route path="/help-support" element={<Helpsupport />} />
 
-				{/* Man pages */}
-				<Route path="/profile" element={<Profile />} />
-				<Route path="/female-members" element={<Femalemembers />} />
-				<Route path="/edit-men-profile" element={<Meneditprofile />} />
-				<Route path="/chat" element={<Chat />} />
-				<Route path="/women-details/:id" element={<Womandetails />} />
-				<Route path="/men-notifications" element={<Mennotification />} />
-				<Route path="/sponsored-dates" element={<SponsoredDates />} />
-				<Route path="/my-membership" element={<Membership />} />
-				<Route path="/matched-profiles" element={<MatchedProfiles />} />
-				<Route
-					path="/matched-Profiles-detail"
-					element={<MatchedProfilesDetail />}
-				/>
-				<Route path="/man-settings" element={<Mansetting />} />
-				<Route path="/man-change-password" element={<Mansettingpassword />} />
-				<Route path="/man-subscription" element={<Subscription />} />
+        {/* Man pages */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/female-members" element={<Femalemembers />} />
+        <Route path="/edit-men-profile" element={<Meneditprofile />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/women-details/:id" element={<Womandetails />} />
+        <Route path="/men-notifications" element={<Mennotification />} />
+        <Route path="/sponsored-dates" element={<SponsoredDates />} />
+        <Route path="/my-membership" element={<Membership />} />
+        <Route path="/matched-profiles" element={<MatchedProfiles />} />
+        <Route
+          path="/matched-Profiles/:id"
+          element={<MatchedProfilesDetail />}
+        />
+        <Route path="/man-settings" element={<Mansetting />} />
+        <Route path="/man-change-password" element={<Mansettingpassword />} />
+        <Route path="/man-subscription" element={<Subscription />} />
 
-				{/* Woman Pages */}
-				<Route path="/women-profiles" element={<WomenProfile />} />
-				<Route path="/women-edit-profiles" element={<WomenEditProfile />} />
-				<Route path="/dates-tab" element={<DatesTab />} />
-				<Route path="/like-match-unmatched" element={<LikeMatchUnmatched />} />
-				<Route path="/like-match-matched" element={<LikeMatchMatched />} />
-				<Route path="/chat-women" element={<WomenChat />} />
-				<Route path="/my-membership-women" element={<MembershipWomen />} />
-				<Route path="/women-notification" element={<WomenNotification />} />
-				<Route path="/women-settings" element={<Setting />} />
-				<Route path="/women-change-password" element={<Settingpassword />} />
-				<Route path="/profile-man" element={<ManProfiles />} />
-				<Route path="/subscription-women" element={<Subscriptionwomen />} />
-				<Route path="/edit-profile" element={<Editprofile />} />
-				{/* Registration Form */}
-				<Route path="/man-registration" element={<StepFormMan />} />
-				<Route path="/women-registration" element={<StepFormWomen />} />
-			</Routes>
-		</div>
-	);
+        {/* Woman Pages */}
+        <Route path="/women-profiles" element={<WomenProfile />} />
+        <Route path="/women-edit-profiles" element={<WomenEditProfile />} />
+        <Route path="/dates-tab" element={<DatesTab />} />
+        <Route path="/like-match-unmatched" element={<LikeMatchUnmatched />} />
+        <Route path="/like-match-matched" element={<LikeMatchMatched />} />
+        <Route path="/chat-women" element={<WomenChat />} />
+        <Route path="/my-membership-women" element={<MembershipWomen />} />
+        <Route path="/women-notification" element={<WomenNotification />} />
+        <Route path="/women-settings" element={<Setting />} />
+        <Route path="/women-change-password" element={<Settingpassword />} />
+        <Route path="/profile-man" element={<ManProfiles />} />
+        <Route path="/subscription-women" element={<Subscriptionwomen />} />
+        <Route path="/edit-profile" element={<Editprofile />} />
+        {/* Registration Form */}
+        <Route path="/man-registration" element={<StepFormMan />} />
+        <Route path="/women-registration" element={<StepFormWomen />} />
+      </Routes>
+    </div>
+  );
 }
 
 function Publicroutes() {

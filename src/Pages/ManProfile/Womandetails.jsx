@@ -70,7 +70,6 @@ function Womandetails() {
 	const location = useLocation();
 	const rawMember = location.state?.member;
 	const member = rawMember ? normalizeMember(rawMember) : null;
-	console.log(member, "asasd");
 
 	// Group avatars (demo)
 	const group = {

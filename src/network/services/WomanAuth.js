@@ -2,7 +2,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
 import {
+	DELETE_IMAGE_WOMAN,
+	DELETE_VIDEO_WOMAN,
 	PURCHASE_PACKAGES_WOMEN,
+	WOMEN_DATA,
 	WOMEN_LOGIN,
 	WOMEN_SIGNUP,
 } from "../../utils/endpoints";
@@ -37,9 +40,30 @@ export const WomenAuth = createApi({
 				body: credentials,
 			}),
 		}),
+		womanData: build.mutation({
+			query: (credentials) => ({
+				url: WOMEN_DATA,
+				method: "POST",
+				body: credentials,
+			}),
+		}),
 		purchasePackageWomen: build.mutation({
 			query: (formData) => ({
 				url: PURCHASE_PACKAGES_WOMEN,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
+		deleteImageWoman: build.mutation({
+			query: (formData) => ({
+				url: DELETE_IMAGE_WOMAN,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
+		deleteVideoWoman: build.mutation({
+			query: (formData) => ({
+				url: DELETE_VIDEO_WOMAN,
 				method: "POST",
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
@@ -51,6 +75,9 @@ export const {
 	useWomenSignupMutation,
 	useWomenLoginMutation,
 	usePurchasePackageWomenMutation,
+	useDeleteImageWomanMutation,
+	useDeleteVideoWomanMutation,
+	useWomanDataMutation,
 } = WomenAuth;
 
 export default WomenAuth;

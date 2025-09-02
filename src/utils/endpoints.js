@@ -60,4 +60,7 @@ export const MAN_DATA = `auth-men/men-data`;
 // Endpoints women
 export const WOMEN_SIGNUP = `auth-women/register-women`;
 export const WOMEN_LOGIN = `auth-women/login-women`;
+export const WOMEN_DATA = `auth-women/women-data`;
 export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;
+export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
+export const DELETE_VIDEO_WOMAN = `auth-women/delete-video`;

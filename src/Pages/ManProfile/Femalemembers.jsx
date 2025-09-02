@@ -31,7 +31,6 @@ function Femalemembers({ member }) {
 	// 🔹 API Call with RTK Query
 	const { data, isLoading } = useGetFemaleMembershipQuery();
 	const members = data?.response?.data?.Women || [];
-	console.log(members);
 	const navigate = useNavigate();
 
 	const handleClick = (member) => {

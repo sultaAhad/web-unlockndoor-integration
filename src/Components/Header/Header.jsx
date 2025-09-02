@@ -27,7 +27,6 @@ function Header() {
 
 	// ✅ Get user from Redux
 	const { user } = useSelector((state) => state.auth);
-	console.log("🔵 Redux User from Header:", user);
 
 	const handleCategoryShow = (gender) => {
 		setSelectedGender(gender); // "male" or "female"
