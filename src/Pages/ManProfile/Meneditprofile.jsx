@@ -21,20 +21,39 @@ function Meneditprofile() {
 	const { user } = useSelector((state) => state.auth);
 	const navigate = useNavigate();
 
+	// ✅ Normalize API data
+	const parsedSkills = user?.skills
+		? Array.isArray(user.skills)
+			? user.skills
+			: user.skills.split(",").map((s) => s.trim())
+		: [];
+
+	const parsedImages =
+		typeof user?.images === "string"
+			? JSON.parse(user.images)
+			: user?.images || [];
+
+	const parsedVideos =
+		typeof user?.videos === "string"
+			? JSON.parse(user.videos)
+			: user?.videos || [];
+
 	const [form, setForm] = useState({
 		name: user?.name || "",
 		email: user?.email || "",
 		annual_income: user?.income || "",
 		date_of_birth: user?.date_of_birth ? new Date(user.date_of_birth) : null,
-		skills: Array.isArray(user?.skills) ? user.skills : [], // 🔑 always an array
+		skills: parsedSkills,
 		message: user?.message || "",
 		occupation: user?.occupation || "",
-		height: user?.height || "",
+		nationality: user?.nationality || "",
 		bannerImage: user?.cover_image_url || null,
 		profileImage: user?.profile_image_url || null,
-		galleryImages: [],
-		videos: [],
+		images: user?.images_urls || [],
+		videos: user?.videos_urls || [],
 	});
+
+	const [formErrors, setFormErrors] = useState({});
 
 	const [manupUatepPofileImage] = useManupUatepPofileImageMutation();
 	const [updateManCoverImage] = useUpdateManCoverImageMutation();
@@ -42,7 +61,7 @@ function Meneditprofile() {
 	const bannerInputRef = useRef(null);
 	const profileInputRef = useRef(null);
 
-	// ===== Image Handlers =====
+	// ===== Banner Upload =====
 	const handleBannerChange = async (e) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -53,6 +72,7 @@ function Meneditprofile() {
 		}
 	};
 
+	// ===== Profile Upload =====
 	const handleProfileChange = async (e) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -63,7 +83,7 @@ function Meneditprofile() {
 		}
 	};
 
-	// ===== Chips (Skills) =====
+	// ===== Skills =====
 	const handleAddChip = (chip) => {
 		if (chip && !form.skills.includes(chip)) {
 			setForm((prev) => ({ ...prev, skills: [...prev.skills, chip] }));
@@ -77,15 +97,14 @@ function Meneditprofile() {
 		}));
 	};
 
-	// ===== Files Upload =====
+	// ===== Upload files =====
 	const handleFileChange = (e, type) => {
 		const selectedFiles = Array.from(e.target.files);
+		const urls = selectedFiles.map((file) => URL.createObjectURL(file));
+
 		setForm((prev) => ({
 			...prev,
-			[type === "gallery" ? "galleryImages" : "videos"]: [
-				...prev[type === "gallery" ? "galleryImages" : "videos"],
-				...selectedFiles,
-			],
+			[type]: [...prev[type], ...urls],
 		}));
 	};
 
@@ -96,78 +115,58 @@ function Meneditprofile() {
 		}));
 	};
 
-	const renderPreviews = (files, type) => (
-		<div className="preview-container d-flex flex-wrap gap-3 mt-2">
-			{files.map((file, index) => (
-				<div key={index} className="position-relative">
-					{type === "videos" ? (
-						<video
-							src={URL.createObjectURL(file)}
-							width={100}
-							height={100}
-							controls
-							className="rounded object-cover"
-						/>
-					) : (
-						<img
-							src={URL.createObjectURL(file)}
-							alt="preview"
-							width={100}
-							height={100}
-							className="rounded object-cover"
-						/>
-					)}
-					<button
-						type="button"
-						className="position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
-						style={{ width: 20, height: 20, fontSize: 14 }}
-						onClick={() => removeFile(index, type)}
-					>
-						✖
-					</button>
-				</div>
-			))}
-		</div>
-	);
+	// ===== Validation =====
+	const validateForm = () => {
+		const errors = {};
+
+		if (!form.name?.trim()) errors.name = "Name is required";
+		if (!form.email?.trim()) {
+			errors.email = "Email is required";
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+			errors.email = "Enter a valid email";
+		}
+		if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
+		if (!form.occupation?.trim()) errors.occupation = "Occupation is required";
+		if (!form.annual_income?.trim())
+			errors.annual_income = "Annual income is required";
+		if (!form.skills.length) errors.skills = "At least one skill is required";
+		if (!form.message?.trim()) errors.message = "Message is required";
+		if (!form.bannerImage) errors.bannerImage = "Cover image is required";
+		if (!form.profileImage) errors.profileImage = "Profile image is required";
+		if (form.images.length < 5)
+			errors.images = "At least 5 images are required";
+		if (form.videos.length < 2)
+			errors.videos = "At least 2 videos are required";
+
+		return errors;
+	};
+
+	// ===== Submit =====
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const errors = validateForm();
+		if (Object.keys(errors).length > 0) {
+			setFormErrors(errors);
+			return;
+		}
+		console.log("Final Data:", form);
+		navigate("/profile");
+	};
 
 	useEffect(() => {
 		Aos.init({ duration: 1000, once: true });
 	}, []);
 
-	// ===== Input Change =====
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setForm((prev) => ({ ...prev, [name]: value }));
-	};
-
-	// ===== Submit Handler =====
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-		if (form.galleryImages.length < 5) {
-			alert("Please upload at least 5 pictures.");
-			return;
-		}
-		if (form.videos.length < 2) {
-			alert("Please upload at least 2 introduction videos.");
-			return;
-		}
-
-		console.log("Final Data:", form);
-		// TODO: Send form data via API
-		navigate("/profile");
-	};
-
 	return (
 		<>
 			<Header />
 
-			{/* Banner + Profile Section */}
+			{/* Banner + Profile */}
 			<section className="profile_sec pt-5 pb-5" data-aos="fade-up">
 				<div className="container">
 					<div className="profile_banner_img position-relative">
 						<img
-							src={form?.bannerImage}
+							src={form.bannerImage}
 							className="img-fluid banner_img"
 							alt="Banner"
 						/>
@@ -191,7 +190,7 @@ function Meneditprofile() {
 						<div className="profile_img_div">
 							<div className="position-relative text-center">
 								<img
-									src={form?.profileImage}
+									src={form.profileImage}
 									className="img-fluid profile_imgg"
 									alt="Profile"
 								/>
@@ -214,33 +213,6 @@ function Meneditprofile() {
 								<h5>{form?.name || "John Smith"}</h5>
 							</div>
 						</div>
-
-						<div className="account_access_dv">
-							<div className="notify_edit_dv">
-								<ul>
-									<Link
-										className="text-decoration-none text-white secondary-secondregular-font"
-										to="/chat-women"
-									>
-										<li className="wrapper-navigate-main position-relative">
-											<img src={massagewrapper} alt="" /> <span>Message</span>
-											<span className="number_move_dv">21</span>
-										</li>
-									</Link>
-									<Link to="/men-notifications">
-										<li className="position-relative">
-											<img src={notification} alt="Notification" />
-											<span className="number_move_dv">19</span>
-										</li>
-									</Link>
-									<Link to="/man-settings">
-										<li>
-											<img src={edit} alt="Edit" />
-										</li>
-									</Link>
-								</ul>
-							</div>
-						</div>
 					</div>
 				</div>
 			</section>
@@ -257,42 +229,81 @@ function Meneditprofile() {
 										<input
 											type="text"
 											placeholder="Your Name"
-											required
 											name="name"
-											value={form?.name}
-											onChange={handleChange}
+											value={form.name}
+											onChange={(e) =>
+												setForm((prev) => ({ ...prev, name: e.target.value }))
+											}
 										/>
+										{formErrors.name && (
+											<p className="text-danger">{formErrors.name}</p>
+										)}
 									</div>
 								</div>
 
-								{/* Date of Birth */}
+								{/* Email */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input type="email" value={form.email} disabled />
+									</div>
+								</div>
+
+								{/* DOB */}
 								<div className="col-md-4">
 									<div className="form-group position-relative">
 										<DatePicker
-											selected={form?.date_of_birth}
+											selected={form.date_of_birth}
 											onChange={(date) =>
 												setForm((prev) => ({ ...prev, date_of_birth: date }))
 											}
-											placeholderText="Date Of Birth (DOB must match ID)"
+											placeholderText="Date Of Birth"
 											dateFormat="dd/MM/yyyy"
 											className="custom_datePicker"
 										/>
 										<div className="input_icons">
 											<img src={calenderwrapper1} alt="" />
 										</div>
+										{formErrors.date_of_birth && (
+											<p className="text-danger">{formErrors.date_of_birth}</p>
+										)}
 									</div>
 								</div>
-
-								{/* Purpose */}
+								{/* Nationalty */}
 								<div className="col-md-4">
 									<div className="form-group">
 										<input
 											type="text"
-											placeholder="Purpose"
-											name="purpose"
-											value={form?.purpose || ""}
-											onChange={handleChange}
+											placeholder="Nationality "
+											value={form.nationality}
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													nationality: e.target.value,
+												}))
+											}
 										/>
+										{formErrors.nationality && (
+											<p className="text-danger">{formErrors.nationality}</p>
+										)}
+									</div>
+								</div>
+								{/* Occupation */}
+								<div className="col-md-4">
+									<div className="form-group">
+										<input
+											type="text"
+											placeholder="Occupation"
+											value={form.occupation}
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													occupation: e.target.value,
+												}))
+											}
+										/>
+										{formErrors.occupation && (
+											<p className="text-danger">{formErrors.occupation}</p>
+										)}
 									</div>
 								</div>
 
@@ -302,32 +313,26 @@ function Meneditprofile() {
 										<input
 											type="text"
 											placeholder="Annual Income"
-											name="annual_income"
-											value={form?.annual_income}
-											onChange={handleChange}
+											value={form.annual_income}
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													annual_income: e.target.value,
+												}))
+											}
 										/>
+										{formErrors.annual_income && (
+											<p className="text-danger">{formErrors.annual_income}</p>
+										)}
 									</div>
 								</div>
 
-								{/* Height */}
-								<div className="col-md-4">
+								{/* Skills */}
+								<div className="col-lg-4">
 									<div className="form-group">
 										<input
 											type="text"
-											placeholder="Height"
-											name="height"
-											value={form?.height}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
-
-								{/* Skills Input */}
-								<div className="col-md-4">
-									<div className="form-group">
-										<input
-											type="text"
-											placeholder="Your talents and skills?"
+											placeholder="Add a skill and press Enter"
 											onKeyDown={(e) => {
 												if (e.key === "Enter") {
 													e.preventDefault();
@@ -336,6 +341,26 @@ function Meneditprofile() {
 												}
 											}}
 										/>
+										<div className="chips d-flex gap-2 flex-wrap mt-2">
+											{form.skills.map((chip) => (
+												<div
+													key={chip}
+													className="chip px-2 py-1 border rounded bg-light"
+												>
+													{chip}
+													<span
+														className="ms-2 chipwwww text-danger"
+														onClick={() => handleRemoveChip(chip)}
+														style={{ cursor: "pointer" }}
+													>
+														&times;
+													</span>
+												</div>
+											))}
+										</div>
+										{formErrors.skills && (
+											<p className="text-danger">{formErrors.skills}</p>
+										)}
 									</div>
 								</div>
 
@@ -344,57 +369,38 @@ function Meneditprofile() {
 									<div className="form-group">
 										<textarea
 											style={{ borderRadius: "10px" }}
-											className="form_input-2 input_border w-100"
 											rows="4"
-											value={form?.message}
+											value={form.message}
+											className="form_input-21 input_border w-100"
 											placeholder="Message"
-											onChange={handleChange}
-											name="message"
+											onChange={(e) =>
+												setForm((prev) => ({
+													...prev,
+													message: e.target.value,
+												}))
+											}
 										/>
+										{formErrors.message && (
+											<p className="text-danger">{formErrors.message}</p>
+										)}
 									</div>
 								</div>
-
-								{/* Occupation */}
-								<div className="col-md-4">
-									<div className="form-group">
-										<input
-											type="text"
-											placeholder="Occupation"
-											name="occupation"
-											value={form?.occupation}
-											onChange={handleChange}
-										/>
-									</div>
+								{/* Save Button */}
+								<div className="col-md-4 align-content-center">
+									{" "}
+									<button
+										type="submit"
+										className="border radius-8 secondary-regular-font"
+									>
+										Save
+									</button>
 								</div>
-
-								{/* Skills Chips Display */}
-								<div className="col-lg-4">
-									<div className="form-group">
-										<div className="chips d-flex gap-2 flex-wrap">
-											{Array.isArray(form.skills) &&
-												form.skills.map((chip) => (
-													<div
-														key={chip}
-														className="chip px-2 py-1 border rounded bg-light"
-													>
-														{chip}
-														<span
-															className="ms-2 text-danger"
-															onClick={() => handleRemoveChip(chip)}
-															style={{ cursor: "pointer" }}
-														>
-															&times;
-														</span>
-													</div>
-												))}
-										</div>
-									</div>
-								</div>
-
-								{/* Gallery Upload */}
+								{/* Images */}
 								<div className="col-md-4">
 									<div className="form-group upload-section mt-2">
-										<label>Upload 5 pictures minimum</label>
+										<label className="text-white">
+											Upload 5 pictures minimum
+										</label>
 										<div className="uploader py-3 rounded mt-2">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">
@@ -403,7 +409,7 @@ function Meneditprofile() {
 														alt=""
 														className="img-fluid"
 													/>
-													<p className="secondary-secondsemibold-font">
+													<p className="secondary-secondsemibold-font text-white">
 														Upload here
 													</p>
 												</div>
@@ -412,19 +418,50 @@ function Meneditprofile() {
 												type="file"
 												accept="image/*"
 												multiple
-												className="uploader_file"
-												onChange={(e) => handleFileChange(e, "gallery")}
+												onChange={(e) => handleFileChange(e, "images")}
 											/>
 										</div>
-										{form.galleryImages.length > 0 &&
-											renderPreviews(form.galleryImages, "gallery")}
+										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
+											{form.images.map((img, i) => (
+												<div key={i} className="position-relative">
+													<img
+														src={img}
+														width={100}
+														height={100}
+														alt="gallery"
+													/>
+													<button
+														type="button"
+														onClick={() => removeFile(i, "images")}
+														className="position-absolute top-0 end-0 bg-danger text-white border-0 rounded-circle"
+														style={{ width: 20, height: 20 }}
+													>
+														✖
+													</button>
+												</div>
+											))}
+										</div>
+										<div class="col-lg-10">
+											<label class="mt-1 text-white">
+												Note :{" "}
+												<span class="label_span">
+													make sure you got the best of your attractiveness and
+													qualities{" "}
+												</span>
+											</label>
+										</div>
+										{formErrors.images && (
+											<p className="text-danger">{formErrors.images}</p>
+										)}
 									</div>
 								</div>
 
-								{/* Videos Upload */}
+								{/* Videos */}
 								<div className="col-md-4">
 									<div className="form-group upload-section mt-2">
-										<label>Upload at least 2 introduction videos</label>
+										<label className="text-white">
+											Upload at least 2 introduction videos
+										</label>
 										<div className="uploader py-3 rounded mt-2">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">
@@ -433,7 +470,7 @@ function Meneditprofile() {
 														alt=""
 														className="img-fluid"
 													/>
-													<p className="secondary-secondsemibold-font">
+													<p className="secondary-secondsemibold-font text-white">
 														Upload here
 													</p>
 												</div>
@@ -442,23 +479,29 @@ function Meneditprofile() {
 												type="file"
 												accept="video/*"
 												multiple
-												className="uploader_file"
 												onChange={(e) => handleFileChange(e, "videos")}
 											/>
 										</div>
-										{form.videos.length > 0 &&
-											renderPreviews(form.videos, "videos")}
-									</div>
-								</div>
 
-								{/* Save Button */}
-								<div className="col-md-4 align-content-center">
-									<button
-										type="submit"
-										className=" border radius-8 secondary-regular-font"
-									>
-										Save
-									</button>
+										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
+											{form.videos.map((vid, i) => (
+												<div key={i} className="position-relative">
+													<video src={vid} width={120} height={100} controls />
+													<button
+														type="button"
+														onClick={() => removeFile(i, "videos")}
+														className="position-absolute top-0 end-0 bg-danger text-white border-0 rounded-circle"
+														style={{ width: 20, height: 20 }}
+													>
+														✖
+													</button>
+												</div>
+											))}
+										</div>
+										{formErrors.videos && (
+											<p className="text-danger">{formErrors.videos}</p>
+										)}
+									</div>
 								</div>
 							</div>
 						</form>

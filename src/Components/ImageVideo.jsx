@@ -54,7 +54,7 @@ const ImageVideo = ({ file, type }) => {
               <source src={file} type="video/mp4" />
             </video>
             <div className="pic_icon">
-              <i class="fa fa-play" aria-hidden="true"></i>
+              <i className="fa fa-play" aria-hidden="true"></i>
             </div>
           </div>
         </div>
