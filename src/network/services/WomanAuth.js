@@ -5,6 +5,7 @@ import {
 	DELETE_IMAGE_WOMAN,
 	DELETE_VIDEO_WOMAN,
 	PURCHASE_PACKAGES_WOMEN,
+	WOMEN_DATA,
 	WOMEN_LOGIN,
 	WOMEN_SIGNUP,
 } from "../../utils/endpoints";
@@ -39,6 +40,13 @@ export const WomenAuth = createApi({
 				body: credentials,
 			}),
 		}),
+		womanData: build.mutation({
+			query: (credentials) => ({
+				url: WOMEN_DATA,
+				method: "POST",
+				body: credentials,
+			}),
+		}),
 		purchasePackageWomen: build.mutation({
 			query: (formData) => ({
 				url: PURCHASE_PACKAGES_WOMEN,
@@ -69,6 +77,7 @@ export const {
 	usePurchasePackageWomenMutation,
 	useDeleteImageWomanMutation,
 	useDeleteVideoWomanMutation,
+	useWomanDataMutation,
 } = WomenAuth;
 
 export default WomenAuth;

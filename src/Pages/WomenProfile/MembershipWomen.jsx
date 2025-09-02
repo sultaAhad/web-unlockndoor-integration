@@ -19,11 +19,15 @@ import Aos from "aos";
 import ProfileNavbar from "../../Components/ProfileNavbar";
 import PackageSelectionModal from "../../Components/PackageSelectionModal";
 import ProfileHeader from "../../Components/ProfileHeader";
+import { useSelector } from "react-redux";
 
 function MembershipWomen() {
   const [activeTab, setActiveTab] = useState("men");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
 
   const packagesData = {
     men: [

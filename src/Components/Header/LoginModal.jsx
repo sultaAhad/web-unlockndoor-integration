@@ -25,23 +25,9 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
   const [femaleLogin, setFemaleLogin] = useState({ email: "", password: "" });
   const [loginErrors, setLoginErrors] = useState({});
   const [rememberMe, setRememberMe] = useState(false);
-
-  // Password visibility
   const [showPassword, setShowPassword] = useState(false);
-  // const [hasPackage, setHasPackage] = useState(false);
-  // const [selfieVerified, setSelfieVerified] = useState(false);
-
-  // Modals
-  // const [showSelfie, setShowSelfie] = useState(false);
-  // const [showPackages, setShowPackages] = useState(false);
-  // const [showWomenSelfie, setShowWomenSelfie] = useState(false);
-  // const [showWomenPackage, setShowWomenPackage] = useState(false);
-
-  // API mutations
   const [manLogin, manResponse] = useManLoginMutation();
   const [womenLogin, womenResponse] = useWomenLoginMutation();
-
-  // Close login modal if already logged in
   useEffect(() => {
     if (userToken) {
       onClose();
@@ -71,9 +57,6 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
       const apiData =
         activeTab === "male" ? responseData?.men : responseData?.women;
 
-      // setHasPackage(responseData?.package);
-      // setSelfieVerified(responseData?.selfie_verified);
-
       const token = responseData?.token;
 
       if (!apiData || !token) {
@@ -99,8 +82,6 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
       } else {
         navigate("/women-profiles");
       }
-
-      // Reset form
       if (activeTab === "male") setMaleLogin({ email: "", password: "" });
       else setFemaleLogin({ email: "", password: "" });
 
