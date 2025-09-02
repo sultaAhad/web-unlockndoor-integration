@@ -46,9 +46,10 @@ const normalizeMember = (data) => {
 		skills: data.skills ? data.skills.split(",") : [],
 		pictures: data.images_urls || [],
 
-		videos: (data.videos_urls || []).map((url) => ({
+		// 👇 videos with fallback thumbnail
+		videos: (data.videos_urls || []).map((url, i) => ({
 			url,
-			thumbnail: "/assets/video-thumbnail.jpg", // 👈 thumbnail placeholder
+			thumbnail: data.images_urls?.[i] || "/assets/video-placeholder.jpg",
 		})),
 	};
 };
@@ -69,6 +70,7 @@ function Womandetails() {
 	const location = useLocation();
 	const rawMember = location.state?.member;
 	const member = rawMember ? normalizeMember(rawMember) : null;
+	console.log(member, "asasd");
 
 	// Group avatars (demo)
 	const group = {
@@ -112,8 +114,23 @@ function Womandetails() {
 										className="img-fluid banner_img"
 										alt="Banner"
 									/>
-									<div className="platinum-wra position-absolute right-0 top-0 p-3">
-										<h5>{member?.membershipType}</h5>
+									<div className="platinum-wra position-absolute right-0 top-0 p-3 rounded">
+										<h5
+											className="mb-0 text-capitalize"
+											style={{
+												background:
+													member?.membershipType === "gold-package"
+														? "gold"
+														: member?.membershipType === "platinum-package"
+														? "#00bfff"
+														: member?.membershipType === "silver-package"
+														? "#7a7a7a"
+														: "black", // fallback
+												fontWeight: "bold",
+											}}
+										>
+											{member?.membershipType?.replace("-package", "")}
+										</h5>
 									</div>
 								</div>
 
@@ -126,6 +143,7 @@ function Womandetails() {
 									<h5>{member?.name}</h5>
 								</div>
 
+								{/* Actions */}
 								{/* Actions */}
 								<div className="account_access_dv gap-3">
 									<div className="d-flex align-items-center justify-content-between pe-3">
@@ -163,33 +181,76 @@ function Womandetails() {
 										</div>
 									</div>
 
-									<Button
-										onClick={handleofferShow}
-										className="data-offer bg-transparent border-0"
-									>
-										<h5 className="secondary-regular-font">
-											Create Date Offer
-										</h5>
-									</Button>
+									{/* ✅ Membership-based actions */}
+									{member?.membershipType === "silver-package" && (
+										<Link
+											to="/chat"
+											className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+											style={{ backgroundColor: "transparent" }}
+										>
+											<img src={massagewrapper} className="img-fluid" alt="" />{" "}
+											Message
+										</Link>
+									)}
 
-									{/* Video Call */}
-									<button
-										onClick={() => setShowPricingModal(true)}
-										className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-										style={{ backgroundColor: "transparent" }}
-									>
-										<i className="fas fa-video"></i> Video Call
-									</button>
+									{member?.membershipType === "platinum-package" && (
+										<>
+											<Button
+												onClick={handleofferShow}
+												className="data-offer bg-transparent border-0"
+											>
+												<h5 className="secondary-regular-font">
+													Create Date Offer
+												</h5>
+											</Button>
 
-									{/* Message */}
-									<Link
-										to="/chat"
-										className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-										style={{ backgroundColor: "transparent" }}
-									>
-										<img src={massagewrapper} className="img-fluid" alt="" />{" "}
-										Message
-									</Link>
+											<button
+												onClick={() => setShowPricingModal(true)}
+												className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+												style={{ backgroundColor: "transparent" }}
+											>
+												<i className="fas fa-video"></i> Video Call
+											</button>
+
+											<Link
+												to="/chat"
+												className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+												style={{ backgroundColor: "transparent" }}
+											>
+												<img
+													src={massagewrapper}
+													className="img-fluid"
+													alt=""
+												/>{" "}
+												Message
+											</Link>
+										</>
+									)}
+
+									{member?.membershipType === "gold-package" && (
+										<>
+											<button
+												onClick={() => setShowPricingModal(true)}
+												className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+												style={{ backgroundColor: "transparent" }}
+											>
+												<i className="fas fa-video"></i> Video Call
+											</button>
+
+											<Link
+												to="/chat"
+												className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+												style={{ backgroundColor: "transparent" }}
+											>
+												<img
+													src={massagewrapper}
+													className="img-fluid"
+													alt=""
+												/>{" "}
+												Message
+											</Link>
+										</>
+									)}
 								</div>
 							</div>
 						</div>
