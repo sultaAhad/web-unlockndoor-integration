@@ -6,7 +6,6 @@ import { useSettingContentQuery } from "../network/services/HelpServices";
 function Footer() {
 	const { data: SettingpageContent, isLoading } = useSettingContentQuery();
 	const settingPageData = SettingpageContent?.response?.data;
-	console.log(settingPageData, "asdasd");
 
 	if (isLoading) {
 		return <div>Loading...</div>;

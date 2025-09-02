@@ -17,7 +17,6 @@ const AuthReducer = createSlice({
 		setLogoutUser: (state) => {
 			state.userToken = "";
 			state.user = null;
-			console.log("🔴 User logged out");
 		},
 	},
 });

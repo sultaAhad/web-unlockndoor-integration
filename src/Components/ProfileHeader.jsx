@@ -32,7 +32,11 @@ function ProfileHeader({ showButtons = true }) {
                   </li>
                 </Link>
                 <Link
-                  to={`${gender === "male" ? "/men" : "/women"}-notification`}
+                  to={`${
+                    gender === "male"
+                      ? "/men-notifications"
+                      : "/women-notification"
+                  }`}
                 >
                   {" "}
                   <li className="position-relative">
@@ -40,7 +44,7 @@ function ProfileHeader({ showButtons = true }) {
                     <span className="number_move_dv">19</span>
                   </li>
                 </Link>
-                <Link to={`/${gender === "male" ? "men" : "women"}-settings`}>
+                <Link to={`/${gender === "male" ? "man" : "women"}-settings`}>
                   <li>
                     <img src={edit} />
                   </li>

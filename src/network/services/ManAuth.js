@@ -189,10 +189,10 @@ export const {
 	useSendMessageMutation,
 	useOfferDateMutation,
 	useWithdrawDateMutation,
-	useGetMatchedProfilesQuery,
 	useGetSponsoredDatesQuery,
 	useGetFemaleMembershipQuery,
 	useGetManDataQuery,
+	useGetMatchedProfilesQuery,
 } = ManAuth;
 
 export default ManAuth;

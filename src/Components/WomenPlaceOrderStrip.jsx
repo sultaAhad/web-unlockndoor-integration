@@ -33,117 +33,110 @@ const CheckoutForm = ({
 	const [payButton, setPayButton] = useState(true);
 
 	const [purchasePackage, response] = usePurchasePackageWomenMutation();
-	console.log(response);
 
-	// ✅ Handle success
-	useEffect(() => {
-		if (response?.isSuccess) {
-			setShowSuccessModal(true);
-			console.log("✅ Purchase Success Response:", response.data);
+  // ✅ Handle success
+  useEffect(() => {
+    if (response?.isSuccess) {
+      setShowSuccessModal(true);
 
-			if (response?.data?.user) {
-				dispatch(
-					setUserToken({
-						user: response.data.user,
-						token: userToken,
-						remember: true,
-					}),
-				);
-			}
-			localStorage.setItem("hasPackage", "true");
+      if (response?.data?.user) {
+        dispatch(
+          setUserToken({
+            user: response.data.user,
+            token: userToken,
+            remember: true,
+          })
+        );
+      }
+      localStorage.setItem("hasPackage", "true");
 
-			// ✅ navigate to women-profiles
-			setTimeout(() => {
-				navigate("/women-profiles");
-			}, 1500);
-		}
-	}, [
-		response?.isSuccess,
-		dispatch,
-		navigate,
-		setShowSuccessModal,
-		userToken,
-		response?.data,
-	]);
+      // ✅ navigate to women-profiles
+      setTimeout(() => {
+        navigate("/women-profiles");
+      }, 1500);
+    }
+  }, [
+    response?.isSuccess,
+    dispatch,
+    navigate,
+    setShowSuccessModal,
+    userToken,
+    response?.data,
+  ]);
 
-	// ✅ Handle error
-	useEffect(() => {
-		if (response?.isError) {
-			console.error("❌ Purchase Error:", response.error);
+  // ✅ Handle error
+  useEffect(() => {
+    if (response?.isError) {
+      console.error("❌ Purchase Error:", response.error);
 
-			if (response?.error?.data?.statusCode === 409) {
-				Alert({
-					iconStyle: "error",
-					title: "Already Upgraded",
-					text:
-						response?.error?.data?.message ||
-						"You have already upgraded your package.",
-					icon: "error",
-				});
+      if (response?.error?.data?.statusCode === 409) {
+        Alert({
+          iconStyle: "error",
+          title: "Already Upgraded",
+          text:
+            response?.error?.data?.message ||
+            "You have already upgraded your package.",
+          icon: "error",
+        });
 
-				// Navigate after short delay
-				setTimeout(() => {
-					setShowSuccessModal(false);
-					navigate("/women-profiles");
-				}, 2000);
+        // Navigate after short delay
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          navigate("/women-profiles");
+        }, 2000);
 
-				return;
-			}
+        return;
+      }
 
-			// ❌ Other errors => show alert
-			Alert({
-				iconStyle: "error",
-				title: "Error",
-				text:
-					response?.error?.data?.message ||
-					"Subscription Failed. Please try again.",
-				icon: "error",
-			});
-		}
-	}, [response?.isError, response?.error, navigate, setShowSuccessModal]);
+      // ❌ Other errors => show alert
+      Alert({
+        iconStyle: "error",
+        title: "Error",
+        text:
+          response?.error?.data?.message ||
+          "Subscription Failed. Please try again.",
+        icon: "error",
+      });
+    }
+  }, [response?.isError, response?.error, navigate, setShowSuccessModal]);
 
-	// ✅ Submit handler
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		if (!stripe || !elements) return;
+  // ✅ Submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
 
-		if (!checkedTerm?.id) {
-			Alert({
-				iconStyle: "error",
-				title: "Error",
-				text: "No package selected. Please choose a package before checkout.",
-				icon: "error",
-			});
-			return;
-		}
+    if (!checkedTerm?.id) {
+      Alert({
+        iconStyle: "error",
+        title: "Error",
+        text: "No package selected. Please choose a package before checkout.",
+        icon: "error",
+      });
+      return;
+    }
 
-		const cardElement = elements.getElement(CardElement);
-		const payload = await stripe.createToken(cardElement);
+    const cardElement = elements.getElement(CardElement);
+    const payload = await stripe.createToken(cardElement);
 
-		if (payload.error) {
-			setCardError(payload.error.message);
-			cardElement.clear();
-			console.error("❌ Stripe Token Error:", payload.error);
-			return;
-		}
+    if (payload.error) {
+      setCardError(payload.error.message);
+      cardElement.clear();
+      console.error("❌ Stripe Token Error:", payload.error);
+      return;
+    }
 
-		if (payload?.token?.id) {
-			setCardError("");
+    if (payload?.token?.id) {
+      setCardError("");
 
-			// ✅ Use FormData (if backend expects multipart)
-			const formData = new FormData();
-			formData.set("stripe_token", payload.token.id);
-			formData.set("package_id", checkedTerm.id);
+      // ✅ Use FormData (if backend expects multipart)
+      const formData = new FormData();
+      formData.set("stripe_token", payload.token.id);
+      formData.set("package_id", checkedTerm.id);
 
-			console.log("📦 Sending Purchase Request =>", {
-				stripe_token: payload.token.id,
-				package_id: checkedTerm.id,
-			});
-
-			purchasePackage(formData);
-			cardElement.clear();
-		}
-	};
+      purchasePackage(formData);
+      cardElement.clear();
+    }
+  };
 
 	return (
 		<form onSubmit={handleSubmit}>

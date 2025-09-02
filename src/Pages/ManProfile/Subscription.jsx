@@ -20,9 +20,8 @@ const Subscription = () => {
 
 	useEffect(() => {
 		if (initialSelected) {
-			console.log("🎯 Selected Package from Navigate:", initialSelected);
-			setSelectedPackage(initialSelected);
-		}
+      setSelectedPackage(initialSelected);
+    }
 	}, [initialSelected]);
 
 	useEffect(() => {

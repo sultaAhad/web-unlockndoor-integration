@@ -28,7 +28,6 @@ function DatesTab() {
   const [showRejectModal, setShowRejectModal] = useState(false);
 
   const handleRejectSubmit = (data) => {
-    console.log("Rejected with data:", data);
     // Handle API submission here
   };
   useEffect(() => {

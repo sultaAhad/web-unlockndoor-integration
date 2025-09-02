@@ -3,25 +3,25 @@ import "../../assets/Css/matchprofile.css";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import {
-	bid_one,
-	edit,
-	massagewrapper,
-	matchprofile,
-	matchprofile1,
-	matchprofile2,
-	matchprofile3,
-	matchprofile4,
-	matchprofile5,
-	matchprofile6,
-	matchprofile7,
-	matchprofile8,
-	matchprofile9,
-	message,
-	notification,
-	mchat,
-	manproimage3,
-	manproimage2,
-	innerpages, // ✅ Added mchat import
+  bid_one,
+  edit,
+  massagewrapper,
+  matchprofile,
+  matchprofile1,
+  matchprofile2,
+  matchprofile3,
+  matchprofile4,
+  matchprofile5,
+  matchprofile6,
+  matchprofile7,
+  matchprofile8,
+  matchprofile9,
+  message,
+  notification,
+  mchat,
+  manproimage3,
+  manproimage2,
+  innerpages, // ✅ Added mchat import
 } from "../../Constant/Index";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -31,8 +31,14 @@ import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
 import ProfileHeader from "../../Components/ProfileHeader";
+import MatchedProfileCard from "../../Components/MatchedProfileCard";
+import { useGetMatchedProfilesQuery } from "../../network/services/ManAuth";
+import Spinner from "../../Components/Spinner";
 
 function MatchedProfiles() {
+  const { data: matchedProfiles, isLoading } = useGetMatchedProfilesQuery();
+
+  const profiles = matchedProfiles?.response?.data?.matchedProfiles ?? [];
   const [showPricingModal, setShowPricingModal] = useState(false);
   const handlePricingClose = () => setShowPricingModal(false);
   const handlePricingShow = () => setShowPricingModal(true);
@@ -53,34 +59,6 @@ function MatchedProfiles() {
   const handleVideoClose = () => setShowVideoModal(false);
   const handleVideoShow = () => setShowVideoModal(true);
 
-  const cards = [
-    { image: matchprofile },
-    { image: matchprofile1 },
-    { image: matchprofile2 },
-    { image: matchprofile3 },
-    { image: matchprofile4 },
-    { image: matchprofile5 },
-    { image: matchprofile6 },
-    { image: matchprofile7 },
-    { image: matchprofile8 },
-    { image: matchprofile9 },
-    { image: matchprofile6 },
-    { image: matchprofile7 },
-  ];
-
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${innerpages})`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.minHeight = "100vh";
-
-    return () => {
-      document.body.style.backgroundImage = "";
-    };
-  }, []);
   return (
     <>
       <Header />
@@ -99,53 +77,17 @@ function MatchedProfiles() {
 
       <section className="videos_sec" data-aos="fade-right">
         <div className="container">
-          <div className="row">
-            {cards.map((card, index) => (
-              <div className="col-lg-4 col-md-6 mb-4" key={index}>
-                <div className="profile-card">
-                  <img src={card.image} alt="profile" className="card-image" />
-
-                  <div className="card-bottom d-flex justify-content-between align-items-end">
-                    {/* Left: Icons */}
-                    <div className="card-left-icons d-flex align-items-center gap-2">
-                      <Link to="/chat" className="bottom-icon comment-icon">
-                        <img
-                          src={mchat}
-                          alt="chat"
-                          className="chat-image-icon"
-                        />
-                      </Link>
-                      <Link
-                        to="#"
-                        className="bottom-icon video-icon"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handlePricingShow();
-                        }}
-                      >
-                        <i className="fa-solid fa-video"></i>
-                      </Link>
-                    </div>
-
-                    {/* Right: View Profile */}
-                    <div className="card-right-actions text-end">
-                      <Link
-                        to="/matched-Profiles-detail"
-                        className="view-profile-btn secondary-secondmedium-font"
-                      >
-                        View Profile
-                      </Link>
-                      <img
-                        src={card.image}
-                        alt="thumb"
-                        className="profile-thumb"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="row justify-content-center">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="row">
+              {profiles.map((profile, index) => (
+                <MatchedProfileCard card={profile} index={index} />
+              ))}
+            </div>
+          )}
 
           <div className="row">
             <div className="col-lg-2 mx-auto">

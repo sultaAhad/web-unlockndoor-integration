@@ -27,7 +27,6 @@ function MembershipWomen() {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   const packagesData = {
     men: [
