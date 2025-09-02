@@ -23,14 +23,13 @@ import MatchedProfiles from "../Pages/ManProfile/MatchedProfiles";
 import MatchedProfilesDetail from "../Pages/ManProfile/MatchedProfilesDetail";
 import WomenEditProfile from "../Pages/WomenProfile/WomenEditProfile";
 import DatesTab from "../Pages/WomenProfile/DatesTab";
-import LikeMatchUnmatched from "../Pages/WomenProfile/LikeMatchUnmatched";
-import LikeMatchMatched from "../Pages/WomenProfile/LikeMatchMatched";
+import LikeMatchMatched from "../Pages/WomenProfile/LikeMatch/LikeMatchMatched";
 import WomenChat from "../Pages/WomenProfile/WomenChat";
 import MembershipWomen from "../Pages/WomenProfile/MembershipWomen";
 import WomenNotification from "../Pages/WomenProfile/WomenNotification";
 import Setting from "../Pages/WomenProfile/Setting";
 import Settingpassword from "../Pages/WomenProfile/Settingpassword";
-import ManProfiles from "../Pages/WomenProfile/ManProfiles";
+import ManProfiles from "../Pages/WomenProfile/LikeMatch/ManProfiles";
 import Femalemembers from "../Pages/ManProfile/Femalemembers";
 import Subscriptionwomen from "../Pages/WomenProfile/Subscriptionwomen";
 import Mansetting from "../Pages/ManProfile/Mansetting";
@@ -40,10 +39,10 @@ import WomenProfile from "../Pages/WomenProfile/WomenProfile";
 
 // Wrapper component to use useLocation
 function AppRoutes() {
-	const location = useLocation();
-	const isHomePage = location.pathname === "/";
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
-	return (
+  return (
     <div className="">
       <ScrollToTop />
       <Routes>
@@ -75,14 +74,14 @@ function AppRoutes() {
         <Route path="/women-profiles" element={<WomenProfile />} />
         <Route path="/women-edit-profiles" element={<WomenEditProfile />} />
         <Route path="/dates-tab" element={<DatesTab />} />
-        <Route path="/like-match-unmatched" element={<LikeMatchUnmatched />} />
-        <Route path="/like-match-matched" element={<LikeMatchMatched />} />
+        {/* <Route path="/like-match-unmatched" element={<LikeMatchUnmatched />} /> */}
+        <Route path="/woman/like-match" element={<LikeMatchMatched />} />
         <Route path="/chat-women" element={<WomenChat />} />
         <Route path="/my-membership-women" element={<MembershipWomen />} />
         <Route path="/women-notification" element={<WomenNotification />} />
         <Route path="/women-settings" element={<Setting />} />
         <Route path="/women-change-password" element={<Settingpassword />} />
-        <Route path="/profile-man" element={<ManProfiles />} />
+        <Route path="/woman/profile-man/:uid" element={<ManProfiles />} />
         <Route path="/subscription-women" element={<Subscriptionwomen />} />
         <Route path="/edit-profile" element={<Editprofile />} />
         {/* Registration Form */}

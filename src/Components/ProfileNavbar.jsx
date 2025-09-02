@@ -6,21 +6,18 @@ function ProfileNavbar() {
 
 	// Function to check if the link is active
 	const isActive = (path) => {
-		if (path === "/like-match-unmatched") {
-			return (
-				location.pathname === "/like-match-unmatched" ||
-				location.pathname === "/like-match-matched"
-			);
-		}
-		return location.pathname === path;
-	};
+    if (path === "/woman/like-match") {
+      return location.pathname === "/woman/like-match";
+    }
+    return location.pathname === path;
+  };
 
-	const menuItems = [
-		{ label: "My Profile", to: "/women-profiles" },
-		{ label: "Dates Tab", to: "/dates-tab" },
-		{ label: "Like/Match", to: "/like-match-unmatched" },
-		{ label: "My Membership", to: "/my-membership-women" },
-	];
+  const menuItems = [
+    { label: "My Profile", to: "/women-profiles" },
+    { label: "Dates Tab", to: "/dates-tab" },
+    { label: "Like/Match", to: "/woman/like-match" },
+    { label: "My Membership", to: "/my-membership-women" },
+  ];
 
 	return (
 		<div className="horizontal-navbar ms-2 me-2 mb-4">

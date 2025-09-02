@@ -25,23 +25,23 @@ const LikeMatchNavigation = () => {
   };
 
   return (
-    <div className='d-flex align-items-center gap-3 justify-content-end mb-4'>
+    <div className="d-flex align-items-center gap-3 justify-content-end mb-4">
       <Link
         to="/like-match-unmatched"
         className="secondary-medium-font"
         style={{
           ...buttonBaseStyle,
-          ...(activeTab === 'unmatched' ? activeStyle : {})
+          ...(activeTab === "unmatched" ? activeStyle : {}),
         }}
       >
         Unmatched Members
       </Link>
       <Link
-        to="/like-match-matched"
+        to="/woman/like-match"
         className="secondary-medium-font text-white"
         style={{
           ...buttonBaseStyle,
-          ...(activeTab === 'matched' ? activeStyle : {})
+          ...(activeTab === "matched" ? activeStyle : {}),
         }}
       >
         Matched Members

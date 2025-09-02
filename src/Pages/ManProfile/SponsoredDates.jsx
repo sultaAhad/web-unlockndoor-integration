@@ -16,7 +16,7 @@ function SponsoredDates() {
   const [sponsoredDates, setSponsoredDates] = useState([]);
 
   useEffect(() => {
-    setSponsoredDates(data.response?.data?.sponsoredDates ?? []);
+    setSponsoredDates(data?.response?.data?.sponsoredDates ?? []);
   }, [data]);
 
   useEffect(() => {

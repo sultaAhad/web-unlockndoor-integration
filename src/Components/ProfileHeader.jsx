@@ -5,13 +5,15 @@ import { edit, massagewrapper, notification } from "../Constant/Index";
 function ProfileHeader({ showButtons = true }) {
   const { user } = useSelector((state) => state.auth);
 
-  console.log(user);
 
   const gender = localStorage.getItem("gender");
   return (
     <div className="col-md-12 pb-5">
       <div className="profile_banner_img">
-        <img src={user?.cover_image_url} className="img-fluid banner_img" />
+        <img
+          src={user?.cover_image_url || user?.cover_images_url}
+          className="img-fluid banner_img"
+        />
         <div className="profile_img_div11">
           <img
             src={user?.profile_image_url}
