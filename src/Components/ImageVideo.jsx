@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import { deletetrash } from "../Constant/Index";
 import Swal from "sweetalert2";
+import {
+  useDeleteImageWomanMutation,
+  useDeleteVideoWomanMutation,
+} from "../network/services/WomanAuth";
 
 const ImageVideo = ({ file, type }) => {
+  const [deleteImageWoman] = useDeleteImageWomanMutation();
+  const [deleteVideoWoman] = useDeleteVideoWomanMutation();
+
+  const gender = localStorage.getItem("gender");
   const deleteFile = (file, type) => {
     Swal.fire({
       title: "Are you sure?",
@@ -14,7 +22,14 @@ const ImageVideo = ({ file, type }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        if (gender === "female") {
+          // if (type === "image") {
+          //   deleteImageWoman(file);
+          // } else if (type === "video") {
+          //   deleteVideoWoman(file);
+          // }
+          // Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        }
       }
     });
   };

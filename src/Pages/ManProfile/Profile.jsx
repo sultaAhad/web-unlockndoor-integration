@@ -33,6 +33,7 @@ import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import { checkMiddleware } from "../../middleware/checkMiddleware";
 import { useSelector } from "react-redux";
 import ImageVideo from "../../Components/ImageVideo";
+import ProfileHeader from "../../Components/ProfileHeader";
 function Profile() {
   useEffect(() => {
     AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
@@ -58,50 +59,7 @@ function Profile() {
       <section className="profile_sec" data-aos="fade-up">
         <div className="container">
           <div className="row">
-            <div className="col-md-12 pb-5">
-              <div className="profile_banner_img">
-                <img
-                  src={user?.cover_image_url}
-                  className="img-fluid banner_img"
-                />
-                <div className="profile_img_div">
-                  <img
-                    src={user?.profile_image_url}
-                    className="img-fluid profile_imgg"
-                  />
-                  <h5>{user?.name}</h5>
-                </div>
-
-                <div className="account_access_dv">
-                  <div className="notify_edit_dv">
-                    <ul>
-                      <Link
-                        className="text-decoration-none text-white secondary-secondregular-font"
-                        to="/chat-women"
-                      >
-                        <li className="wrapper-navigate-main position-relative">
-                          <img src={massagewrapper} /> <span>Message</span>
-                          <span className="number_move_dv">21</span>
-                        </li>
-                      </Link>
-                      <Link to="/men-notifications">
-                        {" "}
-                        <li className="position-relative">
-                          <img src={notification} />
-                          <span className="number_move_dv">19</span>
-                        </li>
-                      </Link>
-                      <Link to="/man-settings">
-                        <li>
-                          <img src={edit} />
-                        </li>
-                      </Link>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            <ProfileHeader />
             <div className="col-md-12 pt-5 for-extra-space">
               <ProfileNavbartwo />
 
