@@ -7,49 +7,51 @@ import {
 	chatimg1,
 	chatimg2,
 	chatimg3,
-	edit,
-	editimg,
 	innerpages,
-	manproimage,
-	manproimage1,
-	manproimage2,
-	manproimage3,
-	manproimage4,
-	manproimage5,
-	manproimage6,
-	manproimage7,
 	massagewrapper,
-	mdi_dollar,
-	message,
-	notification,
 	p1,
-	p10,
 	p2,
-	p3,
-	p4,
 	p5,
 	p6,
 	p8,
 	p9,
-	skillimg,
-	solar_upload,
-	womenproimg,
-	womenproimg1,
-	womenproimg2,
-	womenproimg3,
-	womenproimg4,
-	womenproimg5,
-	womenproimg6,
-	womenproimg7,
 } from "../../Constant/Index";
 import AOS from "aos";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
 import OfferModal from "./OfferModal";
 import VideoChatModal from "../../Components/ChatModals/videoChatModal";
 import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
+
+// ✅ Normalize API data
+const normalizeMember = (data) => {
+	return {
+		name: data.name,
+		email: data.email,
+		phone: data.phone,
+		height: data.height,
+		dob: data.date_of_birth,
+		hairColor: data.hair_color,
+		nationality: data.nationality,
+		relationshipStatus: data.relationship_status ?? "N/A",
+		purpose: data.purpose ?? "N/A",
+		occupation: data.occupation,
+		membershipType: data.package?.slug || "Free",
+
+		profileImage: data.profile_image_url,
+		bannerImage: data.cover_images_url,
+
+		skills: data.skills ? data.skills.split(",") : [],
+		pictures: data.images_urls || [],
+
+		videos: (data.videos_urls || []).map((url) => ({
+			url,
+			thumbnail: "/assets/video-thumbnail.jpg", // 👈 thumbnail placeholder
+		})),
+	};
+};
 
 function Womandetails() {
 	// Modals
@@ -62,15 +64,27 @@ function Womandetails() {
 	const [showofferModal, setShowofferModal] = useState(false);
 	const handleofferClose = () => setShowofferModal(false);
 	const handleofferShow = () => setShowofferModal(true);
-	// Offer Modal States
+
+	const { id } = useParams();
+	const location = useLocation();
+	const rawMember = location.state?.member;
+	const member = rawMember ? normalizeMember(rawMember) : null;
+
+	// Group avatars (demo)
 	const group = {
 		membersCount: "1.2k",
 		avatars: [chatimg, chatimg1, chatimg2, chatimg3],
 	};
 
+	// Video Player modal
+	const [videoModal, setVideoModal] = useState({ show: false, url: "" });
+	const handleVideoOpen = (url) => setVideoModal({ show: true, url });
+	const handleVideoClose = () => setVideoModal({ show: false, url: "" });
+
 	useEffect(() => {
-		AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
+		AOS.init({ duration: 1000, once: true });
 	}, []);
+
 	useEffect(() => {
 		document.body.style.backgroundImage = `url(${innerpages})`;
 		document.body.style.backgroundSize = "cover";
@@ -81,6 +95,7 @@ function Womandetails() {
 			document.body.style.backgroundImage = "";
 		};
 	}, []);
+
 	return (
 		<>
 			<Header />
@@ -88,21 +103,31 @@ function Womandetails() {
 			<section className="profile_sec" data-aos="fade-up">
 				<div className="container">
 					<div className="row">
+						{/* Banner + Profile */}
 						<div className="col-md-12 pb-5">
 							<div className="profile_banner_img woman-profile-wrap">
 								<div className="position-relative">
-									<img src={womenproimg} className="img-fluid banner_img" />
+									<img
+										src={member?.bannerImage}
+										className="img-fluid banner_img"
+										alt="Banner"
+									/>
 									<div className="platinum-wra position-absolute right-0 top-0 p-3">
-										<h5>Platinium</h5>
+										<h5>{member?.membershipType}</h5>
 									</div>
 								</div>
+
 								<div className="profile_img_div">
-									<img src={womenproimg1} className="img-fluid profile_imgg" />
-									<h5>Tina Smith</h5>
+									<img
+										src={member?.profileImage}
+										className="img-fluid profile_imgg"
+										alt="Profile"
+									/>
+									<h5>{member?.name}</h5>
 								</div>
 
+								{/* Actions */}
 								<div className="account_access_dv gap-3">
-									{/* Member avatars */}
 									<div className="d-flex align-items-center justify-content-between pe-3">
 										<div className="avatar-wrapper">
 											<ul className="avatar-list d-flex align-items-center list-unstyled m-0">
@@ -117,7 +142,6 @@ function Womandetails() {
 														/>
 													</li>
 												))}
-												{/* Member count */}
 												<li>
 													<div
 														className="avaternumber bg-danger rounded-circle d-flex justify-content-center align-items-center text-white fw-bold"
@@ -129,6 +153,7 @@ function Womandetails() {
 											</ul>
 										</div>
 									</div>
+
 									<div className="card-actions1 d-flex align-items-center gap-2">
 										<div className="icon-circle linear-bg">
 											<i className="fa-solid fa-heart"></i>
@@ -137,6 +162,7 @@ function Womandetails() {
 											<i className="fa-solid fa-xmark dark-color"></i>
 										</div>
 									</div>
+
 									<Button
 										onClick={handleofferShow}
 										className="data-offer bg-transparent border-0"
@@ -145,10 +171,11 @@ function Womandetails() {
 											Create Date Offer
 										</h5>
 									</Button>
+
 									{/* Video Call */}
 									<button
-										onClick={setShowPricingModal}
-										className="wrapper-bg-good btn rounded-pill text-white  px-4 d-flex align-items-center gap-2"
+										onClick={() => setShowPricingModal(true)}
+										className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
 										style={{ backgroundColor: "transparent" }}
 									>
 										<i className="fas fa-video"></i> Video Call
@@ -157,7 +184,7 @@ function Womandetails() {
 									{/* Message */}
 									<Link
 										to="/chat"
-										className="wrapper-bg-good btn rounded-pill text-white   px-4 d-flex align-items-center gap-2"
+										className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
 										style={{ backgroundColor: "transparent" }}
 									>
 										<img src={massagewrapper} className="img-fluid" alt="" />{" "}
@@ -167,6 +194,7 @@ function Womandetails() {
 							</div>
 						</div>
 
+						{/* Info Section */}
 						<div className="col-md-12 pt-5 for-extra-space">
 							<div className="profile_info_dv">
 								<div className="row">
@@ -176,74 +204,37 @@ function Womandetails() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p1} />
+															<img src={p1} alt="" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">Name : </span>
-																John Smith
+																<span className="blod_area">Name: </span>
+																{member?.name}
 															</h5>
 														</div>
 													</div>
 												</li>
-
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p2} />
+															<img src={p2} alt="" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area"> DOB : </span>
-																14/02/2001
+																<span className="blod_area">DOB: </span>
+																{member?.dob}
 															</h5>
 														</div>
 													</div>
 												</li>
-
-												{/* <li>
-													<div className="dv_for_flex">
-														<div className="img_dv">
-															<img src={p3} />
-														</div>
-														<div className="text_dv">
-															<h5>
-																<span className="blod_area">
-																	{" "}
-																	Eyes Color :{" "}
-																</span>
-																Black
-															</h5>
-														</div>
-													</div>
-												</li> */}
-
-												{/* <li>
-													<div className="dv_for_flex">
-														<div className="img_dv">
-															<img src={p4} />
-														</div>
-														<div className="text_dv">
-															<h5>
-																<span className="blod_area">
-																	{" "}
-																	Profession :{" "}
-																</span>
-																Job
-															</h5>
-														</div>
-													</div>
-												</li> */}
-
 												<li>
 													<div className="dv_for_flex">
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area">
-																	{" "}
 																	Relationship Status:{" "}
 																</span>
-																Single
+																{member?.relationshipStatus}
 															</h5>
 														</div>
 													</div>
@@ -258,70 +249,35 @@ function Womandetails() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p5} />
+															<img src={p5} alt="" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">Email : </span>
-																Info@lorem.com
+																<span className="blod_area">Email: </span>
+																{member?.email}
 															</h5>
 														</div>
 													</div>
 												</li>
-
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p6} />
+															<img src={p6} alt="" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area"> Height : </span>
-																5.7
+																<span className="blod_area">Height: </span>
+																{member?.height}
 															</h5>
 														</div>
 													</div>
 												</li>
-
-												{/* <li>
-													  <div className="dv_for_flex">
-														<div className="img_dv">
-														  <img src={p7} />
-														</div>
-														<div className="text_dv">
-														  <h5>
-															<span className="blod_area">
-															  {' '}
-															  Nationality :{' '}
-															</span>
-															USA
-														  </h5>
-														</div>
-													  </div>
-													</li> */}
-												{/* <li>
-													<div className="dv_for_flex">
-														<div className="img_dv">
-															<img src={p4} />
-														</div>
-														<div className="text_dv">
-															<h5>
-																<span className="blod_area">
-																	{" "}
-																	Profession :{" "}
-																</span>
-																Job
-															</h5>
-														</div>
-													</div>
-												</li> */}
-
 												<li>
 													<div className="dv_for_flex">
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area"> Skills : </span>
-																Gaming , Movie , Online
+																<span className="blod_area">Skills: </span>
+																{member?.skills?.join(", ")}
 															</h5>
 														</div>
 													</div>
@@ -336,31 +292,25 @@ function Womandetails() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p8} />
+															<img src={p8} alt="" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">
-																	Phone Number :{" "}
-																</span>
-																+1 234 567 890
+																<span className="blod_area">Phone: </span>
+																{member?.phone}
 															</h5>
 														</div>
 													</div>
 												</li>
-
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p9} />
+															<img src={p9} alt="" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">
-																	{" "}
-																	Hair Color :{" "}
-																</span>
-																Black
+																<span className="blod_area">Hair Color: </span>
+																{member?.hairColor}
 															</h5>
 														</div>
 													</div>
@@ -369,25 +319,12 @@ function Womandetails() {
 													<div className="dv_for_flex">
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area"> Purpose : </span>
-																Multiple Man
+																<span className="blod_area">Purpose: </span>
+																{member?.purpose}
 															</h5>
 														</div>
 													</div>
 												</li>
-												{/* <li>
-													<div className="dv_for_flex">
-														<div className="img_dv">
-															<img src={p10} />
-														</div>
-														<div className="text_dv">
-															<h5>
-																<span className="blod_area"> Body Type : </span>
-																Smart
-															</h5>
-														</div>
-													</div>
-												</li> */}
 											</ul>
 										</div>
 									</div>
@@ -398,94 +335,61 @@ function Womandetails() {
 				</div>
 			</section>
 
-			{/* Pictures section  */}
+			{/* Pictures */}
 			<section className="pictures_sec" data-aos="fade-left">
 				<div className="container">
-					<div className="pic_head">
-						<div className="d-flex justify-content-between">
-							<h3>Pictures</h3>
-						</div>
+					<div className="pic_head d-flex justify-content-between">
+						<h3>Pictures</h3>
 					</div>
 					<div className="row mt-3">
-						<div className="col-md-6">
-							<div className="pictures_dv">
-								<div className="pic_dv">
-									<img src={womenproimg2} />
+						{member?.pictures?.map((pic, index) => (
+							<div className="col-md-6" key={index}>
+								<div className="pictures_dv">
+									<div className="pic_dv">
+										<img src={pic} alt={`pic-${index}`} />
+									</div>
 								</div>
 							</div>
-						</div>
-
-						<div className="col-md-6">
-							<div className="pictures_dv">
-								<div className="pic_dv">
-									<img src={womenproimg3} />
-								</div>
-							</div>
-						</div>
-
-						<div className="col-md-6">
-							<div className="pictures_dv">
-								<div className="pic_dv">
-									<img src={womenproimg4} />
-								</div>
-							</div>
-						</div>
-
-						<div className="col-md-6">
-							<div className="pictures_dv">
-								<div className="pic_dv">
-									<img src={womenproimg5} />
-								</div>
-							</div>
-						</div>
+						))}
 					</div>
 				</div>
 			</section>
-			{/* ======================= */}
 
-			{/* Video Seciton  */}
+			{/* Videos */}
 			<section className="videos_sec" data-aos="fade-right">
 				<div className="container">
-					<div className="pic_head">
-						<div className=" d-flex  justify-content-between">
-							<h3>Videos</h3>
-						</div>
+					<div className="pic_head d-flex justify-content-between">
+						<h3>Videos</h3>
 					</div>
 					<div className="row mt-3">
-						<div className="col-md-6">
-							<div className="pictures_dv">
-								<div className="pic_dv">
-									<img src={womenproimg6} />
-									<div className="pic_icon">
-										<i class="fa fa-play" aria-hidden="true"></i>
+						{member?.videos?.map((video, index) => (
+							<div className="col-md-6" key={index}>
+								<div
+									className="pictures_dv"
+									onClick={() => handleVideoOpen(video.url)}
+									style={{ cursor: "pointer" }}
+								>
+									<div className="pic_dv position-relative">
+										<img src={video.thumbnail} alt={`video-${index}`} />
+										<div className="pic_icon position-absolute top-50 start-50 translate-middle">
+											<i className="fa fa-play" aria-hidden="true"></i>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-
-						<div className="col-md-6">
-							<div className="pictures_dv">
-								<div className="pic_dv">
-									<img src={womenproimg7} />
-									<div className="pic_icon">
-										<i class="fa fa-play" aria-hidden="true"></i>
-									</div>
-								</div>
-							</div>
-						</div>
+						))}
 					</div>
 				</div>
 			</section>
-			{/* ============================ */}
+
 			<Footer />
 
-			{/* Offer Modal  */}
+			{/* Modals */}
 			<OfferModal
 				showofferModal={showofferModal}
 				handleofferClose={handleofferClose}
 				setShowofferModal={setShowofferModal}
 			/>
-			{/* Offer Modal  */}
 
 			<PricingModal
 				showPricingModal={showPricingModal}
@@ -512,6 +416,23 @@ function Womandetails() {
 				showVideoChatModal={showVideoChatModal}
 				handleVideoChatClose={() => setShowVideoChatModal(false)}
 			/>
+
+			{/* Video Player Modal */}
+			<Modal
+				show={videoModal.show}
+				onHide={handleVideoClose}
+				centered
+				size="lg"
+			>
+				<Modal.Body className="p-0">
+					<video
+						src={videoModal.url}
+						controls
+						autoPlay
+						style={{ width: "100%", height: "auto" }}
+					/>
+				</Modal.Body>
+			</Modal>
 		</>
 	);
 }

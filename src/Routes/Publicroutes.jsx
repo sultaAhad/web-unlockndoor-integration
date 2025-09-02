@@ -58,7 +58,7 @@ function AppRoutes() {
 				<Route path="/female-members" element={<Femalemembers />} />
 				<Route path="/edit-men-profile" element={<Meneditprofile />} />
 				<Route path="/chat" element={<Chat />} />
-				<Route path="/woman-details" element={<Womandetails />} />
+				<Route path="/women-details/:id" element={<Womandetails />} />
 				<Route path="/men-notifications" element={<Mennotification />} />
 				<Route path="/sponsored-dates" element={<SponsoredDates />} />
 				<Route path="/my-membership" element={<Membership />} />
