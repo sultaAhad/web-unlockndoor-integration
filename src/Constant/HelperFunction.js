@@ -69,91 +69,164 @@ export const validateMenRegistration = (registerman, step) => {
 };
 // src/Constant/HelperFunction.js
 export const validateWomenRegistration = (registerWomen, step) => {
-  const errors = {};
+	const errors = {};
 
-  // Step 1: Personal Info
-  if (step === 0) {
-    if (!registerWomen.name?.trim()) errors.name = ["Name is required"];
+	// Step 1: Personal Info
+	if (step === 0) {
+		if (!registerWomen.name?.trim()) errors.name = ["Name is required"];
 
-    if (!registerWomen.email?.trim()) {
-      errors.email = ["Email is required"];
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerWomen.email)) {
-      errors.email = ["Enter a valid email"];
-    }
+		if (!registerWomen.email?.trim()) {
+			errors.email = ["Email is required"];
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerWomen.email)) {
+			errors.email = ["Enter a valid email"];
+		}
 
-    if (!registerWomen.phone?.trim()) {
-      errors.phone = ["Phone number is required"];
-    } else if (!/^\d{7,15}$/.test(registerWomen.phone)) {
-      errors.phone = ["Enter a valid phone number"];
-    }
+		if (!registerWomen.phone?.trim()) {
+			errors.phone = ["Phone number is required"];
+		} else if (!/^\d{7,15}$/.test(registerWomen.phone)) {
+			errors.phone = ["Enter a valid phone number"];
+		}
 
-    if (!registerWomen.date_of_birth) {
-      errors.date_of_birth = ["Date of Birth is required"];
-    }
+		if (!registerWomen.date_of_birth) {
+			errors.date_of_birth = ["Date of Birth is required"];
+		}
 
-    if (!registerWomen.password) {
-      errors.password = ["Password is required"];
-    } else if (registerWomen.password.length < 6) {
-      errors.password = ["Password must be at least 6 characters"];
-    }
+		if (!registerWomen.password) {
+			errors.password = ["Password is required"];
+		} else if (registerWomen.password.length < 6) {
+			errors.password = ["Password must be at least 6 characters"];
+		}
 
-    if (!registerWomen.profile_image) {
-      errors.profile_image = ["Profile image is required"];
-    }
+		if (!registerWomen.profile_image) {
+			errors.profile_image = ["Profile image is required"];
+		}
 
-    if (!registerWomen.height?.trim()) {
-      errors.height = ["Please enter the Height"];
-    }
+		if (!registerWomen.height?.trim()) {
+			errors.height = ["Please enter the Height"];
+		}
 
-    if (!registerWomen.hair_color?.trim()) {
-      errors.hair_color = ["Please enter the Hair Color"];
-    }
-  }
+		if (!registerWomen.hair_color?.trim()) {
+			errors.hair_color = ["Please enter the Hair Color"];
+		}
+	}
 
-  // Step 2: Occupation & Skills
-  if (step === 1) {
-    if (!registerWomen.occupation?.trim())
-      errors.occupation = ["Occupation is required"];
+	// Step 2: Occupation & Skills
+	if (step === 1) {
+		if (!registerWomen.occupation?.trim())
+			errors.occupation = ["Occupation is required"];
 
-    if (!registerWomen.nationality?.trim())
-      errors.nationality = ["Nationality is required"];
+		if (!registerWomen.nationality?.trim())
+			errors.nationality = ["Nationality is required"];
 
-    if (!registerWomen.address?.trim())
-      errors.address = ["Address is required"];
+		if (!registerWomen.address?.trim())
+			errors.address = ["Address is required"];
 
-    if (!registerWomen.income?.trim()) {
-      errors.income = ["Income is required"];
-    }
+		if (!registerWomen.income?.trim()) {
+			errors.income = ["Income is required"];
+		}
 
-    if (!registerWomen.body_type?.trim()) {
-      errors.body_type = ["Body type is required"];
-    }
+		if (!registerWomen.body_type?.trim()) {
+			errors.body_type = ["Body type is required"];
+		}
 
-    if (!registerWomen.skills || registerWomen.skills.length === 0) {
-      errors.skills = ["At least one skill is required"];
-    }
-  }
+		if (!registerWomen.skills || registerWomen.skills.length === 0) {
+			errors.skills = ["At least one skill is required"];
+		}
+	}
 
-  // Step 3: Media & Message
-  if (step === 2) {
-    if (!registerWomen.cover_images || registerWomen.cover_images.length === 0) {
-      errors.cover_images = ["At least 1 cover photo is required"];
-    }
+	// Step 3: Media & Message
+	if (step === 2) {
+		if (
+			!registerWomen.cover_images ||
+			registerWomen.cover_images.length === 0
+		) {
+			errors.cover_images = ["At least 1 cover photo is required"];
+		}
 
-    if (!registerWomen.images || registerWomen.images.length < 5) {
-      errors.images = ["At least 5 images are required"];
-    }
+		if (!registerWomen.images || registerWomen.images.length < 5) {
+			errors.images = ["At least 5 images are required"];
+		}
 
-    if (!registerWomen.videos || registerWomen.videos.length < 2) {
-      errors.videos = ["At least 2 videos are required"];
-    }
+		if (!registerWomen.videos || registerWomen.videos.length < 2) {
+			errors.videos = ["At least 2 videos are required"];
+		}
+	}
 
-  }
-
-  return errors;
+	return errors;
 };
+// edit
+export const validateMenEditRegistration = (registerman, step) => {
+	const errors = {};
 
+	// Step 1: Personal Info
+	if (step === 1) {
+		if (!registerman.name?.trim()) errors.name = ["Name is required"];
 
+		if (!registerman.email?.trim()) {
+			errors.email = ["Email is required"];
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerman.email)) {
+			errors.email = ["Enter a valid email"];
+		}
+
+		if (!registerman.phone?.trim()) {
+			errors.phone = ["Phone number is required"];
+		} else if (!/^\d{7,15}$/.test(registerman.phone)) {
+			errors.phone = ["Enter a valid phone number"];
+		}
+
+		if (!registerman.nationality?.trim())
+			errors.nationality = ["Nationality is required"];
+
+		if (!registerman.date_of_birth) {
+			errors.date_of_birth = ["Date of Birth is required"];
+		}
+
+		if (!registerman.password) {
+			errors.password = ["Password is required"];
+		} else if (registerman.password.length < 6) {
+			errors.password = ["Password must be at least 6 characters"];
+		}
+
+		if (!registerman.profile_image) {
+			errors.profile_image = ["Profile image is required"];
+		}
+
+		if (!registerman.can_pay) errors.can_pay = ["Please select if you can pay"];
+	}
+
+	// Step 2: Occupation & Skills
+	if (step === 2) {
+		if (!registerman.occupation?.trim())
+			errors.occupation = ["Occupation is required"];
+
+		if (!registerman.annual_income?.trim()) {
+			errors.annual_income = ["Annual income is required"];
+		}
+
+		if (!Array.isArray(registerman.skills) || registerman.skills.length === 0) {
+			errors.skills = ["At least one skill is required"];
+		}
+	}
+
+	// Step 3: Media & Message
+	if (step === 3) {
+		if (!registerman.cover_image && !registerman.bannerImage) {
+			errors.cover_image = ["Cover image is required"];
+		}
+
+		if (!registerman.images || registerman.images.length < 5) {
+			errors.images = ["At least 5 images are required"];
+		}
+
+		if (!registerman.videos || registerman.videos.length < 2) {
+			errors.videos = ["At least 2 videos are required"];
+		}
+
+		if (!registerman.message?.trim()) errors.message = ["Message is required"];
+	}
+
+	return errors;
+};
 
 export const validatelogin = (login, setLoginErrors) => {
 	let isValid = true;
