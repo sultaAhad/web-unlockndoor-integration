@@ -15,6 +15,7 @@ import { useGetFemaleMembershipQuery } from "../../network/services/ManAuth";
 import Spinner from "../../Components/Spinner";
 import ProfileHeader from "../../Components/ProfileHeader";
 import FemaleMemberCard from "../../Components/FemaleMemberCard";
+import { ToastContainer, toast } from "react-toastify";
 
 function Femalemembers({ member }) {
   // 🔹 Modals
@@ -48,7 +49,7 @@ function Femalemembers({ member }) {
   return (
     <>
       <Header />
-
+      <ToastContainer />
       <section className="profile_sec" data-aos="fade-up">
         <div className="container">
           <div className="row">

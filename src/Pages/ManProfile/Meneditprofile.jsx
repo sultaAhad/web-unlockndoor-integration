@@ -58,7 +58,7 @@ function Meneditprofile() {
 	const [updateCoverImage, { isLoading: isCoverImageLoading }] =
 		useUpdateCoverImageMutation();
 	const [editProfile, { isLoading: isEditProfileLoading }] =
-		useEditProfileMutation();
+    useEditProfileMutation();
 
 	const bannerInputRef = useRef(null);
 	const profileInputRef = useRef(null);

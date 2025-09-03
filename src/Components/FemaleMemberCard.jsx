@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
-import { mchat } from "../Constant/Index";
-import { useState } from "react";
+import { like, mchat } from "../Constant/Index";
+import { useEffect, useState } from "react";
 import OfferModal from "../Pages/ManProfile/OfferModal";
 import PricingModal from "./ChatModals/PricingModal";
 import PayNowModal from "./ChatModals/PayNowModal";
 import ThankYouModal from "./ChatModals/ThankYouModal";
 import VideoChatModal from "./ChatModals/videoChatModal";
+import { useLikeProfileMutation } from "../network/services/WomanAuth";
+import { toast } from "react-toastify";
 
 const FemaleMemberCard = ({ member, key }) => {
   const packageTitle = member?.package?.slug
@@ -17,6 +19,10 @@ const FemaleMemberCard = ({ member, key }) => {
   const [showThankModal, setShowThankModal] = useState(false);
   const [showVideoChatModal, setShowVideoChatModal] = useState(false);
   const [showofferModal, setShowofferModal] = useState(false);
+  const [actionType, setActionType] = useState("like");
+
+  const [likeProfile, { isLoading: isLikeProfileLoading }] =
+    useLikeProfileMutation();
 
   const checkFeatureAccess = (member, feature) => {
     const pkg = member?.package?.slug || "";
@@ -36,6 +42,25 @@ const FemaleMemberCard = ({ member, key }) => {
 
   const handleofferClose = () => setShowofferModal(false);
   const handleofferShow = () => setShowofferModal(true);
+  const profileAction = async (member_id, type) => {
+    try {
+      setActionType(type);
+      const response =
+        type == "like"
+          ? await likeProfile({ liked_id: member_id }).unwrap()
+          : await likeProfile({ liked_id: member_id }).unwrap();
+      toast.success(response?.data?.message);
+      setActionType("like");
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
+
+  const Loader = () => (
+    <div className="btn-loader spinner-border text-warning" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  );
 
   return (
     <>
@@ -103,16 +128,30 @@ const FemaleMemberCard = ({ member, key }) => {
 
           <div className="card-actions">
             <div>
-              <span className="like-count me-0 ms-1">200</span>
-              <div className="wrapper-dash">
+              <span className="like-count me-0 ms-1">{member.likes ?? 0}</span>
+              <div
+                className="wrapper-dash"
+                onClick={() => profileAction(member.id, "like")}
+              >
                 <div className="icon-circle linear-bg">
-                  <i className="fa-solid fa-heart"></i>
+                  {isLikeProfileLoading && actionType === "like" ? (
+                    <Loader />
+                  ) : (
+                    <i className="fa-solid fa-heart"></i>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="wrapper-dash">
+            <div
+              className="wrapper-dash"
+              onClick={() => profileAction(member.id, "swap")}
+            >
               <div className="icon-circle">
-                <i className="fa-solid fa-xmark close-icon"></i>
+                {isLikeProfileLoading && actionType === "swap" ? (
+                  <Loader />
+                ) : (
+                  <i className="fa-solid fa-xmark close-icon"></i>
+                )}
               </div>
             </div>
           </div>

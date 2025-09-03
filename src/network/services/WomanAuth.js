@@ -4,11 +4,13 @@ import { BASE_URL } from "../../utils/base_url";
 import {
 	DELETE_IMAGE_WOMAN,
 	DELETE_VIDEO_WOMAN,
+	MAN_LIKE_WOMEN,
 	PURCHASE_PACKAGES_WOMEN,
 	WOMEN_DATA,
 	WOMEN_LOGIN,
 	WOMEN_SIGNUP,
 } from "../../utils/endpoints";
+import { like } from "../../Constant/Index";
 
 export const WomenAuth = createApi({
 	reducerPath: "WomenAuth",
@@ -68,6 +70,13 @@ export const WomenAuth = createApi({
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
 		}),
+		likeProfile: build.mutation({
+			query: (formData) => ({
+				url: MAN_LIKE_WOMEN,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
 	}),
 });
 
@@ -78,6 +87,7 @@ export const {
 	useDeleteImageWomanMutation,
 	useDeleteVideoWomanMutation,
 	useWomanDataMutation,
+	useLikeProfileMutation,
 } = WomenAuth;
 
 export default WomenAuth;
