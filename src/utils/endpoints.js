@@ -37,7 +37,7 @@ export const MAN_LOGIN = `auth-men/login-men`;
 export const MAN_SELFIE = `auth-men/verify-selfie`;
 export const GET_MANPACKAGES = `package`;
 export const PURCHASE_PACKAGES = `auth-men/men-purchase-package`;
-export const EDIT_PROFILE_MAN = `auth-men/update-men/8`;
+export const EDIT_PROFILE_MAN = `auth-men/update-men`;
 export const MAN_LIKE_WOMEN = `auth-men/like-women`;
 export const OFFER_DATE = `auth-men/offer-date`;
 export const MAN_DELETE_IMAGES = `auth-men/delete-image`;
@@ -49,7 +49,6 @@ export const MAN_UPGRADE_PACKAGES = `auth-men/upgrade-men-package`;
 export const MAN_WITHDREW_DATE = `auth-men/withdraw-date`;
 export const CHANGE_PROFILE_IMAGE = `auth-men/update-profile-image`;
 export const CHANGE_COVER_IMAGE = `auth-men/update-cover-image`;
-
 
 // GET API MAN
 export const MAN_MATCHED_PRIFILE = `auth-men/matched-profiles`;

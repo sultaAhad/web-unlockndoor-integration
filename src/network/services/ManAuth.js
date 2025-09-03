@@ -83,7 +83,7 @@ export const ManAuth = createApi({
 		editProfile: build.mutation({
 			query: (data) => ({
 				url: EDIT_PROFILE_MAN,
-				method: "PUT",
+				method: "POST",
 				body: data,
 			}),
 		}),

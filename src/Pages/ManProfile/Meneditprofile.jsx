@@ -2,47 +2,42 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import Aos from "aos";
-import {
-	calenderwrapper1,
-	edit,
-	massagewrapper,
-	notification,
-	uploader_icon,
-} from "../../Constant/Index";
-import { Link, useNavigate } from "react-router-dom";
+import { calenderwrapper1, uploader_icon } from "../../Constant/Index";
+import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import {
-	useManupUatepPofileImageMutation,
-	useUpdateManCoverImageMutation,
-} from "../../network/services/AuthServices";
+	useEditProfileMutation,
+	useUpdateCoverImageMutation,
+	useUpdateProfileImageMutation,
+} from "../../network/services/ManAuth";
+import { setUserToken, setUser } from "../../network/reducers/AuthReducer";
 
 function Meneditprofile() {
 	const { user } = useSelector((state) => state.auth);
+	console.log(user, "asas");
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-	// ✅ Normalize API data
+	// ✅ Parse skills safely
 	const parsedSkills = user?.skills
 		? Array.isArray(user.skills)
 			? user.skills
 			: user.skills.split(",").map((s) => s.trim())
 		: [];
 
-	const parsedImages =
-		typeof user?.images === "string"
-			? JSON.parse(user.images)
-			: user?.images || [];
-
-	const parsedVideos =
-		typeof user?.videos === "string"
-			? JSON.parse(user.videos)
-			: user?.videos || [];
+	// ✅ Safe date parser
+	const parseValidDate = (dateString) => {
+		const date = new Date(dateString);
+		return isNaN(date.getTime()) ? null : date;
+	};
 
 	const [form, setForm] = useState({
 		name: user?.name || "",
 		email: user?.email || "",
 		annual_income: user?.income || "",
-		date_of_birth: user?.date_of_birth ? new Date(user.date_of_birth) : null,
+		date_of_birth: parseValidDate(user?.date_of_birth),
 		skills: parsedSkills,
 		message: user?.message || "",
 		occupation: user?.occupation || "",
@@ -54,32 +49,121 @@ function Meneditprofile() {
 	});
 
 	const [formErrors, setFormErrors] = useState({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [imageFiles, setImageFiles] = useState([]);
+	const [videoFiles, setVideoFiles] = useState([]);
 
-	const [manupUatepPofileImage] = useManupUatepPofileImageMutation();
-	const [updateManCoverImage] = useUpdateManCoverImageMutation();
+	const [updateProfileImage, { isLoading: isProfileImageLoading }] =
+		useUpdateProfileImageMutation();
+	const [updateCoverImage, { isLoading: isCoverImageLoading }] =
+		useUpdateCoverImageMutation();
+	const [editProfile, { isLoading: isEditProfileLoading }] =
+		useEditProfileMutation();
 
 	const bannerInputRef = useRef(null);
 	const profileInputRef = useRef(null);
+	const imagesInputRef = useRef(null);
+	const videosInputRef = useRef(null);
 
 	// ===== Banner Upload =====
 	const handleBannerChange = async (e) => {
 		const file = e.target.files[0];
-		if (file) {
+		if (!file) return;
+
+		try {
 			const formData = new FormData();
 			formData.append("cover_image", file);
-			await updateManCoverImage(formData);
-			setForm((prev) => ({ ...prev, bannerImage: URL.createObjectURL(file) }));
+
+			const response = await updateCoverImage(formData).unwrap();
+
+			if (response.data?.cover_image_url) {
+				setForm((prev) => ({
+					...prev,
+					bannerImage: response.data.cover_image_url,
+				}));
+
+				dispatch(
+					setUser({
+						user: {
+							...user,
+							cover_image_url: response.data.cover_image_url,
+						},
+					}),
+				);
+
+				Swal.fire({
+					icon: "success",
+					title: "Success!",
+					text: "Cover image updated successfully!",
+					timer: 2000,
+					showConfirmButton: false,
+				});
+			} else {
+				setForm((prev) => ({
+					...prev,
+					bannerImage: URL.createObjectURL(file),
+				}));
+			}
+		} catch (error) {
+			console.error("Failed to update cover image:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Upload Failed",
+				text:
+					error.data?.message ||
+					"Failed to update cover image. Please try again.",
+				confirmButtonText: "OK",
+			});
 		}
 	};
 
 	// ===== Profile Upload =====
 	const handleProfileChange = async (e) => {
 		const file = e.target.files[0];
-		if (file) {
+		if (!file) return;
+
+		try {
 			const formData = new FormData();
 			formData.append("profile_image", file);
-			await manupUatepPofileImage(formData);
-			setForm((prev) => ({ ...prev, profileImage: URL.createObjectURL(file) }));
+
+			const response = await updateProfileImage(formData).unwrap();
+
+			if (response.data?.profile_image_url) {
+				setForm((prev) => ({
+					...prev,
+					profileImage: response.data.profile_image_url,
+				}));
+
+				dispatch(
+					setUser({
+						...user,
+						profile_image_url: response.data.profile_image_url,
+					}),
+				);
+
+				Swal.fire({
+					icon: "success",
+					title: "Success!",
+					text: "Profile image updated successfully!",
+					timer: 2000,
+					showConfirmButton: false,
+				});
+			} else {
+				setForm((prev) => ({
+					...prev,
+					profileImage: URL.createObjectURL(file),
+				}));
+			}
+		} catch (error) {
+			console.error("Failed to update profile image:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Upload Failed",
+				text:
+					error.data?.message ||
+					"Failed to update profile image. Please try again.",
+				confirmButtonText: "OK",
+			});
 		}
 	};
 
@@ -100,15 +184,22 @@ function Meneditprofile() {
 	// ===== Upload files =====
 	const handleFileChange = (e, type) => {
 		const selectedFiles = Array.from(e.target.files);
+
+		if (type === "images") setImageFiles((prev) => [...prev, ...selectedFiles]);
+		else if (type === "videos")
+			setVideoFiles((prev) => [...prev, ...selectedFiles]);
+
 		const urls = selectedFiles.map((file) => URL.createObjectURL(file));
 
-		setForm((prev) => ({
-			...prev,
-			[type]: [...prev[type], ...urls],
-		}));
+		setForm((prev) => ({ ...prev, [type]: [...prev[type], ...urls] }));
 	};
 
 	const removeFile = (index, type) => {
+		if (type === "images")
+			setImageFiles((prev) => prev.filter((_, i) => i !== index));
+		else if (type === "videos")
+			setVideoFiles((prev) => prev.filter((_, i) => i !== index));
+
 		setForm((prev) => ({
 			...prev,
 			[type]: prev[type].filter((_, i) => i !== index),
@@ -120,11 +211,9 @@ function Meneditprofile() {
 		const errors = {};
 
 		if (!form.name?.trim()) errors.name = "Name is required";
-		if (!form.email?.trim()) {
-			errors.email = "Email is required";
-		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+		if (!form.email?.trim()) errors.email = "Email is required";
+		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
 			errors.email = "Enter a valid email";
-		}
 		if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
 		if (!form.occupation?.trim()) errors.occupation = "Occupation is required";
 		if (!form.annual_income?.trim())
@@ -141,17 +230,97 @@ function Meneditprofile() {
 		return errors;
 	};
 
-	// ===== Submit =====
-	const handleSubmit = (e) => {
+	// ===== Submit with FormData =====
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const errors = validateForm();
+
 		if (Object.keys(errors).length > 0) {
 			setFormErrors(errors);
+			Swal.fire({
+				icon: "error",
+				title: "Validation Error",
+				text: "Please fill all required fields correctly",
+				confirmButtonText: "OK",
+			});
 			return;
 		}
-		console.log("Final Data:", form);
-		navigate("/profile");
+
+		setIsSubmitting(true);
+
+		try {
+			const formData = new FormData();
+			formData.append("name", form.name);
+			formData.append("annual_income", form.annual_income);
+			formData.append(
+				"date_of_birth",
+				form.date_of_birth
+					? form.date_of_birth.toISOString().split("T")[0]
+					: "",
+			);
+			formData.append("skills", form.skills.join(","));
+			formData.append("message", form.message);
+			formData.append("occupation", form.occupation);
+			formData.append("nationality", form.nationality);
+
+			if (form.profileImage?.startsWith("http"))
+				formData.append("profile_image", form.profileImage);
+			if (form.bannerImage?.startsWith("http"))
+				formData.append("cover_image", form.bannerImage);
+
+			imageFiles.forEach((file) => formData.append("images", file));
+			videoFiles.forEach((file) => formData.append("videos", file));
+
+			const response = await editProfile(formData).unwrap();
+
+			// console.log("updateResponse:", response?.response?.data);
+
+			if (response.status == 200) {
+				// ✅ Merge current user state with updated fields
+				dispatch(setUser(response?.response?.data));
+			}
+
+			Swal.fire({
+				icon: "success",
+				title: "Profile Updated!",
+				text: "Your profile has been updated successfully",
+				showConfirmButton: false,
+				timer: 2000,
+			}).then(() => navigate("/profile"));
+		} catch (error) {
+			console.error("Failed to update profile:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Update Failed",
+				text:
+					error.data?.message || "Failed to update profile. Please try again.",
+				confirmButtonText: "OK",
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
+	useEffect(() => {
+		if (user) {
+			setForm((prev) => ({
+				...prev,
+				name: user.name || "",
+				email: user.email || "",
+				annual_income: user.income || "",
+				date_of_birth: parseValidDate(user.date_of_birth),
+				skills: Array.isArray(user.skills)
+					? user.skills
+					: user.skills?.split(",") || [],
+				message: user.message || "",
+				occupation: user.occupation || "",
+				nationality: user.nationality || "",
+				bannerImage: user.cover_image_url || null,
+				profileImage: user.profile_image_url || null,
+				images: user.images_urls || [],
+				videos: user.videos_urls || [],
+			}));
+		}
+	}, [user]);
 
 	useEffect(() => {
 		Aos.init({ duration: 1000, once: true });
@@ -175,8 +344,18 @@ function Meneditprofile() {
 								type="button"
 								className="btn p-0"
 								onClick={() => bannerInputRef.current.click()}
+								disabled={isCoverImageLoading}
 							>
-								<i className="fa-solid fa-camera"></i>
+								{isCoverImageLoading ? (
+									<div
+										className="spinner-border spinner-border-sm text-light"
+										role="status"
+									>
+										<span className="visually-hidden">Loading...</span>
+									</div>
+								) : (
+									<i className="fa-solid fa-camera"></i>
+								)}
 							</button>
 							<input
 								type="file"
@@ -184,6 +363,7 @@ function Meneditprofile() {
 								onChange={handleBannerChange}
 								accept="image/*"
 								hidden
+								disabled={isCoverImageLoading}
 							/>
 						</div>
 
@@ -199,8 +379,18 @@ function Meneditprofile() {
 										type="button"
 										className="btn p-0"
 										onClick={() => profileInputRef.current.click()}
+										disabled={isProfileImageLoading}
 									>
-										<i className="fa-solid fa-camera"></i>
+										{isProfileImageLoading ? (
+											<div
+												className="spinner-border spinner-border-sm text-light"
+												role="status"
+											>
+												<span className="visually-hidden">Loading...</span>
+											</div>
+										) : (
+											<i className="fa-solid fa-camera"></i>
+										)}
 									</button>
 									<input
 										type="file"
@@ -208,6 +398,7 @@ function Meneditprofile() {
 										onChange={handleProfileChange}
 										accept="image/*"
 										hidden
+										disabled={isProfileImageLoading}
 									/>
 								</div>
 								<h5>{form?.name || "John Smith"}</h5>
@@ -252,7 +443,11 @@ function Meneditprofile() {
 								<div className="col-md-4">
 									<div className="form-group position-relative">
 										<DatePicker
-											selected={form.date_of_birth}
+											selected={
+												form.date_of_birth instanceof Date
+													? form.date_of_birth
+													: null
+											}
 											onChange={(date) =>
 												setForm((prev) => ({ ...prev, date_of_birth: date }))
 											}
@@ -268,7 +463,8 @@ function Meneditprofile() {
 										)}
 									</div>
 								</div>
-								{/* Nationalty */}
+
+								{/* Nationality */}
 								<div className="col-md-4">
 									<div className="form-group">
 										<input
@@ -287,6 +483,7 @@ function Meneditprofile() {
 										)}
 									</div>
 								</div>
+
 								{/* Occupation */}
 								<div className="col-md-4">
 									<div className="form-group">
@@ -385,16 +582,25 @@ function Meneditprofile() {
 										)}
 									</div>
 								</div>
+
 								{/* Save Button */}
 								<div className="col-md-4 align-content-center">
-									{" "}
 									<button
 										type="submit"
 										className="border radius-8 secondary-regular-font"
+										disabled={isSubmitting || isEditProfileLoading}
 									>
-										Save
+										{isSubmitting || isEditProfileLoading ? (
+											<>
+												<span className="spinner-border spinner-border-sm me-2" />
+												Saving...
+											</>
+										) : (
+											"Save"
+										)}
 									</button>
 								</div>
+
 								{/* Images */}
 								<div className="col-md-4">
 									<div className="form-group upload-section mt-2">
@@ -416,6 +622,7 @@ function Meneditprofile() {
 											</div>
 											<input
 												type="file"
+												ref={imagesInputRef}
 												accept="image/*"
 												multiple
 												onChange={(e) => handleFileChange(e, "images")}
@@ -424,35 +631,17 @@ function Meneditprofile() {
 										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
 											{form.images.map((img, i) => (
 												<div key={i} className="position-relative">
-													<img
-														src={img}
-														width={100}
-														height={100}
-														alt="gallery"
-													/>
-													<button
-														type="button"
+													<img src={img} alt="" className="preview-img" />
+													<span
+														className="position-absolute top-0 end-0 bg-danger text-white rounded-circle p-1"
+														style={{ cursor: "pointer" }}
 														onClick={() => removeFile(i, "images")}
-														className="position-absolute top-0 end-0 bg-danger text-white border-0 rounded-circle"
-														style={{ width: 20, height: 20 }}
 													>
-														✖
-													</button>
+														&times;
+													</span>
 												</div>
 											))}
 										</div>
-										<div class="col-lg-10">
-											<label class="mt-1 text-white">
-												Note :{" "}
-												<span class="label_span">
-													make sure you got the best of your attractiveness and
-													qualities{" "}
-												</span>
-											</label>
-										</div>
-										{formErrors.images && (
-											<p className="text-danger">{formErrors.images}</p>
-										)}
 									</div>
 								</div>
 
@@ -460,7 +649,7 @@ function Meneditprofile() {
 								<div className="col-md-4">
 									<div className="form-group upload-section mt-2">
 										<label className="text-white">
-											Upload at least 2 introduction videos
+											Upload 2 videos minimum
 										</label>
 										<div className="uploader py-3 rounded mt-2">
 											<div className="upload_pic text-center">
@@ -477,30 +666,26 @@ function Meneditprofile() {
 											</div>
 											<input
 												type="file"
+												ref={videosInputRef}
 												accept="video/*"
 												multiple
 												onChange={(e) => handleFileChange(e, "videos")}
 											/>
 										</div>
-
 										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
 											{form.videos.map((vid, i) => (
 												<div key={i} className="position-relative">
-													<video src={vid} width={120} height={100} controls />
-													<button
-														type="button"
+													<video src={vid} className="preview-img" controls />
+													<span
+														className="position-absolute top-0 end-0 bg-danger text-white rounded-circle p-1"
+														style={{ cursor: "pointer" }}
 														onClick={() => removeFile(i, "videos")}
-														className="position-absolute top-0 end-0 bg-danger text-white border-0 rounded-circle"
-														style={{ width: 20, height: 20 }}
 													>
-														✖
-													</button>
+														&times;
+													</span>
 												</div>
 											))}
 										</div>
-										{formErrors.videos && (
-											<p className="text-danger">{formErrors.videos}</p>
-										)}
 									</div>
 								</div>
 							</div>
