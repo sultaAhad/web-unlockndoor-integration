@@ -36,9 +36,30 @@ import { useGetMatchedProfilesQuery } from "../../network/services/ManAuth";
 import Spinner from "../../Components/Spinner";
 
 function MatchedProfiles() {
-  const { data: matchedProfiles, isLoading } = useGetMatchedProfilesQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [profiles, setProfiles] = useState([]);
 
-  const profiles = matchedProfiles?.response?.data?.matchedProfiles ?? [];
+  const { data, isLoading, refetch } = useGetMatchedProfilesQuery(currentPage);
+
+  useEffect(() => {
+    if (data?.response?.data?.matchedProfiles?.data) {
+      setProfiles((prev) =>
+        currentPage === 1
+          ? data.response.data.matchedProfiles.data
+          : [...prev, ...data.response.data.matchedProfiles.data]
+      );
+      setCurrentPage(data.response.data.matchedProfiles?.current_page);
+      setLastPage(data.response.data.matchedProfiles?.last_page);
+    }
+  }, [data, currentPage]);
+
+  useEffect(() => {
+    refetch();
+  }, [currentPage]);
+
+  // const profiles =
+  //   matchedProfiles?.response?.data?.matchedProfiles?.data ?? [];
   const [showPricingModal, setShowPricingModal] = useState(false);
   const handlePricingClose = () => setShowPricingModal(false);
   const handlePricingShow = () => setShowPricingModal(true);
@@ -88,19 +109,18 @@ function MatchedProfiles() {
               ))}
             </div>
           )}
-
-          <div className="row">
-            <div className="col-lg-2 mx-auto">
-              <div className="btn-wrapper">
-                <Link
-                  to=""
-                  className="btn-write secondary-medium-font rounded-0 d-flex align-items-center justify-content-center extra-bg-1"
+          {!isLoading && lastPage > currentPage && (
+            <div className="row">
+              <div className="col-lg-2 mx-auto">
+                <button
+                  className="btn-write secondary-medium-font load-more-wrapper rounded-0 d-flex align-items-center justify-content-center extra-bg-1 border-none"
+                  onClick={() => setCurrentPage(page++)}
                 >
                   Load More
-                </Link>
+                </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 

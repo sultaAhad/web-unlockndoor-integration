@@ -12,12 +12,25 @@ import ProfileHeader from "../../Components/ProfileHeader";
 import { useGetSponsoredDatesQuery } from "../../network/services/ManAuth";
 import Spinner from "../../Components/Spinner";
 function SponsoredDates() {
-  const { data, isLoading } = useGetSponsoredDatesQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
   const [sponsoredDates, setSponsoredDates] = useState([]);
 
+  const { data, isLoading, refetch } = useGetSponsoredDatesQuery(currentPage);
+
   useEffect(() => {
-    setSponsoredDates(data?.response?.data?.sponsoredDates ?? []);
-  }, [data]);
+    if (data?.response?.data?.sponsoredDates?.data) {
+      setSponsoredDates(data.response.data.sponsoredDates.data);
+      setCurrentPage(data.response.data.sponsoredDates?.current_page);
+      setLastPage(data.response.data.sponsoredDates?.last_page);
+    } else {
+      setSponsoredDates(data?.response?.data?.sponsoredDates);
+    }
+  }, [data, currentPage]);
+
+  useEffect(() => {
+    refetch();
+  }, [currentPage]);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
@@ -194,7 +207,11 @@ function SponsoredDates() {
                       <div className="row">
                         <div className="col-lg-12">
                           <div className="container mt-5">
-                            <Pagination />
+                            <Pagination
+                              currentPage={currentPage}
+                              lastPage={lastPage}
+                              onPageChange={(page) => setCurrentPage(page)}
+                            />
                           </div>
                         </div>
                       </div>

@@ -171,20 +171,20 @@ export const ManAuth = createApi({
 		}),
 		// ✅ New GET APIs
 		getMatchedProfiles: build.query({
-			query: () => ({
-				url: MAN_MATCHED_PRIFILE,
+			query: (page) => ({
+				url: `${MAN_MATCHED_PRIFILE}?page=${page}`,
 				method: "GET",
 			}),
 		}),
 		getSponsoredDates: build.query({
-			query: () => ({
-				url: MAN_SPONSORED_DATES,
+			query: (page) => ({
+				url: `${MAN_SPONSORED_DATES}?page=${page}`,
 				method: "GET",
 			}),
 		}),
 		getFemaleMembership: build.query({
-			query: () => ({
-				url: MAN_FEMALE_MEMBERSHIP,
+			query: (page) => ({
+				url: `${MAN_FEMALE_MEMBERSHIP}?page=${page}`,
 				method: "GET",
 			}),
 		}),
