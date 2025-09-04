@@ -18,81 +18,77 @@ import FemaleMemberCard from "../../Components/FemaleMemberCard";
 import { ToastContainer, toast } from "react-toastify";
 
 function Femalemembers({ member }) {
-  // 🔹 Modals
+	// 🔹 Modals
 
-  // 🔹 Load More state
-  const [visibleCount, setVisibleCount] = useState(12);
+	// 🔹 Load More state
+	const [visibleCount, setVisibleCount] = useState(12);
 
-  // 🔹 API Call with RTK Query
-  const { data, isLoading } = useGetFemaleMembershipQuery();
-  const members = data?.response?.data?.Women || [];
-  const navigate = useNavigate();
+	// 🔹 API Call with RTK Query
+	const { data, isLoading } = useGetFemaleMembershipQuery();
+	const members = data?.response?.data?.Women?.data || [];
+	console.log(data);
 
-  const handleClick = (member) => {
-    navigate(`/women-details/${member.id}`, { state: { member } });
-  };
+	useEffect(() => {
+		AOS.init({ duration: 1000, once: true });
+	}, []);
 
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
+	useEffect(() => {
+		document.body.style.backgroundImage = `url(${innerpages1})`;
+		document.body.style.backgroundSize = "cover";
+		document.body.style.backgroundPosition = "center";
+		document.body.style.minHeight = "100vh";
+		return () => {
+			document.body.style.backgroundImage = "";
+		};
+	}, []);
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${innerpages1})`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.minHeight = "100vh";
-    return () => {
-      document.body.style.backgroundImage = "";
-    };
-  }, []);
+	return (
+		<>
+			<Header />
+			<ToastContainer />
+			<section className="profile_sec" data-aos="fade-up">
+				<div className="container">
+					<div className="row">
+						<ProfileHeader />
+						<div className="col-md-12 pt-5 for-extra-space">
+							<ProfileNavbartwo />
+						</div>
+					</div>
+				</div>
+			</section>
 
-  return (
-    <>
-      <Header />
-      <ToastContainer />
-      <section className="profile_sec" data-aos="fade-up">
-        <div className="container">
-          <div className="row">
-            <ProfileHeader />
-            <div className="col-md-12 pt-5 for-extra-space">
-              <ProfileNavbartwo />
-            </div>
-          </div>
-        </div>
-      </section>
+			<section className="videos_sec" data-aos="fade-right">
+				<div className="container">
+					{isLoading ? (
+						<div className="row justify-content-center">
+							<Spinner />
+						</div>
+					) : (
+						<div className="row">
+							{members.map((member) => (
+								<FemaleMemberCard key={member.id} member={member} />
+							))}
+						</div>
+					)}
 
-      <section className="videos_sec" data-aos="fade-right">
-        <div className="container">
-          {isLoading ? (
-            <div className="row justify-content-center">
-              <Spinner />
-            </div>
-          ) : (
-            <div className="row">
-              {members.map((member) => (
-                <FemaleMemberCard key={member.id} member={member} />
-              ))}
-            </div>
-          )}
+					{!isLoading && members.length > 0 && (
+						<div className="row">
+							<div className="col-lg-2 mx-auto">
+								<button
+									className="btn-write secondary-medium-font load-more-wrapper rounded-0 d-flex align-items-center justify-content-center extra-bg-1 border-none"
+									onClick={() => setVisibleCount(visibleCount + 12)}
+								>
+									Load More
+								</button>
+							</div>
+						</div>
+					)}
+				</div>
+			</section>
 
-          {!isLoading && members.length > 0 && (
-            <div className="row">
-              <div className="col-lg-2 mx-auto">
-                <button
-                  className="btn-write secondary-medium-font load-more-wrapper rounded-0 d-flex align-items-center justify-content-center extra-bg-1 border-none"
-                  onClick={() => setVisibleCount(visibleCount + 12)}
-                >
-                  Load More
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default Femalemembers;

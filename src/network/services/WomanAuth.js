@@ -8,6 +8,9 @@ import {
 	PURCHASE_PACKAGES_WOMEN,
 	WOMEN_DATA,
 	WOMEN_LOGIN,
+	WOMEN_LOGIN_CHANGEPASSWORD_RESET,
+	WOMEN_LOGIN_OTP_SAND,
+	WOMEN_LOGIN_OTP_VARIFY,
 	WOMEN_SIGNUP,
 } from "../../utils/endpoints";
 import { like } from "../../Constant/Index";
@@ -40,6 +43,30 @@ export const WomenAuth = createApi({
 				url: WOMEN_LOGIN,
 				method: "POST",
 				body: credentials,
+			}),
+		}),
+		// OTP Send
+		sendOtp: build.mutation({
+			query: (data) => ({
+				url: WOMEN_LOGIN_OTP_SAND,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		// OTP Verify
+		verifyOtp: build.mutation({
+			query: (data) => ({
+				url: WOMEN_LOGIN_OTP_VARIFY,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		// Reset Password
+		resetPassword: build.mutation({
+			query: (data) => ({
+				url: WOMEN_LOGIN_CHANGEPASSWORD_RESET,
+				method: "POST",
+				body: data,
 			}),
 		}),
 		womanData: build.mutation({
@@ -88,6 +115,9 @@ export const {
 	useDeleteVideoWomanMutation,
 	useWomanDataMutation,
 	useLikeProfileMutation,
+	useSendOtpMutation,
+	useVerifyOtpMutation,
+	useResetPasswordMutation,
 } = WomenAuth;
 
 export default WomenAuth;

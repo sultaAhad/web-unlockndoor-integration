@@ -19,6 +19,9 @@ import {
 	MAN_FEMALE_MEMBERSHIP,
 	MAN_SPONSORED_DATES,
 	MAN_MATCHED_PRIFILE,
+	MAN_LOGIN_OTP_VARIFY,
+	MAN_LOGIN_OTP_SAND,
+	MAN_LOGIN_CHANGEPASSWORD_RESET,
 } from "../../utils/endpoints";
 
 export const ManAuth = createApi({
@@ -44,6 +47,27 @@ export const ManAuth = createApi({
 		manLogin: build.mutation({
 			query: (data) => ({
 				url: MAN_LOGIN,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		verifyOtp: build.mutation({
+			query: (data) => ({
+				url: MAN_LOGIN_OTP_VARIFY,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		sendOtp: build.mutation({
+			query: (data) => ({
+				url: MAN_LOGIN_OTP_SAND,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		resetPassword: build.mutation({
+			query: (data) => ({
+				url: MAN_LOGIN_CHANGEPASSWORD_RESET,
 				method: "POST",
 				body: data,
 			}),
@@ -176,6 +200,9 @@ export const ManAuth = createApi({
 export const {
 	useManSignupMutation,
 	useManLoginMutation,
+	useVerifyOtpMutation,
+	useSendOtpMutation,
+	useResetPasswordMutation,
 	useVerifySelfieMutation,
 	useGetMenPackagesQuery,
 	usePurchasePackageMutation,

@@ -34,6 +34,9 @@ export const LOGIN_CHANGEPASSWORDMAN = `change-password`;
 // Endpoints man
 export const MAN_SIGNUP = `auth-men/register-men`;
 export const MAN_LOGIN = `auth-men/login-men`;
+export const MAN_LOGIN_OTP_VARIFY = `auth-men/verify-otp`;
+export const MAN_LOGIN_OTP_SAND = `auth-men/send-otp`;
+export const MAN_LOGIN_CHANGEPASSWORD_RESET = `auth-men/reset-password`;
 export const MAN_SELFIE = `auth-men/verify-selfie`;
 export const GET_MANPACKAGES = `package`;
 export const PURCHASE_PACKAGES = `auth-men/men-purchase-package`;
@@ -59,6 +62,9 @@ export const MAN_DATA = `auth-men/men-data`;
 // Endpoints women
 export const WOMEN_SIGNUP = `auth-women/register-women`;
 export const WOMEN_LOGIN = `auth-women/login-women`;
+export const WOMEN_LOGIN_OTP_VARIFY = `auth-women/verify-otp`;
+export const WOMEN_LOGIN_OTP_SAND = `auth-women/send-otp`;
+export const WOMEN_LOGIN_CHANGEPASSWORD_RESET = `auth-women/reset-password`;
 export const WOMEN_DATA = `auth-women/women-data`;
 export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;
 export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
