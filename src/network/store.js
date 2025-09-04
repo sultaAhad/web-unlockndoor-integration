@@ -11,6 +11,7 @@ import AuthServices from "./services/AuthServices";
 import GalleryApi from "./services/GalleryApi";
 import ManAuth from "./services/ManAuth";
 import WomenAuth from "./services/WomanAuth";
+import SponsoredDates from "./services/woman/SponsoredDates";
 
 // ✅ combine all reducers
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	[GalleryApi.reducerPath]: GalleryApi.reducer,
 	[ManAuth.reducerPath]: ManAuth.reducer,
 	[WomenAuth.reducerPath]: WomenAuth.reducer,
+	[SponsoredDates.reducerPath]: SponsoredDates.reducer,
 });
 
 // ✅ persist config
@@ -44,6 +46,7 @@ const store = configureStore({
 			GalleryApi.middleware,
 			ManAuth.middleware,
 			WomenAuth.middleware,
+			SponsoredDates.middleware,
 		]),
 });
 

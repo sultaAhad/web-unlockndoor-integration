@@ -69,3 +69,5 @@ export const WOMEN_DATA = `auth-women/women-data`;
 export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;
 export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
 export const DELETE_VIDEO_WOMAN = `auth-women/delete-video`;
+export const WOMAN_SPONSORED_DATES = `auth-women/sponsored-dates`;
+export const WOMAN_MATCHED_PRIFILE = `auth-women/matched-profiles`;

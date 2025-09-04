@@ -8,9 +8,10 @@ const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
 	const [preview, setPreview] = useState(null);
 	const [verifySelfie, { isLoading }] = useVerifySelfieMutation();
 
-	useEffect(() => {
-		if (!isOpen) setPreview(null);
-	}, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) setPreview(null);
+  }, [isOpen]);
 
 	if (!isOpen) return null;
 

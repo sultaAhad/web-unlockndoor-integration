@@ -6,6 +6,7 @@ import {
 	DELETE_VIDEO_WOMAN,
 	MAN_LIKE_WOMEN,
 	PURCHASE_PACKAGES_WOMEN,
+	WOMAN_MATCHED_PRIFILE,
 	WOMEN_DATA,
 	WOMEN_LOGIN,
 	WOMEN_LOGIN_CHANGEPASSWORD_RESET,
@@ -104,6 +105,12 @@ export const WomenAuth = createApi({
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
 		}),
+		getWomanMatchProfiles: build.query({
+			query: ({ filterBy, page }) => ({
+				url: `${WOMAN_MATCHED_PRIFILE}?page=${page}&filterBy=${filterBy}`,
+				method: "GET",
+			}),
+		}),
 	}),
 });
 
@@ -118,6 +125,7 @@ export const {
 	useSendOtpMutation,
 	useVerifyOtpMutation,
 	useResetPasswordMutation,
+	useGetWomanMatchProfilesQuery
 } = WomenAuth;
 
 export default WomenAuth;

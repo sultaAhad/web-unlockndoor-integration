@@ -17,35 +17,35 @@ export function checkMiddleware(
 		const hasPackage = localStorage.getItem("hasPackage") === "true";
 		const gender = localStorage.getItem("gender");
 
-		if (checkSelfie && !selfieVerified) {
-			if (gender === "female") {
-				return (
-					<WomenselfieModel
-						isOpen={true}
-						onClose={() => {}}
-						onVerified={() => {
-							localStorage.setItem("selfieVerified", "true");
-							setShowSelfie(false);
-							window.location.reload();
-						}}
-					/>
-				);
-			}
-			if (gender === "male") {
-				return (
-					<SelfieModal
-						isOpen={true}
-						onClose={() => {}}
-						onVerified={() => {
-							localStorage.setItem("selfieVerified", "true");
-							setShowSelfie(false);
-							window.location.reload();
-						}}
-					/>
-				);
-			}
-			return <Component {...props} />;
-		}
+		if (checkSelfie && !selfieVerified && gender == "man") {
+      if (gender === "female") {
+        return (
+          <WomenselfieModel
+            isOpen={true}
+            onClose={() => {}}
+            onVerified={() => {
+              localStorage.setItem("selfieVerified", "true");
+              setShowSelfie(false);
+              window.location.reload();
+            }}
+          />
+        );
+      }
+      if (gender === "male") {
+        return (
+          <SelfieModal
+            isOpen={true}
+            onClose={() => {}}
+            onVerified={() => {
+              localStorage.setItem("selfieVerified", "true");
+              setShowSelfie(false);
+              window.location.reload();
+            }}
+          />
+        );
+      }
+      return <Component {...props} />;
+    }
 		if (checkPackage && !hasPackage) {
 			if (gender === "female") {
 				return (

@@ -3,19 +3,19 @@ import "../../assets/Css/profile.css";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import {
-	chatimg1,
-	chatimg3,
-	chatimg4,
-	edit,
-	innerpages1,
-	manproimage2,
-	manproimage3,
-	massagewrapper,
-	message,
-	notification,
-	notify_img,
-	womenproimg,
-	womenproimg1,
+  chatimg1,
+  chatimg3,
+  chatimg4,
+  edit,
+  innerpages1,
+  manproimage2,
+  manproimage3,
+  massagewrapper,
+  message,
+  notification,
+  notify_img,
+  womenproimg,
+  womenproimg1,
 } from "../../Constant/Index";
 import AOS from "aos";
 import { Link } from "react-router-dom";
@@ -23,80 +23,38 @@ import Pagination from "../../Components/Pagination";
 import ProfileNavbar from "../../Components/ProfileNavbar";
 import RejectModal from "../../Components/RejectModal";
 import ProfileHeader from "../../Components/ProfileHeader";
+import { useGetWomanSponsoredDatesQuery } from "../../network/services/woman/SponsoredDates";
+import Spinner from "../../Components/Spinner";
 
 function DatesTab() {
   const [showRejectModal, setShowRejectModal] = useState(false);
 
-  const handleRejectSubmit = (data) => {
-    // Handle API submission here
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [sponsoredDates, setSponsoredDates] = useState([]);
+
+  const { data, isLoading, refetch } =
+    useGetWomanSponsoredDatesQuery(currentPage);
+
+  useEffect(() => {
+    if (data?.response?.data?.sponsoredDates?.data) {
+      setSponsoredDates(data.response.data.sponsoredDates?.data);
+      setCurrentPage(data.response.data.sponsoredDates?.current_page);
+      setLastPage(data.response.data.sponsoredDates?.last_page);
+    } else {
+      setSponsoredDates(data?.response?.data?.sponsoredDates);
+    }
+  }, [data, currentPage]);
+
+  useEffect(() => {
+    refetch();
+  }, [currentPage]);
+
+  const handleRejectSubmit = (data) => {};
   useEffect(() => {
     AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
   }, []);
-  // Sample data for orders
 
-  const sponsoredData = [
-    {
-      name: "Jan Tschichold",
-      date: "23/04/2025",
-      offer: "$700",
-      img: chatimg4,
-      btnLabel: "Accepted",
-      btnClass: "extra-bg-4",
-      statusClass: "extra-color-4",
-      para: "Lorem Ipsum sit amet",
-      btnLabel1: "",
-      btnClass1: "",
-    },
-    {
-      name: "Jan Tschichold",
-      date: "2-Mar-24",
-      offer: "$700",
-      status: "Pending",
-      img: notify_img,
-      btnLabel: "Accept",
-      btnClass: "extra-bg-12",
-      statusClass: "extra-color-1",
-      btnLabel1: "Reject",
-      btnClass1: "extra-bg-1",
-    },
-    {
-      name: "Jan Tschichold",
-      date: "2-Mar-24",
-      offer: "$700",
-      status: "Pending",
-      img: notify_img,
-      btnLabel: "Accept",
-      btnClass: "extra-bg-12",
-      statusClass: "extra-color-1",
-      btnLabel1: "Reject",
-      btnClass1: "extra-bg-1",
-    },
-    {
-      name: "Jan Tschichold",
-      date: "2-Mar-24",
-      offer: "$700",
-      status: "Pending",
-      img: notify_img,
-      btnLabel: "Accept",
-      btnClass: "extra-bg-12",
-      statusClass: "extra-color-1",
-      btnLabel1: "Reject",
-      btnClass1: "extra-bg-1",
-    },
-    {
-      name: "Jan Tschichold",
-      date: "2-Mar-24",
-      offer: "$700",
-      status: "Pending",
-      img: notify_img,
-      btnLabel: "Accept",
-      btnClass: "extra-bg-12",
-      statusClass: "extra-color-1",
-      btnLabel1: "Reject",
-      btnClass1: "extra-bg-1",
-    },
-  ];
   useEffect(() => {
     document.body.style.backgroundImage = `url(${innerpages1})`;
     document.body.style.backgroundSize = "cover";
@@ -107,6 +65,52 @@ function DatesTab() {
       document.body.style.backgroundImage = "";
     };
   }, []);
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "accepted":
+        return "extra-color-4";
+      case "pending":
+        return "extra-color-1";
+      case "rejected":
+        return "extra-color-3";
+      case "countered":
+        return "extra-color-4";
+      default:
+        return "";
+    }
+  };
+
+  const Actions = (status) => {
+    if (status === "pending") {
+      return (
+        <>
+          <Link
+            className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-12`}
+          >
+            Accept
+          </Link>
+          <Link
+            className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-1`}
+            onClick={() => setShowRejectModal(true)}
+          >
+            Reject
+          </Link>
+        </>
+      );
+    }
+    if (status === "Accepted" || status === "Countered") {
+      return (
+        <Link
+          to={"/chat"}
+          className={`btn-write rounded-0 d-flex align-items-center justify-content-center extra-bg-4`}
+        >
+          Accepted
+        </Link>
+      );
+    }
+  };
+
   return (
     <>
       <Header />
@@ -124,98 +128,103 @@ function DatesTab() {
       </section>
       <section className="cart-section order-wrapper pt-5 mb-5 pb-5">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-12 ">
-              <div className="row">
-                <div className="col-lg-12 ps-lg-0 pe-lg-0">
-                  <div className="cart-table-wrapper">
-                    <div className="table-responsive">
-                      <table className="table">
-                        <thead className="bg-transparent">
-                          <tr>
-                            <th className="position-relative text-start">
-                              <h4 className="secondary-medium-font text-white level-8 mb-0">
-                                Name
-                              </h4>
-                            </th>
-                            <th className="position-relative">
-                              <h4 className="secondary-medium-font text-white level-8 mb-0">
-                                Date
-                              </h4>
-                            </th>
-                            <th className="position-relative">
-                              <h4 className="secondary-medium-font text-white level-8 mb-0">
-                                Offer
-                              </h4>
-                            </th>
-                            <th className="position-relative">
-                              <h4 className="secondary-medium-font text-white level-8 mb-0">
-                                Action
-                              </h4>
-                            </th>
-                            <th className="position-relative">
-                              <h4 className="secondary-medium-font text-white level-7"></h4>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {sponsoredData.map((item, index) => (
-                            <tr key={index}>
-                              <td className="secondary-medium-font  level-8 ">
-                                <div className="d-flex align-items-center gap-3">
-                                  <div className="">
-                                    {" "}
-                                    <img
-                                      src={item.img}
-                                      className="img-fluid wrapper-fluid-notification"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="">
-                                    <h4 class="secondary-medium-font mb-1 text-white text-start level-8 ">
-                                      {item.name}
-                                    </h4>
-                                    <p className="mb-0 text-white ">
-                                      {item.para}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="secondary-medium-font text-white level-8 text-center">
-                                {item.date}
-                              </td>
-                              <td className="secondary-medium-font text-white level-8 text-center">
-                                {item.offer}
-                              </td>
-                              <td className="secondary-medium-font text-white level-8 text-center">
-                                <div className="btn-wrapper">
-                                  <Link
-                                    to=""
-                                    className={`btn-write rounded-0 d-flex align-items-center justify-content-center ${item.btnClass}`}
-                                  >
-                                    {item.btnLabel}
-                                  </Link>
-                                </div>
-                              </td>
-                              <td className="secondary-medium-font level-8 text-center">
-                                <div className="btn-wrapper">
-                                  <Link
-                                    onClick={() => setShowRejectModal(true)}
-                                    className={`btn-write rounded-0 d-flex align-items-center justify-content-center ${item.btnClass1}`}
-                                  >
-                                    {item.btnLabel1}
-                                  </Link>
-                                </div>
-                              </td>
+          {isLoading ? (
+            <div className="row justify-content-center">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="row">
+              <div className="col-lg-12 ">
+                <div className="row">
+                  <div className="col-lg-12 ps-lg-0 pe-lg-0">
+                    <div className="cart-table-wrapper">
+                      <div className="table-responsive">
+                        <table className="table">
+                          <thead className="bg-transparent">
+                            <tr>
+                              <th className="position-relative text-start">
+                                <h4 className="secondary-medium-font text-white level-8 mb-0">
+                                  Name
+                                </h4>
+                              </th>
+                              <th className="position-relative">
+                                <h4 className="secondary-medium-font text-white level-8 mb-0">
+                                  Date
+                                </h4>
+                              </th>
+                              <th className="position-relative">
+                                <h4 className="secondary-medium-font text-white level-8 mb-0">
+                                  Offer
+                                </h4>
+                              </th>
+                              <th className="position-relative">
+                                <h4 className="secondary-medium-font text-white level-8 mb-0">
+                                  Action
+                                </h4>
+                              </th>
+                              <th className="position-relative">
+                                <h4 className="secondary-medium-font text-white level-7"></h4>
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="row">
-                      <div className="col-lg-12">
-                        <div className="container mt-5">
-                          <Pagination />
+                          </thead>
+                          <tbody>
+                            {sponsoredDates &&
+                              sponsoredDates.map((sponsorDate, index) => (
+                                <tr className="wrapper-table-d" key={index}>
+                                  <td className="secondary-medium-font  level-8 ">
+                                    <div className="d-flex align-items-center gap-3">
+                                      <div className="">
+                                        {" "}
+                                        <img
+                                          src={
+                                            sponsorDate.man?.profile_image_url
+                                          }
+                                          className="img-fluid wrapper-fluid-notification"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="">
+                                        <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
+                                          {sponsorDate.man?.name}
+                                        </h4>
+                                        <p className="mb-0 text-white ">
+                                          {sponsorDate.comment}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="secondary-medium-font text-white level-8 text-center">
+                                    {sponsorDate.date}
+                                  </td>
+                                  <td className="secondary-medium-font text-white level-8 text-center">
+                                    ${sponsorDate.offer_price}
+                                  </td>
+                                  <td className="secondary-medium-font text-white level-8 text-center">
+                                    <h4
+                                      className={`${getStatusClass(
+                                        sponsorDate.status
+                                      )} mb-0 secondary-medium-font level-8 text-capitalize`}
+                                    >
+                                      {sponsorDate.status}
+                                    </h4>
+                                  </td>
+                                  <td className="secondary-medium-font level-8 text-center d-flex">
+                                    {Actions(sponsorDate.status)}
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="row">
+                        <div className="col-lg-12">
+                          <div className="container mt-5">
+                            <Pagination
+                              currentPage={currentPage}
+                              lastPage={lastPage}
+                              onPageChange={(page) => setCurrentPage(page)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -223,7 +232,7 @@ function DatesTab() {
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
       <RejectModal

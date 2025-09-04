@@ -25,10 +25,33 @@ import LikeMatchNavigation from "../../../Components/LikeMatchNavigation";
 import ProfileHeader from "../../../Components/ProfileHeader";
 import LikeMatchCard from "../../../Components/LikeMatchCard";
 import Spinner from "../../../Components/Spinner";
+import { useGetWomanMatchProfilesQuery } from "../../../network/services/WomanAuth";
 
 function LikeMatchMatched() {
   const [filterBy, setFilterBy] = useState("matched");
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [matchedProfiles, setMatchedProfiles] = useState([]);
+
+  const { data, isLoading, refetch } = useGetWomanMatchProfilesQuery({
+    filterBy,
+    page: currentPage,
+  });
+
+  useEffect(() => {
+    if (data?.response?.data?.sponsoredDates?.data) {
+      setMatchedProfiles(data.response.data.sponsoredDates.data);
+      setCurrentPage(data.response.data.sponsoredDates?.current_page);
+      setLastPage(data.response.data.sponsoredDates?.last_page);
+    } else {
+      setMatchedProfiles(data?.response?.data?.sponsoredDates);
+    }
+  }, [data, currentPage]);
+
+  useEffect(() => {
+    refetch();
+  }, [currentPage, filterBy]);
 
   const activeStyle = {
     backgroundColor: "#c22751",
@@ -108,10 +131,8 @@ function LikeMatchMatched() {
                 <Link
                   className="secondary-medium-font"
                   onClick={() => {
-                    setIsLoading(true);
                     setTimeout(() => {
                       setFilterBy("unmatched");
-                      setIsLoading(false);
                     }, 1000);
                   }}
                   style={{
@@ -123,10 +144,8 @@ function LikeMatchMatched() {
                 </Link>
                 <Link
                   onClick={() => {
-                    setIsLoading(true);
                     setTimeout(() => {
                       setFilterBy("matched");
-                      setIsLoading(false);
                     }, 1000);
                   }}
                   className="secondary-medium-font text-white"
@@ -154,7 +173,11 @@ function LikeMatchMatched() {
               <div className="row mt-5 pt-4">
                 <div className="col-lg-2 mx-auto">
                   <div className="btn-wrapper">
-                    <Pagination />
+                    <Pagination
+                      currentPage={currentPage}
+                      lastPage={lastPage}
+                      onPageChange={(page) => setCurrentPage(page)}
+                    />
                   </div>
                 </div>
               </div>
