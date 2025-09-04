@@ -10,63 +10,63 @@ import { useLikeProfileMutation } from "../network/services/WomanAuth";
 import { toast } from "react-toastify";
 
 const FemaleMemberCard = ({ member, key }) => {
-	const packageTitle = member?.package?.slug
-		?.replace("-package", "")
-		.toUpperCase();
+  const packageTitle = member?.package?.slug
+    ?.replace("-package", "")
+    .toUpperCase();
 
-	const [showPricingModal, setShowPricingModal] = useState(false);
-	const [showPayModal, setShowPayModal] = useState(false);
-	const [showThankModal, setShowThankModal] = useState(false);
-	const [showVideoChatModal, setShowVideoChatModal] = useState(false);
-	const [showofferModal, setShowofferModal] = useState(false);
-	const [actionType, setActionType] = useState("like");
+  const [showPricingModal, setShowPricingModal] = useState(false);
+  const [showPayModal, setShowPayModal] = useState(false);
+  const [showThankModal, setShowThankModal] = useState(false);
+  const [showVideoChatModal, setShowVideoChatModal] = useState(false);
+  const [showofferModal, setShowofferModal] = useState(false);
+  const [actionType, setActionType] = useState("like");
 
-	const [likeProfile, { isLoading: isLikeProfileLoading }] =
-		useLikeProfileMutation();
+  const [likeProfile, { isLoading: isLikeProfileLoading }] =
+    useLikeProfileMutation();
 
-	const checkFeatureAccess = (member, feature) => {
-		const pkg = member?.package?.slug || "";
-		if (!pkg) return false;
+  const checkFeatureAccess = (member, feature) => {
+    const pkg = member?.package?.slug || "";
+    if (!pkg) return false;
 
-		if (pkg.includes("silver")) {
-			return feature === "chat";
-		}
-		if (pkg.includes("gold")) {
-			return feature === "chat" || feature === "video";
-		}
-		if (pkg.includes("platinum")) {
-			return true;
-		}
-		return false;
-	};
-	const navigate = useNavigate();
+    if (pkg.includes("silver")) {
+      return feature === "chat";
+    }
+    if (pkg.includes("gold")) {
+      return feature === "chat" || feature === "video";
+    }
+    if (pkg.includes("platinum")) {
+      return true;
+    }
+    return false;
+  };
+  const navigate = useNavigate();
 
-	const handleClick = (member) => {
-		navigate(`/women-details/${member.id}`, { state: { member } });
-	};
-	const handleofferClose = () => setShowofferModal(false);
-	const handleofferShow = () => setShowofferModal(true);
-	const profileAction = async (member_id, type) => {
-		try {
-			setActionType(type);
-			const response =
-				type == "like"
-					? await likeProfile({ liked_id: member_id }).unwrap()
-					: await likeProfile({ liked_id: member_id }).unwrap();
-			toast.success(response?.data?.message);
-			setActionType("like");
-		} catch (error) {
-			toast.error(error?.data?.message);
-		}
-	};
+  const handleClick = (member) => {
+    navigate(`/women-details/${member.id}`, { state: { member } });
+  };
+  const handleofferClose = () => setShowofferModal(false);
+  const handleofferShow = () => setShowofferModal(true);
+  const profileAction = async (member_id, type) => {
+    try {
+      setActionType(type);
+      const response =
+        type == "like"
+          ? await likeProfile({ liked_id: member_id }).unwrap()
+          : await likeProfile({ liked_id: member_id }).unwrap();
+      toast.success(response?.data?.message);
+      setActionType("like");
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
 
-	const Loader = () => (
-		<div className="btn-loader spinner-border text-warning" role="status">
-			<span className="visually-hidden">Loading...</span>
-		</div>
-	);
+  const Loader = () => (
+    <div className="btn-loader spinner-border text-warning" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  );
 
-	return (
+  return (
     <>
       <div key={key} className="col-lg-4 col-md-6 mb-4">
         <div className="profile-card">
@@ -132,7 +132,9 @@ const FemaleMemberCard = ({ member, key }) => {
 
           <div className="card-actions">
             <div>
-              <span className="like-count me-0 ms-1">{member.likes ?? 0}</span>
+              <span className="like-count me-0 ms-1">
+                {member.likes_count ?? 0}
+              </span>
               <div
                 className="wrapper-dash"
                 onClick={() => profileAction(member.id, "like")}

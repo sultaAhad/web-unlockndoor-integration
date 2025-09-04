@@ -6,6 +6,7 @@ import {
 	DELETE_VIDEO_WOMAN,
 	MAN_LIKE_WOMEN,
 	PURCHASE_PACKAGES_WOMEN,
+	WOMAN_CHATS,
 	WOMAN_MATCHED_PRIFILE,
 	WOMEN_DATA,
 	WOMEN_LOGIN,
@@ -125,7 +126,8 @@ export const {
 	useSendOtpMutation,
 	useVerifyOtpMutation,
 	useResetPasswordMutation,
-	useGetWomanMatchProfilesQuery
+	useGetWomanMatchProfilesQuery,
+
 } = WomenAuth;
 
 export default WomenAuth;

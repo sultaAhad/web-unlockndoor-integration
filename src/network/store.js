@@ -12,6 +12,7 @@ import GalleryApi from "./services/GalleryApi";
 import ManAuth from "./services/ManAuth";
 import WomenAuth from "./services/WomanAuth";
 import SponsoredDates from "./services/woman/SponsoredDates";
+import Chat from "./services/Chat";
 
 // ✅ combine all reducers
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
 	[ManAuth.reducerPath]: ManAuth.reducer,
 	[WomenAuth.reducerPath]: WomenAuth.reducer,
 	[SponsoredDates.reducerPath]: SponsoredDates.reducer,
+	[Chat.reducerPath]: Chat.reducer,
 });
 
 // ✅ persist config
@@ -47,6 +49,7 @@ const store = configureStore({
 			ManAuth.middleware,
 			WomenAuth.middleware,
 			SponsoredDates.middleware,
+			Chat.middleware,
 		]),
 });
 
