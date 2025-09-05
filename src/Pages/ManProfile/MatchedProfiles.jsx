@@ -44,14 +44,17 @@ function MatchedProfiles() {
 
   useEffect(() => {
     if (data?.response?.data?.matchedProfiles?.data) {
-      setProfiles((prev) =>
-        currentPage === 1
-          ? data.response.data.matchedProfiles.data
-          : [...prev, ...data.response.data.matchedProfiles.data]
-      );
-      setCurrentPage(data.response.data.matchedProfiles?.current_page);
-      setLastPage(data.response.data.matchedProfiles?.last_page);
+      let responseData = data?.response?.data?.matchedProfiles;
+      console.log(responseData);
+      setProfiles(responseData?.data);
+
+      // setProfiles((prev) =>
+      //   currentPage == 1 ? responseData.data : [...prev, ...responseData.data]
+      // );
+      setCurrentPage(responseData?.current_page);
+      setLastPage(responseData?.last_page);
     }
+    console.log(profiles);
   }, [data, currentPage]);
 
   useEffect(() => {
@@ -102,9 +105,19 @@ function MatchedProfiles() {
             </div>
           ) : (
             <div className="row">
-              {profiles.map((profile, index) => (
-                <MatchedProfileCard card={profile} index={index} />
-              ))}
+              {profiles && profiles.length > 0 ? (
+                profiles.map((profile, index) => (
+                  <MatchedProfileCard
+                    key={profile.id || index}
+                    card={profile}
+                    index={index}
+                  />
+                ))
+              ) : (
+                <h3 className="col-12 text-center text-secondary">
+                  No matched profiles found.
+                </h3>
+              )}
             </div>
           )}
           {!isLoading && lastPage > currentPage && (

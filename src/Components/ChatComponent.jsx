@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  useGetChatMessagesQuery,
   useGetChatsQuery,
   useSendMessageMutation,
   // useGetMessagesQuery,
@@ -55,31 +56,34 @@ function ChatComponent({ type }) {
   });
 
   const { data, isLoading: isChatLoading, refetch } = useGetChatsQuery(type);
+  const {
+    data: messagesData,
+    isLoading: isChatMessagesLoading,
+    refetch: refetchMessages,
+  } = useGetChatMessagesQuery({
+    type: type,
+    chat_id: selectedChat?.chat_id,
+  });
   const [sendMessage, sendMessageResponse] = useSendMessageMutation();
-
-  // const {
-  //   data: messagesData,
-  //   refetch: refetchMessages,
-  //   isLoading: isMessagesLoading,
-  // } = useGetMessagesQuery(selectedChat?.chat_id, {
-  //   skip: !selectedChat?.chat_id,
-  // });
 
   useEffect(() => {
     if (data?.chats) setChats(data.chats);
   }, [data]);
 
-  // useEffect(() => {
-  //   if (messagesData?.messages) {
-  //     setMessages(messagesData.messages.map(formateMessage));
-  //   }
-  // }, [messagesData]);
+  useEffect(() => {
+    if (messagesData?.chat) {
+      let messages = messagesData?.chat?.messages.map((message) =>
+        formateMessage(message)
+      );
+      setMessages(messages);
+    }
+  }, [messagesData]);
 
-  // useEffect(() => {
-  //   if (selectedChat?.chat_id) {
-  //     refetchMessages();
-  //   }
-  // }, [selectedChat?.chat_id, refetchMessages]);
+  useEffect(() => {
+    if (selectedChat?.chat_id) {
+      refetchMessages();
+    }
+  }, [selectedChat?.chat_id, refetchMessages]);
 
   const sendMessageHandle = async () => {
     try {
@@ -180,6 +184,12 @@ function ChatComponent({ type }) {
     date: formatDate(message.created_at),
     attachment: message.file_urls?.[0] || null,
   });
+
+  const Loader = () => (
+    <div className="btn-loader spinner-border text-warning" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  );
 
   const sendMessageFormHTML = () => {
     if (!selectedChat) return null;
@@ -298,7 +308,14 @@ function ChatComponent({ type }) {
   };
 
   const chatsHTML = () => {
-    if (isChatLoading) return null;
+    if (isChatLoading) {
+      return (
+        <div className="col-md-12 py-5 text-center">
+          <Loader />
+        </div>
+      );
+    }
+
     return (
       <ul className="p-0 wrapper-chat-b">
         {chats.length > 0 ? (
@@ -443,7 +460,7 @@ function ChatComponent({ type }) {
                     {message.type === "incoming" && (
                       <img
                         src={message.profile_image_url}
-                        className="img-fluid chat-users"
+                        className="img-fluid chat-users rounded-circle"
                         alt={`User ${index + 1}`}
                       />
                     )}
@@ -476,7 +493,7 @@ function ChatComponent({ type }) {
                     {message.type === "outgoing" && (
                       <img
                         src={message.profile_image_url}
-                        className="img-fluid chat-users"
+                        className="img-fluid chat-users rounded-circle"
                         alt={`User ${index + 1}`}
                       />
                     )}

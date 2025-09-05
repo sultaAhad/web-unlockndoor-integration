@@ -150,7 +150,11 @@ const FemaleMemberCard = ({ member, key }) => {
                   {isLikeProfileLoading && actionType === "like" ? (
                     <Loader />
                   ) : (
-                    <i className="fa-solid fa-heart"></i>
+                    <i
+                      className={`fa-solid fa-heart ${
+                        femaleMember?.is_liked ? "text-danger" : ""
+                      }`}
+                    ></i>
                   )}
                 </div>
               </div>

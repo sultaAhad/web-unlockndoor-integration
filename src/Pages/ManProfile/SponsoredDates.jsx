@@ -155,52 +155,53 @@ function SponsoredDates() {
                             </tr>
                           </thead>
                           <tbody>
-                            {sponsoredDates.map((sponsorDate, index) => (
-                              <tr className="wrapper-table-d" key={index}>
-                                <td className="secondary-medium-font  level-8 ">
-                                  <div className="d-flex align-items-center gap-3">
-                                    <div className="">
-                                      {" "}
-                                      <img
-                                        src={
-                                          sponsorDate.women?.profile_image_url
-                                        }
-                                        className="img-fluid wrapper-fluid-notification"
-                                        alt=""
-                                      />
+                            {sponsoredDates != null &&
+                              sponsoredDates.map((sponsorDate, index) => (
+                                <tr className="wrapper-table-d" key={index}>
+                                  <td className="secondary-medium-font  level-8 ">
+                                    <div className="d-flex align-items-center gap-3">
+                                      <div className="">
+                                        {" "}
+                                        <img
+                                          src={
+                                            sponsorDate.women?.profile_image_url
+                                          }
+                                          className="img-fluid wrapper-fluid-notification"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="">
+                                        <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
+                                          {sponsorDate.women?.name}
+                                        </h4>
+                                        <p className="mb-0 text-white ">
+                                          {sponsorDate.comment}
+                                        </p>
+                                      </div>
                                     </div>
-                                    <div className="">
-                                      <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
-                                        {sponsorDate.women?.name}
-                                      </h4>
-                                      <p className="mb-0 text-white ">
-                                        {sponsorDate.comment}
-                                      </p>
+                                  </td>
+                                  <td className="secondary-medium-font text-white level-8 text-center">
+                                    {sponsorDate.date}
+                                  </td>
+                                  <td className="secondary-medium-font text-white level-8 text-center">
+                                    ${sponsorDate.offer_price}
+                                  </td>
+                                  <td className="secondary-medium-font text-white level-8 text-center">
+                                    <h4
+                                      className={`${getStatusClass(
+                                        sponsorDate.status
+                                      )} mb-0 secondary-medium-font level-8 text-capitalize`}
+                                    >
+                                      {sponsorDate.status}
+                                    </h4>
+                                  </td>
+                                  <td className="secondary-medium-font level-8 text-center">
+                                    <div className="btn-wrapper">
+                                      {Actions(sponsorDate.status)}
                                     </div>
-                                  </div>
-                                </td>
-                                <td className="secondary-medium-font text-white level-8 text-center">
-                                  {sponsorDate.date}
-                                </td>
-                                <td className="secondary-medium-font text-white level-8 text-center">
-                                  ${sponsorDate.offer_price}
-                                </td>
-                                <td className="secondary-medium-font text-white level-8 text-center">
-                                  <h4
-                                    className={`${getStatusClass(
-                                      sponsorDate.status
-                                    )} mb-0 secondary-medium-font level-8 text-capitalize`}
-                                  >
-                                    {sponsorDate.status}
-                                  </h4>
-                                </td>
-                                <td className="secondary-medium-font level-8 text-center">
-                                  <div className="btn-wrapper">
-                                    {Actions(sponsorDate.status)}
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
+                                  </td>
+                                </tr>
+                              ))}
                           </tbody>
                         </table>
                       </div>
