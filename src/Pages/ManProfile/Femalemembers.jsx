@@ -90,7 +90,7 @@ function Femalemembers({ member }) {
               <div className="col-lg-2 mx-auto">
                 <button
                   className="btn-write secondary-medium-font load-more-wrapper rounded-0 d-flex align-items-center justify-content-center extra-bg-1 border-none"
-                  onClick={() => setCurrentPage(page++)}
+                  onClick={() => setCurrentPage((page) => page + 1)}
                 >
                   Load More
                 </button>
