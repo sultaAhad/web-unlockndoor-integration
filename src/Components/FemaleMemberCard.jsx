@@ -8,6 +8,7 @@ import ThankYouModal from "./ChatModals/ThankYouModal";
 import VideoChatModal from "./ChatModals/videoChatModal";
 import { useLikeProfileMutation } from "../network/services/WomanAuth";
 import { toast } from "react-toastify";
+import LikeSwapButtons from "./LikeSwapButtons";
 
 const FemaleMemberCard = ({ member, key }) => {
   const packageTitle = member?.package?.slug
@@ -20,10 +21,6 @@ const FemaleMemberCard = ({ member, key }) => {
   const [showThankModal, setShowThankModal] = useState(false);
   const [showVideoChatModal, setShowVideoChatModal] = useState(false);
   const [showofferModal, setShowofferModal] = useState(false);
-  const [actionType, setActionType] = useState("like");
-
-  const [likeProfile, { isLoading: isLikeProfileLoading }] =
-    useLikeProfileMutation();
 
   const checkFeatureAccess = (member, feature) => {
     const pkg = member?.package?.slug || "";
@@ -47,31 +44,6 @@ const FemaleMemberCard = ({ member, key }) => {
   };
   const handleofferClose = () => setShowofferModal(false);
   const handleofferShow = () => setShowofferModal(true);
-  const profileAction = async (member_id, type) => {
-    try {
-      setActionType(type);
-      const response =
-        type == "like"
-          ? await likeProfile({ liked_id: member_id }).unwrap()
-          : await likeProfile({ liked_id: member_id }).unwrap();
-
-      setFemaleMember((pre) => ({
-        ...pre,
-        likes_count: response.likes_count,
-        is_liked: response.is_liked,
-      }));
-      toast.success(response?.data?.message);
-      setActionType("like");
-    } catch (error) {
-      toast.error(error?.data?.message);
-    }
-  };
-
-  const Loader = () => (
-    <div className="btn-loader spinner-border text-warning" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
-  );
 
   return (
     <>
@@ -142,34 +114,32 @@ const FemaleMemberCard = ({ member, key }) => {
               <span className="like-count me-0 ms-1">
                 {femaleMember.likes_count ?? 0}
               </span>
-              <div
-                className="wrapper-dash"
-                onClick={() => profileAction(femaleMember.id, "like")}
-              >
-                <div className="icon-circle linear-bg">
-                  {isLikeProfileLoading && actionType === "like" ? (
-                    <Loader />
-                  ) : (
-                    <i
-                      className={`fa-solid fa-heart ${
-                        femaleMember?.is_liked ? "text-danger" : ""
-                      }`}
-                    ></i>
-                  )}
-                </div>
+              <div className="wrapper-dash">
+                <LikeSwapButtons
+                  type={"like"}
+                  femaleMember={femaleMember}
+                  responseAction={(response) => {
+                    setFemaleMember((pre) => ({
+                      ...pre,
+                      likes_count: response.likes_count,
+                      is_liked: response.is_liked,
+                    }));
+                  }}
+                />
               </div>
             </div>
-            <div
-              className="wrapper-dash"
-              onClick={() => profileAction(femaleMember.id, "swap")}
-            >
-              <div className="icon-circle">
-                {isLikeProfileLoading && actionType === "swap" ? (
-                  <Loader />
-                ) : (
-                  <i className="fa-solid fa-xmark close-icon"></i>
-                )}
-              </div>
+            <div className="wrapper-dash">
+              <LikeSwapButtons
+                type={"swap"}
+                femaleMember={femaleMember}
+                responseAction={(response) => {
+                  setFemaleMember((pre) => ({
+                    ...pre,
+                    likes_count: response.likes_count,
+                    is_liked: response.is_liked,
+                  }));
+                }}
+              />
             </div>
           </div>
         </div>
