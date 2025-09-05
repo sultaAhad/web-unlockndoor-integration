@@ -329,7 +329,9 @@ function ChatComponent({ type }) {
                   to_id: chat.participant_id,
                 }));
               }}
-              className="d-flex align-items-start border-bottom justify-content-between py-3 px-3"
+              className={`d-flex align-items-start border-bottom justify-content-between py-3 px-3 
+                ${chat.chat_id == selectedChat?.chat_id ? "bg-massage" : ""}
+                `}
             >
               <div className="d-flex align-items-center gap-3">
                 <img
@@ -371,11 +373,11 @@ function ChatComponent({ type }) {
     if (!selectedChat) return null;
     return (
       <>
-        <div className="col-lg-6">
+        <div className="col-lg-6 selected_chat">
           <div className="d-flex align-items-center gap-3">
             <img
               src={selectedChat?.participant_profile}
-              className="img-fluid border-golder w-25 rounded-circle"
+              className="img-fluid border-golder rounded-circle "
               alt="User"
             />
             <h4 className="secondary-regular-font mb-0 text-white level-7 text-capitalize">
@@ -424,97 +426,111 @@ function ChatComponent({ type }) {
   };
 
   return (
-    <div className="chat-wrapper">
-      <div className="row">
-        <div className="col-lg-4">
-          <div className="wrapper-member-pp wrapper-chat-input d-flex align-items-center gap-2">
-            <img src={searchchat} className="img-fluid" alt="" />
-            <div className="input-group ">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search here...."
-                aria-label="Search here...."
-              />
+    <>
+      <style>
+        {`
+          .selected_chat img {
+            height: 55px;
+            width: 55px;
+          }
+        `}
+      </style>
+      <div className="chat-wrapper">
+        <div className="row">
+          <div className="col-lg-4">
+            <div className="wrapper-member-pp wrapper-chat-input d-flex align-items-center gap-2">
+              <img src={searchchat} className="img-fluid" alt="" />
+              <div className="input-group ">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here...."
+                  aria-label="Search here...."
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-8">
+            <div className="row align-items-center justify-content-between">
+              {selectedChatHTML()}
             </div>
           </div>
         </div>
-        <div className="col-lg-8">
-          <div className="row align-items-center justify-content-between">
-            {selectedChatHTML()}
+        <div className="row">
+          <div className="col-lg-4">
+            <div className="chat-user">{chatsHTML()}</div>
           </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-lg-4">
-          <div className="chat-user">{chatsHTML()}</div>
-        </div>
-        <div className="col-lg-8 mt-4">
-          <div className="multichat1">
-            <div className="multichat ">
-              {[...messages].reverse().map((message, index) => (
-                <div key={message.id || index}>
-                  <div
-                    className={`${message.type}-massage d-flex align-items-center gap-3 mt-3 mb-3`}
-                  >
-                    {message.type === "incoming" && (
-                      <img
-                        src={message.profile_image_url}
-                        className="img-fluid chat-users rounded-circle"
-                        alt={`User ${index + 1}`}
-                      />
-                    )}
-                    <div
-                      className={`bg-massage bg-${message.type} ${
-                        message.newclass || ""
-                      }`}
-                    >
-                      <div className="d-flex align-items-center justify-content-between">
-                        <h5 className="secondary-medium-font mb-2 mt-2 text-white level-8">
-                          {/* You can show sender name if available */}
-                        </h5>
-                        <h4 className="secondary-regular-font mb-0 extra-color-13 level-8">
-                          {message.time}
-                        </h4>
-                      </div>
-                      {message.message && (
-                        <p className="mb-0 extra-color-13 secondary-light-font">
-                          {message.message}
-                        </p>
-                      )}
-                      {message.attachment && (
-                        <img
-                          src={message.attachment}
-                          alt="Attachment"
-                          className="img-fluid mt-2"
-                        />
-                      )}
-                    </div>
-                    {message.type === "outgoing" && (
-                      <img
-                        src={message.profile_image_url}
-                        className="img-fluid chat-users rounded-circle"
-                        alt={`User ${index + 1}`}
-                      />
-                    )}
+          <div className="col-lg-8 mt-4">
+            <div className="multichat1">
+              <div className="multichat ">
+                {isChatMessagesLoading ? (
+                  <div className="col-md-12 py-5 text-center">
+                    <Loader />
                   </div>
-                  {message.date && (
-                    <div className="row">
-                      <div className="col-lg-5 mx-auto position-relative">
-                        <h5 className="wrapper-dash-gg dash-date level-8 extra-color-16 secondary-regular-font text-center">
-                          {message.date}
-                        </h5>
+                ) : (
+                  [...messages].reverse().map((message, index) => (
+                    <div key={message.id || index}>
+                      <div
+                        className={`${message.type}-massage d-flex align-items-center gap-3 mt-3 mb-3`}
+                      >
+                        {message.type === "incoming" && (
+                          <img
+                            src={message.profile_image_url}
+                            className="img-fluid chat-users rounded-circle"
+                            alt={`User ${index + 1}`}
+                          />
+                        )}
+                        <div
+                          className={`bg-massage bg-${message.type} ${
+                            message.newclass || ""
+                          }`}
+                        >
+                          <div className="d-flex align-items-center justify-content-between">
+                            <h5 className="secondary-medium-font mb-2 mt-2 text-white level-8"></h5>
+                            <h4 className="secondary-regular-font mb-0 extra-color-13 level-8">
+                              {message.time}
+                            </h4>
+                          </div>
+                          {message.message && (
+                            <p className="mb-0 extra-color-13 secondary-light-font">
+                              {message.message}
+                            </p>
+                          )}
+                          {message.attachment && (
+                            <img
+                              src={message.attachment}
+                              alt="Attachment"
+                              className="img-fluid mt-2"
+                            />
+                          )}
+                        </div>
+                        {message.type === "outgoing" && (
+                          <img
+                            src={message.profile_image_url}
+                            className="img-fluid chat-users rounded-circle"
+                            alt={`User ${index + 1}`}
+                          />
+                        )}
                       </div>
+                      {message.date && (
+                        <div className="row">
+                          <div className="col-lg-5 mx-auto position-relative">
+                            <h5 className="wrapper-dash-gg dash-date level-8 extra-color-16 secondary-regular-font text-center">
+                              {message.date}
+                            </h5>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  ))
+                )}
+              </div>
+              {sendMessageFormHTML()}
             </div>
-            {sendMessageFormHTML()}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
