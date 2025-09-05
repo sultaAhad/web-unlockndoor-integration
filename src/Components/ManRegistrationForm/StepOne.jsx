@@ -167,7 +167,7 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 													</p>
 												)}
 											</div>
-											<div className="form-group mb-3">
+											{/* <div className="form-group mb-3">
 												<input
 													type="number"
 													name="can_pay"
@@ -181,7 +181,7 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 														{formErrors.can_pay[0]}
 													</p>
 												)}
-											</div>
+											</div> */}
 
 											<div className="form-group position-relative mb-4">
 												<DatePicker
