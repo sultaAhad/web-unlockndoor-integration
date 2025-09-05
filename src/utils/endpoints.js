@@ -71,4 +71,5 @@ export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
 export const DELETE_VIDEO_WOMAN = `auth-women/delete-video`;
 export const WOMAN_SPONSORED_DATES = `auth-women/sponsored-dates`;
 export const WOMAN_MATCHED_PRIFILE = `auth-women/matched-profiles`;
-export const WOMAN_CHATS = `auth-women/chats?type=women`;
+export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;
+export const SEND_CHAT_MESSAGE_API = (type) => `auth-${type}/send-message`;

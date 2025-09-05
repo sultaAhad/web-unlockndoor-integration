@@ -867,6 +867,7 @@ span.green {
 	flex-direction: column-reverse;
 	display: flex;
 	margin-bottom: 10px;
+	min-height: 500px;
 }
 
 .bgtranspp {
@@ -880,6 +881,7 @@ span.green {
 	background: #ffffff1a;
 	padding: 20px;
 	border-radius: 10px;
+	
 }
 
 .multichat::-webkit-scrollbar {

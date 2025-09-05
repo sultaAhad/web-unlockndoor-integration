@@ -1,6 +1,6 @@
 // services/WomanAuth.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { WOMAN_CHATS, WOMAN_SPONSORED_DATES } from "../../utils/endpoints";
+import { CHATS_API, SEND_CHAT_MESSAGE_API } from "../../utils/endpoints";
 import { BASE_URL } from "../../utils/base_url";
 
 export const Chat = createApi({
@@ -13,26 +13,23 @@ export const Chat = createApi({
 			if (token) {
 				headers.set("Authorization", `Bearer ${token}`);
 			}
-
 			return headers;
 		},
 	}),
 	endpoints: (build) => ({
 		getChats: build.query({
 			query: (type) => ({
-				url: type = 'woman' ? WOMAN_CHATS : WOMAN_CHATS,
+				url: CHATS_API(type),
 				method: "GET",
 			}),
 		}),
 		sendMessage: build.mutation({
-			query: (data, type) => ({
-				url: type = 'woman' ? WOMAN_CHATS : WOMAN_CHATS,
+			query: (data) => ({
+				url: SEND_CHAT_MESSAGE_API(data?.type),
 				method: "POST",
 				body: data,
 			}),
 		}),
-
-
 	}),
 });
 

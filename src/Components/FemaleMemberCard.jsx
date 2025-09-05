@@ -14,6 +14,7 @@ const FemaleMemberCard = ({ member, key }) => {
     ?.replace("-package", "")
     .toUpperCase();
 
+  const [femaleMember, setFemaleMember] = useState(member);
   const [showPricingModal, setShowPricingModal] = useState(false);
   const [showPayModal, setShowPayModal] = useState(false);
   const [showThankModal, setShowThankModal] = useState(false);
@@ -53,6 +54,12 @@ const FemaleMemberCard = ({ member, key }) => {
         type == "like"
           ? await likeProfile({ liked_id: member_id }).unwrap()
           : await likeProfile({ liked_id: member_id }).unwrap();
+
+      setFemaleMember((pre) => ({
+        ...pre,
+        likes_count: response.likes_count,
+        is_liked: response.is_liked,
+      }));
       toast.success(response?.data?.message);
       setActionType("like");
     } catch (error) {
@@ -74,7 +81,7 @@ const FemaleMemberCard = ({ member, key }) => {
             {packageTitle}
           </span>
           <div className="card-icons">
-            {checkFeatureAccess(member, "chat") && (
+            {checkFeatureAccess(femaleMember, "chat") && (
               <div className="icon-circle iconwra1">
                 <Link to="/chat">
                   <img src={mchat} alt="chat" />
@@ -82,7 +89,7 @@ const FemaleMemberCard = ({ member, key }) => {
               </div>
             )}
 
-            {checkFeatureAccess(member, "video") && (
+            {checkFeatureAccess(femaleMember, "video") && (
               <div className="icon-circle iconwra2">
                 <Link
                   to="#"
@@ -96,7 +103,7 @@ const FemaleMemberCard = ({ member, key }) => {
               </div>
             )}
 
-            {checkFeatureAccess(member, "offer") && (
+            {checkFeatureAccess(femaleMember, "offer") && (
               <div className="icon-circle iconwra3">
                 <Link
                   to="#"
@@ -112,7 +119,7 @@ const FemaleMemberCard = ({ member, key }) => {
           </div>
 
           <img
-            src={member.profile_image_url}
+            src={femaleMember.profile_image_url}
             alt="profile"
             className="card-image"
           />
@@ -123,21 +130,21 @@ const FemaleMemberCard = ({ member, key }) => {
 
           <div
             className="card-footer"
-            onClick={() => handleClick(member)}
+            onClick={() => handleClick(femaleMember)}
             style={{ cursor: "pointer" }}
           >
-            <h4>{member.name}</h4>
-            <p>{member.nationality || member.address}</p>
+            <h4>{femaleMember.name}</h4>
+            <p>{femaleMember.nationality || femaleMember.address}</p>
           </div>
 
           <div className="card-actions">
             <div>
               <span className="like-count me-0 ms-1">
-                {member.likes_count ?? 0}
+                {femaleMember.likes_count ?? 0}
               </span>
               <div
                 className="wrapper-dash"
-                onClick={() => profileAction(member.id, "like")}
+                onClick={() => profileAction(femaleMember.id, "like")}
               >
                 <div className="icon-circle linear-bg">
                   {isLikeProfileLoading && actionType === "like" ? (
@@ -150,7 +157,7 @@ const FemaleMemberCard = ({ member, key }) => {
             </div>
             <div
               className="wrapper-dash"
-              onClick={() => profileAction(member.id, "swap")}
+              onClick={() => profileAction(femaleMember.id, "swap")}
             >
               <div className="icon-circle">
                 {isLikeProfileLoading && actionType === "swap" ? (
@@ -168,7 +175,7 @@ const FemaleMemberCard = ({ member, key }) => {
       <OfferModal
         showofferModal={showofferModal}
         handleofferClose={handleofferClose}
-        womenId={member?.id}
+        womenId={femaleMember?.id}
       />
 
       <PricingModal
