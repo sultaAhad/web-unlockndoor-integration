@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import { innerpages1 } from "../../Constant/Index";
-import Chat from "../../Components/Chat";
+import ChatComponent from "../../Components/ChatComponent";
 
 const WomenChat = () => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +27,7 @@ const WomenChat = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-12 ">
-              <Chat type={"woman"} />
+              <ChatComponent type={"women"} />
             </div>
           </div>
         </div>

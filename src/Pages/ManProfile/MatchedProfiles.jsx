@@ -58,8 +58,6 @@ function MatchedProfiles() {
     refetch();
   }, [currentPage]);
 
-  // const profiles =
-  //   matchedProfiles?.response?.data?.matchedProfiles?.data ?? [];
   const [showPricingModal, setShowPricingModal] = useState(false);
   const handlePricingClose = () => setShowPricingModal(false);
   const handlePricingShow = () => setShowPricingModal(true);
@@ -114,7 +112,7 @@ function MatchedProfiles() {
               <div className="col-lg-2 mx-auto">
                 <button
                   className="btn-write secondary-medium-font load-more-wrapper rounded-0 d-flex align-items-center justify-content-center extra-bg-1 border-none"
-                  onClick={() => setCurrentPage(page++)}
+                  onClick={() => setCurrentPage((page) => page + 1)}
                 >
                   Load More
                 </button>
