@@ -29,7 +29,6 @@ const StepperMale = () => {
 		password: "",
 		occupation: "",
 		income: "",
-		can_pay: "",
 		skills: [],
 		profile_image: null,
 		cover_image: null,

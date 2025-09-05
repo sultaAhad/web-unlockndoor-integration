@@ -32,7 +32,6 @@ export const validateMenRegistration = (registerman, step) => {
 		if (!registerman.profile_image) {
 			errors.profile_image = ["Profile image is required"];
 		}
-		if (!registerman.can_pay) errors.can_pay = ["Please select if you can pay"];
 	}
 
 	// Step 2: Occupation & Skills
@@ -263,6 +262,7 @@ export const validateforget = (email, setForgotErrors) => {
 	setForgotErrors(errors);
 	return isValid;
 };
+
 export const validateOtpData = (email, otp, setErrors) => {
 	let isValid = true;
 	let errors = {};

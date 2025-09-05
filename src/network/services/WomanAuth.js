@@ -48,7 +48,7 @@ export const WomenAuth = createApi({
 			}),
 		}),
 		// OTP Send
-		sendOtp: build.mutation({
+		womenSendOtp: build.mutation({
 			query: (data) => ({
 				url: WOMEN_LOGIN_OTP_SAND,
 				method: "POST",
@@ -56,13 +56,14 @@ export const WomenAuth = createApi({
 			}),
 		}),
 		// OTP Verify
-		verifyOtp: build.mutation({
+		womenVerifyOtp: build.mutation({
 			query: (data) => ({
 				url: WOMEN_LOGIN_OTP_VARIFY,
 				method: "POST",
 				body: data,
 			}),
 		}),
+
 		// Reset Password
 		resetPassword: build.mutation({
 			query: (data) => ({
@@ -123,11 +124,10 @@ export const {
 	useDeleteVideoWomanMutation,
 	useWomanDataMutation,
 	useLikeProfileMutation,
-	useSendOtpMutation,
-	useVerifyOtpMutation,
+	useWomenSendOtpMutation,
+	useWomenVerifyOtpMutation,
 	useResetPasswordMutation,
 	useGetWomanMatchProfilesQuery,
-
 } = WomenAuth;
 
 export default WomenAuth;

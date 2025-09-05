@@ -24,6 +24,7 @@ function Header() {
 
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
 	const [selectedGender, setSelectedGender] = useState("");
+	const [userEmail, setUserEmail] = useState(""); // ✅ add this line
 
 	// ✅ Get user from Redux
 	const { user } = useSelector((state) => state.auth);
@@ -133,27 +134,35 @@ function Header() {
 			<LoginModal
 				show={showModal2}
 				onClose={() => setShowModal2(false)}
-				onForgotPassword={() => {
+				onForgotPassword={(gender) => {
+					setSelectedGender(gender);
 					setShowModal2(false);
 					setShowModal3(true);
 				}}
 			/>
+
 			<ForgotPasswordModal
 				show={showModal3}
 				onClose={() => setShowModal3(false)}
-				onContinue={() => {
+				gender={selectedGender}
+				onContinue={(email) => {
+					setUserEmail(email); // email save
 					setShowModal3(false);
-					setShowModal4(true);
+					setShowModal4(true); // OTP modal open
 				}}
 			/>
+
 			<OtpModal
 				show={showModal4}
 				onClose={() => setShowModal4(false)}
 				onContinue={() => {
 					setShowModal4(false);
-					setShowModal5(true);
+					setShowModal5(true); // ✅ open reset password modal only if OTP is valid
 				}}
+				gender={selectedGender} // ✅ use selectedGender from state
+				email={userEmail} // ✅ use userEmail saved from ForgotPasswordModal
 			/>
+
 			<NewPasswordModal
 				show={showModal5}
 				onClose={() => setShowModal5(false)}
