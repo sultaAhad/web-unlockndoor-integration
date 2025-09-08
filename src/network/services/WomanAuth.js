@@ -64,7 +64,7 @@ export const WomenAuth = createApi({
 		}),
 
 		// Reset Password
-		resetPassword: build.mutation({
+		resetPasswordWomen: build.mutation({
 			query: (data) => ({
 				url: WOMEN_LOGIN_CHANGEPASSWORD_RESET,
 				method: "POST",
@@ -125,7 +125,7 @@ export const {
 	useLikeProfileMutation,
 	useWomenSendOtpMutation,
 	useWomenVerifyOtpMutation,
-	useResetPasswordMutation,
+	useResetPasswordWomenMutation,
 	useGetWomanMatchProfilesQuery,
 } = WomenAuth;
 
