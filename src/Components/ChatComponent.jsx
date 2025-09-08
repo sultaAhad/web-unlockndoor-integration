@@ -13,7 +13,7 @@ import {
   paperclip,
   searchchat,
 } from "../Constant/Index";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
@@ -28,6 +28,22 @@ function ChatComponent({ type }) {
   const [messages, setMessages] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const messagesEndRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state != null) {
+      setSelectedChat({
+        chat_id: 0,
+        participant_id: location?.state?.id,
+        participant_name: location?.state?.name,
+        participant_profile: location?.state?.profile_image_url,
+      });
+      setForm((pre) => ({
+        ...pre,
+        to_id: location?.state?.id,
+      }));
+    }
+  }, [location?.state]);
 
   const toggleDropdown1 = () => setDropdownOpen(!dropdownOpen);
 
@@ -108,7 +124,10 @@ function ChatComponent({ type }) {
         }));
         scrollToBottom();
         refetch();
-        // refetchMessages();
+        setSelectedChat((pre) => ({
+          ...pre,
+          chat_id: response.chat?.id,
+        }));
       }
     } catch (error) {
       console.log(error);

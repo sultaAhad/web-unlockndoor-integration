@@ -26,7 +26,7 @@ function MatchedProfileCard({ card, index }) {
         <div className="card-bottom d-flex justify-content-between align-items-end">
           {/* Left: Icons */}
           <div className="card-left-icons d-flex align-items-center gap-2">
-            <Link to="/chat" className="bottom-icon comment-icon">
+            <Link to="/chat" state={card} className="bottom-icon comment-icon">
               <img src={mchat} alt="chat" className="chat-image-icon" />
             </Link>
             <Link
