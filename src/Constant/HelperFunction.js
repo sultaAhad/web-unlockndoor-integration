@@ -306,11 +306,11 @@ export const validateChangePassword = (changePassword, setErrors) => {
 	}
 
 	// ✅ Confirm password validation
-	if (!changePassword.confirm_password?.trim()) {
-		errors.confirm_password = ["Confirm password is required"];
+	if (!changePassword.confirmPassword?.trim()) {
+		errors.confirmPassword = ["Confirm password is required"];
 		isValid = false;
-	} else if (changePassword.password !== changePassword.confirm_password) {
-		errors.confirm_password = ["Passwords do not match"];
+	} else if (changePassword.password !== changePassword.confirmPassword) {
+		errors.confirmPassword = ["Passwords do not match"];
 		isValid = false;
 	}
 

@@ -166,6 +166,8 @@ function Header() {
 			<NewPasswordModal
 				show={showModal5}
 				onClose={() => setShowModal5(false)}
+				role={selectedGender} // 👈 gender bhejna zaroori hai
+				email={userEmail} // 👈 email bhi bhejna zaroori hai
 			/>
 
 			{/* Category Modal */}

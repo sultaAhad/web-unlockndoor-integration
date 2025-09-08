@@ -112,13 +112,13 @@ const Stepper = () => {
 	useEffect(() => {
 		if (response?.isSuccess) {
 			dispatch(
-        setUserToken({
-          user: response?.data,
-          token,
-          remember: true,
-          gender: "female", // ✅ pass gender
-        })
-      );
+				setUserToken({
+					user: response?.data,
+					//   token,
+					remember: true,
+					gender: "female", // ✅ pass gender
+				}),
+			);
 			Swal.fire({
 				title: "Success",
 				text: response?.data?.message || "Registration successful",

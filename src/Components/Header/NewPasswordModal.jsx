@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
@@ -6,11 +6,11 @@ import { validateChangePassword } from "../../Constant/HelperFunction";
 import { useResetPasswordMutation } from "../../network/services/ManAuth";
 import { useResetPasswordWomenMutation } from "../../network/services/WomanAuth";
 
-const NewPasswordModal = ({ show, onClose, role }) => {
+const NewPasswordModal = ({ show, onClose, role, email }) => {
 	const [form, setForm] = useState({
-		email: "",
+		email: email || "",
 		password: "",
-		confirm_password: "",
+		confirmPassword: "",
 	});
 	const [errors, setErrors] = useState({});
 	const [showPassword, setShowPassword] = useState([false, false]);
@@ -21,6 +21,12 @@ const NewPasswordModal = ({ show, onClose, role }) => {
 		useResetPasswordWomenMutation();
 
 	const loading = isManLoading || isWomenLoading;
+
+	useEffect(() => {
+		if (email) {
+			setForm((prev) => ({ ...prev, email }));
+		}
+	}, [email]);
 
 	const togglePasswordVisibility = (index) => {
 		const updated = [...showPassword];
@@ -36,16 +42,19 @@ const NewPasswordModal = ({ show, onClose, role }) => {
 		if (!validateChangePassword(form, setErrors)) return;
 
 		try {
-			const formData = new FormData();
-			formData.append("email", form.email);
-			formData.append("password", form.password);
-			formData.append("confirm_password", form.confirm_password);
+			const payload = {
+				email: form.email,
+				password: form.password,
+				confirmPassword: form.confirmPassword, // ya password_confirmation agar backend me ye hai
+			};
+
+			console.log("🚀 Sending payload:", payload);
 
 			let res;
 			if (role === "male") {
-				res = await ResetPassword(formData).unwrap();
+				res = await ResetPassword(payload).unwrap();
 			} else {
-				res = await ResetPasswordWomen(formData).unwrap();
+				res = await ResetPasswordWomen(payload).unwrap();
 			}
 
 			Swal.fire({
@@ -55,12 +64,24 @@ const NewPasswordModal = ({ show, onClose, role }) => {
 			});
 
 			onClose();
-			setForm({ email: "", password: "", confirm_password: "" });
+			setForm({ email: "", password: "", confirmPassword: "" });
 		} catch (err) {
+			console.error("❌ API Error:", err);
+			let errorMsg = "Something went wrong";
+
+			if (err?.data?.message) {
+				if (typeof err.data.message === "string") {
+					errorMsg = err.data.message;
+				} else if (typeof err.data.message === "object") {
+					const firstKey = Object.keys(err.data.message)[0];
+					errorMsg = err.data.message[firstKey][0];
+				}
+			}
+
 			Swal.fire({
 				icon: "error",
 				title: "Oops...",
-				text: err?.data?.message || "Something went wrong",
+				text: errorMsg,
 			});
 		}
 	};
@@ -76,19 +97,20 @@ const NewPasswordModal = ({ show, onClose, role }) => {
 
 				<div className="login_modal_all">
 					{/* Email */}
-					<div className="login_input">
+					<div className="login_input ">
 						<input
 							type="email"
 							name="email"
 							placeholder="Email"
 							value={form.email}
 							onChange={handleChange}
+							readOnly // ✅ prevent user from changing it
 						/>
 						{errors.email && <p className="text-danger">{errors.email[0]}</p>}
 					</div>
 
 					{/* Password & Confirm */}
-					{["password", "confirm_password"].map((field, index) => (
+					{["password", "confirmPassword"].map((field, index) => (
 						<div className="login_input" key={field}>
 							<div className="login_password position-relative">
 								<input
