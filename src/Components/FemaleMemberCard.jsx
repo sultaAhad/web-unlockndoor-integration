@@ -9,6 +9,7 @@ import VideoChatModal from "./ChatModals/videoChatModal";
 import { useLikeProfileMutation } from "../network/services/WomanAuth";
 import { toast } from "react-toastify";
 import LikeSwapButtons from "./LikeSwapButtons";
+import VideoCallButton from "./VideoCallButton";
 
 const FemaleMemberCard = ({ member, key }) => {
   const packageTitle = member?.package?.slug
@@ -16,10 +17,7 @@ const FemaleMemberCard = ({ member, key }) => {
     .toUpperCase();
 
   const [femaleMember, setFemaleMember] = useState(member);
-  const [showPricingModal, setShowPricingModal] = useState(false);
-  const [showPayModal, setShowPayModal] = useState(false);
-  const [showThankModal, setShowThankModal] = useState(false);
-  const [showVideoChatModal, setShowVideoChatModal] = useState(false);
+
   const [showofferModal, setShowofferModal] = useState(false);
 
   const checkFeatureAccess = (member, feature) => {
@@ -63,15 +61,7 @@ const FemaleMemberCard = ({ member, key }) => {
 
             {checkFeatureAccess(femaleMember, "video") && (
               <div className="icon-circle iconwra2">
-                <Link
-                  to="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowPricingModal(true);
-                  }}
-                >
-                  <i className="fa-solid fa-video video-icon"></i>
-                </Link>
+                <VideoCallButton member={femaleMember} />
               </div>
             )}
 
@@ -150,35 +140,6 @@ const FemaleMemberCard = ({ member, key }) => {
         showofferModal={showofferModal}
         handleofferClose={handleofferClose}
         womenId={femaleMember?.id}
-      />
-
-      <PricingModal
-        showPricingModal={showPricingModal}
-        handlePricingClose={() => setShowPricingModal(false)}
-        setShowPricingModal={setShowPricingModal}
-        setShowPayModal={setShowPayModal}
-      />
-
-      <PayNowModal
-        showPayModal={showPayModal}
-        handlePayClose={() => setShowPayModal(false)}
-        setShowPayModal={setShowPayModal}
-        setShowThankModal={setShowThankModal}
-      />
-
-      <ThankYouModal
-        showThankModal={showThankModal}
-        handleThankClose={() => {
-          setShowThankModal(false);
-          setShowVideoChatModal(true); // 🔹 ThankYou ke baad Video Chat open hoga
-        }}
-        setShowThankModal={setShowThankModal}
-        setShowVideoChatModal={setShowVideoChatModal}
-      />
-
-      <VideoChatModal
-        showVideoChatModal={showVideoChatModal}
-        handleVideoChatClose={() => setShowVideoChatModal(false)}
       />
     </>
   );

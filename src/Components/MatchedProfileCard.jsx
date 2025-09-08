@@ -12,6 +12,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router-dom";
 import { mchat } from "../Constant/Index";
+import VideoCallButton from "./VideoCallButton";
 
 function MatchedProfileCard({ card, index }) {
   return (
@@ -24,24 +25,15 @@ function MatchedProfileCard({ card, index }) {
         />
 
         <div className="card-bottom d-flex justify-content-between align-items-end">
-          {/* Left: Icons */}
           <div className="card-left-icons d-flex align-items-center gap-2">
-            <Link to="/chat" state={card} className="bottom-icon comment-icon">
-              <img src={mchat} alt="chat" className="chat-image-icon" />
-            </Link>
-            <Link
-              to="#"
-              className="bottom-icon video-icon"
-              onClick={(e) => {
-                e.preventDefault();
-                handlePricingShow();
-              }}
-            >
-              <i className="fa-solid fa-video"></i>
-            </Link>
+            <div className="icon-circle iconwra1">
+              <Link to={`/chat`} state={card}>
+                <img src={mchat} alt="chat" />
+              </Link>
+            </div>
+            <VideoCallButton member={card} />
           </div>
 
-          {/* Right: View Profile */}
           <div className="card-right-actions text-end">
             <Link
               to={`/matched-Profiles/${card.id}`}
