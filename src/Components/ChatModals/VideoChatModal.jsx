@@ -1,6 +1,5 @@
-import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import { signalImg, tick_circle, videocall } from "../../Constant/Index";
+import { signalImg, videocall } from "../../Constant/Index";
 import { button } from "framer-motion/client";
 
 const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
@@ -79,7 +78,7 @@ const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
 										</span>
 										<div className="chat_desc mt-2">
 											<p className="level-8 secondary-medium-font text-white">
-												Unmute
+												{"Unmute"}
 											</p>
 										</div>
 									</Button>
@@ -114,7 +113,7 @@ const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
 										</span>
 										<div className="chat_desc mt-2">
 											<p className="level-8 secondary-medium-font text-white">
-												End Call
+												{"End Call"}
 											</p>
 										</div>
 									</Button>
