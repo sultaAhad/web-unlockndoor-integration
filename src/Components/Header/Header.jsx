@@ -144,11 +144,11 @@ function Header() {
 			<ForgotPasswordModal
 				show={showModal3}
 				onClose={() => setShowModal3(false)}
-				gender={selectedGender}
+				gender={selectedGender} // "male" ya "female"
 				onContinue={(email) => {
-					setUserEmail(email); // email save
+					setUserEmail(email);
 					setShowModal3(false);
-					setShowModal4(true); // OTP modal open
+					setShowModal4(true); // OTP modal
 				}}
 			/>
 
