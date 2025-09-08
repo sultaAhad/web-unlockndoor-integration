@@ -55,7 +55,7 @@ const FemaleMemberCard = ({ member, key }) => {
           <div className="card-icons">
             {checkFeatureAccess(femaleMember, "chat") && (
               <div className="icon-circle iconwra1">
-                <Link to="/chat">
+                <Link to={`/chat`} state={femaleMember}>
                   <img src={mchat} alt="chat" />
                 </Link>
               </div>

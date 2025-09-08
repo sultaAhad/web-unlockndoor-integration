@@ -27,6 +27,10 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
     try {
       let response = await offerDate(form);
 		console.log(response);
+		if (response.data?.status) {
+      toast.success(response.data?.message);
+      handleofferClose();
+    }
 		if (response.error) {
       toast.error(response.error.data.Message);
       handleofferClose();
