@@ -4,16 +4,25 @@ import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
 import { useVerifyOtpMutation } from "../../network/services/ManAuth";
 import { useWomenVerifyOtpMutation } from "../../network/services/WomanAuth";
+import { useSendOtpMutation } from "../../network/services/ManAuth";
+import { useWomenSendOtpMutation } from "../../network/services/WomanAuth";
 
 const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 	const [otp, setOtp] = useState(Array(6).fill(""));
 	const inputRefs = useRef([]);
 	const [timer, setTimer] = useState(30);
 	const [loading, setLoading] = useState(false);
+	const [resendLoading, setResendLoading] = useState(false);
 
+	// OTP verification API
 	const [verifyManOtp] = useVerifyOtpMutation();
 	const [verifyWomenOtp] = useWomenVerifyOtpMutation();
 
+	// Send OTP API (for resend)
+	const [sendManOtp] = useSendOtpMutation();
+	const [sendWomenOtp] = useWomenSendOtpMutation();
+
+	// Countdown timer
 	useEffect(() => {
 		let countdown;
 		if (show && timer > 0) {
@@ -22,6 +31,7 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 		return () => clearInterval(countdown);
 	}, [show, timer]);
 
+	// Reset OTP on modal open
 	useEffect(() => {
 		if (show) {
 			setOtp(Array(6).fill(""));
@@ -57,8 +67,10 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 		}
 	};
 
+	// Resend OTP
 	const handleResend = async () => {
 		try {
+			setResendLoading(true);
 			setOtp(Array(6).fill(""));
 			setTimer(30);
 			inputRefs.current[0]?.focus();
@@ -67,8 +79,11 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 			formData.append("email", email);
 
 			let response;
-			if (gender === "male") response = await verifyManOtp(formData).unwrap();
-			else response = await verifyWomenOtp(formData).unwrap();
+			if (gender === "male") {
+				response = await sendManOtp(formData).unwrap();
+			} else {
+				response = await sendWomenOtp(formData).unwrap();
+			}
 
 			Swal.fire(
 				"Success",
@@ -77,9 +92,12 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 			);
 		} catch (err) {
 			Swal.fire("Error", err?.data?.message || "Failed to resend OTP", "error");
+		} finally {
+			setResendLoading(false);
 		}
 	};
 
+	// Continue / verify OTP
 	const handleContinue = async () => {
 		const enteredOtp = otp.join("");
 		if (!enteredOtp || enteredOtp.length < 6) {
@@ -143,8 +161,14 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 
 				<p>
 					0:{timer < 10 ? `0${timer}` : timer}{" "}
-					<span style={{ cursor: "pointer" }} onClick={handleResend}>
-						Resend
+					<span
+						style={{
+							cursor: timer === 0 && !resendLoading ? "pointer" : "not-allowed",
+							color: timer === 0 ? "blue" : "gray",
+						}}
+						onClick={timer === 0 && !resendLoading ? handleResend : null}
+					>
+						{resendLoading ? "Resending..." : "Resend"}
 					</span>
 				</p>
 			</Modal.Body>
