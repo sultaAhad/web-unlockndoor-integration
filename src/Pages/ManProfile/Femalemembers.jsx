@@ -29,14 +29,13 @@ function Femalemembers({ member }) {
   useEffect(() => {
     if (data?.response?.data?.Women?.data) {
       setMembers((prev) =>
-        currentPage === 1
+        currentPage == 1
           ? data.response.data.Women.data
           : [...prev, ...data.response.data.Women.data]
       );
-      setCurrentPage(data.response.data.Women?.current_page);
       setLastPage(data.response.data.Women?.last_page);
     }
-  }, [data, currentPage]);
+  }, [data]);
 
   useEffect(() => {
     refetch();

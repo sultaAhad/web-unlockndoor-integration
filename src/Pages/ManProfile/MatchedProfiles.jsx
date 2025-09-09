@@ -48,10 +48,9 @@ function MatchedProfiles() {
       setProfiles((prev) =>
         currentPage == 1 ? responseData.data : [...prev, ...responseData.data]
       );
-      setCurrentPage(responseData?.current_page);
       setLastPage(responseData?.last_page);
     }
-  }, [data, currentPage]);
+  }, [data]);
 
   useEffect(() => {
     refetch();

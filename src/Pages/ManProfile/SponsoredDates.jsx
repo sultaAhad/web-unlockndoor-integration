@@ -27,12 +27,11 @@ function SponsoredDates() {
   useEffect(() => {
     if (data?.response?.data?.sponsoredDates?.data) {
       setSponsoredDates(data.response.data.sponsoredDates.data);
-      setCurrentPage(data.response.data.sponsoredDates?.current_page);
       setLastPage(data.response.data.sponsoredDates?.last_page);
     } else {
       setSponsoredDates(data?.response?.data?.sponsoredDates);
     }
-  }, [data, currentPage]);
+  }, [data]);
 
   useEffect(() => {
     refetch();

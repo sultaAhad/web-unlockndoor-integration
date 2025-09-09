@@ -18,6 +18,7 @@ import gsap from "gsap";
 // import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
+import { toast, ToastContainer } from "react-toastify";
 
 function ChatComponent({ type }) {
   const { user, userToken } = useSelector((state) => state.auth);
@@ -36,7 +37,8 @@ function ChatComponent({ type }) {
         chat_id: 0,
         participant_id: location?.state?.id,
         participant_name: location?.state?.name,
-        participant_profile: location?.state?.profile_image_url,
+        participant_profile:
+          location?.state?.profile_image_url || location?.state?.profileImage,
       });
       setForm((pre) => ({
         ...pre,
@@ -130,7 +132,14 @@ function ChatComponent({ type }) {
         }));
       }
     } catch (error) {
-      console.log(error);
+      if (error.data?.message) {
+        toast.error(error.data?.message);
+        setForm((pre) => ({
+          ...pre,
+          message: "",
+          files: [],
+        }));
+      }
     }
   };
 
@@ -485,6 +494,7 @@ function ChatComponent({ type }) {
 
   return (
     <>
+      <ToastContainer />
       <style>
         {`
           .selected_chat img {

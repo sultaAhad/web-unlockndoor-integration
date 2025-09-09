@@ -51,18 +51,28 @@ function LikeSwapButtons({ type, femaleMember, responseAction }) {
 
   if (type == "like") {
     return (
+      // <div
+      //   className="icon-circle linear-bg"
+      // onClick={() => profileAction(femaleMember.id, "like")}
+      // >
+      //   {isLikeProfileLoading && actionType === "like" ? (
+      //     <Loader />
+      //   ) : (
+      //     <i
+      //       className={`fa-solid fa-heart ${
+      //         femaleMember?.is_liked ? "text-danger" : ""
+      //       }`}
+      //     ></i>
+      //   )}
+      // </div>
       <div
-        className="icon-circle linear-bg"
+        className={`icon-circle  ${femaleMember?.is_liked ? "linear-bg" : ""}`}
         onClick={() => profileAction(femaleMember.id, "like")}
       >
         {isLikeProfileLoading && actionType === "like" ? (
           <Loader />
         ) : (
-          <i
-            className={`fa-solid fa-heart ${
-              femaleMember?.is_liked ? "text-danger" : ""
-            }`}
-          ></i>
+          <i className="fa-solid fa-heart"></i>
         )}
       </div>
     );
