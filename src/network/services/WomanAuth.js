@@ -116,7 +116,7 @@ export const WomenAuth = createApi({
 		}),
 		getWomanMatchProfiles: build.query({
 			query: ({ filterBy, page }) => ({
-				url: `${WOMAN_MATCHED_PRIFILE}?page=${page}&filterBy=${filterBy}`,
+				url: `${WOMAN_MATCHED_PRIFILE}?page=${page}&filter_by=${filterBy}`,
 				method: "GET",
 			}),
 		}),
