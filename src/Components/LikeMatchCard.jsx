@@ -37,16 +37,20 @@ const LikeMatchCard = ({ card, type, index }) => {
   return (
     <div className="col-lg-4 col-md-6 mb-4" key={index}>
       <div className="profile-card">
-        <img src={card.image} alt="profile" className="card-image" />
+        <img
+          src={card?.liker?.profile_image_url}
+          alt="profile"
+          className="card-image"
+        />
 
-        <div className="card-footer">
-          <h4>{card.name}</h4>
-          <p>{card.location}</p>
-        </div>
+        {/* <div className="card-footer">
+          <h4>{card?.liker?.name}</h4>
+          <p>{card?.liker?.location}</p>
+        </div> */}
 
         <div className="card-bottom d-flex justify-content-between align-items-end">
           {type === "matched" && <MatchedAction />}
-          {type === "unmatched" && <UnmatchedAction />}
+          {type === "liked" && <UnmatchedAction />}
           <div className="card-right-actions text-end">
             <Link
               to="/woman/profile-man/2"
@@ -54,7 +58,11 @@ const LikeMatchCard = ({ card, type, index }) => {
             >
               View Profile
             </Link>
-            <img src={card.image} alt="thumb" className="profile-thumb" />
+            <img
+              src={card?.liker?.profile_image_url}
+              alt="thumb"
+              className="profile-thumb"
+            />
           </div>
         </div>
       </div>

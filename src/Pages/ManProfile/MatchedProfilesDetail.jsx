@@ -44,7 +44,6 @@ import {
 } from "../../Constant/Index";
 import AOS from "aos";
 import { Link } from "react-router-dom";
-import VideoChatModal from "../../Components/ChatModals/videoChatModal";
 import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";

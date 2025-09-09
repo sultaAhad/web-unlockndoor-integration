@@ -1,27 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../../../assets/Css/matchprofile.css";
-
 import Header from "../../../Components/Header/Header";
 import Footer from "../../../Components/Footer";
-import {
-  edit,
-  innerpages1,
-  like,
-  like1,
-  like2,
-  like3,
-  like4,
-  massagewrapper,
-  message,
-  notification,
-  womenproimg,
-  womenproimg1,
-} from "../../../Constant/Index";
-import AOS from "aos";
 import { Link } from "react-router-dom";
 import ProfileNavbar from "../../../Components/ProfileNavbar";
 import Pagination from "../../../Components/Pagination";
-import LikeMatchNavigation from "../../../Components/LikeMatchNavigation";
 import ProfileHeader from "../../../Components/ProfileHeader";
 import LikeMatchCard from "../../../Components/LikeMatchCard";
 import Spinner from "../../../Components/Spinner";
@@ -40,12 +23,10 @@ function LikeMatchMatched() {
   });
 
   useEffect(() => {
-    if (data?.response?.data?.sponsoredDates?.data) {
-      setMatchedProfiles(data.response.data.sponsoredDates.data);
-      setCurrentPage(data.response.data.sponsoredDates?.current_page);
-      setLastPage(data.response.data.sponsoredDates?.last_page);
-    } else {
-      setMatchedProfiles(data?.response?.data?.sponsoredDates);
+    if (data?.data) {
+      setMatchedProfiles(data?.data.data);
+      setCurrentPage(data?.data?.current_page);
+      setLastPage(data?.data?.last_page);
     }
   }, [data, currentPage]);
 
@@ -72,41 +53,6 @@ function LikeMatchMatched() {
     transition: "all 0.3s ease",
   };
 
-  const cards = [
-    {
-      image: like,
-    },
-    {
-      image: like1,
-    },
-    {
-      image: like2,
-    },
-    {
-      image: like3,
-    },
-    {
-      image: like4,
-    },
-    {
-      image: like3,
-    },
-  ];
-
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
-  // useEffect(() => {
-  //   document.body.style.backgroundImage = `url(${innerpages1})`;
-  //   document.body.style.backgroundSize = "cover";
-  //   document.body.style.backgroundPosition = "center";
-  //   document.body.style.minHeight = "100vh";
-
-  //   return () => {
-  //     document.body.style.backgroundImage = "";
-  //   };
-  // }, []);
-
   return (
     <>
       <Header />
@@ -131,22 +77,18 @@ function LikeMatchMatched() {
                 <Link
                   className="secondary-medium-font"
                   onClick={() => {
-                    setTimeout(() => {
-                      setFilterBy("unmatched");
-                    }, 1000);
+                    setFilterBy("liked");
                   }}
                   style={{
                     ...buttonBaseStyle,
-                    ...(filterBy === "unmatched" ? activeStyle : {}),
+                    ...(filterBy === "liked" ? activeStyle : {}),
                   }}
                 >
                   Unmatched Members
                 </Link>
                 <Link
                   onClick={() => {
-                    setTimeout(() => {
-                      setFilterBy("matched");
-                    }, 1000);
+                    setFilterBy("matched");
                   }}
                   className="secondary-medium-font text-white"
                   style={{
@@ -166,7 +108,7 @@ function LikeMatchMatched() {
           ) : (
             <>
               <div className="row">
-                {cards.map((card, index) => (
+                {matchedProfiles.map((card, index) => (
                   <LikeMatchCard key={index} type={filterBy} card={card} />
                 ))}
               </div>

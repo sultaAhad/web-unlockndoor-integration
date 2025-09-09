@@ -73,7 +73,7 @@ export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;
 export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
 export const DELETE_VIDEO_WOMAN = `auth-women/delete-video`;
 export const WOMAN_SPONSORED_DATES = `auth-women/sponsored-dates`;
-export const WOMAN_MATCHED_PRIFILE = `auth-women/matched-profiles`;
+export const WOMAN_MATCHED_PRIFILE = `auth-women/male-members`;
 export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;
 export const SEND_CHAT_MESSAGE_API = (type) => `auth-${type}/send-message`;
 export const GET_CHAT_MESSAGES_API = (type, chat_id) => `auth-${type}/single-chat?chat_id=${chat_id}`;

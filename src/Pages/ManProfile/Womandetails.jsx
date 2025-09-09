@@ -26,7 +26,6 @@ import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
 import LikeSwapButtons from "../../Components/LikeSwapButtons";
 
-// ✅ Normalize API data
 const normalizeMember = (data) => {
   return {
     id: data.id,
