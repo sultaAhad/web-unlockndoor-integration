@@ -16,7 +16,7 @@ import outline1 from "../assets/img/outline1.png";
 import outline2 from "../assets/img/outline2.png";
 import dotsimg from "../assets/img/dotsimg.png";
 import steps from "../assets/img/steps.png";
-import Vector from "../assets/img/Vector.png";
+import Vector from "../assets/img/Vector.png"; 
 import correct from "../assets/img/correct.png";
 import package2 from "../assets/img/package2.png";
 import professorimg from "../assets/img/professorimg.png";

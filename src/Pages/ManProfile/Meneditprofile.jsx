@@ -84,8 +84,7 @@ function Meneditprofile() {
 				dispatch(
 					setUser({ ...user, cover_image_url: response.data.cover_image_url }),
 				);
-				refetch(); // 🔹 Refetch after update
-
+				refetch();
 				Swal.fire({
 					icon: "success",
 					title: "Success!",
@@ -93,11 +92,6 @@ function Meneditprofile() {
 					timer: 2000,
 					showConfirmButton: false,
 				});
-			} else {
-				setForm((prev) => ({
-					...prev,
-					bannerImage: URL.createObjectURL(file),
-				}));
 			}
 		} catch (error) {
 			console.error("Failed to update cover image:", error);
@@ -134,8 +128,7 @@ function Meneditprofile() {
 						profile_image_url: response.data.profile_image_url,
 					}),
 				);
-				refetch(); // 🔹 Refetch after update
-
+				refetch();
 				Swal.fire({
 					icon: "success",
 					title: "Success!",
@@ -143,11 +136,6 @@ function Meneditprofile() {
 					timer: 2000,
 					showConfirmButton: false,
 				});
-			} else {
-				setForm((prev) => ({
-					...prev,
-					profileImage: URL.createObjectURL(file),
-				}));
 			}
 		} catch (error) {
 			console.error("Failed to update profile image:", error);
@@ -178,26 +166,50 @@ function Meneditprofile() {
 	// ===== Upload files =====
 	const handleFileChange = (e, type) => {
 		const selectedFiles = Array.from(e.target.files);
-
-		if (type === "images") setImageFiles((prev) => [...prev, ...selectedFiles]);
-		else if (type === "videos")
-			setVideoFiles((prev) => [...prev, ...selectedFiles]);
-
 		const urls = selectedFiles.map((file) => URL.createObjectURL(file));
 
-		setForm((prev) => ({ ...prev, [type]: [...prev[type], ...urls] }));
+		if (type === "images") {
+			setImageFiles((prev) => [...prev, ...selectedFiles]);
+			setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
+		} else if (type === "videos") {
+			setVideoFiles((prev) => [...prev, ...selectedFiles]);
+			setForm((prev) => ({ ...prev, videos: [...prev.videos, ...urls] }));
+		}
 	};
 
-	const removeFile = (index, type) => {
-		if (type === "images")
-			setImageFiles((prev) => prev.filter((_, i) => i !== index));
-		else if (type === "videos")
-			setVideoFiles((prev) => prev.filter((_, i) => i !== index));
+	const removeFile = async (index, type) => {
+		try {
+			if (type === "images") {
+				// Optional: call API to delete the image from server first
+				// await deleteImageAPI(imageFiles[index] or image URL)
 
-		setForm((prev) => ({
-			...prev,
-			[type]: prev[type].filter((_, i) => i !== index),
-		}));
+				setImageFiles((prev) => prev.filter((_, i) => i !== index));
+				setForm((prev) => ({
+					...prev,
+					images: prev.images.filter((_, i) => i !== index),
+				}));
+			} else if (type === "videos") {
+				// Optional: call API to delete the video from server first
+				// await deleteVideoAPI(videoFiles[index] or video URL)
+
+				setVideoFiles((prev) => prev.filter((_, i) => i !== index));
+				setForm((prev) => ({
+					...prev,
+					videos: prev.videos.filter((_, i) => i !== index),
+				}));
+			}
+
+			// Refetch user data so backend changes reflect in UI
+			refetch();
+		} catch (error) {
+			console.error("Failed to remove file:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "Failed to remove file. Please try again.",
+				confirmButtonText: "OK",
+			});
+		}
 	};
 
 	// ===== Validation =====
@@ -244,9 +256,7 @@ function Meneditprofile() {
 			formData.append("income", form.income);
 			formData.append(
 				"date_of_birth",
-				form.date_of_birth
-					? form.date_of_birth.toISOString().split("T")[0]
-					: "",
+				form.date_of_birth.toISOString().split("T")[0],
 			);
 			formData.append("skills", form.skills.join(","));
 			formData.append("message", form.message);
@@ -258,23 +268,28 @@ function Meneditprofile() {
 			if (form.bannerImage?.startsWith("http"))
 				formData.append("cover_image", form.bannerImage);
 
-			imageFiles.forEach((file) => formData.append("images", file));
-			videoFiles.forEach((file) => formData.append("videos", file));
+			imageFiles.forEach((file) => formData.append("images[]", file));
+			videoFiles.forEach((file) => formData.append("videos[]", file));
 
 			const response = await editProfile(formData).unwrap();
 
-			if (response.status == 200) {
-				dispatch(setUser(response?.response?.data));
-				refetch(); // 🔹 Refetch after profile update
-			}
+			if (response.status === 200) {
+				const updatedData = response.response.data;
+				dispatch(setUser(updatedData));
+				refetch();
+				setForm((prev) => ({
+					...prev,
+					images: updatedData.images_urls,
+					videos: updatedData.videos_urls,
+				}));
 
-			Swal.fire({
-				icon: "success",
-				title: "Profile Updated!",
-				text: "Your profile has been updated successfully",
-				showConfirmButton: false,
-				timer: 2000,
-			}).then(() => navigate("/profile"));
+				Swal.fire({
+					icon: "success",
+					title: "Profile Updated!",
+					showConfirmButton: false,
+					timer: 2000,
+				}).then(() => navigate("/profile"));
+			}
 		} catch (error) {
 			console.error("Failed to update profile:", error);
 			Swal.fire({
@@ -589,7 +604,6 @@ function Meneditprofile() {
 										)}
 									</button>
 								</div>
-
 								{/* Images */}
 								<div className="col-md-4">
 									<div className="form-group upload-section mt-2">
@@ -630,10 +644,12 @@ function Meneditprofile() {
 													</span>
 												</div>
 											))}
+											{formErrors.images && (
+												<span className="text-danger">{formErrors.images}</span>
+											)}
 										</div>
 									</div>
 								</div>
-
 								{/* Videos */}
 								<div className="col-md-4">
 									<div className="form-group upload-section mt-2">
@@ -674,6 +690,9 @@ function Meneditprofile() {
 													</span>
 												</div>
 											))}
+											{formErrors.videos && (
+												<span className="text-danger">{formErrors.videos}</span>
+											)}
 										</div>
 									</div>
 								</div>

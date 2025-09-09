@@ -77,4 +77,8 @@ export const WOMAN_MATCHED_PRIFILE = `auth-women/male-members`;
 export const WOMAN_LIKE_MAN_PROFILE = `auth-women/like-men`;
 export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;
 export const SEND_CHAT_MESSAGE_API = (type) => `auth-${type}/send-message`;
-export const GET_CHAT_MESSAGES_API = (type, chat_id) => `auth-${type}/single-chat?chat_id=${chat_id}`;
+export const GET_CHAT_MESSAGES_API = (type, chat_id) =>
+	`auth-${type}/single-chat?chat_id=${chat_id}`;
+
+// Edit WmonenProfile
+export const WOMEN_EDIT_PROFILE = `auth-women/update-women`;

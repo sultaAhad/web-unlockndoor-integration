@@ -227,7 +227,7 @@ function Profile() {
 						</div>
 					</div>
 					<div className="row mt-3">
-						{user?.images_urls.map((image, index) => (
+						{user?.images_urls?.map((image, index) => (
 							<ImageVideo key={index} file={image} type="image" />
 						))}
 					</div>
@@ -241,7 +241,7 @@ function Profile() {
 						</div>
 					</div>
 					<div className="row mt-3">
-						{user?.videos_urls.map((video, index) => (
+						{user?.videos_urls?.map((video, index) => (
 							<ImageVideo key={index} file={video} type="video" />
 						))}
 					</div>

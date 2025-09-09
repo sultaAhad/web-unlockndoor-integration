@@ -9,6 +9,7 @@ import {
 	WOMAN_LIKE_MAN_PROFILE,
 	WOMAN_MATCHED_PRIFILE,
 	WOMEN_DATA,
+	WOMEN_EDIT_PROFILE,
 	WOMEN_LOGIN,
 	WOMEN_LOGIN_CHANGEPASSWORD_RESET,
 	WOMEN_LOGIN_OTP_SAND,
@@ -100,6 +101,13 @@ export const WomenAuth = createApi({
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
 		}),
+		womenEditProfile: build.mutation({
+			query: (formData) => ({
+				url: WOMEN_EDIT_PROFILE,
+				method: "POST",
+				body: formData,
+			}),
+		}),
 		likeProfile: build.mutation({
 			query: (formData) => ({
 				url: MAN_LIKE_WOMEN,
@@ -129,6 +137,7 @@ export const {
 	usePurchasePackageWomenMutation,
 	useDeleteImageWomanMutation,
 	useDeleteVideoWomanMutation,
+	useWomenEditProfileMutation,
 	useWomanDataMutation,
 	useLikeProfileMutation,
 	useWomenSendOtpMutation,
