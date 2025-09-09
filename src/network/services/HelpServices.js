@@ -1,6 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
-import { CONTECT_US, CONTENT, FAQS, SEND_SUBSCRIPTION, SETTING, TESTEMONIAL } from "../../utils/endpoints";
+import {
+	CONTECT_US,
+	CONTENT,
+	FAQS,
+	SEND_SUBSCRIPTION,
+	SETTING,
+	TESTEMONIAL,
+} from "../../utils/endpoints";
 
 const HelpServices = createApi({
 	reducerPath: "HelpServices",
@@ -69,5 +76,4 @@ export const {
 	useSettingContentQuery,
 	useSendContactQueryMutation,
 	useSendSubscriptionQueryMutation, // ✅ new
-
 } = HelpServices;

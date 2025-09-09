@@ -15,7 +15,7 @@ import {
 } from "../Constant/Index";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-import Pusher from "pusher-js";
+// import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
 
