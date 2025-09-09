@@ -26,15 +26,16 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
     e.preventDefault();
     try {
       let response = await offerDate(form);
-		console.log(response);
-		if (response.error) {
-      toast.error(response.error.data.Message);
-      handleofferClose();
-    }
-
-      // handleofferClose();
+      if (response.data?.status) {
+        toast.success(response.data?.message);
+        handleofferClose();
+      }
+      if (response.error) {
+        toast.error(response.error.data.Message);
+        handleofferClose();
+      }
     } catch (err) {
-      // handle error if needed
+     console.log(err);
     }
   };
 

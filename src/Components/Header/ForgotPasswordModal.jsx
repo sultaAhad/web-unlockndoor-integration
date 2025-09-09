@@ -5,61 +5,65 @@ import Spinner from "react-bootstrap/Spinner";
 import Swal from "sweetalert2";
 import { useSendOtpMutation } from "../../network/services/ManAuth";
 import { useWomenSendOtpMutation } from "../../network/services/WomanAuth";
-import { validateforget } from "../../Constant/HelperFunction";
 
 const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 	const [email, setEmail] = useState("");
-	const [errors, setErrors] = useState({});
+	const [loading, setLoading] = useState(false);
 
-	const [sendManOtp, { isLoading: isManLoading }] = useSendOtpMutation();
-	const [sendWomenOtp, { isLoading: isWomenLoading }] =
-		useWomenSendOtpMutation();
-
-	const loading = isManLoading || isWomenLoading;
+	const [sendManOtp] = useSendOtpMutation();
+	const [sendWomenOtp] = useWomenSendOtpMutation();
 
 	const handleContinue = async () => {
-		if (!validateforget(email, setErrors)) return;
+		if (!email?.trim()) {
+			Swal.fire("Error", "Email is required", "error");
+			return;
+		}
 
 		try {
-			const payload = { email };
-			if (gender === "male") await sendManOtp(payload).unwrap();
-			else await sendWomenOtp(payload).unwrap();
+			setLoading(true);
+			const formData = new FormData();
+			formData.append("email", email);
 
-			Swal.fire("Success", "OTP sent to your email", "success");
-			onContinue(email); // ✅ Pass email to OTP modal
-			setErrors({});
+			let response;
+			if (gender === "male") response = await sendManOtp(formData).unwrap();
+			else response = await sendWomenOtp(formData).unwrap();
+
+			Swal.fire(
+				"Success",
+				response?.message || "OTP sent successfully",
+				"success",
+			);
+			onContinue(email); // send email to OTP modal
 			setEmail("");
 		} catch (err) {
-			if (err?.data?.errors) setErrors(err.data.errors);
-			else
-				Swal.fire("Error", err?.data?.message || "Failed to send OTP", "error");
+			Swal.fire("Error", err?.data?.message || "Failed to send OTP", "error");
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
 		<Modal show={show} centered onHide={onClose} className="border-radius-www">
-			<Modal.Header closeButton></Modal.Header>
+			<Modal.Header closeButton />
 			<Modal.Body className="p-4">
 				<div className="login_input">
-					<div className="login_head">
+					<div className="login_head text-center">
 						<h3 className="secondary-semibold-font">Forgot Password</h3>
 						<h5>Enter Your Email ({gender})</h5>
 					</div>
 
-					<div className="login_email">
+					<div className="login_email my-3">
 						<input
 							type="email"
 							placeholder="Email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							disabled={loading}
+							className="form-control"
 						/>
 					</div>
-					{errors.email && (
-						<small className="text-danger">{errors.email[0]}</small>
-					)}
 
-					<div className="login_btn mt-3 text-center">
+					<div className="login_btn text-center">
 						<Button onClick={handleContinue} disabled={loading}>
 							{loading ? (
 								<>
@@ -67,7 +71,6 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 										as="span"
 										animation="border"
 										size="sm"
-										role="status"
 										className="me-2"
 									/>
 									Sending...

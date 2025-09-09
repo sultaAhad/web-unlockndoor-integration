@@ -15,6 +15,7 @@ import { useWomenEditProfileMutation } from "../../network/services/WomanAuth";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { setUser } from "../../network/reducers/AuthReducer";
+import ImageVideo from "../../Components/ImageVideo";
 
 function WomenEditProfile() {
 	const { user } = useSelector((state) => state.auth);
@@ -540,7 +541,7 @@ function WomenEditProfile() {
 						))}
 					</div>
 				</div>
-			</section>
+			</section> 
 			{/* ============================ */}
 
 			<Footer />

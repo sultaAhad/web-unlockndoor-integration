@@ -9,14 +9,20 @@ import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import Pagination from "../../Components/Pagination";
 import ReofferModal from "./ReofferModal";
 import ProfileHeader from "../../Components/ProfileHeader";
-import { useGetSponsoredDatesQuery } from "../../network/services/ManAuth";
+import {
+  useGetSponsoredDatesQuery,
+  useWithdrawDateMutation,
+} from "../../network/services/ManAuth";
 import Spinner from "../../Components/Spinner";
+import { toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 function SponsoredDates() {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [sponsoredDates, setSponsoredDates] = useState([]);
 
   const { data, isLoading, refetch } = useGetSponsoredDatesQuery(currentPage);
+  const [withdrawDate] = useWithdrawDateMutation();
 
   useEffect(() => {
     if (data?.response?.data?.sponsoredDates?.data) {
@@ -64,13 +70,41 @@ function SponsoredDates() {
         return "";
     }
   };
+  const WithdrawOfferHandle = async (date_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You will not be able to undo this action!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, withdraw it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          let response = await withdrawDate({ date_id: date_id });
+          if (response.data?.status) {
+            toast.success(response.data?.message);
+            refetch();
+          }
+          if (response.error) {
+            toast.error(response.error.data.Message);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
+  };
 
-  const Actions = (status) => {
+  const Actions = (status, offer) => {
     if (status === "pending") {
       return (
         <button
           className={`wrapper-ggg btn-write rounded-0 border-none d-flex align-items-center justify-content-center w-100 extra-bg-2`}
-          onClick={() => {}}
+          onClick={() => {
+            WithdrawOfferHandle(offer?.id);
+          }}
         >
           Withdraw
         </button>
@@ -78,20 +112,29 @@ function SponsoredDates() {
     }
     if (status === "Rejected") {
       return (
-        <button
-          className={`wrapper-ggg btn-write rounded-0 border-none d-flex align-items-center justify-content-center w-100 extra-bg-4`}
-          onClick={() => {
-            handlereofferShow();
-          }}
-        >
-          ReOffer
-        </button>
+        <>
+          <button
+            className={`wrapper-ggg btn-write rounded-0 border-none d-flex align-items-center justify-content-center w-100 extra-bg-4`}
+            onClick={() => {
+              handlereofferShow();
+            }}
+          >
+            Re-Offer
+          </button>
+          <ReofferModal
+            offer={offer}
+            showreofferModal={showreofferModal}
+            handlereofferClose={handlereofferClose}
+            setShowreofferModal={setShowreofferModal}
+          />
+        </>
       );
     }
     if (status === "Accepted" || status === "Countered") {
       return (
         <Link
           to={"/chat"}
+          state={offer?.woman}
           className={`wrapper-ggg btn-write rounded-0 border-none d-flex align-items-center justify-content-center w-100 extra-bg-1`}
         >
           Message
@@ -103,6 +146,7 @@ function SponsoredDates() {
   return (
     <>
       <Header />
+      <ToastContainer />
       <section className="profile_sec " data-aos="fade-up">
         <div className="container">
           <div className="row">
@@ -160,13 +204,13 @@ function SponsoredDates() {
                                 <tr className="wrapper-table-d" key={index}>
                                   <td className="secondary-medium-font  level-8 ">
                                     <div className="d-flex align-items-center gap-3">
-                                      <div className="">
+                                      <div className="w-25">
                                         {" "}
                                         <img
                                           src={
                                             sponsorDate.women?.profile_image_url
                                           }
-                                          className="img-fluid wrapper-fluid-notification"
+                                          className="img-fluid wrapper-fluid-notification w-25"
                                           alt=""
                                         />
                                       </div>
@@ -197,7 +241,7 @@ function SponsoredDates() {
                                   </td>
                                   <td className="secondary-medium-font level-8 text-center">
                                     <div className="btn-wrapper">
-                                      {Actions(sponsorDate.status)}
+                                      {Actions(sponsorDate.status, sponsorDate)}
                                     </div>
                                   </td>
                                 </tr>
@@ -225,12 +269,6 @@ function SponsoredDates() {
         </div>
       </section>
       <Footer />
-
-      <ReofferModal
-        showreofferModal={showreofferModal}
-        handlereofferClose={handlereofferClose}
-        setShowreofferModal={setShowreofferModal}
-      />
     </>
   );
 }

@@ -287,22 +287,37 @@ export const validateChangePassword = (changePassword, setErrors) => {
 	let isValid = true;
 	let errors = {};
 
+	// ✅ Email validation
+	if (!changePassword.email?.trim()) {
+		errors.email = ["Email is required"];
+		isValid = false;
+	} else {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(changePassword.email)) {
+			errors.email = ["Enter a valid email address"];
+			isValid = false;
+		}
+	}
+
+	// ✅ Password validation
 	if (!changePassword.password?.trim()) {
 		errors.password = ["New password is required"];
 		isValid = false;
 	}
 
-	if (!changePassword.confirm_password?.trim()) {
-		errors.confirm_password = ["Confirm password is required"];
+	// ✅ Confirm password validation
+	if (!changePassword.confirmPassword?.trim()) {
+		errors.confirmPassword = ["Confirm password is required"];
 		isValid = false;
-	} else if (changePassword.password !== changePassword.confirm_password) {
-		errors.confirm_password = ["Passwords do not match"];
+	} else if (changePassword.password !== changePassword.confirmPassword) {
+		errors.confirmPassword = ["Passwords do not match"];
 		isValid = false;
 	}
 
 	setErrors(errors);
 	return isValid;
 };
+
 // edit form man
 export const validateMenEditForm = (registerman, setFormErrors, chips = []) => {
 	let isValid = true;

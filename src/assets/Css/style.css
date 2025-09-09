@@ -2674,6 +2674,9 @@ textarea.form_input-21 {
 	font-family: "TomatoGrotesk-SemiBold";
 	resize: none;
 }
+div:where(.swal2-container) {
+	z-index: 99999 !important;
+}
 .login_btn .submit_signup_btn:hover {
 	transform: scale(1.05);
 	box-shadow: 0 0 25px rgba(156, 22, 72, 0.8);

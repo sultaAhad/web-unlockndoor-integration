@@ -13,19 +13,37 @@ import {
   paperclip,
   searchchat,
 } from "../Constant/Index";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import gsap from "gsap";
 // import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
 
 function ChatComponent({ type }) {
-  const { user } = useSelector((state) => state.auth);
+  const { user, userToken } = useSelector((state) => state.auth);
 
   const [chats, setChats] = useState([]);
+  const [filteredChats, setFilteredChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const messagesEndRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state != null) {
+      setSelectedChat({
+        chat_id: 0,
+        participant_id: location?.state?.id,
+        participant_name: location?.state?.name,
+        participant_profile: location?.state?.profile_image_url,
+      });
+      setForm((pre) => ({
+        ...pre,
+        to_id: location?.state?.id,
+      }));
+    }
+  }, [location?.state]);
 
   const toggleDropdown1 = () => setDropdownOpen(!dropdownOpen);
 
@@ -67,7 +85,10 @@ function ChatComponent({ type }) {
   const [sendMessage, sendMessageResponse] = useSendMessageMutation();
 
   useEffect(() => {
-    if (data?.chats) setChats(data.chats);
+    if (data?.chats) {
+      setChats(data.chats);
+      setFilteredChats(data.chats);
+    }
   }, [data]);
 
   useEffect(() => {
@@ -80,7 +101,7 @@ function ChatComponent({ type }) {
   }, [messagesData]);
 
   useEffect(() => {
-    if (selectedChat?.chat_id) {
+    if (selectedChat?.chat_id != undefined && selectedChat?.chat_id > 0) {
       refetchMessages();
     }
   }, [selectedChat?.chat_id, refetchMessages]);
@@ -101,8 +122,12 @@ function ChatComponent({ type }) {
           message: "",
           files: [],
         }));
+        scrollToBottom();
         refetch();
-        // refetchMessages();
+        setSelectedChat((pre) => ({
+          ...pre,
+          chat_id: response.chat?.id,
+        }));
       }
     } catch (error) {
       console.log(error);
@@ -157,22 +182,30 @@ function ChatComponent({ type }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (!selectedChat?.chat_id) return;
-  //   const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-  //     cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-  //     encrypted: true,
-  //   });
-  //   const channel = pusher.subscribe(`chat.${selectedChat.chat_id}`);
-  //   channel.bind("message.sent", (data) => {
-  //     setMessages((prev) => [...prev, formateMessage(data.message)]);
-  //   });
-  //   return () => {
-  //     channel.unbind_all();
-  //     channel.unsubscribe();
-  //     pusher.disconnect();
-  //   };
-  // }, [selectedChat?.chat_id]);
+  useEffect(() => {
+    if (!selectedChat?.chat_id) return;
+    const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
+      cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
+      encrypted: true,
+      authEndpoint: `${import.meta.env.VITE_APP_API_URL}/broadcasting/auth`,
+      auth: {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    });
+    const channel = pusher.subscribe(`private-chat.${selectedChat.chat_id}`);
+    channel.bind("message.sent", (data) => {
+      console.log(data);
+
+      // setMessages((prev) => [...prev, formateMessage(data.message)]);
+    });
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
+  }, [selectedChat?.chat_id]);
 
   const formateMessage = (message) => ({
     id: message.id || message.message_id,
@@ -185,12 +218,39 @@ function ChatComponent({ type }) {
     attachment: message.file_urls?.[0] || null,
   });
 
+  // const searchChat = (event) => {
+  //   const { value } = event.target;
+  //   let rowChats = chats.map((chat) => chat.participant_name);
+
+  //   console.log(value);
+  // };
+
+  const handleChatSearch = (e) => {
+    const { value } = e.target;
+    if (!value.trim()) {
+      setFilteredChats(chats);
+      return;
+    }
+    const filtered = chats.filter((chat) =>
+      chat.participant_name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredChats(filtered);
+  };
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const setLimit = (message) => {
+    if (message != null) {
+      return `${message.substring(0, 25)}${message.length > 25 ? "..." : ""}`;
+    }
+    return "";
+  };
   const Loader = () => (
     <div className="btn-loader spinner-border text-warning" role="status">
       <span className="visually-hidden">Loading...</span>
     </div>
   );
-
   const sendMessageFormHTML = () => {
     if (!selectedChat) return null;
     return (
@@ -300,13 +360,12 @@ function ChatComponent({ type }) {
             disabled={sendMessageResponse?.isLoading}
             onClick={sendMessageHandle}
           >
-            {sendMessageResponse?.isLoading ? "Sending" : "Send"}
+            {sendMessageResponse?.isLoading ? <Loader /> : "Send"}
           </button>
         </div>
       </div>
     );
   };
-
   const chatsHTML = () => {
     if (isChatLoading) {
       return (
@@ -318,8 +377,8 @@ function ChatComponent({ type }) {
 
     return (
       <ul className="p-0 wrapper-chat-b">
-        {chats.length > 0 ? (
-          chats.map((chat) => (
+        {filteredChats.length > 0 ? (
+          filteredChats.map((chat) => (
             <li
               key={chat.chat_id}
               onClick={() => {
@@ -349,7 +408,7 @@ function ChatComponent({ type }) {
                     ></span>
                   </div>
                   <p className="mb-0 level-8 extra-color-13 secondary-light-font">
-                    {chat.last_message}
+                    {setLimit(chat.last_message)}
                   </p>
                 </div>
               </div>
@@ -368,7 +427,6 @@ function ChatComponent({ type }) {
       </ul>
     );
   };
-
   const selectedChatHTML = () => {
     if (!selectedChat) return null;
     return (
@@ -443,6 +501,7 @@ function ChatComponent({ type }) {
               <div className="input-group ">
                 <input
                   type="text"
+                  onChange={handleChatSearch}
                   className="form-control"
                   placeholder="Search here...."
                   aria-label="Search here...."
@@ -462,57 +521,59 @@ function ChatComponent({ type }) {
           </div>
           <div className="col-lg-8 mt-4">
             <div className="multichat1">
-              <div className="multichat ">
+              <div className="multichat " ref={messagesEndRef}>
                 {isChatMessagesLoading ? (
                   <div className="col-md-12 py-5 text-center">
                     <Loader />
                   </div>
                 ) : (
-                  [...messages].reverse().map((message, index) => (
-                    <div key={message.id || index}>
-                      <div
-                        className={`${message.type}-massage d-flex align-items-center gap-3 mt-3 mb-3`}
-                      >
-                        {message.type === "incoming" && (
-                          <img
-                            src={message.profile_image_url}
-                            className="img-fluid chat-users rounded-circle"
-                            alt={`User ${index + 1}`}
-                          />
-                        )}
-                        <div
-                          className={`bg-massage bg-${message.type} ${
-                            message.newclass || ""
-                          }`}
-                        >
-                          <div className="d-flex align-items-center justify-content-between">
-                            <h5 className="secondary-medium-font mb-2 mt-2 text-white level-8"></h5>
-                            <h4 className="secondary-regular-font mb-0 extra-color-13 level-8">
-                              {message.time}
-                            </h4>
+                  <>
+                    {messages.length > 0 ? (
+                      [...messages].reverse().map((message, index) => (
+                        <div key={message.id || index}>
+                          <div
+                            className={`${message.type}-massage d-flex align-items-center gap-3 mt-3 mb-3`}
+                          >
+                            {message.type === "incoming" && (
+                              <img
+                                src={message.profile_image_url}
+                                className="img-fluid chat-users rounded-circle"
+                                alt={`User ${index + 1}`}
+                              />
+                            )}
+                            <div
+                              className={`bg-massage bg-${message.type} ${
+                                message.newclass || ""
+                              }`}
+                            >
+                              <div className="d-flex align-items-center justify-content-between">
+                                <h5 className="secondary-medium-font mb-2 mt-2 text-white level-8"></h5>
+                                <h4 className="secondary-regular-font mb-0 extra-color-13 level-8">
+                                  {message.time}
+                                </h4>
+                              </div>
+                              {message.message && (
+                                <p className="mb-0 extra-color-13 secondary-light-font">
+                                  {message.message}
+                                </p>
+                              )}
+                              {message.attachment && (
+                                <img
+                                  src={message.attachment}
+                                  alt="Attachment"
+                                  className="img-fluid mt-2 w-25"
+                                />
+                              )}
+                            </div>
+                            {message.type === "outgoing" && (
+                              <img
+                                src={message.profile_image_url}
+                                className="img-fluid chat-users rounded-circle"
+                                alt={`User ${index + 1}`}
+                              />
+                            )}
                           </div>
-                          {message.message && (
-                            <p className="mb-0 extra-color-13 secondary-light-font">
-                              {message.message}
-                            </p>
-                          )}
-                          {message.attachment && (
-                            <img
-                              src={message.attachment}
-                              alt="Attachment"
-                              className="img-fluid mt-2"
-                            />
-                          )}
-                        </div>
-                        {message.type === "outgoing" && (
-                          <img
-                            src={message.profile_image_url}
-                            className="img-fluid chat-users rounded-circle"
-                            alt={`User ${index + 1}`}
-                          />
-                        )}
-                      </div>
-                      {message.date && (
+                          {/* {message.date && (
                         <div className="row">
                           <div className="col-lg-5 mx-auto position-relative">
                             <h5 className="wrapper-dash-gg dash-date level-8 extra-color-16 secondary-regular-font text-center">
@@ -520,9 +581,15 @@ function ChatComponent({ type }) {
                             </h5>
                           </div>
                         </div>
-                      )}
-                    </div>
-                  ))
+                      )} */}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="py-5 text-capitalize text-center text-secondary">
+                        Send message to start chat
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
               {sendMessageFormHTML()}

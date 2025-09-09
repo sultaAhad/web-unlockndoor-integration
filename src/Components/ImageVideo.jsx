@@ -5,12 +5,21 @@ import {
   useDeleteImageWomanMutation,
   useDeleteVideoWomanMutation,
 } from "../network/services/WomanAuth";
+import { useEffect, useRef } from "react";
+import {
+  useDeleteImageManMutation,
+  useDeleteVideoManMutation,
+} from "../network/services/ManAuth";
 
 const ImageVideo = ({ file, type }) => {
-  const [deleteImageWoman] = useDeleteImageWomanMutation();
-  const [deleteVideoWoman] = useDeleteVideoWomanMutation();
+  const [deleteImageWoman, responseImageWoman] = useDeleteImageWomanMutation();
+  const [deleteVideoWoman, responseVideoWoman] = useDeleteVideoWomanMutation();
+  const [deleteImageMan, responseImageMan] = useDeleteImageManMutation();
+  const [deleteVideoMan, responseVideoMan] = useDeleteVideoManMutation();
+  const fileName = useRef(file.split("/").pop());
 
   const gender = localStorage.getItem("gender");
+
   const deleteFile = (file, type) => {
     Swal.fire({
       title: "Are you sure?",
@@ -23,16 +32,46 @@ const ImageVideo = ({ file, type }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         if (gender === "female") {
-          // if (type === "image") {
-          //   deleteImageWoman(file);
-          // } else if (type === "video") {
-          //   deleteVideoWoman(file);
-          // }
-          // Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          if (type === "image") {
+            deleteImageWoman({ image: fileName?.current });
+          } else if (type === "video") {
+            deleteVideoWoman({ video: fileName?.current });
+          }
+        }
+        if (gender === "male") {
+          if (type === "image") {
+            deleteImageMan({ image: fileName?.current });
+          } else if (type === "video") {
+            deleteVideoMan({ video: fileName?.current });
+          }
         }
       }
     });
   };
+
+  useEffect(() => {
+    if (responseImageMan?.data?.status) {
+      Swal.fire("Deleted!", responseImageMan?.data?.message, "success");
+    }
+  }, [responseImageMan]);
+
+  useEffect(() => {
+    if (responseVideoMan?.data?.status) {
+      Swal.fire("Deleted!", responseVideoMan?.data?.message, "success");
+    }
+  }, [responseVideoMan]);
+
+  useEffect(() => {
+    if (responseImageWoman?.data?.status) {
+      Swal.fire("Deleted!", responseImageWoman?.data?.message, "success");
+    }
+  }, [responseImageWoman]);
+
+  useEffect(() => {
+    if (responseVideoWoman?.data?.status) {
+      Swal.fire("Deleted!", responseImageMan?.data?.message, "success");
+    }
+  }, [responseVideoWoman]);
 
   if (type == "video") {
     return (

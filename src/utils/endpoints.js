@@ -43,6 +43,7 @@ export const PURCHASE_PACKAGES = `auth-men/men-purchase-package`;
 export const EDIT_PROFILE_MAN = `auth-men/update-men`;
 export const MAN_LIKE_WOMEN = `auth-men/like-women`;
 export const OFFER_DATE = `auth-men/offer-date`;
+export const REOFFER_DATE = `auth-men/reoffer-date`;
 export const MAN_DELETE_IMAGES = `auth-men/delete-image`;
 export const MAN_DELETE_VIDEO = `auth-men/delete-video`;
 export const MAN_UPDATE_IMAGE = `auth-men/update-profile-image`;
@@ -58,6 +59,8 @@ export const MAN_MATCHED_PRIFILE = `auth-men/matched-profiles`;
 export const MAN_SPONSORED_DATES = `auth-men/sponsored-dates`;
 export const MAN_FEMALE_MEMBERSHIP = `auth-men/female-members`;
 export const MAN_DATA = `auth-men/men-data`;
+export const DELETE_IMAGE_MAN = `auth-men/delete-image`;
+export const DELETE_VIDEO_MAN = `auth-men/delete-video`;
 
 // Endpoints women
 export const WOMEN_SIGNUP = `auth-women/register-women`;

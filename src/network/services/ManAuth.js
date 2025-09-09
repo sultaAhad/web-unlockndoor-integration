@@ -22,6 +22,9 @@ import {
 	MAN_LOGIN_OTP_VARIFY,
 	MAN_LOGIN_OTP_SAND,
 	MAN_LOGIN_CHANGEPASSWORD_RESET,
+	DELETE_IMAGE_MAN,
+	DELETE_VIDEO_MAN,
+	REOFFER_DATE,
 } from "../../utils/endpoints";
 
 export const ManAuth = createApi({
@@ -154,10 +157,16 @@ export const ManAuth = createApi({
 			}),
 		}),
 
-		// ✅ Dating
 		offerDate: build.mutation({
 			query: (data) => ({
 				url: OFFER_DATE,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		reOfferDate: build.mutation({
+			query: (data) => ({
+				url: REOFFER_DATE,
 				method: "POST",
 				body: data,
 			}),
@@ -194,6 +203,20 @@ export const ManAuth = createApi({
 				method: "GET",
 			}),
 		}),
+		deleteImageMan: build.mutation({
+			query: (formData) => ({
+				url: DELETE_IMAGE_MAN,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
+		deleteVideoMan: build.mutation({
+			query: (formData) => ({
+				url: DELETE_VIDEO_MAN,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
 	}),
 });
 
@@ -220,6 +243,9 @@ export const {
 	useGetFemaleMembershipQuery,
 	useGetManDataQuery,
 	useGetMatchedProfilesQuery,
+	useDeleteImageManMutation,
+	useDeleteVideoManMutation,
+	useReOfferDateMutation,
 } = ManAuth;
 
 export default ManAuth;

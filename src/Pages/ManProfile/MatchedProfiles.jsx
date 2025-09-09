@@ -43,18 +43,14 @@ function MatchedProfiles() {
   const { data, isLoading, refetch } = useGetMatchedProfilesQuery(currentPage);
 
   useEffect(() => {
-    if (data?.response?.data?.matchedProfiles?.data) {
-      let responseData = data?.response?.data?.matchedProfiles;
-      console.log(responseData);
-      setProfiles(responseData?.data);
-
-      // setProfiles((prev) =>
-      //   currentPage == 1 ? responseData.data : [...prev, ...responseData.data]
-      // );
+    if (data?.data?.data) {
+      let responseData = data?.data;
+      setProfiles((prev) =>
+        currentPage == 1 ? responseData.data : [...prev, ...responseData.data]
+      );
       setCurrentPage(responseData?.current_page);
       setLastPage(responseData?.last_page);
     }
-    console.log(profiles);
   }, [data, currentPage]);
 
   useEffect(() => {
