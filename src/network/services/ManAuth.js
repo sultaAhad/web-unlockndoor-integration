@@ -245,7 +245,7 @@ export const {
 	useGetMatchedProfilesQuery,
 	useDeleteImageManMutation,
 	useDeleteVideoManMutation,
-	useReOfferDateMutation
+	useReOfferDateMutation,
 } = ManAuth;
 
 export default ManAuth;

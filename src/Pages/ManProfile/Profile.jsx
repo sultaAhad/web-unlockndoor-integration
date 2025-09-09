@@ -34,6 +34,7 @@ import { checkMiddleware } from "../../middleware/checkMiddleware";
 import { useSelector } from "react-redux";
 import ImageVideo from "../../Components/ImageVideo";
 import ProfileHeader from "../../Components/ProfileHeader";
+import { useGetManDataQuery } from "../../network/services/ManAuth";
 function Profile() {
 	useEffect(() => {
 		AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
@@ -48,8 +49,12 @@ function Profile() {
 			document.body.style.backgroundImage = "";
 		};
 	}, []);
+	// const { user } = useSelector((state) => state.auth);
 
-	const { user } = useSelector((state) => state.auth);
+	const { data, isLoading, error } = useGetManDataQuery();
+
+	// ✅ correct path
+	const user = data?.response?.data?.data;
 
 	return (
 		<>
