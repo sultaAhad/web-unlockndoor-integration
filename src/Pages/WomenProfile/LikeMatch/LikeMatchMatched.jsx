@@ -78,6 +78,7 @@ function LikeMatchMatched() {
               <div className="d-flex align-items-center gap-3 justify-content-end mb-4">
                 <Link
                   onClick={() => {
+                    setMatchedProfiles([]);
                     setFilterBy("matched");
                   }}
                   className="secondary-medium-font text-white"
@@ -91,6 +92,7 @@ function LikeMatchMatched() {
                 <Link
                   className="secondary-medium-font"
                   onClick={() => {
+                    setMatchedProfiles([]);
                     setFilterBy("liked");
                   }}
                   style={{

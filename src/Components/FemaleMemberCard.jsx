@@ -10,6 +10,7 @@ import { useLikeProfileMutation } from "../network/services/WomanAuth";
 import { toast } from "react-toastify";
 import LikeSwapButtons from "./LikeSwapButtons";
 import VideoCallButton from "./VideoCallButton";
+import MakeOfferButton from "./MakeOfferButton";
 
 const FemaleMemberCard = ({ member, key }) => {
   const packageTitle = member?.package?.slug
@@ -17,8 +18,6 @@ const FemaleMemberCard = ({ member, key }) => {
     .toUpperCase();
 
   const [femaleMember, setFemaleMember] = useState(member);
-
-  const [showofferModal, setShowofferModal] = useState(false);
 
   const checkFeatureAccess = (member, feature) => {
     const pkg = member?.package?.slug || "";
@@ -40,8 +39,6 @@ const FemaleMemberCard = ({ member, key }) => {
   const handleClick = (member) => {
     navigate(`/women-details/${member.id}`, { state: { member } });
   };
-  const handleofferClose = () => setShowofferModal(false);
-  const handleofferShow = () => setShowofferModal(true);
 
   return (
     <>
@@ -66,17 +63,7 @@ const FemaleMemberCard = ({ member, key }) => {
             )}
 
             {checkFeatureAccess(femaleMember, "offer") && (
-              <div className="icon-circle iconwra3">
-                <Link
-                  to="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleofferShow();
-                  }}
-                >
-                  <i className="fa-solid fa-heart-circle-plus heart-icon"></i>
-                </Link>
-              </div>
+              <MakeOfferButton member={femaleMember} />
             )}
           </div>
 
@@ -134,13 +121,6 @@ const FemaleMemberCard = ({ member, key }) => {
           </div>
         </div>
       </div>
-
-      {/* Modals */}
-      <OfferModal
-        showofferModal={showofferModal}
-        handleofferClose={handleofferClose}
-        womenId={femaleMember?.id}
-      />
     </>
   );
 };

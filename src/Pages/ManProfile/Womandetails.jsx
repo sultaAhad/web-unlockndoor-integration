@@ -25,6 +25,8 @@ import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
 import LikeSwapButtons from "../../Components/LikeSwapButtons";
+import VideoCallButton from "../../Components/VideoCallButton";
+import MakeOfferButton from "../../Components/MakeOfferButton";
 
 const normalizeMember = (data) => {
   return {
@@ -59,13 +61,6 @@ const normalizeMember = (data) => {
 };
 
 function Womandetails() {
-  // Modals
-  const [showPricingModal, setShowPricingModal] = useState(false);
-  const [showPayModal, setShowPayModal] = useState(false);
-  const [showThankModal, setShowThankModal] = useState(false);
-  const [showVideoChatModal, setShowVideoChatModal] = useState(false);
-
-  // Offer Modal States
   const [showofferModal, setShowofferModal] = useState(false);
   const handleofferClose = () => setShowofferModal(false);
   const handleofferShow = () => setShowofferModal(true);
@@ -102,6 +97,17 @@ function Womandetails() {
       document.body.style.backgroundImage = "";
     };
   }, []);
+
+  const ChatLink = () => (
+    <Link
+      to="/chat"
+      state={member}
+      className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+      style={{ backgroundColor: "transparent" }}
+    >
+      <img src={massagewrapper} className="img-fluid" alt="" /> Message
+    </Link>
+  );
 
   return (
     <>
@@ -202,73 +208,20 @@ function Womandetails() {
                     />
                   </div>
 
-                  {member?.membershipType === "silver-package" && (
-                    <Link
-                      to="/chat"
-                      className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-                      style={{ backgroundColor: "transparent" }}
-                    >
-                      <img src={massagewrapper} className="img-fluid" alt="" />{" "}
-                      Message
-                    </Link>
-                  )}
+                  {member?.membershipType === "silver-package" && <ChatLink />}
 
                   {member?.membershipType === "platinum-package" && (
                     <>
-                      <Button
-                        onClick={handleofferShow}
-                        className="data-offer bg-transparent border-0"
-                      >
-                        <h5 className="secondary-regular-font">
-                          Create Date Offer
-                        </h5>
-                      </Button>
-
-                      <button
-                        onClick={() => setShowPricingModal(true)}
-                        className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-                        style={{ backgroundColor: "transparent" }}
-                      >
-                        <i className="fas fa-video"></i> Video Call
-                      </button>
-
-                      <Link
-                        to="/chat"
-                        className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-                        style={{ backgroundColor: "transparent" }}
-                      >
-                        <img
-                          src={massagewrapper}
-                          className="img-fluid"
-                          alt=""
-                        />{" "}
-                        Message
-                      </Link>
+                      <MakeOfferButton member={member} type="button" />
+                      <VideoCallButton member={member} type="button" />
+                      <ChatLink />
                     </>
                   )}
 
                   {member?.membershipType === "gold-package" && (
                     <>
-                      <button
-                        onClick={() => setShowPricingModal(true)}
-                        className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-                        style={{ backgroundColor: "transparent" }}
-                      >
-                        <i className="fas fa-video"></i> Video Call
-                      </button>
-
-                      <Link
-                        to="/chat"
-                        className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
-                        style={{ backgroundColor: "transparent" }}
-                      >
-                        <img
-                          src={massagewrapper}
-                          className="img-fluid"
-                          alt=""
-                        />{" "}
-                        Message
-                      </Link>
+                      <VideoCallButton member={member} type="button" />
+                      <ChatLink />
                     </>
                   )}
                 </div>
@@ -471,49 +424,6 @@ function Womandetails() {
         handleofferClose={handleofferClose}
         setShowofferModal={setShowofferModal}
       />
-
-      <PricingModal
-        showPricingModal={showPricingModal}
-        handlePricingClose={() => setShowPricingModal(false)}
-        setShowPricingModal={setShowPricingModal}
-        setShowPayModal={setShowPayModal}
-      />
-
-      <PayNowModal
-        showPayModal={showPayModal}
-        handlePayClose={() => setShowPayModal(false)}
-        setShowPayModal={setShowPayModal}
-        setShowThankModal={setShowThankModal}
-      />
-
-      <ThankYouModal
-        showThankModal={showThankModal}
-        handleThankClose={() => setShowThankModal(false)}
-        setShowThankModal={setShowThankModal}
-        setShowVideoChatModal={setShowVideoChatModal}
-      />
-
-      <VideoChatModal
-        showVideoChatModal={showVideoChatModal}
-        handleVideoChatClose={() => setShowVideoChatModal(false)}
-      />
-
-      {/* Video Player Modal */}
-      <Modal
-        show={videoModal.show}
-        onHide={handleVideoClose}
-        centered
-        size="lg"
-      >
-        <Modal.Body className="p-0">
-          <video
-            src={videoModal.url}
-            controls
-            autoPlay
-            style={{ width: "100%", height: "auto" }}
-          />
-        </Modal.Body>
-      </Modal>
     </>
   );
 }

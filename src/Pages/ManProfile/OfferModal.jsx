@@ -66,6 +66,7 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
                   </label>
                   <input
                     type="number"
+                    required
                     name="offer_price"
                     value={form.offer_price}
                     onChange={handleChange}
@@ -85,6 +86,7 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
                   <input
                     type="date"
                     name="date"
+                    required
                     value={form.date}
                     onChange={handleChange}
                     className="form-control"
@@ -102,6 +104,7 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
                   <input
                     type="time"
                     name="time"
+                    required
                     value={form.time}
                     onChange={handleChange}
                     className="form-control"
@@ -119,6 +122,7 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
                   <textarea
                     name="comment"
                     id="comment"
+                    required
                     cols="30"
                     rows="3"
                     className="form-control"

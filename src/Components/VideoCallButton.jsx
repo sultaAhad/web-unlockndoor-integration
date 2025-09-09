@@ -21,18 +21,34 @@ function VideoCallButton({ member, type = "icon" }) {
 
   return (
     <>
-      <div className="icon-circle iconwra2">
-        <Link
-          to="#"
+      {type == "button" && (
+        <button
           onClick={(e) => {
             e.preventDefault();
             // setShowPricingModal(true);
             setShowVideoChatModal(true);
           }}
+          className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
+          style={{ backgroundColor: "transparent" }}
         >
-          <i className="fa-solid fa-video video-icon"></i>
-        </Link>
-      </div>
+          <i className="fas fa-video"></i> Video Call
+        </button>
+      )}
+      {type == "icon" && (
+        <div className="icon-circle iconwra2">
+          <Link
+            to="#"
+            onClick={(e) => {
+              e.preventDefault();
+              // setShowPricingModal(true);
+              setShowVideoChatModal(true);
+            }}
+          >
+            <i className="fa-solid fa-video video-icon"></i>
+          </Link>
+        </div>
+      )}
+
       <PricingModal
         showPricingModal={showPricingModal}
         handlePricingClose={() => setShowPricingModal(false)}
