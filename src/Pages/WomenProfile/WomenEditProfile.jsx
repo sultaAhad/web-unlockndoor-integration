@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { useWomenEditProfileMutation } from "../../network/services/WomanAuth";
 import { toast } from "react-toastify";
@@ -38,7 +39,10 @@ function WomenEditProfile() {
 	const [form, setForm] = useState({
 		name: user?.data?.name,
 		phone: user?.data?.phone,
-		date_of_birth: user?.data?.date_of_birth,
+		// date_of_birth: user?.data?.date_of_birth,
+		date_of_birth: user?.data?.date_of_birth
+			? new Date(user.data.date_of_birth)
+			: null,
 		height: user?.data?.height,
 		body_type: user?.data?.body_type,
 		address: user?.data?.address,
@@ -161,7 +165,11 @@ function WomenEditProfile() {
 		let data = new FormData();
 		data.append("name", form?.name);
 		data.append("phone", form?.phone);
-		data.append("date_of_birth", form?.date_of_birth);
+		// data.append("date_of_birth", form?.date_of_birth);
+		const formattedDOB = form?.date_of_birth
+			? format(new Date(form.date_of_birth), "yyyy-MM-dd")
+			: "";
+		data.append("date_of_birth", formattedDOB);
 		data.append("height", form?.height);
 		data.append("body_type", form?.body_type);
 		data.append("address", form?.address);
@@ -173,7 +181,7 @@ function WomenEditProfile() {
 		videos?.map((item, index) => {
 			return data.append(`videos[${index}]`, item);
 		});
-		// Convert skills array back to comma-separated string
+
 		if (form?.skills && Array.isArray(form.skills)) {
 			data.append("skills", form.skills.join(","));
 		} else {
@@ -192,9 +200,9 @@ function WomenEditProfile() {
 				confirmButtonText: "OK",
 			}).then(() => {
 				if (data?.response) {
-					dispatch(setUser(data.response)); // Redux update
+					dispatch(setUser(data.response));
 				}
-				navigate("/women-profiles"); // redirect
+				navigate("/women-profiles"); 
 			});
 		}
 
@@ -376,25 +384,35 @@ function WomenEditProfile() {
 												</div>
 
 												<div className="col-md-4">
-													<div className="form-group">
+													{/* <div className="form-group">
 														<input
 															type="date"
 															value={form?.date_of_birth}
 															required
 														/>
-													</div>
-													{/* <div className="form-group position-relative">
+													</div> */}
+													<div className="form-group position-relative">
 														<DatePicker
-															selected={dateOfBirth}
-															onChange={(date) => setDateOfBirth(date)}
+															selected={
+																form?.date_of_birth
+																	? new Date(form.date_of_birth)
+																	: null
+															}
+															onChange={(date) =>
+																setForm({ ...form, date_of_birth: date })
+															}
 															placeholderText="Date Of Birth (DOB must match the ID given)"
 															dateFormat="dd/MM/yyyy"
 															className="custom_datePicker"
+															maxDate={new Date()}
+															showYearDropdown
+															scrollableYearDropdown
+															yearDropdownItemNumber={100}
 														/>
 														<div className="input_icons">
 															<img src={solar_calendar} alt="" />
 														</div>
-													</div> */}
+													</div>
 												</div>
 
 												<div className="col-md-4">
@@ -541,7 +559,7 @@ function WomenEditProfile() {
 						))}
 					</div>
 				</div>
-			</section> 
+			</section>
 			{/* ============================ */}
 
 			<Footer />
