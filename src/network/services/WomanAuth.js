@@ -6,6 +6,7 @@ import {
 	DELETE_VIDEO_WOMAN,
 	MAN_LIKE_WOMEN,
 	PURCHASE_PACKAGES_WOMEN,
+	WOMAN_LIKE_MAN_PROFILE,
 	WOMAN_MATCHED_PRIFILE,
 	WOMEN_DATA,
 	WOMEN_LOGIN,
@@ -106,6 +107,13 @@ export const WomenAuth = createApi({
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
 		}),
+		likeManProfile: build.mutation({
+			query: (formData) => ({
+				url: WOMAN_LIKE_MAN_PROFILE,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
 		getWomanMatchProfiles: build.query({
 			query: ({ filterBy, page }) => ({
 				url: `${WOMAN_MATCHED_PRIFILE}?page=${page}&filter_by=${filterBy}`,
@@ -127,6 +135,7 @@ export const {
 	useWomenVerifyOtpMutation,
 	useResetPasswordWomenMutation,
 	useGetWomanMatchProfilesQuery,
+	useLikeManProfileMutation
 } = WomenAuth;
 
 export default WomenAuth;

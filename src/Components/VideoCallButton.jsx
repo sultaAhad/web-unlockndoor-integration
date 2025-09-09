@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import ThankYouModal from "./ChatModals/ThankYouModal";
 import VideoChatModal from "./ChatModals/videoChatModal";
 
-function VideoCallButton({ member }) {
+function VideoCallButton({ member, type = "icon" }) {
   const [showPricingModal, setShowPricingModal] = useState(false);
   const [showPayModal, setShowPayModal] = useState(false);
   const [showThankModal, setShowThankModal] = useState(false);

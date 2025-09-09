@@ -9,6 +9,7 @@ import ProfileHeader from "../../../Components/ProfileHeader";
 import LikeMatchCard from "../../../Components/LikeMatchCard";
 import Spinner from "../../../Components/Spinner";
 import { useGetWomanMatchProfilesQuery } from "../../../network/services/WomanAuth";
+import { ToastContainer } from "react-toastify";
 
 function LikeMatchMatched() {
   const [filterBy, setFilterBy] = useState("matched");
@@ -57,7 +58,8 @@ function LikeMatchMatched() {
     <>
       <Header />
 
-      <section className="profile_sec" data-aos="fade-up">
+      <ToastContainer />
+      <section className="profile_sec">
         <div className="container">
           <div className="row">
             <ProfileHeader />
@@ -69,23 +71,11 @@ function LikeMatchMatched() {
         </div>
       </section>
 
-      <section className="videos_sec" data-aos="fade-right">
+      <section className="videos_sec">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="d-flex align-items-center gap-3 justify-content-end mb-4">
-                <Link
-                  className="secondary-medium-font"
-                  onClick={() => {
-                    setFilterBy("liked");
-                  }}
-                  style={{
-                    ...buttonBaseStyle,
-                    ...(filterBy === "liked" ? activeStyle : {}),
-                  }}
-                >
-                  Unmatched Members
-                </Link>
                 <Link
                   onClick={() => {
                     setFilterBy("matched");
@@ -98,6 +88,18 @@ function LikeMatchMatched() {
                 >
                   Matched Members
                 </Link>
+                <Link
+                  className="secondary-medium-font"
+                  onClick={() => {
+                    setFilterBy("liked");
+                  }}
+                  style={{
+                    ...buttonBaseStyle,
+                    ...(filterBy === "liked" ? activeStyle : {}),
+                  }}
+                >
+                  Unmatched Members
+                </Link>
               </div>
             </div>
           </div>
@@ -109,7 +111,14 @@ function LikeMatchMatched() {
             <>
               <div className="row">
                 {matchedProfiles.map((card, index) => (
-                  <LikeMatchCard key={index} type={filterBy} card={card} />
+                  <LikeMatchCard
+                    key={index}
+                    type={filterBy}
+                    card={card?.liker}
+                    responseAction={() => {
+                      refetch();
+                    }}
+                  />
                 ))}
               </div>
               <div className="row mt-5 pt-4">
