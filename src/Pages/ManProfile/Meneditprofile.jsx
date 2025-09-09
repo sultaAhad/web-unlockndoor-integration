@@ -5,38 +5,38 @@ import Aos from "aos";
 import { calenderwrapper1, uploader_icon } from "../../Constant/Index";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import {
 	useEditProfileMutation,
+	useGetManDataQuery,
 	useUpdateCoverImageMutation,
 	useUpdateProfileImageMutation,
 } from "../../network/services/ManAuth";
-import { setUserToken, setUser } from "../../network/reducers/AuthReducer";
+import { setUser } from "../../network/reducers/AuthReducer";
 
 function Meneditprofile() {
-	const { user } = useSelector((state) => state.auth);
-	console.log(user, "asas");
+	const { data, refetch } = useGetManDataQuery();
+	const user = data?.response?.data?.data;
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	// ✅ Parse skills safely
+	const parseValidDate = (dateString) => {
+		const date = new Date(dateString);
+		return isNaN(date.getTime()) ? null : date;
+	};
+
 	const parsedSkills = user?.skills
 		? Array.isArray(user.skills)
 			? user.skills
 			: user.skills.split(",").map((s) => s.trim())
 		: [];
 
-	// ✅ Safe date parser
-	const parseValidDate = (dateString) => {
-		const date = new Date(dateString);
-		return isNaN(date.getTime()) ? null : date;
-	};
-
 	const [form, setForm] = useState({
 		name: user?.name || "",
 		email: user?.email || "",
-		annual_income: user?.income || "",
+		income: user?.income || "",
 		date_of_birth: parseValidDate(user?.date_of_birth),
 		skills: parsedSkills,
 		message: user?.message || "",
@@ -58,7 +58,7 @@ function Meneditprofile() {
 	const [updateCoverImage, { isLoading: isCoverImageLoading }] =
 		useUpdateCoverImageMutation();
 	const [editProfile, { isLoading: isEditProfileLoading }] =
-    useEditProfileMutation();
+		useEditProfileMutation();
 
 	const bannerInputRef = useRef(null);
 	const profileInputRef = useRef(null);
@@ -81,15 +81,10 @@ function Meneditprofile() {
 					...prev,
 					bannerImage: response.data.cover_image_url,
 				}));
-
 				dispatch(
-					setUser({
-						user: {
-							...user,
-							cover_image_url: response.data.cover_image_url,
-						},
-					}),
+					setUser({ ...user, cover_image_url: response.data.cover_image_url }),
 				);
+				refetch(); // 🔹 Refetch after update
 
 				Swal.fire({
 					icon: "success",
@@ -133,13 +128,13 @@ function Meneditprofile() {
 					...prev,
 					profileImage: response.data.profile_image_url,
 				}));
-
 				dispatch(
 					setUser({
 						...user,
 						profile_image_url: response.data.profile_image_url,
 					}),
 				);
+				refetch(); // 🔹 Refetch after update
 
 				Swal.fire({
 					icon: "success",
@@ -173,7 +168,6 @@ function Meneditprofile() {
 			setForm((prev) => ({ ...prev, skills: [...prev.skills, chip] }));
 		}
 	};
-
 	const handleRemoveChip = (chip) => {
 		setForm((prev) => ({
 			...prev,
@@ -209,15 +203,13 @@ function Meneditprofile() {
 	// ===== Validation =====
 	const validateForm = () => {
 		const errors = {};
-
 		if (!form.name?.trim()) errors.name = "Name is required";
 		if (!form.email?.trim()) errors.email = "Email is required";
 		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
 			errors.email = "Enter a valid email";
 		if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
 		if (!form.occupation?.trim()) errors.occupation = "Occupation is required";
-		if (!form.annual_income?.trim())
-			errors.annual_income = "Annual income is required";
+		if (!form.income?.trim()) errors.income = "Annual income is required";
 		if (!form.skills.length) errors.skills = "At least one skill is required";
 		if (!form.message?.trim()) errors.message = "Message is required";
 		if (!form.bannerImage) errors.bannerImage = "Cover image is required";
@@ -226,11 +218,10 @@ function Meneditprofile() {
 			errors.images = "At least 5 images are required";
 		if (form.videos.length < 2)
 			errors.videos = "At least 2 videos are required";
-
 		return errors;
 	};
 
-	// ===== Submit with FormData =====
+	// ===== Submit =====
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const errors = validateForm();
@@ -247,11 +238,10 @@ function Meneditprofile() {
 		}
 
 		setIsSubmitting(true);
-
 		try {
 			const formData = new FormData();
 			formData.append("name", form.name);
-			formData.append("annual_income", form.annual_income);
+			formData.append("income", form.income);
 			formData.append(
 				"date_of_birth",
 				form.date_of_birth
@@ -273,11 +263,9 @@ function Meneditprofile() {
 
 			const response = await editProfile(formData).unwrap();
 
-			// console.log("updateResponse:", response?.response?.data);
-
 			if (response.status == 200) {
-				// ✅ Merge current user state with updated fields
 				dispatch(setUser(response?.response?.data));
+				refetch(); // 🔹 Refetch after profile update
 			}
 
 			Swal.fire({
@@ -300,13 +288,14 @@ function Meneditprofile() {
 			setIsSubmitting(false);
 		}
 	};
+
+	// ===== Sync user data =====
 	useEffect(() => {
 		if (user) {
-			setForm((prev) => ({
-				...prev,
+			setForm({
 				name: user.name || "",
 				email: user.email || "",
-				annual_income: user.income || "",
+				income: user.income || "",
 				date_of_birth: parseValidDate(user.date_of_birth),
 				skills: Array.isArray(user.skills)
 					? user.skills
@@ -318,7 +307,7 @@ function Meneditprofile() {
 				profileImage: user.profile_image_url || null,
 				images: user.images_urls || [],
 				videos: user.videos_urls || [],
-			}));
+			});
 		}
 	}, [user]);
 
@@ -510,16 +499,16 @@ function Meneditprofile() {
 										<input
 											type="text"
 											placeholder="Annual Income"
-											value={form.annual_income}
+											value={form.income}
 											onChange={(e) =>
 												setForm((prev) => ({
 													...prev,
-													annual_income: e.target.value,
+													income: e.target.value,
 												}))
 											}
 										/>
-										{formErrors.annual_income && (
-											<p className="text-danger">{formErrors.annual_income}</p>
+										{formErrors.income && (
+											<p className="text-danger">{formErrors.income}</p>
 										)}
 									</div>
 								</div>
