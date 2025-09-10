@@ -37,20 +37,18 @@ function WomenEditProfile() {
 		useWomenEditProfileMutation();
 
 	const [form, setForm] = useState({
-		name: user?.data?.name,
-		phone: user?.data?.phone,
-		// date_of_birth: user?.data?.date_of_birth,
-		date_of_birth: user?.data?.date_of_birth
-			? new Date(user.data.date_of_birth)
-			: null,
-		height: user?.data?.height,
-		body_type: user?.data?.body_type,
-		address: user?.data?.address,
-		hair_color: user?.data?.hair_color,
-		nationality: user?.data?.nationality,
-		images: user?.data?.images_urls,
-		videos: user?.data?.videos_urls,
-		skills: user?.data?.skills?.split(",")?.map((skill) => skill.trim()) || [],
+		name: user?.name,
+		phone: user?.phone,
+		// date_of_birth: user?.date_of_birth,
+		date_of_birth: user?.date_of_birth ? new Date(user.date_of_birth) : null,
+		height: user?.height,
+		body_type: user?.body_type,
+		address: user?.address,
+		hair_color: user?.hair_color,
+		nationality: user?.nationality,
+		images: user?.images_urls,
+		videos: user?.videos_urls,
+		skills: user?.skills?.split(",")?.map((skill) => skill.trim()) || [],
 	});
 
 	const handleChange = (e) => {
@@ -191,6 +189,32 @@ function WomenEditProfile() {
 		editProfile(data);
 	};
 
+	// useEffect(() => {
+	// 	if (isSuccess) {
+	// 		Swal.fire({
+	// 			title: "Success!",
+	// 			text: "Profile updated successfully!",
+	// 			icon: "success",
+	// 			confirmButtonText: "OK",
+	// 		}).then(() => {
+	// 			if (data?.response) {
+	// 				// console.log(data?.response);
+	// 				dispatch(setUser(data?.response?.data));
+	// 			}
+	// 			navigate("/women-profiles");
+	// 		});
+	// 	}
+
+	// 	if (isError) {
+	// 		Swal.fire({
+	// 			title: "Error!",
+	// 			text: error?.data?.message || "Something went wrong!",
+	// 			icon: "error",
+	// 			confirmButtonText: "OK",
+	// 		});
+	// 	}
+	// }, [isSuccess, isError, data, error, dispatch, navigate]);
+
 	useEffect(() => {
 		if (isSuccess) {
 			Swal.fire({
@@ -200,21 +224,37 @@ function WomenEditProfile() {
 				confirmButtonText: "OK",
 			}).then(() => {
 				if (data?.response) {
-					dispatch(setUser(data.response));
+					dispatch(setUser(data?.response?.data));
 				}
-				navigate("/women-profiles"); 
+				navigate("/women-profiles");
 			});
 		}
 
-		if (isError) {
-			Swal.fire({
-				title: "Error!",
-				text: error?.data?.message || "Something went wrong!",
-				icon: "error",
-				confirmButtonText: "OK",
-			});
-		}
-	}, [isSuccess, isError, data, error, dispatch, navigate]);
+		// if (isError) {
+		// 	const errorMessage = error?.data?.message || "Something went wrong!";
+		// 	// General error alert
+		// 	Swal.fire({
+		// 		title: "Error!",
+		// 		text: errorMessage,
+		// 		icon: "error",
+		// 		confirmButtonText: "OK",
+		// 	});
+
+		// 	// Loop through errors and show them per field
+		// 	if (error?.data?.errors && Array.isArray(error?.data?.errors)) {
+		// 		error?.data?.errors.forEach((err) => {
+		// 			if (err.field && err.message) {
+		// 				Swal.fire({
+		// 					title: `${err.field} Error!`,
+		// 					text: err.message,
+		// 					icon: "error",
+		// 					confirmButtonText: "OK",
+		// 				});
+		// 			}
+		// 		});
+		// 	}
+		// }
+	}, [isSuccess, data, dispatch, navigate]);
 
 	return (
 		<>
@@ -368,6 +408,15 @@ function WomenEditProfile() {
 															value={form?.phone}
 															required
 														/>
+														{console.log(
+															error?.data?.errors?.phone,
+															"response",
+														)}
+														{error?.data?.errors?.phone && (
+															<div className="text-danger">
+																{error?.data?.errors?.phone?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 												<div className="col-md-4">
@@ -380,6 +429,11 @@ function WomenEditProfile() {
 															value={form?.name}
 															required
 														/>
+														{error?.data?.errors?.name && (
+															<div className="text-danger">
+																{error?.data?.errors?.name?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 
@@ -412,6 +466,11 @@ function WomenEditProfile() {
 														<div className="input_icons">
 															<img src={solar_calendar} alt="" />
 														</div>
+														{error?.data?.errors?.date_of_birth && (
+															<div className="text-danger">
+																{error?.data?.errors?.date_of_birth?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 
@@ -425,6 +484,11 @@ function WomenEditProfile() {
 															placeholder="Body Type"
 															required
 														/>
+														{error?.data?.errors?.body_type && (
+															<div className="text-danger">
+																{error?.data?.errors?.body_type?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 
@@ -438,6 +502,11 @@ function WomenEditProfile() {
 															value={form?.address}
 															required
 														/>
+														{error?.data?.errors?.address && (
+															<div className="text-danger">
+																{error?.data?.errors?.address?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 
@@ -451,6 +520,11 @@ function WomenEditProfile() {
 															value={form?.height}
 															required
 														/>
+														{error?.data?.errors?.height && (
+															<div className="text-danger">
+																{error?.data?.errors?.height?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 												<div className="col-md-4">
@@ -478,6 +552,11 @@ function WomenEditProfile() {
 															value={form?.hair_color}
 															required
 														/>
+														{error?.data?.errors?.hair_color && (
+															<div className="text-danger">
+																{error?.data?.errors?.hair_color?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 												<div className="col-md-4">
@@ -490,6 +569,11 @@ function WomenEditProfile() {
 															value={form?.nationality}
 															required
 														/>
+														{error?.data?.errors?.nationality && (
+															<div className="text-danger">
+																{error?.data?.errors?.nationality?.[0]}
+															</div>
+														)}
 													</div>
 												</div>
 												<div className="col-lg-4">
@@ -537,7 +621,7 @@ function WomenEditProfile() {
 						</div>
 					</div>
 					<div className="row mt-3">
-						{user?.data?.images_urls?.map((image, index) => (
+						{user?.images_urls?.map((image, index) => (
 							<ImageVideo key={index} file={image} type="image" />
 						))}
 					</div>
@@ -554,7 +638,7 @@ function WomenEditProfile() {
 						</div>
 					</div>
 					<div className="row mt-3">
-						{user?.data?.videos_urls?.map((video, index) => (
+						{user?.videos_urls?.map((video, index) => (
 							<ImageVideo key={index} file={video} type="video" />
 						))}
 					</div>
