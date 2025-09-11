@@ -8,6 +8,8 @@ import DatePicker from "react-datepicker";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import {
+	useDeleteImageManMutation,
+	useDeleteVideoManMutation,
 	useEditProfileMutation,
 	useGetManDataQuery,
 	useUpdateCoverImageMutation,
@@ -59,6 +61,8 @@ function Meneditprofile() {
 		useUpdateCoverImageMutation();
 	const [editProfile, { isLoading: isEditProfileLoading }] =
 		useEditProfileMutation();
+	const [deleteImageMan] = useDeleteImageManMutation();
+	const [deleteVideoMan] = useDeleteVideoManMutation();
 
 	const bannerInputRef = useRef(null);
 	const profileInputRef = useRef(null);
@@ -101,7 +105,6 @@ function Meneditprofile() {
 				text:
 					error.data?.message ||
 					"Failed to update cover image. Please try again.",
-				confirmButtonText: "OK",
 			});
 		}
 	};
@@ -145,7 +148,6 @@ function Meneditprofile() {
 				text:
 					error.data?.message ||
 					"Failed to update profile image. Please try again.",
-				confirmButtonText: "OK",
 			});
 		}
 	};
@@ -179,34 +181,65 @@ function Meneditprofile() {
 
 	const removeFile = async (index, type) => {
 		try {
+			let formData = new FormData();
+
 			if (type === "images") {
-				// Optional: call API to delete the image from server first
-				// await deleteImageAPI(imageFiles[index] or image URL)
+				const fileUrl = form.images[index];
 
-				setImageFiles((prev) => prev.filter((_, i) => i !== index));
-				setForm((prev) => ({
-					...prev,
-					images: prev.images.filter((_, i) => i !== index),
-				}));
+				// extract only the filename from the URL
+				const fileName = fileUrl.split("/").pop();
+
+				formData.append("image", fileName);
+
+				const response = await deleteImageMan(formData).unwrap();
+
+				if (response.status === 200) {
+					setForm((prev) => ({
+						...prev,
+						images: prev.images.filter((_, i) => i !== index),
+					}));
+
+					Swal.fire({
+						icon: "success",
+						title: "Deleted!",
+						text: "Image deleted successfully.",
+						timer: 1500,
+						showConfirmButton: false,
+					});
+				}
 			} else if (type === "videos") {
-				// Optional: call API to delete the video from server first
-				// await deleteVideoAPI(videoFiles[index] or video URL)
+				const fileUrl = form.videos[index];
 
-				setVideoFiles((prev) => prev.filter((_, i) => i !== index));
-				setForm((prev) => ({
-					...prev,
-					videos: prev.videos.filter((_, i) => i !== index),
-				}));
+				// extract only the filename from the URL
+				const fileName = fileUrl.split("/").pop();
+
+				formData.append("video", fileName);
+
+				const response = await deleteVideoMan(formData).unwrap();
+
+				if (response.status === 200) {
+					setForm((prev) => ({
+						...prev,
+						videos: prev.videos.filter((_, i) => i !== index),
+					}));
+
+					Swal.fire({
+						icon: "success",
+						title: "Deleted!",
+						text: "Video deleted successfully.",
+						timer: 1500,
+						showConfirmButton: false,
+					});
+				}
 			}
 
-			// Refetch user data so backend changes reflect in UI
 			refetch();
 		} catch (error) {
 			console.error("Failed to remove file:", error);
 			Swal.fire({
 				icon: "error",
 				title: "Error",
-				text: "Failed to remove file. Please try again.",
+				text: error.data?.message || "Could not delete, please try again.",
 				confirmButtonText: "OK",
 			});
 		}
@@ -220,16 +253,21 @@ function Meneditprofile() {
 		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
 			errors.email = "Enter a valid email";
 		if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
+		else if (form.date_of_birth >= new Date())
+			errors.date_of_birth = "Date of Birth must be before today";
 		if (!form.occupation?.trim()) errors.occupation = "Occupation is required";
 		if (!form.income?.trim()) errors.income = "Annual income is required";
 		if (!form.skills.length) errors.skills = "At least one skill is required";
 		if (!form.message?.trim()) errors.message = "Message is required";
-		if (!form.bannerImage) errors.bannerImage = "Cover image is required";
-		if (!form.profileImage) errors.profileImage = "Profile image is required";
-		if (form.images.length < 5)
+		if (!form.bannerImage && !bannerInputRef.current?.files[0])
+			errors.bannerImage = "Cover image is required";
+		if (!form.profileImage && !profileInputRef.current?.files[0])
+			errors.profileImage = "Profile image is required";
+		if (imageFiles.length + (user?.images_urls?.length || 0) < 5)
 			errors.images = "At least 5 images are required";
-		if (form.videos.length < 2)
+		if (videoFiles.length + (user?.videos_urls?.length || 0) < 2)
 			errors.videos = "At least 2 videos are required";
+
 		return errors;
 	};
 
@@ -244,7 +282,6 @@ function Meneditprofile() {
 				icon: "error",
 				title: "Validation Error",
 				text: "Please fill all required fields correctly",
-				confirmButtonText: "OK",
 			});
 			return;
 		}
@@ -263,10 +300,10 @@ function Meneditprofile() {
 			formData.append("occupation", form.occupation);
 			formData.append("nationality", form.nationality);
 
-			if (form.profileImage?.startsWith("http"))
-				formData.append("profile_image", form.profileImage);
-			if (form.bannerImage?.startsWith("http"))
-				formData.append("cover_image", form.bannerImage);
+			if (profileInputRef.current?.files[0])
+				formData.append("profile_image", profileInputRef.current.files[0]);
+			if (bannerInputRef.current?.files[0])
+				formData.append("cover_image", bannerInputRef.current.files[0]);
 
 			imageFiles.forEach((file) => formData.append("images[]", file));
 			videoFiles.forEach((file) => formData.append("videos[]", file));
@@ -297,7 +334,6 @@ function Meneditprofile() {
 				title: "Update Failed",
 				text:
 					error.data?.message || "Failed to update profile. Please try again.",
-				confirmButtonText: "OK",
 			});
 		} finally {
 			setIsSubmitting(false);
@@ -606,11 +642,11 @@ function Meneditprofile() {
 								</div>
 								{/* Images */}
 								<div className="col-md-4">
-									<div className="form-group upload-section mt-2">
+									<div className="form-group upload-section upload-section11 mt-2">
 										<label className="text-white">
 											Upload 5 pictures minimum
 										</label>
-										<div className="uploader py-3 rounded mt-2">
+										<div className="uploader py-3 rounded mt-2 position-relative">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">
 													<img
@@ -634,16 +670,34 @@ function Meneditprofile() {
 										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
 											{form.images.map((img, i) => (
 												<div key={i} className="position-relative">
-													<img src={img} alt="" className="preview-img" />
+													<img
+														src={img}
+														alt=""
+														className="preview-img preview-imgvide img-fluid"
+													/>
 													<span
-														className="position-absolute top-0 end-0 bg-danger text-white rounded-circle p-1"
-														style={{ cursor: "pointer" }}
+														className="position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
+														style={{
+															width: 20,
+															height: 20,
+															lineHeight: "14px",
+															fontSize: 14,
+														}}
 														onClick={() => removeFile(i, "images")}
 													>
 														&times;
 													</span>
 												</div>
 											))}
+											<div class="col-lg-10">
+												<label className="mt-1">
+													Note :{" "}
+													<span className="label_span">
+														make sure you got the best of your attractiveness
+														and qualities{" "}
+													</span>
+												</label>
+											</div>
 											{formErrors.images && (
 												<span className="text-danger">{formErrors.images}</span>
 											)}
@@ -652,11 +706,11 @@ function Meneditprofile() {
 								</div>
 								{/* Videos */}
 								<div className="col-md-4">
-									<div className="form-group upload-section mt-2">
+									<div className="form-group upload-section upload-section11 mt-2">
 										<label className="text-white">
 											Upload 2 videos minimum
 										</label>
-										<div className="uploader py-3 rounded mt-2">
+										<div className="uploader py-3 rounded mt-2 position-relative">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">
 													<img
@@ -680,10 +734,19 @@ function Meneditprofile() {
 										<div className="preview-container d-flex flex-wrap gap-2 mt-2">
 											{form.videos.map((vid, i) => (
 												<div key={i} className="position-relative">
-													<video src={vid} className="preview-img" controls />
+													<video
+														src={vid}
+														className="preview-img preview-imgvide rounded object-cover"
+														controls
+													/>
 													<span
-														className="position-absolute top-0 end-0 bg-danger text-white rounded-circle p-1"
-														style={{ cursor: "pointer" }}
+														className="position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
+														style={{
+															width: 20,
+															height: 20,
+															lineHeight: "14px",
+															fontSize: 14,
+														}}
 														onClick={() => removeFile(i, "videos")}
 													>
 														&times;
