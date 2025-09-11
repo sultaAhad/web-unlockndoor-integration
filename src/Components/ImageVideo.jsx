@@ -11,7 +11,7 @@ import {
   useDeleteVideoManMutation,
 } from "../network/services/ManAuth";
 
-const ImageVideo = ({ file, type }) => {
+const ImageVideo = ({ file, type, onDelete }) => {
   const [deleteImageWoman, responseImageWoman] = useDeleteImageWomanMutation();
   const [deleteVideoWoman, responseVideoWoman] = useDeleteVideoWomanMutation();
   const [deleteImageMan, responseImageMan] = useDeleteImageManMutation();
@@ -45,31 +45,52 @@ const ImageVideo = ({ file, type }) => {
             deleteVideoMan({ video: fileName?.current });
           }
         }
+        onDelete(true);
       }
     });
   };
 
   useEffect(() => {
     if (responseImageMan?.data?.status) {
-      Swal.fire("Deleted!", responseImageMan?.data?.message, "success");
+      Swal.fire({
+        icon: "success",
+        title: responseImageMan?.data?.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   }, [responseImageMan]);
 
   useEffect(() => {
     if (responseVideoMan?.data?.status) {
-      Swal.fire("Deleted!", responseVideoMan?.data?.message, "success");
+      Swal.fire({
+        icon: "success",
+        title: responseVideoMan?.data?.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   }, [responseVideoMan]);
 
   useEffect(() => {
     if (responseImageWoman?.data?.status) {
-      Swal.fire("Deleted!", responseImageWoman?.data?.message, "success");
+      Swal.fire({
+        icon: "success",
+        title: responseImageWoman?.data?.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   }, [responseImageWoman]);
 
   useEffect(() => {
     if (responseVideoWoman?.data?.status) {
-      Swal.fire("Deleted!", responseImageMan?.data?.message, "success");
+      Swal.fire({
+        icon: "success",
+        title: responseVideoWoman?.data?.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   }, [responseVideoWoman]);
 
