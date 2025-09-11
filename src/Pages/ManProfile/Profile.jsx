@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/Css/profile.css";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
@@ -7,38 +7,50 @@ import {
 	edit,
 	editimg,
 	innerpages,
-	manproimage,
-	manproimage1,
-	manproimage2,
-	manproimage3,
-	manproimage4,
-	manproimage5,
-	manproimage6,
-	manproimage7,
-	massagewrapper,
-	mdi_dollar,
-	message,
-	notification,
 	p1,
 	p2,
 	p4,
 	p5,
 	p8,
 	skillimg,
-	solar_upload,
+	mdi_dollar,
 } from "../../Constant/Index";
 import AOS from "aos";
 import { Link } from "react-router-dom";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import { checkMiddleware } from "../../middleware/checkMiddleware";
-import { useSelector } from "react-redux";
+import {
+	useGetManDataQuery,
+	useDeleteImageManMutation,
+	useDeleteVideoManMutation,
+} from "../../network/services/ManAuth";
 import ImageVideo from "../../Components/ImageVideo";
 import ProfileHeader from "../../Components/ProfileHeader";
-import { useGetManDataQuery } from "../../network/services/ManAuth";
+import Swal from "sweetalert2";
+
 function Profile() {
+	const { data, isLoading, error } = useGetManDataQuery();
+	const user = data?.response?.data?.data;
+
+	const [deleteImageMan] = useDeleteImageManMutation();
+	const [deleteVideoMan] = useDeleteVideoManMutation();
+
+	const [form, setForm] = useState({ images: [], videos: [] });
+
+	// Update form when user data is loaded
 	useEffect(() => {
-		AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
+		if (user) {
+			setForm({
+				images: user.images_urls || [],
+				videos: user.videos_urls || [],
+			});
+		}
+	}, [user]);
+
+	useEffect(() => {
+		AOS.init({ duration: 1000, once: true });
 	}, []);
+
 	useEffect(() => {
 		document.body.style.backgroundImage = `url(${innerpages})`;
 		document.body.style.backgroundSize = "cover";
@@ -49,12 +61,65 @@ function Profile() {
 			document.body.style.backgroundImage = "";
 		};
 	}, []);
-	// const { user } = useSelector((state) => state.auth);
 
-	const { data, isLoading, error } = useGetManDataQuery();
+	const removeFile = async (index, type) => {
+		try {
+			let formData = new FormData();
 
-	// ✅ correct path
-	const user = data?.response?.data?.data;
+			if (type === "images") {
+				const fileUrl = form.images[index];
+				const fileName = fileUrl.split("/").pop();
+				formData.append("image", fileName);
+
+				const response = await deleteImageMan(formData).unwrap();
+
+				if (response.status === 200) {
+					setForm((prev) => ({
+						...prev,
+						images: prev.images.filter((_, i) => i !== index),
+					}));
+					Swal.fire({
+						icon: "success",
+						title: "Deleted!",
+						text: "Image deleted successfully.",
+						timer: 1500,
+						showConfirmButton: false,
+					});
+				}
+			} else if (type === "videos") {
+				const fileUrl = form.videos[index];
+				const fileName = fileUrl.split("/").pop();
+				formData.append("video", fileName);
+
+				const response = await deleteVideoMan(formData).unwrap();
+
+				if (response.status === 200) {
+					setForm((prev) => ({
+						...prev,
+						videos: prev.videos.filter((_, i) => i !== index),
+					}));
+					Swal.fire({
+						icon: "success",
+						title: "Deleted!",
+						text: "Video deleted successfully.",
+						timer: 1500,
+						showConfirmButton: false,
+					});
+				}
+			}
+		} catch (error) {
+			console.error("Failed to remove file:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: error.data?.message || "Could not delete, please try again.",
+				confirmButtonText: "OK",
+			});
+		}
+	};
+
+	if (isLoading) return <div>Loading...</div>;
+	if (error) return <div>Error loading profile.</div>;
 
 	return (
 		<>
@@ -66,20 +131,20 @@ function Profile() {
 						<ProfileHeader />
 						<div className="col-md-12 pt-5 for-extra-space">
 							<ProfileNavbartwo />
-
 							<div className="profile_info_dv">
 								<div className="row">
+									{/* Left Column */}
 									<div className="col-md-3">
 										<div className="info_ul">
 											<ul>
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p1} />
+															<img src={p1} alt="Name Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">Name : </span>
+																<span className="blod_area">Name: </span>
 																{user?.name}
 															</h5>
 														</div>
@@ -88,11 +153,11 @@ function Profile() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p2} />
+															<img src={p2} alt="DOB Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area"> DOB : </span>
+																<span className="blod_area">DOB: </span>
 																{user?.date_of_birth}
 															</h5>
 														</div>
@@ -101,13 +166,12 @@ function Profile() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={mdi_dollar} />
+															<img src={mdi_dollar} alt="Income Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area">
-																	{" "}
-																	Annual Income :{" "}
+																	Annual Income:{" "}
 																</span>
 																{user?.income}
 															</h5>
@@ -118,31 +182,31 @@ function Profile() {
 										</div>
 									</div>
 
+									{/* Middle Columns */}
 									<div className="col-md-3">
 										<div className="info_ul">
 											<ul>
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p5} />
+															<img src={p5} alt="Email Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">Email : </span>
+																<span className="blod_area">Email: </span>
 																{user?.email}
 															</h5>
 														</div>
 													</div>
 												</li>
-
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={skillimg} />
+															<img src={skillimg} alt="Skills Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area"> Skills : </span>
+																<span className="blod_area">Skills: </span>
 																{user?.skills}
 															</h5>
 														</div>
@@ -158,13 +222,11 @@ function Profile() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p8} />
+															<img src={p8} alt="Phone Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">
-																	Phone Number :{" "}
-																</span>
+																<span className="blod_area">Phone: </span>
 																{user?.phone}
 															</h5>
 														</div>
@@ -173,11 +235,11 @@ function Profile() {
 												<li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
-															<img src={p4} />
+															<img src={p4} alt="Occupation Icon" />
 														</div>
 														<div className="text_dv">
 															<h5>
-																<span className="blod_area">Occupation :</span>
+																<span className="blod_area">Occupation: </span>
 																{user?.occupation}
 															</h5>
 														</div>
@@ -187,6 +249,7 @@ function Profile() {
 										</div>
 									</div>
 
+									{/* Edit Button */}
 									<div className="col-md-3">
 										<div className="edit_btn text-end">
 											<Link to="/edit-men-profile">
@@ -203,6 +266,8 @@ function Profile() {
 											</Link>
 										</div>
 									</div>
+
+									{/* Message */}
 									<div className="col-lg-12">
 										<p className="text-white secondary-medium-font">
 											Message:{" "}
@@ -218,31 +283,39 @@ function Profile() {
 				</div>
 			</section>
 
-			{/* Pictures section  */}
+			{/* Pictures Section */}
 			<section className="pictures_sec" data-aos="fade-left">
 				<div className="container">
 					<div className="pic_head">
-						<div className="d-flex justify-content-between">
-							<h3>Pictures</h3>
-						</div>
+						<h3>Pictures</h3>
 					</div>
 					<div className="row mt-3">
-						{user?.images_urls?.map((image, index) => (
-							<ImageVideo key={index} file={image} type="image" />
+						{form.images.map((image, index) => (
+							<ImageVideo
+								key={index}
+								file={image}
+								type="image"
+								onDelete={() => removeFile(index, "images")}
+							/>
 						))}
 					</div>
 				</div>
 			</section>
+
+			{/* Videos Section */}
 			<section className="videos_sec" data-aos="fade-right">
 				<div className="container">
 					<div className="pic_head">
-						<div className=" d-flex  justify-content-between">
-							<h3>Videos</h3>
-						</div>
+						<h3>Videos</h3>
 					</div>
 					<div className="row mt-3">
-						{user?.videos_urls?.map((video, index) => (
-							<ImageVideo key={index} file={video} type="video" />
+						{form.videos.map((video, index) => (
+							<ImageVideo
+								key={index}
+								file={video}
+								type="video"
+								onDelete={() => removeFile(index, "videos")}
+							/>
 						))}
 					</div>
 				</div>

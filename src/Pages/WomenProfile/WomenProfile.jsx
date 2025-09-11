@@ -88,7 +88,7 @@ function WomenProfile() {
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area">Name : </span>
-																{user?.data?.name}
+																{user?.name}
 															</h5>
 														</div>
 													</div>
@@ -102,7 +102,7 @@ function WomenProfile() {
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area"> DOB : </span>
-																{user?.data?.date_of_birth}
+																{user?.date_of_birth}
 															</h5>
 														</div>
 													</div>
@@ -119,7 +119,7 @@ function WomenProfile() {
 																	{" "}
 																	Nationality :{" "}
 																</span>
-																{user?.data?.nationality}
+																{user?.nationality}
 															</h5>
 														</div>
 													</div>
@@ -132,7 +132,7 @@ function WomenProfile() {
 																	{" "}
 																	Relationship Status:{" "}
 																</span>
-																{user?.data?.relationship_status}
+																{user?.relationship_status}
 															</h5>
 														</div>
 													</div>
@@ -152,7 +152,7 @@ function WomenProfile() {
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area">Email : </span>
-																{user?.data?.email}
+																{user?.email}
 															</h5>
 														</div>
 													</div>
@@ -166,7 +166,7 @@ function WomenProfile() {
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area"> Height : </span>
-																{user?.data?.height}
+																{user?.height}
 															</h5>
 														</div>
 													</div>
@@ -176,7 +176,7 @@ function WomenProfile() {
 														<div className="text_dv ms-1 mt-1">
 															<h5>
 																<span className="blod_area"> Skills : </span>
-																{user?.data?.skills}
+																{user?.skills}
 															</h5>
 														</div>
 													</div>
@@ -186,7 +186,7 @@ function WomenProfile() {
 														<div className="text_dv">
 															<h5>
 																<span className="blod_area"> Purpose : </span>
-																{user?.data?.purpose}
+																{user?.purpose}
 															</h5>
 														</div>
 													</div>
@@ -208,7 +208,7 @@ function WomenProfile() {
 																<span className="blod_area">
 																	Phone Number :{" "}
 																</span>
-																{user?.data?.phone}
+																{user?.phone}
 															</h5>
 														</div>
 													</div>
@@ -225,7 +225,7 @@ function WomenProfile() {
 																	{" "}
 																	Hair Color :{" "}
 																</span>
-																{user?.data?.hair_color}
+																{user?.hair_color}
 															</h5>
 														</div>
 													</div>
@@ -265,7 +265,7 @@ function WomenProfile() {
 						</div>
 					</div>
 					<div className="row mt-3">
-						{user?.data?.images_urls?.map((image, index) => (
+						{user?.images_urls?.map((image, index) => (
 							<ImageVideo key={index} file={image} type="image" />
 						))}
 					</div>
@@ -282,7 +282,7 @@ function WomenProfile() {
 						</div>
 					</div>
 					<div className="row mt-3">
-						{user?.data?.videos_urls?.map((video, index) => (
+						{user?.videos_urls?.map((video, index) => (
 							<ImageVideo key={index} file={video} type="video" />
 						))}
 					</div>
