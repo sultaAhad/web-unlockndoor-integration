@@ -7,10 +7,9 @@ const VideoCallApp = () => {
   const callFrameRef = useRef();
 
   const createRoom = async () => {
-    const response = await fetch("/api/create-room", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      "http://what-she-said-api.test/v1/api/start-call"
+    );
     const data = await response.json();
     setRoomUrl(data.url);
   };

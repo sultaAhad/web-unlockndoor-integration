@@ -200,9 +200,11 @@ function ChatComponent({ type }) {
       auth: {
         headers: {
           Authorization: `Bearer ${userToken}`,
+          Accept: "application/json",
         },
       },
     });
+
     const channel = pusher.subscribe(`private-chat.${selectedChat.chat_id}`);
     channel.bind("message.sent", (data) => {
       console.log(data);

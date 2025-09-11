@@ -5,29 +5,37 @@ import PricingModal from "./ChatModals/PricingModal";
 import PayNowModal from "./ChatModals/PayNowModal";
 import { Link } from "react-router-dom";
 import ThankYouModal from "./ChatModals/ThankYouModal";
-import VideoChatModal from "./ChatModals/videoChatModal";
+// import VideoChatModal from "./ChatModals/videoChatModal";
+import { useDispatch, useSelector } from "react-redux";
+import { handleVideoCallModal } from "../network/reducers/AuthReducer";
 
 function VideoCallButton({ member, type = "icon" }) {
+   const { user, videoCallData } = useSelector((state) => state.auth);
   const [showPricingModal, setShowPricingModal] = useState(false);
   const [showPayModal, setShowPayModal] = useState(false);
   const [showThankModal, setShowThankModal] = useState(false);
   const [showVideoChatModal, setShowVideoChatModal] = useState(false);
+  const dispatch = useDispatch();
+ 
+  const StartVideoCall = () => {
+    dispatch(
+      handleVideoCallModal({
+        status: true,
+        // data: { member: member, channel: `channel_${member?.id}_${user?.id}` },
+        data: { member: member, channel: `channel_13_20` },
+      })
+    );
+  }
 
-  const Loader = () => (
-    <div className="btn-loader spinner-border text-warning" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
-  );
+
+  
+
 
   return (
     <>
       {type == "button" && (
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            // setShowPricingModal(true);
-            setShowVideoChatModal(true);
-          }}
+          onClick={StartVideoCall}
           className="wrapper-bg-good btn rounded-pill text-white px-4 d-flex align-items-center gap-2"
           style={{ backgroundColor: "transparent" }}
         >
@@ -36,14 +44,7 @@ function VideoCallButton({ member, type = "icon" }) {
       )}
       {type == "icon" && (
         <div className="icon-circle iconwra2">
-          <Link
-            to="#"
-            onClick={(e) => {
-              e.preventDefault();
-              // setShowPricingModal(true);
-              setShowVideoChatModal(true);
-            }}
-          >
+          <Link to="#" onClick={StartVideoCall}>
             <i className="fa-solid fa-video video-icon"></i>
           </Link>
         </div>
@@ -65,15 +66,15 @@ function VideoCallButton({ member, type = "icon" }) {
         showThankModal={showThankModal}
         handleThankClose={() => {
           setShowThankModal(false);
-          setShowVideoChatModal(true); // 🔹 ThankYou ke baad Video Chat open hoga
+          setShowVideoChatModal(true);
         }}
         setShowThankModal={setShowThankModal}
         setShowVideoChatModal={setShowVideoChatModal}
       />
-      <VideoChatModal
+      {/* <VideoChatModal
         showVideoChatModal={showVideoChatModal}
         handleVideoChatClose={() => setShowVideoChatModal(false)}
-      />
+      /> */}
     </>
   );
 }

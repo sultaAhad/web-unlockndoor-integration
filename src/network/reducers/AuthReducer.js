@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	userToken: "",
 	user: null,
+	videoCallData: { status: false, data: null },
 };
 
 const AuthReducer = createSlice({
@@ -21,8 +22,11 @@ const AuthReducer = createSlice({
 			state.userToken = "";
 			state.user = null;
 		},
+		handleVideoCallModal: (state, action) => {
+			state.videoCallData = action.payload;
+		},
 	},
 });
 
-export const { setUserToken, setUser, setLogoutUser } = AuthReducer.actions;
+export const { setUserToken, setUser, setLogoutUser, handleVideoCallModal } = AuthReducer.actions;
 export default AuthReducer.reducer;
