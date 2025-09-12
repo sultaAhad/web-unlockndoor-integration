@@ -2,147 +2,184 @@ import { Link } from "react-router-dom";
 import { deletetrash } from "../Constant/Index";
 import Swal from "sweetalert2";
 import {
-  useDeleteImageWomanMutation,
-  useDeleteVideoWomanMutation,
+	useDeleteImageWomanMutation,
+	useDeleteVideoWomanMutation,
 } from "../network/services/WomanAuth";
-import { useEffect, useRef } from "react";
 import {
-  useDeleteImageManMutation,
-  useDeleteVideoManMutation,
+	useDeleteImageManMutation,
+	useDeleteVideoManMutation,
 } from "../network/services/ManAuth";
+import { useEffect, useRef } from "react";
+
+// Fancybox imports
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 const ImageVideo = ({ file, type, onDelete }) => {
-  const [deleteImageWoman, responseImageWoman] = useDeleteImageWomanMutation();
-  const [deleteVideoWoman, responseVideoWoman] = useDeleteVideoWomanMutation();
-  const [deleteImageMan, responseImageMan] = useDeleteImageManMutation();
-  const [deleteVideoMan, responseVideoMan] = useDeleteVideoManMutation();
-  const fileName = useRef(file.split("/").pop());
+	const [deleteImageWoman, responseImageWoman] = useDeleteImageWomanMutation();
+	const [deleteVideoWoman, responseVideoWoman] = useDeleteVideoWomanMutation();
+	const [deleteImageMan, responseImageMan] = useDeleteImageManMutation();
+	const [deleteVideoMan, responseVideoMan] = useDeleteVideoManMutation();
 
-  const gender = localStorage.getItem("gender");
+	const fileName = useRef(file.split("/").pop());
+	const gender = localStorage.getItem("gender");
 
-  const deleteFile = (file, type) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: `You will not be able to recover this ${type} file!`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (gender === "female") {
-          if (type === "image") {
-            deleteImageWoman({ image: fileName?.current });
-          } else if (type === "video") {
-            deleteVideoWoman({ video: fileName?.current });
-          }
-        }
-        if (gender === "male") {
-          if (type === "image") {
-            deleteImageMan({ image: fileName?.current });
-          } else if (type === "video") {
-            deleteVideoMan({ video: fileName?.current });
-          }
-        }
-        onDelete(true);
-      }
-    });
-  };
+	// Fancybox setup
+	useEffect(() => {
+		Fancybox.bind("[data-fancybox]", {
+			Toolbar: {
+				display: [
+					{ id: "counter", position: "center" },
+					"zoom",
+					"fullscreen",
+					"close",
+				],
+			},
+			Video: {
+				autoplay: true,
+			},
+		});
 
-  useEffect(() => {
-    if (responseImageMan?.data?.status) {
-      Swal.fire({
-        icon: "success",
-        title: responseImageMan?.data?.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  }, [responseImageMan]);
+		return () => {
+			Fancybox.destroy();
+		};
+	}, []);
 
-  useEffect(() => {
-    if (responseVideoMan?.data?.status) {
-      Swal.fire({
-        icon: "success",
-        title: responseVideoMan?.data?.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  }, [responseVideoMan]);
+	const deleteFile = (file, type) => {
+		Swal.fire({
+			title: "Are you sure?",
+			text: `You will not be able to recover this ${type} file!`,
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				if (gender === "female") {
+					if (type === "image") {
+						deleteImageWoman({ image: fileName?.current });
+					} else if (type === "video") {
+						deleteVideoWoman({ video: fileName?.current });
+					}
+				}
+				if (gender === "male") {
+					if (type === "image") {
+						deleteImageMan({ image: fileName?.current });
+					} else if (type === "video") {
+						deleteVideoMan({ video: fileName?.current });
+					}
+				}
+				onDelete(true);
+			}
+		});
+	};
 
-  useEffect(() => {
-    if (responseImageWoman?.data?.status) {
-      Swal.fire({
-        icon: "success",
-        title: responseImageWoman?.data?.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  }, [responseImageWoman]);
+	// Success messages
+	useEffect(() => {
+		if (responseImageMan?.data?.status) {
+			Swal.fire({
+				icon: "success",
+				title: responseImageMan?.data?.message,
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		}
+	}, [responseImageMan]);
 
-  useEffect(() => {
-    if (responseVideoWoman?.data?.status) {
-      Swal.fire({
-        icon: "success",
-        title: responseVideoWoman?.data?.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  }, [responseVideoWoman]);
+	useEffect(() => {
+		if (responseVideoMan?.data?.status) {
+			Swal.fire({
+				icon: "success",
+				title: responseVideoMan?.data?.message,
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		}
+	}, [responseVideoMan]);
 
-  if (type == "video") {
-    return (
-      <div className="col-md-6">
-        <div className="pictures_dv">
-          <div className="pic_dv">
-            <div className="del_icon d-flex align-items-center justify-content-center  ">
-              <Link
-                className="cursor-pointer"
-                onClick={() => deleteFile(file, type)}
-              >
-                <img
-                  src={deletetrash}
-                  className="img-fluid wrapper-deletetrash"
-                />
-              </Link>
-            </div>
-            <video>
-              <source src={file} type="video/mp4" />
-            </video>
-            <div className="pic_icon">
-              <i className="fa fa-play" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  if (type == "image") {
-    return (
-      <div className="col-md-6">
-        <div className="pictures_dv">
-          <div className="pic_dv">
-            <div className="del_icon d-flex align-items-center justify-content-center  ">
-              <Link
-                className="cursor-pointer"
-                onClick={() => deleteFile(file, type)}
-              >
-                <img
-                  src={deletetrash}
-                  className="img-fluid wrapper-deletetrash"
-                />
-              </Link>
-            </div>
-            <img src={file} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+	useEffect(() => {
+		if (responseImageWoman?.data?.status) {
+			Swal.fire({
+				icon: "success",
+				title: responseImageWoman?.data?.message,
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		}
+	}, [responseImageWoman]);
+
+	useEffect(() => {
+		if (responseVideoWoman?.data?.status) {
+			Swal.fire({
+				icon: "success",
+				title: responseVideoWoman?.data?.message,
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		}
+	}, [responseVideoWoman]);
+
+	// Render video
+	if (type === "video") {
+		return (
+			<div className="col-md-6">
+				<div className="pictures_dv">
+					<div className="pic_dv position-relative">
+						<div className="del_icon d-flex align-items-center justify-content-center">
+							<Link
+								className="cursor-pointer"
+								onClick={() => deleteFile(file, type)}
+							>
+								<img
+									src={deletetrash}
+									className="img-fluid wrapper-deletetrash"
+								/>
+							</Link>
+						</div>
+
+						{/* Fancybox trigger */}
+						<a data-fancybox="gallery" href={file}>
+							<video className="w-100 h-100" muted>
+								<source src={file} type="video/mp4" />
+							</video>
+							<div className="pic_icon cursor-pointer">
+								<i className="fa fa-play" aria-hidden="true"></i>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	// Render image
+	if (type === "image") {
+		return (
+			<div className="col-md-6">
+				<div className="pictures_dv">
+					<div className="pic_dv position-relative">
+						<div className="del_icon d-flex align-items-center justify-content-center">
+							<Link
+								className="cursor-pointer"
+								onClick={() => deleteFile(file, type)}
+							>
+								<img
+									src={deletetrash}
+									className="img-fluid wrapper-deletetrash"
+								/>
+							</Link>
+						</div>
+
+						{/* Fancybox trigger */}
+						<a data-fancybox="gallery" href={file}>
+							<img src={file} alt="uploaded" className="setimgwrapper" />
+						</a>
+					</div>
+				</div>
+			</div>
+		);
+	}
 };
 
 export default ImageVideo;

@@ -63,6 +63,8 @@ export const DELETE_IMAGE_MAN = `auth-men/delete-image`;
 export const DELETE_VIDEO_MAN = `auth-men/delete-video`;
 
 // Endpoints women
+export const CHANGE_PROFILE_IMAGE_WOMEN = `auth-women/update-profile-image`;
+export const CHANGE_COVER_IMAGE_WOMEN = `auth-women/update-cover-image`;
 export const WOMEN_SIGNUP = `auth-women/register-women`;
 export const WOMEN_LOGIN = `auth-women/login-women`;
 export const WOMEN_LOGIN_OTP_VARIFY = `auth-women/verify-otp`;

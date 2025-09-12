@@ -70,9 +70,17 @@ function Meneditprofile() {
 	const videosInputRef = useRef(null);
 
 	// ===== Banner Upload =====
+	// ===== Banner Upload =====
 	const handleBannerChange = async (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
+
+		// Show preview instantly
+		const localPreview = URL.createObjectURL(file);
+		setForm((prev) => ({
+			...prev,
+			bannerImage: localPreview,
+		}));
 
 		try {
 			const formData = new FormData();
@@ -83,7 +91,7 @@ function Meneditprofile() {
 			if (response.data?.cover_image_url) {
 				setForm((prev) => ({
 					...prev,
-					bannerImage: response.data.cover_image_url,
+					bannerImage: response.data.cover_image_url, // replace with server image
 				}));
 				dispatch(
 					setUser({ ...user, cover_image_url: response.data.cover_image_url }),
@@ -114,6 +122,13 @@ function Meneditprofile() {
 		const file = e.target.files[0];
 		if (!file) return;
 
+		// Show preview instantly
+		const localPreview = URL.createObjectURL(file);
+		setForm((prev) => ({
+			...prev,
+			profileImage: localPreview,
+		}));
+
 		try {
 			const formData = new FormData();
 			formData.append("profile_image", file);
@@ -123,7 +138,7 @@ function Meneditprofile() {
 			if (response.data?.profile_image_url) {
 				setForm((prev) => ({
 					...prev,
-					profileImage: response.data.profile_image_url,
+					profileImage: response.data.profile_image_url, // replace with server image
 				}));
 				dispatch(
 					setUser({
