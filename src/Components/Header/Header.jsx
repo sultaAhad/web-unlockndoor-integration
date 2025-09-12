@@ -45,44 +45,44 @@ function Header() {
   }, [videoCallData]);
 
   useEffect(() => {
-    Swal.fire({
-      title: "Someone is calling you",
-      html: `
-		<div style="display: flex; flex-direction: column; align-items: center;">
-		  <div class="calling-icon-animation" style="margin-bottom: 10px;">
-			<svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-			  <circle cx="12" cy="12" r="10" stroke="#3085d6" stroke-width="2" fill="#e3f2fd">
-				<animate attributeName="r" values="10;14;10" dur="1s" repeatCount="indefinite"/>
-			  </circle>
-			  <path d="M17 2C17 2 19 4 19 7C19 10 15 14 12 14C9 14 5 10 5 7C5 4 7 2 7 2" stroke="#3085d6" stroke-width="2" fill="none"/>
-			  <circle cx="12" cy="7" r="2" fill="#3085d6"/>
-			</svg>
-		  </div>
-		  <span style="font-size: 1.1em;">Incoming Call...</span>
-		</div>
-	  `,
-      showDenyButton: true,
-      position: "top-end",
-      animation: true,
-      showCancelButton: false,
-      confirmButtonText: "Receive Call",
-      denyButtonText: `Reject`,
-      customClass: {
-        popup: "swal2-calling-popup",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(
-          handleVideoCallModal({
-            status: true,
-            // data: { member: member, channel: `channel_${member?.id}_${user?.id}` },
-            data: { member: member ?? null, channel: `channel_13_20` },
-          })
-        );
-      } else if (result.isDenied) {
-        Swal.fire("Call Rejected", "", "info");
-      }
-    });
+    // Swal.fire({
+    //   title: "Someone is calling you",
+    //   html: `
+    // <div style="display: flex; flex-direction: column; align-items: center;">
+    //   <div class="calling-icon-animation" style="margin-bottom: 10px;">
+    // 	<svg width="60" height="60" viewBox="0 0 24 24" fill="none">
+    // 	  <circle cx="12" cy="12" r="10" stroke="#3085d6" stroke-width="2" fill="#e3f2fd">
+    // 		<animate attributeName="r" values="10;14;10" dur="1s" repeatCount="indefinite"/>
+    // 	  </circle>
+    // 	  <path d="M17 2C17 2 19 4 19 7C19 10 15 14 12 14C9 14 5 10 5 7C5 4 7 2 7 2" stroke="#3085d6" stroke-width="2" fill="none"/>
+    // 	  <circle cx="12" cy="7" r="2" fill="#3085d6"/>
+    // 	</svg>
+    //   </div>
+    //   <span style="font-size: 1.1em;">Incoming Call...</span>
+    // </div>
+    // `,
+    //   showDenyButton: true,
+    //   position: "top-end",
+    //   animation: true,
+    //   showCancelButton: false,
+    //   confirmButtonText: "Receive Call",
+    //   denyButtonText: `Reject`,
+    //   customClass: {
+    //     popup: "swal2-calling-popup",
+    //   },
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     dispatch(
+    //       handleVideoCallModal({
+    //         status: true,
+    //         // data: { member: member, channel: `channel_${member?.id}_${user?.id}` },
+    //         data: { member: member ?? null, channel: `channel_13_20`,type:'IsReceiving' },
+    //       })
+    //     );
+    //   } else if (result.isDenied) {
+    //     Swal.fire("Call Rejected", "", "info");
+    //   }
+    // });
   }, []);
 
   const handleCategoryShow = (gender) => {

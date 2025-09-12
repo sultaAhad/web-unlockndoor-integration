@@ -22,7 +22,7 @@ function VideoCallButton({ member, type = "icon" }) {
       handleVideoCallModal({
         status: true,
         // data: { member: member, channel: `channel_${member?.id}_${user?.id}` },
-        data: { member: member, channel: `channel_13_20` },
+        data: { member: member, channel: `channel_13_20`, type: "isCalling" },
       })
     );
   }
