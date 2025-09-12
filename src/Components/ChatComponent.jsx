@@ -118,7 +118,7 @@ function ChatComponent({ type }) {
       }
       let response = await sendMessage(sendForm).unwrap();
       if (response.success) {
-        setMessages((pre) => [...pre, formateMessage(response.message)]);
+        // setMessages((pre) => [...pre, formateMessage(response.message)]);
         setForm((pre) => ({
           ...pre,
           message: "",
@@ -196,20 +196,21 @@ function ChatComponent({ type }) {
     const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
       cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
       encrypted: true,
-      authEndpoint: `${import.meta.env.VITE_APP_API_URL}/broadcasting/auth`,
-      auth: {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-          Accept: "application/json",
-        },
-      },
+      // authEndpoint: `${import.meta.env.VITE_APP_API_URL}/broadcasting/auth`,
+      // auth: {
+      //   headers: {
+      //     Authorization: `Bearer ${userToken}`,
+      //     Accept: "application/json",
+      //   },
+      // },
     });
 
-    const channel = pusher.subscribe(`private-chat.${selectedChat.chat_id}`);
+    const channel = pusher.subscribe(
+      `chatunlockndoorchannel.${selectedChat.chat_id}`
+    );
     channel.bind("message.sent", (data) => {
-      console.log(data);
-
-      // setMessages((prev) => [...prev, formateMessage(data.message)]);
+      setMessages((prev) => [...prev, formateMessage(data?.message)]);
+      refetch();
     });
     return () => {
       channel.unbind_all();
