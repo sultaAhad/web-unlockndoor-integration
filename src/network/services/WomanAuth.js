@@ -2,6 +2,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
 import {
+	CHANGE_COVER_IMAGE_WOMEN,
+	CHANGE_PROFILE_IMAGE_WOMEN,
 	DELETE_IMAGE_WOMAN,
 	DELETE_VIDEO_WOMAN,
 	MAN_LIKE_WOMEN,
@@ -73,13 +75,13 @@ export const WomenAuth = createApi({
 				body: data,
 			}),
 		}),
-		womanData: build.mutation({
-			query: (credentials) => ({
-				url: WOMEN_DATA,
-				method: "POST",
-				body: credentials,
+		womanData: build.query({
+			query: () => ({
+				url: WOMEN_DATA, // your GET endpoint
+				method: "GET",
 			}),
 		}),
+
 		purchasePackageWomen: build.mutation({
 			query: (formData) => ({
 				url: PURCHASE_PACKAGES_WOMEN,
@@ -128,6 +130,20 @@ export const WomenAuth = createApi({
 				method: "GET",
 			}),
 		}),
+		updateProfileImageWomen: build.mutation({
+			query: (formData) => ({
+				url: CHANGE_PROFILE_IMAGE_WOMEN,
+				method: "POST",
+				body: formData,
+			}),
+		}),
+		updateCoverImageWomen: build.mutation({
+			query: (formData) => ({
+				url: CHANGE_COVER_IMAGE_WOMEN,
+				method: "POST",
+				body: formData,
+			}),
+		}),
 	}),
 });
 
@@ -138,13 +154,15 @@ export const {
 	useDeleteImageWomanMutation,
 	useDeleteVideoWomanMutation,
 	useWomenEditProfileMutation,
-	useWomanDataMutation,
+	useUpdateProfileImageWomenMutation,
+	useUpdateCoverImageWomenMutation,
+	useWomanDataQuery,
 	useLikeProfileMutation,
 	useWomenSendOtpMutation,
 	useWomenVerifyOtpMutation,
 	useResetPasswordWomenMutation,
 	useGetWomanMatchProfilesQuery,
-	useLikeManProfileMutation
+	useLikeManProfileMutation,
 } = WomenAuth;
 
 export default WomenAuth;
