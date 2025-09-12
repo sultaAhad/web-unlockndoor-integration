@@ -18,6 +18,7 @@ import VideoChatModal from "../ChatModals/VideoChatModal";
 import Swal from "sweetalert2";
 import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
 import Pusher from "pusher-js";
+import { useCallActionMutation } from "../../network/services/Chat";
 
 function Header() {
   const [showModal1, setShowModal1] = useState(false); // Role selection
@@ -34,8 +35,24 @@ function Header() {
   const { user, videoCallData } = useSelector((state) => state.auth);
   const [showVideoChatModal, setShowVideoChatModal] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [callAction] = useCallActionMutation();
   const dispatch = useDispatch();
   const member = useRef(null);
+
+  const rejectCallAction = async (user_id, channel) => {
+    const formData = {
+      channel_name: `reject_call_${user_id}`,
+      action: "reject-call",
+      data: { channel: channel },
+    };
+    try {
+      let response = await callAction(formData);
+      if (response?.data?.success) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (pageLoaded) {
@@ -51,7 +68,13 @@ function Header() {
       encrypted: false,
     });
     const videoChannel = pusher.subscribe(`channel_${user.id}`);
+    let audio = null;
+
     videoChannel.bind("call.action", (data) => {
+      audio = new Audio("/ring.mp3");
+      audio.loop = true;
+      audio.play();
+
       Swal.fire({
         title: "Incoming Video Call",
         html: `
@@ -87,6 +110,10 @@ function Header() {
         allowEnterKey: false,
         backdrop: false,
       }).then((result) => {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
         if (result.isConfirmed) {
           dispatch(
             handleVideoCallModal({
@@ -99,12 +126,16 @@ function Header() {
             })
           );
         } else if (result.isDenied) {
-          // Swal.fire("Call Rejected", "", "info");
+          rejectCallAction(data.data?.data?.from_id, data?.data?.data?.channel);
         }
       });
     });
 
     return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
       videoChannel.unbind_all();
       videoChannel.unsubscribe();
       pusher.disconnect();
