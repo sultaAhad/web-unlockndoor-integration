@@ -17,6 +17,7 @@ import CategoryModal from "./CategoryModal";
 import VideoChatModal from "../ChatModals/VideoChatModal";
 import Swal from "sweetalert2";
 import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
+import Pusher from "pusher-js";
 
 function Header() {
   const [showModal1, setShowModal1] = useState(false); // Role selection
@@ -45,44 +46,69 @@ function Header() {
   }, [videoCallData]);
 
   useEffect(() => {
-    // Swal.fire({
-    //   title: "Someone is calling you",
-    //   html: `
-    // <div style="display: flex; flex-direction: column; align-items: center;">
-    //   <div class="calling-icon-animation" style="margin-bottom: 10px;">
-    // 	<svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-    // 	  <circle cx="12" cy="12" r="10" stroke="#3085d6" stroke-width="2" fill="#e3f2fd">
-    // 		<animate attributeName="r" values="10;14;10" dur="1s" repeatCount="indefinite"/>
-    // 	  </circle>
-    // 	  <path d="M17 2C17 2 19 4 19 7C19 10 15 14 12 14C9 14 5 10 5 7C5 4 7 2 7 2" stroke="#3085d6" stroke-width="2" fill="none"/>
-    // 	  <circle cx="12" cy="7" r="2" fill="#3085d6"/>
-    // 	</svg>
-    //   </div>
-    //   <span style="font-size: 1.1em;">Incoming Call...</span>
-    // </div>
-    // `,
-    //   showDenyButton: true,
-    //   position: "top-end",
-    //   animation: true,
-    //   showCancelButton: false,
-    //   confirmButtonText: "Receive Call",
-    //   denyButtonText: `Reject`,
-    //   customClass: {
-    //     popup: "swal2-calling-popup",
-    //   },
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     dispatch(
-    //       handleVideoCallModal({
-    //         status: true,
-    //         // data: { member: member, channel: `channel_${member?.id}_${user?.id}` },
-    //         data: { member: member ?? null, channel: `channel_13_20`,type:'IsReceiving' },
-    //       })
-    //     );
-    //   } else if (result.isDenied) {
-    //     Swal.fire("Call Rejected", "", "info");
-    //   }
-    // });
+    const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
+      cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
+      encrypted: false,
+    });
+    const videoChannel = pusher.subscribe(`channel_${user.id}`);
+    videoChannel.bind("call.action", (data) => {
+      Swal.fire({
+        title: "Incoming Video Call",
+        html: `
+      <div style="display: flex; flex-direction: column; align-items: center; padding: 20px 10px;">
+        <div style="margin-bottom: 16px;">
+        <img
+          src="${data.data?.data?.from_user_profile_image_url || men_profile}"
+          alt="Caller"
+          style="height: 70px; width: 70px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+        />
+        </div>
+        <div style="font-size: 1.15em; font-weight: 500; margin-bottom: 8px;">
+        ${data.data?.data?.from_user_name || "Unknown User"} is calling you...
+        </div>
+        <div style="font-size: 0.95em; color: #666; margin-bottom: 18px;">
+        Please choose to accept or reject the call.
+        </div>
+      </div>
+      `,
+        showDenyButton: true,
+        position: "top-end",
+        animation: true,
+        confirmButtonText: "Receive Call",
+        denyButtonText: `Reject`,
+        customClass: {
+          popup: "swal2-calling-popup",
+        },
+        showCloseButton: false,
+        showCancelButton: false,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        backdrop: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            handleVideoCallModal({
+              status: true,
+              data: {
+                member: data?.data?.data,
+                channel: data?.data?.data?.channel,
+                type: "IsReceiving",
+              },
+            })
+          );
+        } else if (result.isDenied) {
+          // Swal.fire("Call Rejected", "", "info");
+        }
+      });
+    });
+
+    return () => {
+      videoChannel.unbind_all();
+      videoChannel.unsubscribe();
+      pusher.disconnect();
+    };
   }, []);
 
   const handleCategoryShow = (gender) => {

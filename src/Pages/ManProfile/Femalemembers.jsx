@@ -79,7 +79,7 @@ function Femalemembers({ member }) {
           ) : (
             <div className="row">
               {members.map((member) => (
-                <FemaleMemberCard key={member.id} member={member} />
+                <FemaleMemberCard memberId={member.id} member={member} />
               ))}
             </div>
           )}

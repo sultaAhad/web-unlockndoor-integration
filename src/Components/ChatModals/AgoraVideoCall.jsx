@@ -4,8 +4,10 @@ import "../../assets/Css/AgoraVideoCall.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
+import { useCallActionMutation } from "../../network/services/Chat";
 
 const AgoraVideoCall = ({ onCall, onCallEnd }) => {
+  const [callAction] = useCallActionMutation();
   const { user, videoCallData } = useSelector((state) => state.auth);
   const [appId] = useState(import.meta.env.VITE_APP_AGORA_APP_ID);
   const [channel, setChannel] = useState(null);
@@ -20,7 +22,6 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
 
   const dispatch = useDispatch();
   const client = useRef();
-  console.log(videoCallData?.data?.type);
   useEffect(() => {
     setChannel(videoCallData?.data?.channel);
   }, [videoCallData]);
@@ -67,17 +68,42 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
     }
   }, [channel]);
 
-  const callSecondEndUser = async () => {
+  // const endCallAction = async () => {
+  //   const formData = {
+  //     channel: channel,
+  //     action: "end-call",
+  //     data: {},
+  //   };
+  //   try {
+  //     let response = await callAction(formData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const startCallAction = async () => {
     const formData = {
-      from_id: user?.id,
-      from_user_name: user?.name,
-      from_user_profile_image_url: user?.profile_image_url,
-      from_type: user?.gender,
-      to_id: videoCallData?.data?.member?.id,
-      to_type: videoCallData?.data?.member?.gender,
-      channel: channel,
+      channel_name: `channel_${videoCallData?.data?.member?.id}`,
+      action: "start-call",
+      data: {
+        channel: channel,
+        from_id: user?.id,
+        from_user_name: user?.name,
+        from_user_profile_image_url: user?.profile_image_url,
+        from_type: user?.gender == "male" ? "Men" : "Women",
+        to_id: videoCallData?.data?.member?.id,
+        to_type:
+          videoCallData?.data?.member?.gender == "male" ? "Men" : "Women",
+      },
     };
+    try {
+      let response = await callAction(formData);
+      if (response?.data?.success) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const startVideoCall = async () => {
     console.log(user);
     if (!appId || !channel) {
@@ -98,7 +124,7 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
         //     window.location.pathname
         //   }?channel=${encodeURIComponent(channel)}`
         // );
-        callSecondEndUser();
+        startCallAction();
       }
       setTimeout(() => {
         videoTrack.play("local-video");
@@ -125,7 +151,6 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
       dispatch(
         handleVideoCallModal({
           status: false,
-          // data: { member: member, channel: `channel_${member?.id}_${user?.id}` },
           data: {},
         })
       );
@@ -190,7 +215,12 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
             <div id="remote-video" className="video-player"></div>
             {users.length === 0 && (
               <div className="calling-overlay">
-                <h2>Calling...</h2>
+                {videoCallData?.data?.type == "isCalling" && (
+                  <h2>Calling...</h2>
+                )}
+                {videoCallData?.data?.type == "IsReceiving" && (
+                  <h2>Connecting Call...</h2>
+                )}
               </div>
             )}
           </div>

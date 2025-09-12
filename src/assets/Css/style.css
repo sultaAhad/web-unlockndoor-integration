@@ -3049,3 +3049,12 @@ div:where(.swal2-container) {
 	width: 87%;
 	margin: auto;
 }
+
+div#swal2-html-container {
+	margin: 0px !important;
+	padding: 0px !important;
+}
+
+.swal2-actions {
+	margin: 0px !important;
+}

@@ -12,7 +12,7 @@ import LikeSwapButtons from "./LikeSwapButtons";
 import VideoCallButton from "./VideoCallButton";
 import MakeOfferButton from "./MakeOfferButton";
 
-const FemaleMemberCard = ({ member, key }) => {
+const FemaleMemberCard = ({ member, memberId }) => {
   const packageTitle = member?.package?.slug
     ?.replace("-package", "")
     .toUpperCase();
@@ -42,7 +42,7 @@ const FemaleMemberCard = ({ member, key }) => {
 
   return (
     <>
-      <div key={key} className="col-lg-4 col-md-6 mb-4">
+      <div key={memberId} className="col-lg-4 col-md-6 mb-4">
         <div className="profile-card">
           <span className={`card-badge ${packageTitle.toLowerCase()}`}>
             {packageTitle}

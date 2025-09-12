@@ -82,3 +82,4 @@ export const GET_CHAT_MESSAGES_API = (type, chat_id) =>
 
 // Edit WmonenProfile
 export const WOMEN_EDIT_PROFILE = `auth-women/update-women`;
+export const START_VIDEO_CALL = `call-action`;

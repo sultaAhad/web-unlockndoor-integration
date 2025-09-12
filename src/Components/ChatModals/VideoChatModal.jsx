@@ -7,13 +7,12 @@ import { useSelector } from "react-redux";
 
 const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
   const { user, videoCallData } = useSelector((state) => state.auth);
-  
+
   return (
     <>
       <Modal
         show={showVideoChatModal}
         className="chat_modal"
-        // onHide={handleVideoChatClose}
         onHide={() => {}}
         backdrop="static"
         keyboard={false}
@@ -25,7 +24,12 @@ const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
               <> Video Call to {videoCallData?.data?.member?.name}</>
             )}
             {videoCallData?.data?.type == "IsReceiving" && (
-              <> Video Call From {videoCallData?.data?.member?.name}</>
+              <>
+                {" "}
+                Video Call From{" "}
+                {videoCallData?.data?.member?.name ||
+                  videoCallData?.data?.member?.from_user_name}
+              </>
             )}
           </Modal.Title>
         </Modal.Header>

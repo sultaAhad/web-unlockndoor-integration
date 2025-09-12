@@ -1,6 +1,6 @@
 // services/WomanAuth.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CHATS_API, GET_CHAT_MESSAGES_API, SEND_CHAT_MESSAGE_API } from "../../utils/endpoints";
+import { CHATS_API, GET_CHAT_MESSAGES_API, SEND_CHAT_MESSAGE_API, START_VIDEO_CALL } from "../../utils/endpoints";
 import { BASE_URL } from "../../utils/base_url";
 
 export const Chat = createApi({
@@ -36,13 +36,21 @@ export const Chat = createApi({
 				body: data,
 			}),
 		}),
+		callAction: build.mutation({
+			query: (data) => ({
+				url: START_VIDEO_CALL,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
 export const {
 	useGetChatsQuery,
 	useGetChatMessagesQuery,
-	useSendMessageMutation
+	useSendMessageMutation,
+	useCallActionMutation,
 } = Chat;
 
 export default Chat;
