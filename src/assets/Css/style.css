@@ -2464,6 +2464,17 @@ li.bullet_Wrapper.wrapper-bullet {
 	background: #b8000a;
 }
 
+.local-video-small {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #ffffff1f;
+}
+
+.local-video-small .video-player {
+    height: 130px;
+}
+
 /* Category Modal Css  */
 
 .category_modal .form-control {
@@ -3041,7 +3052,7 @@ div:where(.swal2-container) {
 
 @media (min-width: 576px) {
 	.chat_modal .modal-dialog {
-		max-width: 640px;
+		max-width: 80%;
 	}
 }
 
