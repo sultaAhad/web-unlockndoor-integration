@@ -20,6 +20,8 @@ import ProfileNavbar from "../../Components/ProfileNavbar";
 import PackageSelectionModal from "../../Components/PackageSelectionModal";
 import ProfileHeader from "../../Components/ProfileHeader";
 import { useSelector } from "react-redux";
+import { useLazyCancelWomenPackageQuery } from "../../network/services/WomanAuth";
+import { Spinner } from "react-bootstrap";
 
 function MembershipWomen() {
   const [activeTab, setActiveTab] = useState("men");
@@ -29,6 +31,8 @@ function MembershipWomen() {
   const { user } = useSelector((state) => state.auth);
   const [subscriptionPackage, setSubscriptionPackage] = useState(user?.package);
   const descriptions = JSON.parse(subscriptionPackage?.description);
+  const [triggerFunction, { isLoading: isProcessing }] =
+    useLazyCancelWomenPackageQuery();
 
   useEffect(() => {
     Aos.init({ duration: 1000, once: true });
@@ -43,6 +47,8 @@ function MembershipWomen() {
       document.body.style.backgroundImage = "";
     };
   }, []);
+  console.log(isProcessing);
+
   return (
     <>
       <Header />
@@ -111,7 +117,7 @@ function MembershipWomen() {
                             data-bs-toggle="modal"
                             data-bs-target="#membershipcancelmodal"
                           >
-                            Cancel Subscription
+                            {isProcessing ? <Spinner /> : "Cancel Subscription"}
                           </button>
                         </div>
                       </div>
@@ -153,6 +159,7 @@ function MembershipWomen() {
                 <div className="modal_btn modal__withdraw_btn bg-white d-flex  ">
                   <button
                     type="button"
+                    onClick={() => triggerFunction()}
                     className="btn   btn btn-secondary   rounded-0 text-center text-capitalize text-white py-3 w-50 bg-danger "
                     data-bs-dismiss="modal"
                   >

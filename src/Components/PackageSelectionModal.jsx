@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { blacktick } from "../Constant/Index";
 import { useGetMenPackagesQuery } from "../network/services/ManAuth";
+import { useSelector } from "react-redux";
 
 const PackageSelectionModal = ({
   isOpen,
@@ -10,6 +11,9 @@ const PackageSelectionModal = ({
   onRequestClose,
   showCloseBtn = false,
 }) => {
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
+
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetMenPackagesQuery();
 
@@ -60,7 +64,7 @@ const PackageSelectionModal = ({
                 >
                   <div className="text-center border-bottom1 mb-2 pb-2">
                     <h4 className="text-white font_semibold font_level3">
-                      {pkg.title} - ${pkg.price}
+                      {pkg.title} - ${pkg.price} {pkg.id} {user?.package?.id}
                     </h4>
                     <p className="text-white font_reg font_level4 mb-0">
                       {pkg.duration} Days
@@ -92,19 +96,25 @@ const PackageSelectionModal = ({
 
                   {/* Get Started button */}
                   <div className="pack_btn d-flex justify-content-center">
-                    <button
-                      className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
-                      onClick={() => {
-                        if (typeof closeModal === "function") {
-                          closeModal();
-                        }
-                        navigate("/subscription-women", {
-                          state: { selected: pkg },
-                        });
-                      }}
-                    >
-                      Get Started
-                    </button>
+                    {user?.package?.id == pkg.id ? (
+                      <button className="btn rounded-pill text-white py-2 px-4 mb-3 bg-success font_reg text-capitalize font_level wrapper-bg-eere">
+                        Current Package
+                      </button>
+                    ) : (
+                      <button
+                        className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
+                        onClick={() => {
+                          if (typeof closeModal === "function") {
+                            closeModal();
+                          }
+                          navigate("/subscription-women", {
+                            state: { selected: pkg },
+                          });
+                        }}
+                      >
+                        Get Started
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

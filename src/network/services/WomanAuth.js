@@ -10,6 +10,7 @@ import {
 	PURCHASE_PACKAGES_WOMEN,
 	WOMAN_LIKE_MAN_PROFILE,
 	WOMAN_MATCHED_PRIFILE,
+	WOMEN_CANCEL_PACKAGE,
 	WOMEN_DATA,
 	WOMEN_EDIT_PROFILE,
 	WOMEN_LOGIN,
@@ -17,6 +18,7 @@ import {
 	WOMEN_LOGIN_OTP_SAND,
 	WOMEN_LOGIN_OTP_VARIFY,
 	WOMEN_SIGNUP,
+	WOMEN_UPGRADE_PACKAGE,
 } from "../../utils/endpoints";
 import { like } from "../../Constant/Index";
 
@@ -144,6 +146,18 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		cancelWomenPackage: build.query({
+			query: () => ({
+				url: WOMEN_CANCEL_PACKAGE,
+				method: "GET",
+			}),
+		}),
+		upgradeWomenPackage: build.query({
+			query: () => ({
+				url: WOMEN_UPGRADE_PACKAGE,
+				method: "GET",
+			}),
+		}),
 	}),
 });
 
@@ -163,6 +177,8 @@ export const {
 	useResetPasswordWomenMutation,
 	useGetWomanMatchProfilesQuery,
 	useLikeManProfileMutation,
+	useLazyCancelWomenPackageQuery,
+	useUpgradeWomenPackageQuery
 } = WomenAuth;
 
 export default WomenAuth;
