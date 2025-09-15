@@ -152,10 +152,11 @@ export const WomenAuth = createApi({
 				method: "GET",
 			}),
 		}),
-		upgradeWomenPackage: build.query({
-			query: () => ({
+		upgradeWomenPackage: build.mutation({
+			query: (formData) => ({
 				url: WOMEN_UPGRADE_PACKAGE,
-				method: "GET",
+				method: "POST",
+				body: formData,
 			}),
 		}),
 	}),
@@ -178,7 +179,7 @@ export const {
 	useGetWomanMatchProfilesQuery,
 	useLikeManProfileMutation,
 	useLazyCancelWomenPackageQuery,
-	useUpgradeWomenPackageQuery
+	useUpgradeWomenPackageMutation
 } = WomenAuth;
 
 export default WomenAuth;

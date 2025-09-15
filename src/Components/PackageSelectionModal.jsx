@@ -4,21 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { blacktick } from "../Constant/Index";
 import { useGetMenPackagesQuery } from "../network/services/ManAuth";
 import { useSelector } from "react-redux";
+import { useUpgradeWomenPackageMutation } from "../network/services/WomanAuth";
 
 const PackageSelectionModal = ({
   isOpen,
   closeModal,
   onRequestClose,
   showCloseBtn = false,
+  action = "purchase",
 }) => {
   const { user } = useSelector((state) => state.auth);
   console.log(user);
 
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetMenPackagesQuery();
+  const [upgradeWomenPackage, { isLoading: isUpgrading }] =
+    useUpgradeWomenPackageMutation();
 
   // women packages from API
   const packages = data?.response?.data?.women || [];
+
+  const upgradePackage = async (id) => {
+    try {
+      await upgradeWomenPackage({ package_id: id }).unwrap();
+      navigate("/women-profiles");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (isLoading) return <p>Loading packages...</p>;
   if (error) return <p>Error loading packages</p>;
@@ -101,19 +114,31 @@ const PackageSelectionModal = ({
                         Current Package
                       </button>
                     ) : (
-                      <button
-                        className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
-                        onClick={() => {
-                          if (typeof closeModal === "function") {
-                            closeModal();
-                          }
-                          navigate("/subscription-women", {
-                            state: { selected: pkg },
-                          });
-                        }}
-                      >
-                        Get Started
-                      </button>
+                      <>
+                        {action == "upgrade" ? (
+                          <button
+                            className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
+                            onClick={() => upgradePackage(pkg?.id)}
+                            disabled={isUpgrading}
+                          >
+                            {isUpgrading ? "Upgrading" : "Upgrade Package"}
+                          </button>
+                        ) : (
+                          <button
+                            className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
+                            onClick={() => {
+                              if (typeof closeModal === "function") {
+                                closeModal();
+                              }
+                              navigate("/subscription-women", {
+                                state: { selected: pkg },
+                              });
+                            }}
+                          >
+                            Get Started
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

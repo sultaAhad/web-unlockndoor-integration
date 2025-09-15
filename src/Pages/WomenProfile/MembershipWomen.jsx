@@ -181,6 +181,7 @@ function MembershipWomen() {
       <PackageSelectionModal
         isOpen={isSecondModalOpen}
         showCloseBtn={true}
+        action={"upgrade"}
         onRequestClose={() => setIsSecondModalOpen(false)}
       />
       <Footer />
