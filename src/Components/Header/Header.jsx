@@ -67,7 +67,7 @@ function Header() {
       cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
       encrypted: false,
     });
-    const videoChannel = pusher.subscribe(`channel_${user.id}`);
+    const videoChannel = pusher.subscribe(`channel_${user?.id}`);
     let audio = null;
 
     videoChannel.bind("call.action", (data) => {
@@ -140,7 +140,7 @@ function Header() {
       videoChannel.unsubscribe();
       pusher.disconnect();
     };
-  }, []);
+  }, [user]);
 
   const handleCategoryShow = (gender) => {
     setSelectedGender(gender); // "male" or "female"

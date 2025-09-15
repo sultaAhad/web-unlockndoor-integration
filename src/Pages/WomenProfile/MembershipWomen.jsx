@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
-	alert_icon,
-	blacktick,
-	edit,
-	innerpages1,
-	manproimage2,
-	manproimage3,
-	massagewrapper,
-	message,
-	notification,
-	womenproimg,
-	womenproimg1,
+  alert_icon,
+  blacktick,
+  edit,
+  innerpages1,
+  manproimage2,
+  manproimage3,
+  massagewrapper,
+  message,
+  notification,
+  womenproimg,
+  womenproimg1,
 } from "../../Constant/Index";
 import { Link } from "react-router-dom";
 import Header from "../../Components/Header/Header";
@@ -27,24 +27,11 @@ function MembershipWomen() {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
+  const [subscriptionPackage, setSubscriptionPackage] = useState(user?.package);
+  const descriptions = JSON.parse(subscriptionPackage?.description);
 
-  const packagesData = {
-    men: [
-      {
-        title: "Gold Package",
-        price: "$195",
-        duration: "90 days",
-        benefits: [
-          "Upload Pictures",
-          "Upload Videos",
-          "Chat Messaging",
-          "Video Calling",
-        ],
-      },
-    ],
-  };
   useEffect(() => {
-    Aos.init({ duration: 1000, once: true }); // Initialize AOS with options
+    Aos.init({ duration: 1000, once: true });
   }, []);
   useEffect(() => {
     document.body.style.backgroundImage = `url(${innerpages1})`;
@@ -71,21 +58,23 @@ function MembershipWomen() {
             <section className="pack_sec1 mb-5 pb-5 py-5">
               <div className="container">
                 <div className="row mt-3">
-                  {packagesData[activeTab].map((packageData, index) => (
-                    <div className="col-md-5" key={index}>
+                  {subscriptionPackage != null && (
+                    <div className="col-md-5">
                       <div className="package_card px-3 py-4  extra-bg-14 rounded">
                         <div className="pack_heading border-bottom1 text-center px-3  py-3 border-white">
                           <h3 className="dark-color font_semibold font_level3">
-                            {packageData.title} {packageData.price}
+                            {subscriptionPackage.title} $
+                            {subscriptionPackage.price}
                           </h3>
                           <p className="dark-color font_reg font_level4 mb-0">
-                            {packageData.duration}
+                            {subscriptionPackage.duration} Months
                           </p>
                         </div>
                         <div className="pack_bullets">
                           <ul className="ps-0 py-3">
-                            {packageData.benefits.map(
-                              (benefit, benefitIndex) => (
+                            {descriptions &&
+                              descriptions.length > 0 &&
+                              descriptions.map((benefit, benefitIndex) => (
                                 <li
                                   key={benefitIndex}
                                   className="bullet_Wrapper d-flex align-items-baseline  py-2"
@@ -101,8 +90,7 @@ function MembershipWomen() {
                                     {benefit}
                                   </div>
                                 </li>
-                              )
-                            )}
+                              ))}
                           </ul>
                         </div>
                         <div className="pack_btns d-flex  gap-2"></div>
@@ -128,7 +116,7 @@ function MembershipWomen() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </section>
@@ -185,6 +173,7 @@ function MembershipWomen() {
       </div>
       <PackageSelectionModal
         isOpen={isSecondModalOpen}
+        showCloseBtn={true}
         onRequestClose={() => setIsSecondModalOpen(false)}
       />
       <Footer />
