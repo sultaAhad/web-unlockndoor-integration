@@ -77,7 +77,7 @@ const PackageSelectionModal = ({
                 >
                   <div className="text-center border-bottom1 mb-2 pb-2">
                     <h4 className="text-white font_semibold font_level3">
-                      {pkg.title} - ${pkg.price} {pkg.id} {user?.package?.id}
+                      {pkg.title} - ${pkg.price}
                     </h4>
                     <p className="text-white font_reg font_level4 mb-0">
                       {pkg.duration} Days
