@@ -106,7 +106,6 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
   };
 
   const startVideoCall = async () => {
-    console.log(user);
     if (!appId || !channel) {
       alert("Please enter App ID and Channel Name");
       return;
@@ -149,6 +148,8 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
       setIsVideoEnabled(true);
       setChannel(null);
       onCallEnd(false);
+
+      endCallAction(videoCallData?.data?.member?.from_id, channel);
       dispatch(
         handleVideoCallModal({
           status: false,
@@ -157,6 +158,21 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
       );
     } catch (error) {
       console.error("Error leaving channel:", error);
+    }
+  };
+
+  const endCallAction = async (user_id, channel) => {
+    const formData = {
+      channel_name: `reject_call_${user_id}`,
+      action: "reject-call",
+      data: { channel: channel },
+    };
+    try {
+      let response = await callAction(formData);
+      if (response?.data?.success) {
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -184,6 +200,7 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
       cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
       encrypted: false,
     });
+
     const videoChannel = pusher.subscribe(`reject_call_${user.id}`);
     videoChannel.bind("call.action", (data) => {
       if (data?.data?.action === "reject-call") {
@@ -326,9 +343,7 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
                   </svg>
                 </span>
                 <div className="chat_desc mt-2">
-                  <p className="level-8 secondary-medium-font ">
-                    {"End Call"}
-                  </p>
+                  <p className="level-8 secondary-medium-font ">{"End Call"}</p>
                 </div>
               </Button>
             </div>
