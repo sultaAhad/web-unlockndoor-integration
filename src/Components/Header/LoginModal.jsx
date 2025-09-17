@@ -53,40 +53,41 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 	useEffect(() => {
 		const response = activeTab === "male" ? manResponse : womenResponse;
 		if (response?.isSuccess) {
-			const responseData = response?.data?.response?.data;
-			const apiData =
-				activeTab === "male" ? responseData?.men : responseData?.women;
+      const responseData = response?.data?.response?.data;
+      const apiData =
+        activeTab === "male" ? responseData?.men : responseData?.women;
 
-			const token = responseData?.token;
+      const token = responseData?.token;
 
-			if (!apiData || !token) {
-				Swal.fire("Error", "Invalid response format", "error");
-				return;
-			}
+      if (!apiData || !token) {
+        Swal.fire("Error", "Invalid response format", "error");
+        return;
+      }
 
-			dispatch(
-				setUserToken({
-					user: apiData,
-					token: token,
-					remember: rememberMe,
-					gender: activeTab,
-				}),
-			);
+      dispatch(
+        setUserToken({
+          user: apiData,
+          token: token,
+          remember: rememberMe,
+          gender: activeTab,
+        })
+      );
 
-			localStorage.setItem("selfieVerified", responseData?.selfie_verified);
-			localStorage.setItem("gender", activeTab);
-			localStorage.setItem("hasPackage", responseData?.package);
+      localStorage.setItem("selfieVerified", responseData?.selfie_verified);
+      //   localStorage.setItem("selfieVerified", false);
+      localStorage.setItem("gender", activeTab);
+      localStorage.setItem("hasPackage", responseData?.package);
 
-			if (activeTab == "male") {
-				navigate("/profile");
-			} else {
-				navigate("/women-profiles");
-			}
-			if (activeTab === "male") setMaleLogin({ email: "", password: "" });
-			else setFemaleLogin({ email: "", password: "" });
+      if (activeTab == "male") {
+        navigate("/profile");
+      } else {
+        navigate("/women-profiles");
+      }
+      if (activeTab === "male") setMaleLogin({ email: "", password: "" });
+      else setFemaleLogin({ email: "", password: "" });
 
-			onClose();
-		}
+      onClose();
+    }
 
 		if (response?.isError) {
 			const errorMessage =

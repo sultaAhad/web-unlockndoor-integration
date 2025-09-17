@@ -269,7 +269,6 @@ function Profile() {
           </div>
         </div>
       </section>
-
       <Footer />
     </>
   );
