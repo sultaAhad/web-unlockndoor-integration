@@ -10,7 +10,7 @@ const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
 
   return (
     <>
-      <style>{`.modal-content {
+      <style>{`.chat_modal   .modal-content {
     background: transparent;
     border: 0px;
 }`}</style>
