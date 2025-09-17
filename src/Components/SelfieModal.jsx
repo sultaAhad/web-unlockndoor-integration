@@ -1,109 +1,45 @@
-import React, { useRef, useState, useEffect } from "react";
-import Webcam from "react-webcam";
+import React, { useEffect } from "react";
 import Swal from "sweetalert2";
-import {
-	useGetManDataQuery,
-	useVerifySelfieMutation,
-} from "../network/services/ManAuth";
+import { useGetManDataQuery } from "../network/services/ManAuth";
+import FaceVerification from "./FaceVerification";
 
-const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
-	const webcamRef = useRef(null);
-	const [preview, setPreview] = useState(null);
-	const [verifySelfie, { isLoading }] = useVerifySelfieMutation();
-
+const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 	const { data } = useGetManDataQuery();
 	const user1 = data?.response?.data?.data;
-	console.log(user1, "asassd");
 
 	useEffect(() => {
-		if (!isOpen) setPreview(null);
-	}, [isOpen]);
+		if (!isOpen) return;
+		console.log("SelfieModal opened", user1);
+	}, [isOpen, user1]);
 
 	if (!isOpen) return null;
-
-	const capture = () => {
-		const imageSrc = webcamRef.current.getScreenshot();
-		if (!imageSrc) return Swal.fire("Error", "Capture failed", "error");
-		setPreview(imageSrc);
-	};
-
-	const base64ToFile = (base64, filename) => {
-		const byteString = atob(base64.split(",")[1]);
-		const mimeString = base64.split(",")[0].split(":")[1].split(";")[0];
-		const ab = new ArrayBuffer(byteString.length);
-		const ia = new Uint8Array(ab);
-		for (let i = 0; i < byteString.length; i++)
-			ia[i] = byteString.charCodeAt(i);
-		return new File([ab], filename, { type: mimeString });
-	};
-
-	const handleVerify = async () => {
-		if (!preview) return Swal.fire("Error", "Capture selfie first", "error");
-		try {
-			const selfieFile = base64ToFile(preview, "selfie.jpg");
-			const formData = new FormData();
-			formData.append("selfie", selfieFile);
-
-			const res = await verifySelfie(formData).unwrap();
-
-			if (res?.status && res?.message?.includes("verified")) {
-				Swal.fire("Success", "Selfie verified!", "success").then(() => {
-					onVerified?.(); // Tell parent to show packages
-					setPreview(null);
-					onClose(); // Close selfie modal
-				});
-			} else {
-				Swal.fire("Notice", res?.message || "Selfie not verified yet", "info");
-			}
-		} catch (err) {
-			Swal.fire("Error", err?.data?.message || "Verification failed", "error");
-		}
-	};
 
 	return (
 		<div className="modal-overlay">
 			<div className="modal-box">
-				<button
-					className="modal-close"
-					onClick={() => {
-						onClose();
-						setPreview(null);
-					}}
-				>
+				<button className="modal-close" onClick={onClose}>
 					&times;
 				</button>
-				<h2 className="modal-title">Take Your Selfie</h2>
 
-				{/* Webcam / Preview */}
-				{!user?.selfie_verified && !preview ? (
-					<>
-						<Webcam
-							ref={webcamRef}
-							screenshotFormat="image/jpeg"
-							className="webcam"
-							videoConstraints={{ facingMode: "user" }}
-						/>
-						<button className="btn btn-blue mt-3" onClick={capture}>
-							Capture Selfie
-						</button>
-					</>
-				) : !user?.selfie_verified && preview ? (
-					<>
-						<img src={preview} alt="Selfie" className="webcam" />
-						<div className="btn-group mt-3">
-							<button className="btn btn-red" onClick={() => setPreview(null)}>
-								Retake
-							</button>
-							<button
-								className="btn btn-green"
-								onClick={handleVerify}
-								disabled={isLoading}
-							>
-								{isLoading ? "Verifying..." : "Verify"}
-							</button>
-						</div>
-					</>
-				) : null}
+				<h2 className="modal-title">Selfie Verification</h2>
+
+				{user1?.profile_image_url ? (
+					<FaceVerification
+						profileImageUrl={user1.profile_image_url}
+						onVerified={(status) => {
+							if (status) {
+								Swal.fire("Success", "Selfie verified!", "success").then(() => {
+									onVerified?.();
+									onClose();
+								});
+							} else {
+								Swal.fire("Error", "Face did not match!", "error");
+							}
+						}}
+					/>
+				) : (
+					<p>No profile image found for user</p>
+				)}
 
 				<style jsx>{`
 					.modal-overlay {
@@ -122,7 +58,7 @@ const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
 						background: #fff;
 						padding: 25px;
 						border-radius: 12px;
-						max-width: 450px;
+						max-width: 500px;
 						width: 90%;
 						text-align: center;
 						position: relative;
@@ -136,29 +72,10 @@ const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
 						font-size: 26px;
 						cursor: pointer;
 					}
-					.webcam {
-						width: 100%;
-						border-radius: 10px;
-						border: 2px solid #ccc;
-					}
-					.btn-group button {
-						margin: 0 5px;
-						padding: 8px 16px;
-						border: none;
-						border-radius: 6px;
-						cursor: pointer;
-					}
-					.btn-red {
-						background: #f44336;
-						color: #fff;
-					}
-					.btn-green {
-						background: #4caf50;
-						color: #fff;
-					}
-					.btn-blue {
-						background: #2196f3;
-						color: #fff;
+					.modal-title {
+						margin-bottom: 15px;
+						font-size: 20px;
+						font-weight: bold;
 					}
 				`}</style>
 			</div>

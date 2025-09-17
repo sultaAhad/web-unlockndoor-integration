@@ -1,4 +1,3 @@
-// src/components/FaceVerification.jsx
 import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
@@ -9,13 +8,25 @@ const FaceVerification = ({ profileImageUrl, onVerified }) => {
 	const [selfie, setSelfie] = useState(null);
 	const [modelsLoaded, setModelsLoaded] = useState(false);
 
-	// 🔹 Load face-api models
+	// 🔹 Load FaceAPI models
 	useEffect(() => {
 		const loadModels = async () => {
-			await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-			await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-			await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
-			setModelsLoaded(true);
+			try {
+				console.log("🟡 Loading FaceAPI models...");
+				await faceapi.nets.ssdMobilenetv1.loadFromUri(
+					"/models/ssd_mobilenetv1",
+				);
+				await faceapi.nets.faceLandmark68Net.loadFromUri(
+					"/models/face_landmark_68",
+				);
+				await faceapi.nets.faceRecognitionNet.loadFromUri(
+					"/models/face_recognition",
+				);
+				setModelsLoaded(true);
+				console.log("✅ All models loaded successfully");
+			} catch (err) {
+				console.error("❌ Error loading models:", err);
+			}
 		};
 		loadModels();
 	}, []);
@@ -23,44 +34,60 @@ const FaceVerification = ({ profileImageUrl, onVerified }) => {
 	// 🔹 Capture Selfie
 	const captureSelfie = () => {
 		const imageSrc = webcamRef.current.getScreenshot();
-		if (!imageSrc) return Swal.fire("Error", "Selfie capture failed", "error");
+		if (!imageSrc) {
+			Swal.fire("Error", "Selfie capture failed", "error");
+			return;
+		}
+		console.log("📸 Selfie captured");
 		setSelfie(imageSrc);
 	};
 
 	// 🔹 Verify faces
 	const verifyFaces = async () => {
 		if (!profileImageUrl || !selfie) {
-			return Swal.fire("Error", "Profile or Selfie missing!", "error");
+			Swal.fire("Error", "Profile or Selfie missing!", "error");
+			return;
 		}
 
-		const profileImg = await faceapi.fetchImage(profileImageUrl);
-		const selfieImg = await faceapi.fetchImage(selfie);
+		try {
+			console.log("🔍 Fetching images for comparison...");
+			const profileImg = await faceapi.fetchImage(profileImageUrl);
+			const selfieImg = await faceapi.fetchImage(selfie);
 
-		const profileDesc = await faceapi
-			.detectSingleFace(profileImg)
-			.withFaceLandmarks()
-			.withFaceDescriptor();
+			console.log("➡️ Detecting faces...");
+			const profileDesc = await faceapi
+				.detectSingleFace(profileImg)
+				.withFaceLandmarks()
+				.withFaceDescriptor();
 
-		const selfieDesc = await faceapi
-			.detectSingleFace(selfieImg)
-			.withFaceLandmarks()
-			.withFaceDescriptor();
+			const selfieDesc = await faceapi
+				.detectSingleFace(selfieImg)
+				.withFaceLandmarks()
+				.withFaceDescriptor();
 
-		if (!profileDesc || !selfieDesc) {
-			return Swal.fire("Error", "Face not detected!", "error");
-		}
+			if (!profileDesc || !selfieDesc) {
+				Swal.fire("Error", "Face not detected!", "error");
+				console.warn("⚠️ Could not detect face in one of the images");
+				return;
+			}
 
-		const distance = faceapi.euclideanDistance(
-			profileDesc.descriptor,
-			selfieDesc.descriptor,
-		);
+			const distance = faceapi.euclideanDistance(
+				profileDesc.descriptor,
+				selfieDesc.descriptor,
+			);
 
-		if (distance < 0.6) {
-			Swal.fire("Success", "Faces Match! ✅", "success");
-			onVerified?.(true);
-		} else {
-			Swal.fire("Failed", "Faces do not match ❌", "error");
-			onVerified?.(false);
+			console.log("🧮 Face distance:", distance);
+
+			if (distance < 0.6) {
+				Swal.fire("Success", "Faces Match! ✅", "success");
+				onVerified?.(true);
+			} else {
+				Swal.fire("Failed", "Faces do not match ❌", "error");
+				onVerified?.(false);
+			}
+		} catch (err) {
+			console.error("❌ Error during verification:", err);
+			Swal.fire("Error", "Verification failed", "error");
 		}
 	};
 
@@ -81,7 +108,7 @@ const FaceVerification = ({ profileImageUrl, onVerified }) => {
 						videoConstraints={{ facingMode: "user" }}
 					/>
 					<button onClick={captureSelfie} disabled={!modelsLoaded}>
-						Capture Selfie
+						{modelsLoaded ? "Capture Selfie" : "Loading Models..."}
 					</button>
 				</>
 			) : (
