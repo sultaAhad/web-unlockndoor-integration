@@ -5,12 +5,12 @@ import FaceVerification from "./FaceVerification";
 
 const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 	const { data } = useGetManDataQuery();
-	const user1 = data?.response?.data?.data;
+	const user = data?.response?.data?.data;
 
 	useEffect(() => {
 		if (!isOpen) return;
-		console.log("SelfieModal opened", user1);
-	}, [isOpen, user1]);
+		console.log("SelfieModal opened", user);
+	}, [isOpen, user]);
 
 	if (!isOpen) return null;
 
@@ -23,9 +23,9 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 
 				<h2 className="modal-title">Selfie Verification</h2>
 
-				{user1?.profile_image_url ? (
+				{user?.profile_image_url ? (
 					<FaceVerification
-						profileImageUrl={user1.profile_image_url}
+						profileImageUrl={user.profile_image_url}
 						onVerified={(status) => {
 							if (status) {
 								Swal.fire("Success", "Selfie verified!", "success").then(() => {
