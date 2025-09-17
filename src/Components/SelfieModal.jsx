@@ -1,17 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import Swal from "sweetalert2";
-import { useVerifySelfieMutation } from "../network/services/ManAuth";
+import {
+	useGetManDataQuery,
+	useVerifySelfieMutation,
+} from "../network/services/ManAuth";
 
 const SelfieModal = ({ isOpen, onClose, user, onVerified }) => {
 	const webcamRef = useRef(null);
 	const [preview, setPreview] = useState(null);
 	const [verifySelfie, { isLoading }] = useVerifySelfieMutation();
 
+	const { data } = useGetManDataQuery();
+	const user1 = data?.response?.data?.data;
+	console.log(user1, "asassd");
 
-  useEffect(() => {
-    if (!isOpen) setPreview(null);
-  }, [isOpen]);
+	useEffect(() => {
+		if (!isOpen) setPreview(null);
+	}, [isOpen]);
 
 	if (!isOpen) return null;
 

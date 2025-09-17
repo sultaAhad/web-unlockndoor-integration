@@ -16,8 +16,6 @@ export function checkMiddleware(
     const hasPackage = localStorage.getItem("hasPackage") === "true";
     const gender = localStorage.getItem("gender");
 
-    console.log(gender, selfieVerified);
-
     if (checkSelfie && !selfieVerified) {
       if (gender == "female") {
         return (
