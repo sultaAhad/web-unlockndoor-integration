@@ -75,6 +75,7 @@ export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;
 export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
 export const DELETE_VIDEO_WOMAN = `auth-women/delete-video`;
 export const WOMAN_SPONSORED_DATES = `auth-women/sponsored-dates`;
+export const WOMAN_REJECT_SPONSORED_DATES = `auth-women/change-date-status`;
 export const WOMAN_MATCHED_PRIFILE = `auth-women/male-members`;
 export const WOMAN_LIKE_MAN_PROFILE = `auth-women/like-men`;
 export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;

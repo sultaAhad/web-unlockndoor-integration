@@ -42,7 +42,10 @@ function SponsoredDates() {
   }, []);
 
   const [showreofferModal, setShowreofferModal] = useState(false);
-  const handlereofferClose = () => setShowreofferModal(false);
+  const handlereofferClose = () => {
+    setShowreofferModal(false);
+    refetch();
+  };
   const handlereofferShow = () => setShowreofferModal(true);
 
   useEffect(() => {
@@ -97,7 +100,7 @@ function SponsoredDates() {
   };
 
   const Actions = (status, offer) => {
-    if (status === "pending") {
+    if (status == "pending") {
       return (
         <button
           className={`wrapper-ggg btn-write rounded-0 border-none d-flex align-items-center justify-content-center w-100 extra-bg-2`}
@@ -109,7 +112,7 @@ function SponsoredDates() {
         </button>
       );
     }
-    if (status === "Rejected") {
+    if (status == "rejected" || status == "countered") {
       return (
         <>
           <button
@@ -129,7 +132,7 @@ function SponsoredDates() {
         </>
       );
     }
-    if (status === "Accepted" || status === "Countered") {
+    if (status == "Accepted") {
       return (
         <Link
           to={"/chat"}

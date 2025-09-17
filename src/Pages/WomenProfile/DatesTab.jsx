@@ -23,7 +23,10 @@ import Pagination from "../../Components/Pagination";
 import ProfileNavbar from "../../Components/ProfileNavbar";
 import RejectModal from "../../Components/RejectModal";
 import ProfileHeader from "../../Components/ProfileHeader";
-import { useGetWomanSponsoredDatesQuery } from "../../network/services/woman/SponsoredDates";
+import {
+  useGetWomanSponsoredDatesQuery,
+  useRejectDateRequestMutation,
+} from "../../network/services/woman/SponsoredDates";
 import Spinner from "../../Components/Spinner";
 
 function DatesTab() {
@@ -35,6 +38,8 @@ function DatesTab() {
 
   const { data, isLoading, refetch } =
     useGetWomanSponsoredDatesQuery(currentPage);
+  const [rejectDateRequest, { isLoading: rejectingRequest }] =
+    useRejectDateRequestMutation();
 
   useEffect(() => {
     if (data?.response?.data?.sponsoredDates?.data) {
@@ -50,7 +55,27 @@ function DatesTab() {
     refetch();
   }, [currentPage]);
 
-  const handleRejectSubmit = (data) => {};
+  const handleRejectSubmit = async (data) => {
+    try {
+      let response = rejectDateRequest(data).unwrap();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      refetch();
+    }
+  };
+  const acceptOfferHandle = async (date_id) => {
+    try {
+      let response = rejectDateRequest({
+        date_id: date_id,
+        status: "accepted",
+      }).unwrap();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      refetch();
+    }
+  };
   useEffect(() => {
     AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
   }, []);
@@ -81,11 +106,12 @@ function DatesTab() {
     }
   };
 
-  const Actions = (status) => {
-    if (status === "pending") {
+  const Actions = (sponsor) => {
+    if (sponsor?.status == "pending" || sponsor?.status == "countered") {
       return (
         <>
           <Link
+            onClick={() => acceptOfferHandle(sponsor?.id)}
             className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-12`}
           >
             Accept
@@ -96,10 +122,16 @@ function DatesTab() {
           >
             Reject
           </Link>
+          <RejectModal
+            show={showRejectModal}
+            dateId={sponsor?.id}
+            onClose={() => setShowRejectModal(false)}
+            onSubmit={handleRejectSubmit}
+          />
         </>
       );
     }
-    if (status === "Accepted" || status === "Countered") {
+    if (sponsor?.status == "accepted") {
       return (
         <Link
           to={"/chat"}
@@ -109,6 +141,11 @@ function DatesTab() {
         </Link>
       );
     }
+    return (
+      <span className="badge bg-body fs-5 rounded-pill text-capitalize w-100 text-dark">
+        {sponsor?.status}
+      </span>
+    );
   };
 
   return (
@@ -157,13 +194,15 @@ function DatesTab() {
                                   Offer
                                 </h4>
                               </th>
-                              <th className="position-relative">
+                              {/* <th className="position-relative">
                                 <h4 className="secondary-medium-font text-white level-8 mb-0">
                                   Action
                                 </h4>
-                              </th>
+                              </th> */}
                               <th className="position-relative">
-                                <h4 className="secondary-medium-font text-white level-7"></h4>
+                                <h4 className="secondary-medium-font text-white level-7">
+                                  Action
+                                </h4>
                               </th>
                             </tr>
                           </thead>
@@ -177,15 +216,15 @@ function DatesTab() {
                                         {" "}
                                         <img
                                           src={
-                                            sponsorDate.man?.profile_image_url
+                                            sponsorDate.men?.profile_image_url
                                           }
-                                          className="img-fluid wrapper-fluid-notification"
+                                          className="img-fluid wrapper-fluid-notification w-25"
                                           alt=""
                                         />
                                       </div>
                                       <div className="">
                                         <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
-                                          {sponsorDate.man?.name}
+                                          {sponsorDate.men?.name}
                                         </h4>
                                         <p className="mb-0 text-white ">
                                           {sponsorDate.comment}
@@ -209,7 +248,7 @@ function DatesTab() {
                                     </h4>
                                   </td>
                                   <td className="secondary-medium-font level-8 text-center d-flex">
-                                    {Actions(sponsorDate.status)}
+                                    {Actions(sponsorDate)}
                                   </td>
                                 </tr>
                               ))}
@@ -235,11 +274,7 @@ function DatesTab() {
           )}
         </div>
       </section>
-      <RejectModal
-        show={showRejectModal}
-        onClose={() => setShowRejectModal(false)}
-        onSubmit={handleRejectSubmit}
-      />
+
       <Footer />
     </>
   );
