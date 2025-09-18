@@ -74,7 +74,6 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 			);
 
 			localStorage.setItem("selfieVerified", responseData?.selfie_verified);
-			localStorage.setItem("selfieVerified", false);
 			localStorage.setItem("gender", activeTab);
 			localStorage.setItem("hasPackage", responseData?.package);
 
