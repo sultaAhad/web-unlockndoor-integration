@@ -2,17 +2,21 @@ import React, { useEffect } from "react";
 import Swal from "sweetalert2";
 import { useGetManDataQuery } from "../network/services/ManAuth";
 import FaceVerification from "./FaceVerification";
+import { useNavigate } from "react-router-dom";
 
 const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 	const { data } = useGetManDataQuery();
 	const user = data?.response?.data?.data;
+	console.log(user);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isOpen) return;
-		console.log("SelfieModal opened", user);
+		console.log("🟡 SelfieModal opened", user);
 	}, [isOpen, user]);
 
-	if (!isOpen) return null;
+	// ✅ agar already verified hai toh dobara modal hi mat dikhayo
+	if (!isOpen || localStorage.getItem("selfieVerified") === "true") return null;
 
 	return (
 		<div className="modal-overlay">
@@ -29,6 +33,16 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 						onVerified={(status) => {
 							if (status) {
 								Swal.fire("Success", "Selfie verified!", "success").then(() => {
+									localStorage.setItem("selfieVerified", "true");
+
+									// ✅ Navigate based on gender
+									const gender = localStorage.getItem("gender");
+									if (gender === "female") {
+										navigate("/women-profiles");
+									} else if (gender === "male") {
+										navigate("/profile");
+									}
+
 									onVerified?.();
 									onClose();
 								});
