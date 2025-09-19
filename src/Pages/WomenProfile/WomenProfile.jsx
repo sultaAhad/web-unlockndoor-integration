@@ -70,7 +70,8 @@ function WomenProfile() {
 
 	useEffect(() => {
 		if (user) {
-			dispatch(setUser(user));
+			// dispatch(setUser(user));
+			dispatch(setUser({ ...user, gender: "female" }));
 		}
 	}, [user]);
 
