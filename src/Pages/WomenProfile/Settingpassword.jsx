@@ -5,8 +5,8 @@ import Footer from "../../Components/Footer";
 import { innerpages1 } from "../../Constant/Index";
 import Aos from "aos";
 import ProfileHeader from "../../Components/ProfileHeader";
-import { useWomenChangePasswordMutation } from "../../network/services/WomenAuth";
 import Swal from "sweetalert2";
+import { useWomenChangePasswordMutation } from "../../network/services/WomanAuth";
 
 // ✅ Validation function
 export const validateChangePasswordWomen = (values, setErrors) => {
@@ -110,7 +110,7 @@ const Settingpassword = () => {
 
 			// ✅ Navigate to profile page after success
 			setTimeout(() => {
-				navigate("/profile");
+				navigate("/women-profiles");
 			}, 1600);
 		} catch (error) {
 			Swal.fire({
