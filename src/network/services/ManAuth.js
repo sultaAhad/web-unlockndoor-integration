@@ -25,6 +25,7 @@ import {
 	DELETE_IMAGE_MAN,
 	DELETE_VIDEO_MAN,
 	REOFFER_DATE,
+	CHANGE_PASSWORD_PROFILE,
 } from "../../utils/endpoints";
 
 export const ManAuth = createApi({
@@ -217,10 +218,18 @@ export const ManAuth = createApi({
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
 		}),
+		ManChangePassword: build.mutation({
+			query: (formData) => ({
+				url: CHANGE_PASSWORD_PROFILE,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
 	}),
 });
 
 export const {
+	useManChangePasswordMutation,
 	useManSignupMutation,
 	useManLoginMutation,
 	useVerifyOtpMutation,

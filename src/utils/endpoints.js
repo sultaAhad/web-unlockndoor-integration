@@ -53,6 +53,7 @@ export const MAN_UPGRADE_PACKAGES = `auth-men/upgrade-men-package`;
 export const MAN_WITHDREW_DATE = `auth-men/withdraw-date`;
 export const CHANGE_PROFILE_IMAGE = `auth-men/update-profile-image`;
 export const CHANGE_COVER_IMAGE = `auth-men/update-cover-image`;
+export const CHANGE_PASSWORD_PROFILE = `auth-men/change-password`;
 
 // GET API MAN
 export const MAN_MATCHED_PRIFILE = `auth-men/matched-profiles`;
@@ -63,6 +64,7 @@ export const DELETE_IMAGE_MAN = `auth-men/delete-image`;
 export const DELETE_VIDEO_MAN = `auth-men/delete-video`;
 
 // Endpoints women
+export const CHANGE_PASSWORD_PROFILE_WOMEN = `auth-women/change-password`;
 export const CHANGE_PROFILE_IMAGE_WOMEN = `auth-women/update-profile-image`;
 export const CHANGE_COVER_IMAGE_WOMEN = `auth-women/update-cover-image`;
 export const WOMEN_SIGNUP = `auth-women/register-women`;
