@@ -129,46 +129,47 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 	return (
 		<Modal show={show} centered onHide={onClose} className="border-radius-www">
 			<Modal.Header closeButton />
-			<Modal.Body className="p-4 text-center">
+			<Modal.Body className="p-4">
 				<h3 className="secondary-semibold-font">One Time Password</h3>
 				<h5>Enter Your OTP</h5>
-
-				<div className="row justify-content-center my-3">
-					{otp.map((value, index) => (
-						<div className="col-2 px-1" key={index}>
-							<input
-								ref={(el) => (inputRefs.current[index] = el)}
-								type="text"
-								maxLength="1"
-								value={value}
-								onChange={(e) => handleChange(e, index)}
-								onKeyDown={(e) => handleKeyDown(e, index)}
-								onPaste={index === 0 ? handlePaste : undefined}
-								className="form-control text-center"
-								style={{ fontSize: "20px" }}
-							/>
-						</div>
-					))}
+				<div className="login_input">
+					<div className="row justify-content-center my-3">
+						{otp.map((value, index) => (
+							<div className="col-2 px-1" key={index}>
+								<input
+									ref={(el) => (inputRefs.current[index] = el)}
+									type="text"
+									maxLength="1"
+									value={value}
+									onChange={(e) => handleChange(e, index)}
+									onKeyDown={(e) => handleKeyDown(e, index)}
+									onPaste={index === 0 ? handlePaste : undefined}
+									className="otp-input text-center"
+									style={{ fontSize: "20px" }}
+								/>
+							</div>
+						))}
+					</div>
 				</div>
-
-				<Button
-					onClick={handleContinue}
-					disabled={loading}
-					className="w-100 my-2"
-				>
-					{loading ? "Verifying..." : "Continue"}
-				</Button>
-
-				<p>
+				<div className="login_btn">
+					<Button
+						onClick={handleContinue}
+						disabled={loading}
+						className="border w-100 my-2"
+					>
+						{loading ? "Verifying..." : "Continue"}
+					</Button>
+				</div>
+				<p className="text-center">
 					0:{timer < 10 ? `0${timer}` : timer}{" "}
 					<span
 						style={{
 							cursor: timer === 0 && !resendLoading ? "pointer" : "not-allowed",
-							color: timer === 0 ? "blue" : "gray",
+							color: timer === 0 ? "gray" : "#000",
 						}}
 						onClick={timer === 0 && !resendLoading ? handleResend : null}
 					>
-						{resendLoading ? "Resending..." : "Resend"}
+						<b> {resendLoading ? "Resending..." : "Resend"}</b>
 					</span>
 				</p>
 			</Modal.Body>

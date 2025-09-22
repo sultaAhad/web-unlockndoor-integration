@@ -47,7 +47,7 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 			<Modal.Header closeButton />
 			<Modal.Body className="p-4">
 				<div className="login_input">
-					<div className="login_head text-center">
+					<div className="login_head">
 						<h3 className="secondary-semibold-font">Forgot Password</h3>
 						<h5>Enter Your Email ({gender})</h5>
 					</div>
@@ -64,7 +64,11 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 					</div>
 
 					<div className="login_btn text-center">
-						<Button onClick={handleContinue} disabled={loading}>
+						<Button
+							onClick={handleContinue}
+							className="border"
+							disabled={loading}
+						>
 							{loading ? (
 								<>
 									<Spinner
