@@ -204,12 +204,15 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 
 							<div className="remember_dv d-flex justify-content-between align-items-center">
 								<div className="remeber">
-									<input
-										type="checkbox"
-										checked={rememberMe}
-										onChange={(e) => setRememberMe(e.target.checked)}
-									/>{" "}
-									<label>Remember me</label>
+									<label className="d-flex align-items-center gap-2 mb-0">
+										<input
+											type="checkbox"
+											checked={rememberMe}
+											style={{ width: "fit-content" }}
+											onChange={(e) => setRememberMe(e.target.checked)}
+						 				/>{" "}
+										Remember me
+									</label>
 								</div>
 								<div className="forgot_pass">
 									<a
