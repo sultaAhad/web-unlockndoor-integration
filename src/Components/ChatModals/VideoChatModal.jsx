@@ -10,15 +10,19 @@ const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
 
   return (
     <>
+      <style>{`.chat_modal   .modal-content {
+    background: transparent;
+    border: 0px;
+}`}</style>
       <Modal
         show={showVideoChatModal}
-        className="chat_modal"
+        className="chat_modal "
         onHide={() => {}}
         backdrop="static"
         keyboard={false}
         centered
       >
-        <Modal.Header closeButton className="border-0 ms-0">
+        {/* <Modal.Header closeButton className="border-0 ms-0">
           <Modal.Title className="secondary-medium-font level-7 dark-color">
             {videoCallData?.data?.type == "isCalling" && (
               <> Video Call to {videoCallData?.data?.member?.name}</>
@@ -32,8 +36,8 @@ const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
               </>
             )}
           </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="text-center py-0">
+        </Modal.Header> */}
+        <Modal.Body className="text-center py-0 bg-transparent border-0">
           {/* <VideoCallApp/> */}
           <AgoraVideoCall
             onCall={showVideoChatModal}

@@ -16,6 +16,7 @@ import {
 	useWomanDataQuery,
 	useWomenEditProfileMutation,
 } from "../../network/services/WomanAuth";
+import ImageVideo from "../../Components/ImageVideo";
 
 function WomenEditProfile() {
 	const { data, refetch } = useWomanDataQuery();
@@ -643,7 +644,49 @@ function WomenEditProfile() {
 					</div>
 				</div>
 			</div>
+			{/* Pictures section  */}
+			<section className="pictures_sec" data-aos="fade-left">
+				<div className="container">
+					<div className="pic_head">
+						<div className="d-flex justify-content-between">
+							<h3>Pictures</h3>
+						</div>
+					</div>
+					<div className="row mt-3">
+						{user?.images_urls?.map((image, index) => (
+							<ImageVideo
+								key={index}
+								file={image}
+								type="image"
+								refetch={refetch} // <-- yahan bhi pass karo
+							/>
+						))}
+					</div>
+				</div>
+			</section>
+			{/* ======================= */}
 
+			{/* Video Seciton  */}
+			<section className="videos_sec" data-aos="fade-right">
+				<div className="container">
+					<div className="pic_head">
+						<div className=" d-flex  justify-content-between">
+							<h3>Videos</h3>
+						</div>
+					</div>
+					<div className="row mt-3">
+						{user?.videos_urls?.map((video, index) => (
+							<ImageVideo
+								key={index}
+								file={video}
+								type="video"
+								refetch={refetch} // <-- yahan bhi pass karo
+							/>
+						))}
+					</div>
+				</div>
+			</section>
+			{/* ============================ */}
 			<Footer />
 		</>
 	);

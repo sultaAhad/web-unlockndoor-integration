@@ -26,7 +26,6 @@ import {
 import AOS from "aos";
 import { Link } from "react-router-dom";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
-import VideoChatModal from "../../Components/ChatModals/videoChatModal";
 import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
@@ -34,6 +33,7 @@ import ProfileHeader from "../../Components/ProfileHeader";
 import MatchedProfileCard from "../../Components/MatchedProfileCard";
 import { useGetMatchedProfilesQuery } from "../../network/services/ManAuth";
 import Spinner from "../../Components/Spinner";
+import VideoChatModal from "../../Components/ChatModals/VideoChatModal";
 
 function MatchedProfiles() {
   const [currentPage, setCurrentPage] = useState(1);

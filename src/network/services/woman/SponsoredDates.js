@@ -1,6 +1,6 @@
 // services/WomanAuth.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { WOMAN_SPONSORED_DATES } from "../../../utils/endpoints";
+import { WOMAN_REJECT_SPONSORED_DATES, WOMAN_SPONSORED_DATES } from "../../../utils/endpoints";
 import { BASE_URL } from "../../../utils/base_url";
 
 export const SponsoredDates = createApi({
@@ -31,12 +31,19 @@ export const SponsoredDates = createApi({
 				method: "GET",
 			}),
 		}),
-
+		rejectDateRequest: build.mutation({
+			query: (data) => ({
+				url: WOMAN_REJECT_SPONSORED_DATES,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
 export const {
 	useGetWomanSponsoredDatesQuery,
+	useRejectDateRequestMutation
 } = SponsoredDates;
 
 export default SponsoredDates;

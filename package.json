@@ -22,6 +22,7 @@
     "aos": "^2.3.4",
     "bootstrap": "^5.3.7",
     "date-fns": "^4.1.0",
+    "face-api.js": "^0.22.2",
     "framer-motion": "^11.18.2",
     "gsap": "^3.13.0",
     "pusher-js": "^8.4.0",

@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
 import {
 	CHANGE_COVER_IMAGE_WOMEN,
+	CHANGE_PASSWORD_PROFILE_WOMEN,
 	CHANGE_PROFILE_IMAGE_WOMEN,
 	DELETE_IMAGE_WOMAN,
 	DELETE_VIDEO_WOMAN,
@@ -159,10 +160,18 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		WomenChangePassword: build.mutation({
+			query: (formData) => ({
+				url: CHANGE_PASSWORD_PROFILE_WOMEN,
+				method: "POST",
+				body: formData,
+			}),
+		}),
 	}),
 });
 
 export const {
+	useWomenChangePasswordMutation,
 	useWomenSignupMutation,
 	useWomenLoginMutation,
 	usePurchasePackageWomenMutation,
@@ -179,7 +188,7 @@ export const {
 	useGetWomanMatchProfilesQuery,
 	useLikeManProfileMutation,
 	useLazyCancelWomenPackageQuery,
-	useUpgradeWomenPackageMutation
+	useUpgradeWomenPackageMutation,
 } = WomenAuth;
 
 export default WomenAuth;

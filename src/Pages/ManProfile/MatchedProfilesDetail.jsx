@@ -48,6 +48,7 @@ import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import PricingModal from "../../Components/ChatModals/PricingModal";
 import OfferModal from "./OfferModal";
+import VideoChatModal from "../../Components/ChatModals/VideoChatModal";
 function MatchedProfilesDetail() {
 	// Modals
 	const [showPricingModal, setShowPricingModal] = useState(false);

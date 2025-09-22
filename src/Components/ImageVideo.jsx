@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
-const ImageVideo = ({ file, type, onDelete }) => {
+const ImageVideo = ({ file, type, onDelete, refetch }) => {
 	const [deleteImageWoman, responseImageWoman] = useDeleteImageWomanMutation();
 	const [deleteVideoWoman, responseVideoWoman] = useDeleteVideoWomanMutation();
 	const [deleteImageMan, responseImageMan] = useDeleteImageManMutation();
@@ -70,12 +70,12 @@ const ImageVideo = ({ file, type, onDelete }) => {
 						deleteVideoMan({ video: fileName?.current });
 					}
 				}
-				onDelete(true);
+				onDelete?.(true);
 			}
 		});
 	};
 
-	// Success messages
+	// ✅ Success + Refetch
 	useEffect(() => {
 		if (responseImageMan?.data?.status) {
 			Swal.fire({
@@ -84,6 +84,7 @@ const ImageVideo = ({ file, type, onDelete }) => {
 				showConfirmButton: false,
 				timer: 1500,
 			});
+			refetch?.();
 		}
 	}, [responseImageMan]);
 
@@ -95,6 +96,7 @@ const ImageVideo = ({ file, type, onDelete }) => {
 				showConfirmButton: false,
 				timer: 1500,
 			});
+			refetch?.();
 		}
 	}, [responseVideoMan]);
 
@@ -106,6 +108,7 @@ const ImageVideo = ({ file, type, onDelete }) => {
 				showConfirmButton: false,
 				timer: 1500,
 			});
+			refetch?.();
 		}
 	}, [responseImageWoman]);
 
@@ -117,6 +120,7 @@ const ImageVideo = ({ file, type, onDelete }) => {
 				showConfirmButton: false,
 				timer: 1500,
 			});
+			refetch?.();
 		}
 	}, [responseVideoWoman]);
 

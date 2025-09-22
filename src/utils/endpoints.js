@@ -53,6 +53,7 @@ export const MAN_UPGRADE_PACKAGES = `auth-men/upgrade-men-package`;
 export const MAN_WITHDREW_DATE = `auth-men/withdraw-date`;
 export const CHANGE_PROFILE_IMAGE = `auth-men/update-profile-image`;
 export const CHANGE_COVER_IMAGE = `auth-men/update-cover-image`;
+export const CHANGE_PASSWORD_PROFILE = `auth-men/change-password`;
 
 // GET API MAN
 export const MAN_MATCHED_PRIFILE = `auth-men/matched-profiles`;
@@ -63,6 +64,7 @@ export const DELETE_IMAGE_MAN = `auth-men/delete-image`;
 export const DELETE_VIDEO_MAN = `auth-men/delete-video`;
 
 // Endpoints women
+export const CHANGE_PASSWORD_PROFILE_WOMEN = `auth-women/change-password`;
 export const CHANGE_PROFILE_IMAGE_WOMEN = `auth-women/update-profile-image`;
 export const CHANGE_COVER_IMAGE_WOMEN = `auth-women/update-cover-image`;
 export const WOMEN_SIGNUP = `auth-women/register-women`;
@@ -75,6 +77,7 @@ export const PURCHASE_PACKAGES_WOMEN = `auth-women/women-purchase-package`;
 export const DELETE_IMAGE_WOMAN = `auth-women/delete-image`;
 export const DELETE_VIDEO_WOMAN = `auth-women/delete-video`;
 export const WOMAN_SPONSORED_DATES = `auth-women/sponsored-dates`;
+export const WOMAN_REJECT_SPONSORED_DATES = `auth-women/change-date-status`;
 export const WOMAN_MATCHED_PRIFILE = `auth-women/male-members`;
 export const WOMAN_LIKE_MAN_PROFILE = `auth-women/like-men`;
 export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;
