@@ -69,7 +69,11 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 													src={previewImage || user_pro}
 													alt="Profile"
 													className="img-fluid rounded-circle"
-													style={{ width: "80px", height: "80px", objectFit: "cover" }}
+													style={{
+														width: "80px",
+														height: "80px",
+														objectFit: "cover",
+													}}
 												/>
 											</div>
 										</div>
@@ -87,7 +91,9 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 												/>
 											</label>
 											{formErrors?.profile_picture && (
-												<p className="mt-2 text-danger">{formErrors.profile_picture[0]}</p>
+												<p className="mt-2 text-danger">
+													{formErrors.profile_picture[0]}
+												</p>
 											)}
 										</div>
 									</div>
@@ -118,7 +124,9 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 												className="form-control"
 											/>
 											{formErrors?.email && (
-												<p className="mt-2 text-danger">{formErrors.email[0]}</p>
+												<p className="mt-2 text-danger">
+													{formErrors.email[0]}
+												</p>
 											)}
 										</div>
 
@@ -132,7 +140,9 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 												className="form-control"
 											/>
 											{formErrors?.phone_number && (
-												<p className="mt-2 text-danger">{formErrors.phone_number[0]}</p>
+												<p className="mt-2 text-danger">
+													{formErrors.phone_number[0]}
+												</p>
 											)}
 										</div>
 
@@ -149,7 +159,11 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 											/>
 											<div
 												className="input_icons"
-												style={{ position: "absolute", right: "10px", top: "10px" }}
+												style={{
+													position: "absolute",
+													right: "10px",
+													top: "10px",
+												}}
 											>
 												<img src={solar_calendar} alt="calendar" />
 											</div>
@@ -168,7 +182,9 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 												onChange={handleInputChange}
 											/>
 											<i
-												className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} position-absolute text-white`}
+												className={`fa ${
+													showPassword ? "fa-eye-slash" : "fa-eye"
+												} position-absolute text-white`}
 												style={{
 													top: "50%",
 													right: "15px",
@@ -176,11 +192,16 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 													cursor: "pointer",
 												}}
 												onClick={() =>
-													togglePasswordVisibility(setShowPassword, showPassword)
+													togglePasswordVisibility(
+														setShowPassword,
+														showPassword,
+													)
 												}
 											></i>
 											{formErrors?.password && (
-												<p className="mt-2 text-danger">{formErrors.password[0]}</p>
+												<p className="mt-2 text-danger">
+													{formErrors.password[0]}
+												</p>
 											)}
 										</div>
 
@@ -202,7 +223,11 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 
 						<div className="col-md-6">
 							<div className="user_img1">
-								<img src={imgregistaionfemale} className="img-fluid" alt="registration female" />
+								<img
+									src={imgregistaionfemale}
+									className="img-fluid"
+									alt="registration female"
+								/>
 							</div>
 						</div>
 					</div>

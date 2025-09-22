@@ -3089,6 +3089,15 @@ div#swal2-html-container {
 	color: white;
 	background-image: none !important;
 }
+.term_sec p {
+	background: transparent !important;
+}
+.term_sec ul {
+	background: transparent !important;
+}
+.term_sec h5 {
+	background: transparent !important;
+}
 .faqs___sec .accordion-button:not(.collapsed)::after {
 	content: "\f106" !important;
 	font-family: fontAwesome;

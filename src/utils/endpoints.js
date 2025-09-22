@@ -9,6 +9,10 @@ export const SETTING = "site-settings";
 
 export const GALLERY = "gallery";
 
+export const HELPANDSUPPORT = "help-and-support";
+export const TERMCONDITION = "terms-and-condition";
+export const PRIVACYPOLICY = "privacy-policy";
+
 // contect us
 
 export const CONTECT_US = "contact/send-contact-query";
@@ -84,6 +88,7 @@ export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;
 export const SEND_CHAT_MESSAGE_API = (type) => `auth-${type}/send-message`;
 export const GET_CHAT_MESSAGES_API = (type, chat_id) =>
 	`auth-${type}/single-chat?chat_id=${chat_id}`;
+export const WOMEN_SELFIE = `auth-women/verify-selfie`;
 
 // Edit WmonenProfile
 export const WOMEN_EDIT_PROFILE = `auth-women/update-women`;
