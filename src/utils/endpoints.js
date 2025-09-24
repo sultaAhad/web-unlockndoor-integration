@@ -9,6 +9,10 @@ export const SETTING = "site-settings";
 
 export const GALLERY = "gallery";
 
+export const HELPANDSUPPORT = "help-and-support";
+export const TERMCONDITION = "terms-and-condition";
+export const PRIVACYPOLICY = "privacy-policy";
+
 // contect us
 
 export const CONTECT_US = "contact/send-contact-query";
@@ -62,6 +66,8 @@ export const MAN_FEMALE_MEMBERSHIP = `auth-men/female-members`;
 export const MAN_DATA = `auth-men/men-data`;
 export const DELETE_IMAGE_MAN = `auth-men/delete-image`;
 export const DELETE_VIDEO_MAN = `auth-men/delete-video`;
+export const CHARGES_VIDEO_MAN = `auth-men/video-call-charges`;
+export const VIDEO_CALL_PURCHASE_MAN = `auth-men/video-call-purchase`;
 
 // Endpoints women
 export const CHANGE_PASSWORD_PROFILE_WOMEN = `auth-women/change-password`;
@@ -84,6 +90,7 @@ export const CHATS_API = (type) => `auth-${type}/chats?type=${type}`;
 export const SEND_CHAT_MESSAGE_API = (type) => `auth-${type}/send-message`;
 export const GET_CHAT_MESSAGES_API = (type, chat_id) =>
 	`auth-${type}/single-chat?chat_id=${chat_id}`;
+export const WOMEN_SELFIE = `auth-women/verify-selfie`;
 
 // Edit WmonenProfile
 export const WOMEN_EDIT_PROFILE = `auth-women/update-women`;

@@ -15,12 +15,12 @@ const NewPasswordModal = ({ show, onClose, role, email }) => {
 	const [errors, setErrors] = useState({});
 	const [showPassword, setShowPassword] = useState([false, false]);
 
-	const [ResetPassword, { isLoading: isManLoading }] =
+	const [ResetPassword, { isLoading: isMenLoading }] =
 		useResetPasswordMutation();
 	const [ResetPasswordWomen, { isLoading: isWomenLoading }] =
 		useResetPasswordWomenMutation();
 
-	const loading = isManLoading || isWomenLoading;
+	const loading = isMenLoading || isWomenLoading;
 
 	useEffect(() => {
 		if (email) {
@@ -45,13 +45,11 @@ const NewPasswordModal = ({ show, onClose, role, email }) => {
 			const payload = {
 				email: form.email,
 				password: form.password,
-				confirmPassword: form.confirmPassword, // ya password_confirmation agar backend me ye hai
+				confirmPassword: form.confirmPassword, // or password_confirmation if backend requires
 			};
 
-			console.log("🚀 Sending payload:", payload);
-
 			let res;
-			if (role === "male") {
+			if (role === "men") {
 				res = await ResetPassword(payload).unwrap();
 			} else {
 				res = await ResetPasswordWomen(payload).unwrap();
@@ -66,7 +64,6 @@ const NewPasswordModal = ({ show, onClose, role, email }) => {
 			onClose();
 			setForm({ email: "", password: "", confirmPassword: "" });
 		} catch (err) {
-			console.error("❌ API Error:", err);
 			let errorMsg = "Something went wrong";
 
 			if (err?.data?.message) {

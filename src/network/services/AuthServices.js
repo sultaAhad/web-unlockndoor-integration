@@ -3,26 +3,26 @@ import { BASE_URL } from "../../utils/base_url";
 import {
 	CHANGE_COVER_IMAGE,
 	CHANGE_PROFILE_IMAGE,
+	HELPANDSUPPORT,
 	LOGIN_CHANGEPASSWORD,
 	LOGIN_CHANGEPASSWORDMAN,
 	LOGIN_FORGETPASSWORD,
 	LOGIN_MAN,
 	LOGIN_OTP,
 	LOGIN_URL,
+	PRIVACYPOLICY,
+	TERMCONDITION,
 } from "../../utils/endpoints";
 
-// Create API instance
+// ✅ Create API instance
 const AuthServices = createApi({
 	reducerPath: "AuthServices",
 	baseQuery: fetchBaseQuery({
 		baseUrl: BASE_URL,
 		prepareHeaders: (headers, { getState }) => {
-			const reducers = getState();
-			// const token = reducers?.authReducer?.userToken;
 			const token = localStorage.getItem("token");
 			headers.set("Accept", "application/json");
 
-			// ✅ Send Authorization header if token exists
 			if (token) {
 				headers.set("Authorization", `Bearer ${token}`);
 			}
@@ -31,6 +31,7 @@ const AuthServices = createApi({
 	}),
 	tagTypes: ["editInfo", "quiz"],
 	endpoints: (build) => ({
+		// 🔹 Register
 		authRegister: build.mutation({
 			query: (data) => ({
 				url: LOGIN_MAN,
@@ -38,6 +39,8 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 Login
 		loginRegister: build.mutation({
 			query: (data) => ({
 				url: LOGIN_URL,
@@ -45,6 +48,8 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 Forget Password
 		forgetRegister: build.mutation({
 			query: (data) => ({
 				url: LOGIN_FORGETPASSWORD,
@@ -52,6 +57,8 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 OTP
 		otpRegister: build.mutation({
 			query: (data) => ({
 				url: LOGIN_OTP,
@@ -59,6 +66,8 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 Change Password (woman)
 		changepasswordRegister: build.mutation({
 			query: (data) => ({
 				url: LOGIN_CHANGEPASSWORD,
@@ -66,6 +75,8 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 Change Password (man)
 		manchangepasswordRegister: build.mutation({
 			query: (data) => ({
 				url: LOGIN_CHANGEPASSWORDMAN,
@@ -73,6 +84,8 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 Update Profile Image
 		manupUatepPofileImage: build.mutation({
 			query: (data) => ({
 				url: CHANGE_PROFILE_IMAGE,
@@ -80,11 +93,36 @@ const AuthServices = createApi({
 				body: data,
 			}),
 		}),
+
+		// 🔹 Update Cover Image
 		updateManCoverImage: build.mutation({
 			query: (data) => ({
 				url: CHANGE_COVER_IMAGE,
 				method: "POST",
 				body: data,
+			}),
+		}),
+
+		// 🔹 Help & Support
+		helpAndSupport: build.query({
+			query: () => ({
+				url: HELPANDSUPPORT,
+				method: "GET",
+			}),
+		}),
+		// 🔹 Terms & Condition
+		termsAndCondition: build.query({
+			query: () => ({
+				url: TERMCONDITION,
+				method: "GET",
+			}),
+		}),
+
+		// 🔹 Privacy Policy
+		privacyPolicy: build.query({
+			query: () => ({
+				url: PRIVACYPOLICY,
+				method: "GET",
 			}),
 		}),
 	}),
@@ -93,6 +131,8 @@ const AuthServices = createApi({
 export default AuthServices;
 
 export const {
+	useTermsAndConditionQuery,
+	usePrivacyPolicyQuery,
 	useAuthRegisterMutation,
 	useLoginRegisterMutation,
 	useForgetRegisterMutation,
@@ -101,4 +141,5 @@ export const {
 	useManchangepasswordRegisterMutation,
 	useManupUatepPofileImageMutation,
 	useUpdateManCoverImageMutation,
+	useHelpAndSupportQuery,
 } = AuthServices;

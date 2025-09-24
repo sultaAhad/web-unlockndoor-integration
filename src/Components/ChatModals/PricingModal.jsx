@@ -1,76 +1,86 @@
 import { Button, Modal } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { useGetManVideoChargesQuery } from "../../network/services/ManAuth";
 
 const PricingModal = ({
 	showPricingModal,
 	handlePricingClose,
 	setShowPricingModal,
 	setShowPayModal,
+	setSelectedPlan,
 }) => {
+	const { data, isLoading } = useGetManVideoChargesQuery();
+	const [selectedId, setSelectedId] = useState(null);
+
+	useEffect(() => {
+		if (data) {
+			console.log("📦 Plans:", data?.data);
+		}
+	}, [data]);
+
 	const handlePayNowOpen = () => {
+		if (!selectedId) {
+			alert("Please select a plan first");
+			return;
+		}
+
+		// ✅ Find the selected plan
+		const plan = data?.data?.find((p) => p.id === selectedId);
+
+		// ✅ Set selected plan for PayNowModal
+		setSelectedPlan(plan);
+
+		// ✅ Close PricingModal and open PayNowModal
 		setShowPricingModal(false);
 		setShowPayModal(true);
 	};
 
 	return (
-    <>
-      <Modal
-        show={showPricingModal}
-        className="pricing_modal"
-        onHide={handlePricingClose}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="secondary-semibold-font level-7 dark-color">
-            {" "}
-            Video Call Pricing
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="pb-1">
-          <form action="#">
-            <div className="form-group pb-1">
-              <label
-                className="form-label signup-check d-flex align-items-center"
-                htmlFor="11"
-              >
-                <input type="radio" id="11" name="main" hidden />
-                <span className="checkmark"></span>
-                $50 for 15 minutes
-              </label>
-            </div>
-            <div className="form-group pb-1">
-              <label
-                className="form-label signup-check d-flex align-items-center"
-                htmlFor="12"
-              >
-                <input type="radio" id="12" name="main" hidden />
-                <span className="checkmark"></span>
-                $70 for 30 minutes
-              </label>
-            </div>
-            <div className="form-group pb-1">
-              <label
-                className="form-label signup-check d-flex align-items-center"
-                htmlFor="12"
-              >
-                <input type="radio" id="12" name="main" hidden />
-                <span className="checkmark"></span>
-                $100 for 60 minutes
-              </label>
-            </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer className="border-0 pt-0">
-          <Button
-            variant="primary"
-            className="border radius-8 py-3 w-100 secondary-regular-font"
-            onClick={handlePayNowOpen}
-          >
-            Pay Now
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
+		<Modal
+			show={showPricingModal}
+			onHide={handlePricingClose}
+			centered
+			className="pricing_modal"
+		>
+			<Modal.Header closeButton>
+				<Modal.Title>Video Call Pricing</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				{isLoading ? (
+					<p>Loading...</p>
+				) : data?.data?.length > 0 ? (
+					<form>
+						{data.data.map((plan) => (
+							<div className="form-group pb-1" key={plan.id}>
+								<label
+									className="form-label d-flex align-items-center"
+									htmlFor={`plan-${plan.id}`}
+								>
+									<input
+										type="radio"
+										id={`plan-${plan.id}`}
+										name="main"
+										hidden
+										checked={selectedId === plan.id}
+										onChange={() => setSelectedId(plan.id)}
+									/>
+									<span className="checkmark"></span>${plan.price} for{" "}
+									{plan.minutes} minutes
+								</label>
+							</div>
+						))}
+					</form>
+				) : (
+					<p>No plans available.</p>
+				)}
+			</Modal.Body>
+			<Modal.Footer className="border-0 pt-0">
+				<Button variant="primary" className="w-100" onClick={handlePayNowOpen}>
+					Pay Now
+				</Button>
+			</Modal.Footer>
+		</Modal>
+	);
 };
 
 export default PricingModal;

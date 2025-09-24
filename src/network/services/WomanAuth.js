@@ -18,6 +18,7 @@ import {
 	WOMEN_LOGIN_CHANGEPASSWORD_RESET,
 	WOMEN_LOGIN_OTP_SAND,
 	WOMEN_LOGIN_OTP_VARIFY,
+	WOMEN_SELFIE,
 	WOMEN_SIGNUP,
 	WOMEN_UPGRADE_PACKAGE,
 } from "../../utils/endpoints";
@@ -167,10 +168,18 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		verifySelfieWomen: build.mutation({
+			query: (formData) => ({
+				url: WOMEN_SELFIE,
+				method: "POST",
+				body: formData,
+			}),
+		}),
 	}),
 });
 
 export const {
+	useVerifySelfieWomenMutation,
 	useWomenChangePasswordMutation,
 	useWomenSignupMutation,
 	useWomenLoginMutation,

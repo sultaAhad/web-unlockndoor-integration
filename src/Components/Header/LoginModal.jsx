@@ -6,28 +6,26 @@ import { setUserToken } from "../../network/reducers/AuthReducer";
 import { useManLoginMutation } from "../../network/services/ManAuth";
 import { useWomenLoginMutation } from "../../network/services/WomanAuth";
 import { validatelogin } from "../../Constant/HelperFunction";
-import SelfieModal from "../SelfieModal";
-import ManPackagesTab from "../ManPackagesTab";
 import { useNavigate } from "react-router-dom";
-import WomenselfieModel from "../WomenselfieModel";
-import PackageSelectionModal from "../PackageSelectionModal";
 
 const LoginModal = ({ show, onClose, onForgotPassword }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const userToken = useSelector((state) => state.auth.userToken);
 
-	// Active Tab: male or female
-	const [activeTab, setActiveTab] = useState("male");
+	// Active Tab: men or women
+	const [activeTab, setActiveTab] = useState("men");
 
 	// Form states
-	const [maleLogin, setMaleLogin] = useState({ email: "", password: "" });
-	const [femaleLogin, setFemaleLogin] = useState({ email: "", password: "" });
+	const [menLogin, setMenLogin] = useState({ email: "", password: "" });
+	const [womenLogin, setWomenLogin] = useState({ email: "", password: "" });
 	const [loginErrors, setLoginErrors] = useState({});
 	const [rememberMe, setRememberMe] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+
 	const [manLogin, manResponse] = useManLoginMutation();
-	const [womenLogin, womenResponse] = useWomenLoginMutation();
+	const [womenLoginMutation, womenResponse] = useWomenLoginMutation();
+
 	useEffect(() => {
 		if (userToken) {
 			onClose();
@@ -38,7 +36,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const currentLogin = activeTab === "male" ? maleLogin : femaleLogin;
+		const currentLogin = activeTab === "men" ? menLogin : womenLogin;
 
 		if (!validatelogin(currentLogin, setLoginErrors)) return;
 
@@ -46,17 +44,17 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 		formData.append("email", currentLogin.email);
 		formData.append("password", currentLogin.password);
 
-		if (activeTab === "male") manLogin(formData);
-		else womenLogin(formData);
+		if (activeTab === "men") manLogin(formData);
+		else womenLoginMutation(formData);
 	};
 
 	useEffect(() => {
-		const response = activeTab === "male" ? manResponse : womenResponse;
+		const response = activeTab === "men" ? manResponse : womenResponse;
+
 		if (response?.isSuccess) {
 			const responseData = response?.data?.response?.data;
 			const apiData =
-				activeTab === "male" ? responseData?.men : responseData?.women;
-
+				activeTab === "men" ? responseData?.men : responseData?.women;
 			const token = responseData?.token;
 
 			if (!apiData || !token) {
@@ -74,17 +72,17 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 			);
 
 			localStorage.setItem("selfieVerified", responseData?.selfie_verified);
-			localStorage.setItem("selfieVerified", true);
 			localStorage.setItem("gender", activeTab);
 			localStorage.setItem("hasPackage", responseData?.package);
 
-			if (activeTab == "male") {
+			if (activeTab === "men") {
 				navigate("/profile");
 			} else {
 				navigate("/women-profiles");
 			}
-			if (activeTab === "male") setMaleLogin({ email: "", password: "" });
-			else setFemaleLogin({ email: "", password: "" });
+
+			if (activeTab === "men") setMenLogin({ email: "", password: "" });
+			else setWomenLogin({ email: "", password: "" });
 
 			onClose();
 		}
@@ -120,17 +118,17 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 						<div className="login-tabs mb-3 d-flex justify-content-center">
 							<button
 								type="button"
-								className={`tab-btn ${activeTab === "male" ? "active" : ""}`}
-								onClick={() => setActiveTab("male")}
+								className={`tab-btn ${activeTab === "men" ? "active" : ""}`}
+								onClick={() => setActiveTab("men")}
 							>
-								Male
+								Men
 							</button>
 							<button
 								type="button"
-								className={`tab-btn ${activeTab === "female" ? "active" : ""}`}
-								onClick={() => setActiveTab("female")}
+								className={`tab-btn ${activeTab === "women" ? "active" : ""}`}
+								onClick={() => setActiveTab("women")}
 							>
-								Female
+								Women
 							</button>
 						</div>
 
@@ -141,13 +139,13 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 										type="email"
 										placeholder="Email"
 										value={
-											activeTab === "male" ? maleLogin.email : femaleLogin.email
+											activeTab === "men" ? menLogin.email : womenLogin.email
 										}
 										onChange={(e) =>
-											activeTab === "male"
-												? setMaleLogin({ ...maleLogin, email: e.target.value })
-												: setFemaleLogin({
-														...femaleLogin,
+											activeTab === "men"
+												? setMenLogin({ ...menLogin, email: e.target.value })
+												: setWomenLogin({
+														...womenLogin,
 														email: e.target.value,
 												  })
 										}
@@ -167,18 +165,15 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 										type={showPassword ? "text" : "password"}
 										placeholder="Password"
 										value={
-											activeTab === "male"
-												? maleLogin.password
-												: femaleLogin.password
+											activeTab === "men"
+												? menLogin.password
+												: womenLogin.password
 										}
 										onChange={(e) =>
-											activeTab === "male"
-												? setMaleLogin({
-														...maleLogin,
-														password: e.target.value,
-												  })
-												: setFemaleLogin({
-														...femaleLogin,
+											activeTab === "men"
+												? setMenLogin({ ...menLogin, password: e.target.value })
+												: setWomenLogin({
+														...womenLogin,
 														password: e.target.value,
 												  })
 										}
@@ -210,7 +205,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 											checked={rememberMe}
 											style={{ width: "fit-content" }}
 											onChange={(e) => setRememberMe(e.target.checked)}
-						 				/>{" "}
+										/>{" "}
 										Remember me
 									</label>
 								</div>
@@ -219,7 +214,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 										href="#"
 										onClick={(e) => {
 											e.preventDefault();
-											onForgotPassword(activeTab); // pass gender explicitly
+											onForgotPassword(activeTab);
 										}}
 									>
 										Forgot Password?
@@ -232,12 +227,12 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 									className="submit_signup_btn w-100 main-wrapper-btn-wrap mt-2 border text-center px-3 gradient-button"
 									type="submit"
 									disabled={
-										activeTab === "male"
+										activeTab === "men"
 											? manResponse.isLoading
 											: womenResponse.isLoading
 									}
 								>
-									{activeTab === "male"
+									{activeTab === "men"
 										? manResponse.isLoading
 											? "Signing In..."
 											: "Sign In"

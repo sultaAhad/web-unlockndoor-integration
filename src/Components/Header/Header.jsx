@@ -29,9 +29,8 @@ function Header() {
 
 	const [showCategoryModal, setShowCategoryModal] = useState(false);
 	const [selectedGender, setSelectedGender] = useState("");
-	const [userEmail, setUserEmail] = useState(""); // ✅ add this line
+	const [userEmail, setUserEmail] = useState("");
 
-	// ✅ Get user from Redux
 	const { user, videoCallData } = useSelector((state) => state.auth);
 	const [showVideoChatModal, setShowVideoChatModal] = useState(false);
 	const [pageLoaded, setPageLoaded] = useState(false);
@@ -143,7 +142,7 @@ function Header() {
 	}, [user]);
 
 	const handleCategoryShow = (gender) => {
-		setSelectedGender(gender); // "male" or "female"
+		setSelectedGender(gender); // "men" or "women"
 		setShowCategoryModal(true);
 	};
 
@@ -201,7 +200,7 @@ function Header() {
 							<div className="header_button_wrapper d-flex gap-2">
 								{/* Men Button */}
 								<button
-									onClick={() => handleCategoryShow("male")}
+									onClick={() => handleCategoryShow("men")}
 									className="btn-bgtransparent under-line"
 								>
 									<img src={outline1} alt="Men" className="img-fluid pe-2" />
@@ -210,14 +209,13 @@ function Header() {
 
 								{/* Women Button */}
 								<button
-									onClick={() => handleCategoryShow("female")}
+									onClick={() => handleCategoryShow("women")}
 									className="border wrapper-anchor"
 								>
 									<img src={outline2} alt="Women" className="img-fluid pe-2" />
 									Women
 								</button>
 
-								{/* Profile / Login */}
 								{/* Profile / Login */}
 								{!user ? (
 									<Link
@@ -231,10 +229,9 @@ function Header() {
 								) : (
 									<Link
 										className="only_for_img"
-										to={user.gender === "men" ? "/profile" : "/women-profiles"} // ✅ fixed
+										to={user.gender === "men" ? "/profile" : "/women-profiles"}
 									>
 										<span>
-											{console.log("👉 Logged user gender:", user.gender)}
 											<img
 												src={user.profile_image_url || men_profile}
 												alt="Profile"
@@ -338,11 +335,11 @@ function Header() {
 			<ForgotPasswordModal
 				show={showModal3}
 				onClose={() => setShowModal3(false)}
-				gender={selectedGender} // "male" ya "female"
+				gender={selectedGender} // "men" or "women"
 				onContinue={(email) => {
 					setUserEmail(email);
 					setShowModal3(false);
-					setShowModal4(true); // OTP modal
+					setShowModal4(true);
 				}}
 			/>
 
@@ -351,20 +348,19 @@ function Header() {
 				onClose={() => setShowModal4(false)}
 				onContinue={() => {
 					setShowModal4(false);
-					setShowModal5(true); // ✅ open reset password modal only if OTP is valid
+					setShowModal5(true);
 				}}
-				gender={selectedGender} // ✅ use selectedGender from state
-				email={userEmail} // ✅ use userEmail saved from ForgotPasswordModal
+				gender={selectedGender} // "men" or "women"
+				email={userEmail}
 			/>
 
 			<NewPasswordModal
 				show={showModal5}
 				onClose={() => setShowModal5(false)}
-				role={selectedGender} // 👈 gender bhejna zaroori hai
-				email={userEmail} // 👈 email bhi bhejna zaroori hai
+				role={selectedGender} // "men" or "women"
+				email={userEmail}
 			/>
 
-			{/* Category Modal */}
 			<CategoryModal
 				showcategoryModal={showCategoryModal}
 				handlecategoryClose={handleCategoryClose}
