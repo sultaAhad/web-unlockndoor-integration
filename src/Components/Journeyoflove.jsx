@@ -48,7 +48,7 @@ function Journeyoflove() {
           {/* Right Slider */}
           <div className="col-md-6">
             <div
-              className="wrapper p-lg-3 p-md-5"
+              className="wrapper p-lg-3 p-md-5 p-2"
               onMouseEnter={handlePause}
               onMouseLeave={handlePlay}
               onTouchStart={handlePause}

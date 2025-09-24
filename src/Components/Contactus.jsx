@@ -56,7 +56,7 @@ const Contactus = () => {
   return (
     <motion.section
       id="contactus"
-      className="contact_us_sec pb-5 mt-5 mb-5"
+      className="contact_us_sec pb-5 mt-5 mb-sm-5"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -82,7 +82,7 @@ const Contactus = () => {
                 </div>
 
                 <div className="col-lg-6">
-                  <motion.div className="love_sec_head" variants={textVariant}>
+                  <motion.div className="love_sec_head mt-lg-0 mt-4" variants={textVariant}>
                     <motion.h5 variants={textVariant}>{HomePageData?.page_subtitle}</motion.h5>
                     <motion.h2 variants={textVariant}>
                       {HomePageData?.subtitle_1?.split(" ")[0]}{" "}

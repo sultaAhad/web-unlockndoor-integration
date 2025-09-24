@@ -152,22 +152,34 @@ function Header() {
 		setSelectedGender("");
 	};
 
+	const [menuOpen, setMenuOpen] = useState(false);
+
 	return (
 		<>
 			{/* Header Section */}
 			<section className="header_sec pt-2">
 				<div className="container">
 					<div className="row align-items-center">
-						<div className="col-lg-2 col-md-2">
-							<div className="wrapper">
+						<div className="col-lg-2">
+							<div className="wrapper d-flex align-items-center justify-content-between">
 								<div className="img_wrapper">
 									<Link to="/">
-										<img src={web_new_logo} className="img-fluid" alt="logo" />
+										<img
+											src={web_new_logo}
+											className="img-fluid site__logo"
+											alt="logo"
+										/>
 									</Link>
 								</div>
+								<button
+									className="btn border-0 d-lg-none d-block"
+									onClick={() => setMenuOpen(!menuOpen)}
+								>
+									<i className="fas fa-bars fs-3"></i>
+								</button>
 							</div>
 						</div>
-						<div className="col-lg-6 col-md-6">
+						<div className="col-lg-6 d-lg-block d-none">
 							<div className="nav_wrapper">
 								<ul>
 									<li>
@@ -185,7 +197,7 @@ function Header() {
 								</ul>
 							</div>
 						</div>
-						<div className="col-lg-4 col-md-5">
+						<div className="col-lg-4 d-lg-block d-none">
 							<div className="header_button_wrapper d-flex gap-2">
 								{/* Men Button */}
 								<button
@@ -235,6 +247,73 @@ function Header() {
 						</div>
 					</div>
 				</div>
+
+				{menuOpen && (
+					<div className="mobile-nav d-lg-none pt-5">
+						<div className="nav_wrapper">
+							<ul className="flex-column align-items-center gap-4">
+								<li>
+									<Link to="/">Home</Link>
+								</li>
+								<li>
+									<Link to="/#about-section">About Us</Link>
+								</li>
+								<li>
+									<Link to="/#realitysec">Testimonials</Link>
+								</li>
+								<li>
+									<Link to="/#contactus">Contact Us</Link>
+								</li>
+							</ul>
+							<div className="header_button_wrapper d-flex justify-content-center gap-2 pt-4">
+								{/* Men Button */}
+								<button
+									onClick={() => handleCategoryShow("male")}
+									className="btn-bgtransparent under-line"
+								>
+									<img src={outline1} alt="Men" className="img-fluid pe-2" />
+									Men
+								</button>
+
+								{/* Women Button */}
+								<button
+									onClick={() => handleCategoryShow("female")}
+									className="border wrapper-anchor"
+								>
+									<img src={outline2} alt="Women" className="img-fluid pe-2" />
+									Women
+								</button>
+
+								{/* Profile / Login */}
+								{/* Profile / Login */}
+								{!user ? (
+									<Link
+										className="border only_for_img wrapper-anchor"
+										onClick={() => setShowModal1(true)}
+									>
+										<span>
+											<img src={person_img} alt="Profile" />
+										</span>
+									</Link>
+								) : (
+									<Link
+										className="only_for_img"
+										to={user.gender === "men" ? "/profile" : "/women-profiles"} // ✅ fixed
+									>
+										<span>
+											{console.log("👉 Logged user gender:", user.gender)}
+											<img
+												src={user.profile_image_url || men_profile}
+												alt="Profile"
+												className="wrapper-bug"
+											/>
+										</span>
+									</Link>
+								)}
+							</div>
+						</div>
+					</div>
+				)}
 			</section>
 
 			{/* Modals */}

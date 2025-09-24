@@ -21,7 +21,7 @@ function Banner() {
 			<div className="container">
 				<div className="row align-items-center">
 					{/* Left Section */}
-					<div className="col-md-6">
+					<div className="col-lg-6">
 						<motion.div
 							className="wrapper"
 							initial={{ opacity: 0, x: -50 }}
@@ -115,7 +115,7 @@ function Banner() {
 					</div>
 
 					{/* Right Section (Dynamic Images) */}
-					<div className="col-md-6">
+					<div className="col-lg-6">
 						<motion.div
 							className="row"
 							initial={{ opacity: 0, scale: 0.8 }}

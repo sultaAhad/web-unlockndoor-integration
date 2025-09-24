@@ -21,7 +21,7 @@ function Peopleimg() {
     speed: 700,
     responsive: [
       {
-        breakpoint: 768,
+        breakpoint: 992,
         settings: {
           slidesToShow: 2,
           centerPadding: "40px",

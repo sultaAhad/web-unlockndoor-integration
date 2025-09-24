@@ -95,7 +95,7 @@ function Loveyoudeserve() {
                   )
                 )}
 
-                <img src={wrapperfight} alt="steps" />
+                <img src={wrapperfight} alt="steps" className="step__img" />
               </div>
 
               <div className="lets_img text-center mt-2 pt-2">

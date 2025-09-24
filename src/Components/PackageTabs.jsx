@@ -104,7 +104,7 @@ const PackageTabs = () => {
 
 							return (
 								<motion.div
-									className="col-md-4"
+									className="col-lg-4 col-md-6 mb-lg-0 mb-4"
 									key={index}
 									variants={cardVariants}
 									initial="hidden"
@@ -140,7 +140,7 @@ const PackageTabs = () => {
 														className="bullet_Wrapper wrapper-bullet align-items-baseline py-2"
 													>
 														<div className="row">
-															<div className="col-lg-2">
+															<div className="col-md-2 col-3">
 																<div className="bullet_img">
 																	<img
 																		src={
@@ -151,7 +151,7 @@ const PackageTabs = () => {
 																	/>
 																</div>
 															</div>
-															<div className="col-lg-10 ps-0">
+															<div className="col-md-10 col-9 ps-0">
 																<div className="bullet_point text-white font_reg font_level4">
 																	{benefit}
 																</div>

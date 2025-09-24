@@ -15,7 +15,7 @@ function Footer() {
 			<section className="footer_sec">
 				<div className="container">
 					<div className="row">
-						<div className="col-md-3">
+						<div className="col-lg-3 col-md-6">
 							<div className="footer_widget widget1">
 								<div className="footer_logo">
 									{/* {settingPageData?.logo_url && (
@@ -40,8 +40,8 @@ function Footer() {
 								</div>
 							</div>
 						</div>
-						<div className="col-md-1"></div>
-						<div className="col-md-2">
+						<div className="col-lg-1 d-lg-flex d-none"></div>
+						<div className="col-lg-2 col-md-6">
 							<div className="footer_widget widget2">
 								<div className="footer_head">
 									<h3>quick links</h3>
@@ -61,7 +61,7 @@ function Footer() {
 								</div>
 							</div>
 						</div>
-						<div className="col-md-2">
+						<div className="col-lg-2 col-md-6 mt-lg-0 mt-4">
 							<div className="footer_widget widget2">
 								<div className="footer_head">
 									<h3>Help & Support</h3>
@@ -81,9 +81,9 @@ function Footer() {
 								</div>
 							</div>
 						</div>
-						<div className="col-md-1"></div>
+						<div className="col-lg-1 d-lg-flex d-none"></div>
 
-						<div className="col-md-3">
+						<div className="col-lg-3 col-md-6 mt-lg-0 mt-4">
 							<div className="footer_widget widget2">
 								<div className="footer_head">
 									<h3>Contact Info</h3>
