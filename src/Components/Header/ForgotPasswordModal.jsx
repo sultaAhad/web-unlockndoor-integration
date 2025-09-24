@@ -10,7 +10,7 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 	const [email, setEmail] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	const [sendManOtp] = useSendOtpMutation();
+	const [sendMenOtp] = useSendOtpMutation();
 	const [sendWomenOtp] = useWomenSendOtpMutation();
 
 	const handleContinue = async () => {
@@ -25,7 +25,7 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 			formData.append("email", email);
 
 			let response;
-			if (gender === "male") response = await sendManOtp(formData).unwrap();
+			if (gender === "men") response = await sendMenOtp(formData).unwrap();
 			else response = await sendWomenOtp(formData).unwrap();
 
 			Swal.fire(
@@ -33,7 +33,7 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 				response?.message || "OTP sent successfully",
 				"success",
 			);
-			onContinue(email); // send email to OTP modal
+			onContinue(email); // pass email to OTP modal
 			setEmail("");
 		} catch (err) {
 			Swal.fire("Error", err?.data?.message || "Failed to send OTP", "error");

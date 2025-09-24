@@ -12,14 +12,14 @@ export function checkMiddleware(
 	return function ProtectedComponent(props) {
 		const [showSelfie, setShowSelfie] = useState(false);
 		const [showPackages, setShowPackages] = useState(false);
+
+		// ✅ Fix: selfieVerified is true only if value is "true"
 		const selfieVerified = localStorage.getItem("selfieVerified") === "true";
-		// const selfieVerified = false;
-		// const selfieVerified = true;
 		const hasPackage = localStorage.getItem("hasPackage") === "true";
 		const gender = localStorage.getItem("gender");
 
 		if (checkSelfie && !selfieVerified) {
-			if (gender == "female") {
+			if (gender === "women") {
 				return (
 					<WomenselfieModel
 						isOpen={true}
@@ -32,7 +32,7 @@ export function checkMiddleware(
 					/>
 				);
 			}
-			if (gender == "male") {
+			if (gender === "men") {
 				return (
 					<SelfieModal
 						isOpen={true}
@@ -47,8 +47,9 @@ export function checkMiddleware(
 			}
 			return <Component {...props} />;
 		}
+
 		if (checkPackage && !hasPackage) {
-			if (gender === "female") {
+			if (gender === "women") {
 				return (
 					<PackageSelectionModal
 						isOpen={true}
@@ -56,7 +57,7 @@ export function checkMiddleware(
 					/>
 				);
 			}
-			if (gender === "male") {
+			if (gender === "men") {
 				return (
 					<ManPackagesTab
 						isOpen={true}
@@ -66,6 +67,7 @@ export function checkMiddleware(
 			}
 			return <Component {...props} />;
 		}
+
 		return <Component {...props} />;
 	};
 }

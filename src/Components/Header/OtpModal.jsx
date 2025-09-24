@@ -15,11 +15,11 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 	const [resendLoading, setResendLoading] = useState(false);
 
 	// OTP verification API
-	const [verifyManOtp] = useVerifyOtpMutation();
+	const [verifyMenOtp] = useVerifyOtpMutation();
 	const [verifyWomenOtp] = useWomenVerifyOtpMutation();
 
 	// Send OTP API (for resend)
-	const [sendManOtp] = useSendOtpMutation();
+	const [sendMenOtp] = useSendOtpMutation();
 	const [sendWomenOtp] = useWomenSendOtpMutation();
 
 	// Countdown timer
@@ -79,8 +79,8 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 			formData.append("email", email);
 
 			let response;
-			if (gender === "male") {
-				response = await sendManOtp(formData).unwrap();
+			if (gender === "men") {
+				response = await sendMenOtp(formData).unwrap();
 			} else {
 				response = await sendWomenOtp(formData).unwrap();
 			}
@@ -110,7 +110,7 @@ const OtpModal = ({ show, onClose, onContinue, gender, email }) => {
 			const payload = { email, otp: enteredOtp };
 			let response;
 
-			if (gender === "male") response = await verifyManOtp(payload).unwrap();
+			if (gender === "men") response = await verifyMenOtp(payload).unwrap();
 			else response = await verifyWomenOtp(payload).unwrap();
 
 			Swal.fire(

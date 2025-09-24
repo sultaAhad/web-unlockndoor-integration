@@ -26,6 +26,9 @@ import {
 	DELETE_VIDEO_MAN,
 	REOFFER_DATE,
 	CHANGE_PASSWORD_PROFILE,
+	CHARGES_VIDEO_MAN,
+	VIDEO_CALL_PURCHASE_MAN,
+	DELETE_VIDEO_WOMAN,
 } from "../../utils/endpoints";
 
 export const ManAuth = createApi({
@@ -204,6 +207,12 @@ export const ManAuth = createApi({
 				method: "GET",
 			}),
 		}),
+		getManVideoCharges: build.query({
+			query: () => ({
+				url: CHARGES_VIDEO_MAN,
+				method: "GET",
+			}),
+		}),
 		deleteImageMan: build.mutation({
 			query: (formData) => ({
 				url: DELETE_IMAGE_MAN,
@@ -213,7 +222,14 @@ export const ManAuth = createApi({
 		}),
 		deleteVideoMan: build.mutation({
 			query: (formData) => ({
-				url: DELETE_VIDEO_MAN,
+				url: DELETE_VIDEO_WOMAN,
+				method: "POST",
+				body: formData, // ✅ works with FormData (Stripe token + package_id)
+			}),
+		}),
+		VideoManPurchaseCall: build.mutation({
+			query: (formData) => ({
+				url: VIDEO_CALL_PURCHASE_MAN,
 				method: "POST",
 				body: formData, // ✅ works with FormData (Stripe token + package_id)
 			}),
@@ -229,6 +245,8 @@ export const ManAuth = createApi({
 });
 
 export const {
+	useVideoManPurchaseCallMutation,
+	useGetManVideoChargesQuery,
 	useManChangePasswordMutation,
 	useManSignupMutation,
 	useManLoginMutation,
