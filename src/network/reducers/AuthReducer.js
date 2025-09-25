@@ -12,8 +12,10 @@ const AuthReducer = createSlice({
 	reducers: {
 		setUserToken: (state, action) => {
 			const { user, token, gender } = action.payload;
-			if (token) state.userToken = token;
-			if (user) state.user = { ...user, gender };
+
+			// ✅ Always overwrite
+			state.userToken = token || "";
+			state.user = user ? { ...user, gender } : null;
 		},
 		setUser: (state, action) => {
 			state.user = action.payload;
@@ -21,6 +23,14 @@ const AuthReducer = createSlice({
 		setLogoutUser: (state) => {
 			state.userToken = "";
 			state.user = null;
+			state.videoCallData = { status: false, data: null };
+
+			// ✅ Clear localStorage on logout
+			localStorage.removeItem("token");
+			localStorage.removeItem("user");
+			localStorage.removeItem("gender");
+			localStorage.removeItem("selfieVerified");
+			localStorage.removeItem("hasPackage");
 		},
 		handleVideoCallModal: (state, action) => {
 			state.videoCallData = action.payload;
@@ -28,5 +38,6 @@ const AuthReducer = createSlice({
 	},
 });
 
-export const { setUserToken, setUser, setLogoutUser, handleVideoCallModal } = AuthReducer.actions;
+export const { setUserToken, setUser, setLogoutUser, handleVideoCallModal } =
+	AuthReducer.actions;
 export default AuthReducer.reducer;
