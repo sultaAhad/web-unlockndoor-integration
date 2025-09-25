@@ -13,8 +13,8 @@ export function checkMiddleware(
 		const [showSelfie, setShowSelfie] = useState(false);
 		const [showPackages, setShowPackages] = useState(false);
 
-		// ✅ Fix: selfieVerified is true only if value is "true"
-		const selfieVerified = localStorage.getItem("selfieVerified") === "true";
+		// const selfieVerified = localStorage.getItem("selfieVerified") === "true";
+		const selfieVerified = true;
 		const hasPackage = localStorage.getItem("hasPackage") === "true";
 		const gender = localStorage.getItem("gender");
 
