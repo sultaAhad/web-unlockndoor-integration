@@ -16,6 +16,7 @@ import ProfileHeader from "../../Components/ProfileHeader";
 import FemaleMemberCard from "../../Components/FemaleMemberCard";
 import { ToastContainer, toast } from "react-toastify";
 import { useGetFemaleMembershipQuery } from "../../network/services/ManAuth";
+import { faChampagneGlasses } from "@fortawesome/free-solid-svg-icons";
 
 function Femalemembers({ member }) {
 	// 🔹 Modals
@@ -36,6 +37,7 @@ function Femalemembers({ member }) {
 			setLastPage(data.response.data.Women?.last_page);
 		}
 	}, [data]);
+	console.log(data);
 
 	useEffect(() => {
 		refetch();
