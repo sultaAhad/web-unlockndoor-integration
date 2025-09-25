@@ -180,7 +180,7 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 										</div>
 
 										{/* Buttons */}
-										<div className="d-flex justify-content-between align-content-center mt-3 gap-3">
+										<div className="d-flex flex-sm-row flex-column justify-content-between align-content-center mt-3 gap-3">
 											<div className="submit_profile_btn position-relative d-flex align-items-center w-100">
 												<button
 													type="button"

@@ -72,7 +72,7 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 			<div className="container">
 				<div className="profile_dv1">
 					<div className="row">
-						<div className="col-md-6">
+						<div className="col-lg-6">
 							<div className="edit-profile-form">
 								<div className="form-container">
 									<form onSubmit={handleSubmit}>
@@ -166,7 +166,7 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 										</div>
 
 										{/* Buttons */}
-										<div className="d-flex justify-content-between align-content-center mt-3 gap-3">
+										<div className="d-flex flex-sm-row flex-column justify-content-between align-content-center mt-3 gap-3">
 											<div className="submit_profile_btn position-relative d-flex align-items-center w-100">
 												<button
 													type="button"
@@ -196,8 +196,8 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 							</div>
 						</div>
 
-						<div className="col-md-6">
-							<div className="user_img1">
+						<div className="col-lg-6">
+							<div className="user_img1 mt-lg-0 mt-4">
 								<img src={imgregistaionfemale} className="img-fluid" alt="" />
 							</div>
 						</div>

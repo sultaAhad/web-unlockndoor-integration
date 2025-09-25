@@ -226,7 +226,7 @@ const StepThree = ({
 									</div>
 
 									{/* Buttons */}
-									<div className="d-flex justify-content-between align-content-center mt-4 gap-3">
+									<div className="d-flex flex-sm-row flex-column justify-content-between align-content-center mt-4 gap-3">
 										<div className="submit_profile_btn position-relative d-flex align-items-center w-100">
 											<button
 												type="button"

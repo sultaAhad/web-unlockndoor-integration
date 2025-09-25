@@ -60,11 +60,11 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 
 	return (
 		<>
-			<div className="register_sec py-5 pb-5">
+			<div className="register_sec py-5 pb-lg-5 pb-md-3">
 				<div className="container">
 					<div className="profile_dv1">
 						<div className="row">
-							<div className="col-md-6">
+							<div className="col-lg-6">
 								<div className="edit-profile-form">
 									<div className="form-container">
 										<div className="form-header d-flex align-items-center mb-3">
@@ -73,7 +73,7 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 													<img
 														src={previewImage || user_pro}
 														alt="Profile"
-														className="img-fluid rounded-circle"
+														className="img-fluid rounded-circle user__circle"
 														style={{
 															width: "80px",
 															height: "80px",
@@ -255,8 +255,8 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 								</div>
 							</div>
 
-							<div className="col-md-6">
-								<div className="user_img1">
+							<div className="col-lg-6">
+								<div className="user_img1 mt-lg-0 mt-4">
 									<img
 										src={imgregistaionfemale}
 										className="img-fluid"
