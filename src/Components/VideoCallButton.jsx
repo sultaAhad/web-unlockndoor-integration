@@ -14,17 +14,26 @@ function VideoCallButton({ member, type = "icon" }) {
 	const dispatch = useDispatch();
 
 	const StartVideoCall = () => {
-		dispatch(
-			handleVideoCallModal({
-				status: true,
-				data: {
-					member: member,
-					channel: `channel_${member?.id}_${user?.id}`,
-					type: "isCalling",
-				},
-			}),
-		);
-	};
+    connectCall();
+    // if (gender === "women") {
+    //   connectCall();
+    // }
+    // if (gender === "men") {
+    // }
+  };
+
+  const connectCall = () => {
+    dispatch(
+      handleVideoCallModal({
+        status: true,
+        data: {
+          member: member,
+          channel: `channel_${member?.id}_${user?.id}`,
+          type: "isCalling",
+        },
+      })
+    );
+  };
 
 	return (
 		<>

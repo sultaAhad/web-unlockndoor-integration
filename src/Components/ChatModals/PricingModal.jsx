@@ -71,7 +71,7 @@ const PricingModal = ({
 						))}
 					</form>
 				) : (
-					<p>No plans available.</p>
+					<p>Pls Upgrade Packages</p>
 				)}
 			</Modal.Body>
 			<Modal.Footer className="border-0 pt-0">

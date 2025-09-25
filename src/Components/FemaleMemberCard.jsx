@@ -1,3 +1,4 @@
+// ✅ FemaleMemberCard.jsx
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGetManDataQuery } from "../network/services/ManAuth";
@@ -46,18 +47,15 @@ const FemaleMemberCard = ({ member, memberId }) => {
 	};
 
 	// --- Check video call access ---
-	const handleVideoCheck = async () => {
+	const handleVideoCheck = () => {
 		if (isLoading) return;
 
-		await refetch(); // fetch latest manData
+		const minutes = Number(manData?.minutes || 0);
 
-		const canCall = manData?.response?.can_call;
-		const minutes = Number(manData?.response?.minutes || 0);
-
-		if (canCall && minutes > 0) {
-			setShowVideoButton(true); // show video call button
+		if (manData?.can_call && minutes > 0) {
+			setShowVideoButton(true); // ✅ Direct video button dikhao
 		} else {
-			setShowPricingModal(true); // show pricing modal
+			setShowPricingModal(true); // ❌ Pricing modal dikhao
 		}
 	};
 

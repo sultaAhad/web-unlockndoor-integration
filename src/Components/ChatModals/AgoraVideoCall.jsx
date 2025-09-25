@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
 import { useCallActionMutation } from "../../network/services/Chat";
 import Pusher from "pusher-js";
+import { toast } from "react-toastify";
 
 const AgoraVideoCall = ({ onCall, onCallEnd }) => {
   const [callAction] = useCallActionMutation();
@@ -119,11 +120,6 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
       setLocalTracks([audioTrack, videoTrack]);
       setJoined(true);
       if (videoCallData?.data?.type == "isCalling") {
-        // setCallLink(
-        //   `${window.location.origin}${
-        //     window.location.pathname
-        //   }?channel=${encodeURIComponent(channel)}`
-        // );
         startCallAction();
       }
       setTimeout(() => {
@@ -164,7 +160,7 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
   const endCallAction = async (user_id, channel) => {
     const formData = {
       channel_name: `reject_call_${user_id}`,
-      action: "reject-call",
+      action: "end-call",
       data: { channel: channel },
     };
     try {
@@ -203,8 +199,13 @@ const AgoraVideoCall = ({ onCall, onCallEnd }) => {
 
     const videoChannel = pusher.subscribe(`reject_call_${user.id}`);
     videoChannel.bind("call.action", (data) => {
-      if (data?.data?.action === "reject-call") {
+      if (data?.data?.action == "reject-call") {
         leaveChannel();
+        toast.info("Call has been rejected by the user.");
+      }
+      if (data?.data?.action == "end-call") {
+        leaveChannel();
+        toast.info("Call has been ended.");
       }
     });
     return () => {

@@ -1,5 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 import { useEffect } from "react";
+import { tick_circle } from "../../Constant/Index";
 
 const ThankYouModal = ({
 	showThankModal,
@@ -22,11 +23,18 @@ const ThankYouModal = ({
 			onHide={() => setShowThankModal(false)}
 			centered
 		>
-			<Modal.Header closeButton>
-				<Modal.Title>Thank You!</Modal.Title>
+			<Modal.Header closeButton className="border-0">
+				<div className="congrat_img">
+					<img src={tick_circle} alt="" className="img-fluid" />
+				</div>{" "}
 			</Modal.Header>
-			<Modal.Body>
-				<p>Your payment was successful. You can now make video calls!</p>
+			<Modal.Body className="text-center">
+				<h3 className="secondary-semibold-font font_level3 text-black mt-3">
+					Congratulation
+				</h3>
+				<p className="font_reg secondary-light-font dark-color mb-0">
+					Payment has been successfully Completed
+				</p>{" "}
 			</Modal.Body>
 			<Modal.Footer>
 				<Button variant="primary" onClick={() => setShowThankModal(false)}>
