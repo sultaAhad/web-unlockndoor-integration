@@ -1,11 +1,6 @@
-// ✅ FemaleMemberCard.jsx
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGetManDataQuery } from "../network/services/ManAuth";
-
-import PricingModal from "./ChatModals/PricingModal";
-import PayNowModal from "./ChatModals/PayNowModal";
-import ThankYouModal from "./ChatModals/ThankYouModal";
 
 import LikeSwapButtons from "./LikeSwapButtons";
 import MakeOfferButton from "./MakeOfferButton";
@@ -18,19 +13,11 @@ const FemaleMemberCard = ({ member, memberId }) => {
 		.toUpperCase();
 	const [femaleMember, setFemaleMember] = useState(member);
 
-	// --- Modal states ---
-	const [showPricingModal, setShowPricingModal] = useState(false);
-	const [showPayModal, setShowPayModal] = useState(false);
-	const [showThankModal, setShowThankModal] = useState(false);
-	const [selectedPlan, setSelectedPlan] = useState(null);
-
-	// --- Video call button visibility ---
-	const [showVideoButton, setShowVideoButton] = useState(false);
-
 	const navigate = useNavigate();
 
-	// --- Fetch men data ---
+	// --- Fetch man data (minutes, can_call) ---
 	const { data: manData, isLoading, refetch } = useGetManDataQuery();
+	console.log("✅ Man Data:", manData);
 
 	// --- Feature access check ---
 	const checkFeatureAccess = (member, feature) => {
@@ -44,19 +31,6 @@ const FemaleMemberCard = ({ member, memberId }) => {
 
 	const handleClick = (member) => {
 		navigate(`/women-details/${member.id}`, { state: { member } });
-	};
-
-	// --- Check video call access ---
-	const handleVideoCheck = () => {
-		if (isLoading) return;
-
-		const minutes = Number(manData?.minutes || 0);
-
-		if (manData?.can_call && minutes > 0) {
-			setShowVideoButton(true); // ✅ Direct video button dikhao
-		} else {
-			setShowPricingModal(true); // ❌ Pricing modal dikhao
-		}
 	};
 
 	return (
@@ -77,18 +51,11 @@ const FemaleMemberCard = ({ member, memberId }) => {
 						)}
 
 						{checkFeatureAccess(femaleMember, "video") && (
-							<div className="icon-circle iconwra2">
-								{!showVideoButton ? (
-									<button
-										className="btn p-0 border-0 bg-transparent"
-										onClick={handleVideoCheck}
-									>
-										<i className="fa-solid fa-video"></i>
-									</button>
-								) : (
-									<VideoCallButton member={femaleMember} />
-								)}
-							</div>
+							<VideoCallButton
+								member={femaleMember}
+								refetchManData={refetch}
+								manData={manData} // ✅ pass balance data
+							/>
 						)}
 
 						{checkFeatureAccess(femaleMember, "offer") && (
@@ -150,32 +117,6 @@ const FemaleMemberCard = ({ member, memberId }) => {
 					</div>
 				</div>
 			</div>
-
-			{/* Pricing Modal */}
-			<PricingModal
-				showPricingModal={showPricingModal}
-				handlePricingClose={() => setShowPricingModal(false)}
-				setShowPricingModal={setShowPricingModal}
-				setShowPayModal={setShowPayModal}
-				setSelectedPlan={setSelectedPlan}
-			/>
-
-			{/* PayNow Modal */}
-			<PayNowModal
-				show={showPayModal}
-				onHide={() => setShowPayModal(false)}
-				checkedPlan={selectedPlan}
-				showSuccessModal={showThankModal}
-				setShowSuccessModal={setShowThankModal}
-			/>
-
-			{/* ThankYou Modal */}
-			<ThankYouModal
-				showThankModal={showThankModal}
-				setShowThankModal={setShowThankModal}
-				setShowVideoButton={setShowVideoButton}
-				refetchManData={refetch}
-			/>
 		</>
 	);
 };

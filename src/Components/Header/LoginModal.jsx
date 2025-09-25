@@ -62,6 +62,7 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 				return;
 			}
 
+			// ✅ Redux overwrite
 			dispatch(
 				setUserToken({
 					user: apiData,
@@ -71,16 +72,18 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
 				}),
 			);
 
-			localStorage.setItem("selfieVerified", responseData?.selfie_verified);
+			// ✅ LocalStorage overwrite
+			localStorage.setItem("token", token);
+			localStorage.setItem("user", JSON.stringify(apiData));
 			localStorage.setItem("gender", activeTab);
+			localStorage.setItem("selfieVerified", responseData?.selfie_verified);
 			localStorage.setItem("hasPackage", responseData?.package);
 
-			if (activeTab === "men") {
-				navigate("/profile");
-			} else {
-				navigate("/women-profiles");
-			}
+			// ✅ Navigation
+			if (activeTab === "men") navigate("/profile");
+			else navigate("/women-profiles");
 
+			// ✅ Reset form
 			if (activeTab === "men") setMenLogin({ email: "", password: "" });
 			else setWomenLogin({ email: "", password: "" });
 
