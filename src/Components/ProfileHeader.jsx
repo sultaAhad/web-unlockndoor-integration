@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { edit, massagewrapper, notification } from "../Constant/Index";
+import { edit, massagewrapper, message, notification } from "../Constant/Index";
+import { useState } from "react";
 
 function ProfileHeader({ showButtons = true }) {
   const { user } = useSelector((state) => state.auth);
+  let gender = localStorage.getItem("gender");
 
+  const [counts, setCounts] = useState({
+    message: 0,
+    notification: 0,
+  });
 
-  const gender = localStorage.getItem("gender");
   return (
     <div className="col-md-12 pb-5">
       <div className="profile_banner_img">
@@ -33,7 +38,9 @@ function ProfileHeader({ showButtons = true }) {
                 >
                   <li className="wrapper-navigate-main position-relative">
                     <img src={massagewrapper} /> <span>Message</span>
-                    <span className="number_move_dv">21</span>
+                    {counts.message > 0 && (
+                      <span className="number_move_dv">{counts.message}</span>
+                    )}
                   </li>
                 </Link>
                 <Link
@@ -46,7 +53,11 @@ function ProfileHeader({ showButtons = true }) {
                   {" "}
                   <li className="position-relative">
                     <img src={notification} />
-                    <span className="number_move_dv">19</span>
+                    {counts.notification > 0 && (
+                      <span className="number_move_dv">
+                        {counts.notification}
+                      </span>
+                    )}
                   </li>
                 </Link>
                 <Link to={`/${gender === "male" ? "man" : "women"}-settings`}>
