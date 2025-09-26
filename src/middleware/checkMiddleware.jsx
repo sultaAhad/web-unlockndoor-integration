@@ -13,10 +13,10 @@ export function checkMiddleware(
     const [showSelfie, setShowSelfie] = useState(false);
     const [showPackages, setShowPackages] = useState(false);
 
-    const hasPackage = false;
+    // const hasPackage = false;
     const selfieVerified = true;
     // const selfieVerified = localStorage.getItem("selfieVerified") === "true";
-    // const hasPackage = localStorage.getItem("hasPackage") === "true";
+    const hasPackage = localStorage.getItem("hasPackage") === "true";
     const gender = localStorage.getItem("gender");
 
     if (checkPackage && !hasPackage) {
