@@ -79,7 +79,7 @@ export const WomenAuth = createApi({
 				body: data,
 			}),
 		}),
-		womanData: build.query({
+		WomanData: build.query({
 			query: () => ({
 				url: WOMEN_DATA, // your GET endpoint
 				method: "GET",

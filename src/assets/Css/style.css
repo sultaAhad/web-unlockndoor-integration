@@ -3111,6 +3111,162 @@ div#swal2-html-container {
 	background-image: none;
 	transform: none;
 }
+.face-verification-container {
+	padding: 20px;
+	text-align: center;
+	font-family: "TomatoGrotesk-Regular", sans-serif;
+}
+
+.modal-title {
+	font-size: 22px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+.section-title {
+	font-size: 18px;
+	font-weight: 500;
+	margin: 20px 0 10px;
+	color: #333;
+}
+
+/* Profile Image */
+.profile-img-container {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+}
+
+.profile-img-wrapper {
+	position: relative;
+	display: inline-block;
+	text-align: center;
+}
+
+.profile-img {
+	width: 130px;
+	height: 130px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 4px solid transparent;
+	background-color: #ad3762;
+	padding: 3px;
+	box-shadow: 0 0 9px #faa00059;
+}
+
+.upload-btn {
+	position: absolute;
+	bottom: 35px;
+	right: -10px;
+}
+
+.btn-upload {
+	background: #9e42e6;
+	border: none;
+	color: #fff;
+	border-radius: 50%;
+	width: 38px;
+	height: 38px;
+	font-size: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+	transition: background 0.3s ease;
+}
+
+.btn-upload:hover {
+	background: #9c1648;
+}
+
+/* Profile Name */
+.profile-name {
+	margin-top: 10px;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+/* Webcam feed */
+.webcam-feed {
+	border-radius: 12px;
+	border: 2px solid #ddd;
+	margin-bottom: 12px;
+}
+
+/* Selfie Preview */
+.selfie-preview {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.captured-selfie {
+	width: 200px;
+	height: auto;
+	border-radius: 12px;
+	border: 3px solid #9e42e6;
+	margin-bottom: 12px;
+}
+
+.action-buttons {
+	display: flex;
+	justify-content: center;
+}
+
+/* Buttons */
+.btn-custom {
+	width: 38%;
+	height: 51px;
+	font-size: 16px !important;
+	color: #fff;
+	font-family: "TomatoGrotesk-Regular", sans-serif;
+	border-radius: 10px !important;
+	margin: 0 6px !important;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.btn-capture,
+.btn-verify,
+.btn-submit {
+	background: linear-gradient(
+		90deg,
+		#9e42e6,
+		#9d2c97 48%,
+		#9c1d62 70%,
+		#9c1648
+	);
+	box-shadow: 0 0 9px #faa00059;
+	width: 120px;
+}
+
+.btn-retake {
+	background: #999;
+}
+
+.btn-custom:hover {
+	opacity: 0.9;
+}
+
+.spinner {
+	width: 20px;
+	height: 20px;
+	border: 3px solid #fff;
+	border-top: 3px solid transparent;
+	border-radius: 50%;
+	animation: spin 0.7s linear infinite;
+}
+button.btn-custom.btn-custom1 {
+	width: 40px;
+	border-radius: 50% !important;
+	height: 40px;
+}
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}
 
 /* Laptop Responsive  */
 @media (max-width: 1400px) {

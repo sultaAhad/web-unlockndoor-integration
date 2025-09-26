@@ -1,21 +1,37 @@
 import React, { useEffect } from "react";
 import Swal from "sweetalert2";
-import { useGetManDataQuery } from "../network/services/ManAuth";
 import FaceVerification from "./FaceVerification";
 import { useNavigate } from "react-router-dom";
+import { useGetManDataQuery } from "../network/services/ManAuth";
+import { useWomanDataQuery } from "../network/services/WomanAuth";
 
 const SelfieModal = ({ isOpen, onClose, onVerified }) => {
-	const { data } = useGetManDataQuery();
-	const user = data?.response?.data?.data;
-	console.log(user);
+	const { data: manData } = useGetManDataQuery();
+	const { data: womanData } = useWomanDataQuery();
+
+	const gender = localStorage.getItem("gender"); // expect only "men" or "women"
+
+	// ✅ user ko gender ke hisaab se set karo
+	let user = null;
+	if (gender === "men") {
+		user = manData?.response?.data?.data;
+	} else if (gender === "women") {
+		user = womanData?.response?.data?.data;
+	}
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isOpen) return;
-		console.log("🟡 SelfieModal opened", user);
-	}, [isOpen, user]);
 
-	// ✅ agar already verified hai toh dobara modal hi mat dikhayo
+		console.log("🟡 SelfieModal opened");
+		console.log("🔹 gender:", gender);
+		console.log("👨 manData:", manData);
+		console.log("👩 womanData:", womanData);
+		console.log("📌 user used:", user);
+	}, [isOpen, gender, manData, womanData, user]);
+
+	// ✅ agar already verified hai toh modal hi mat dikhao
 	if (!isOpen || localStorage.getItem("selfieVerified") === "true") return null;
 
 	return (
@@ -36,10 +52,9 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 									localStorage.setItem("selfieVerified", "true");
 
 									// ✅ Navigate based on gender
-									const gender = localStorage.getItem("gender");
-									if (gender === "female") {
+									if (gender === "women") {
 										navigate("/women-profiles");
-									} else if (gender === "male") {
+									} else if (gender === "men") {
 										navigate("/profile");
 									}
 
