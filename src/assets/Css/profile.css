@@ -1155,4 +1155,7 @@ section.notification-wrapper .wrapper-fluid-notification {
 		padding: 10px 20px;
 		font-size: 13px;
 	}
+	.pack_sec {
+		padding: 110px 0px;
+	}
 }
