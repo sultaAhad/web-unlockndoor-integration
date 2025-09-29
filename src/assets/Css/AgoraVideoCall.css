@@ -185,3 +185,11 @@ input:focus {
         flex-wrap: wrap;
     }
 }
+.timer {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}

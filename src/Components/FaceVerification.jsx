@@ -2,12 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import Swal from "sweetalert2";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../network/reducers/AuthReducer";
 import {
 	useUpdateProfileImageMutation,
 	useVerifySelfieMutation,
 } from "../network/services/ManAuth";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../network/reducers/AuthReducer";
+import {
+	useUpdateProfileImageWomenMutation,
+	useVerifySelfieWomenMutation,
+} from "../network/services/WomanAuth";
 
 const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const webcamRef = useRef(null);
@@ -15,17 +20,33 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
 
-	const [selfie, setSelfie] = useState(null);
-	const [modelsLoaded, setModelsLoaded] = useState(false);
+	const gender = localStorage.getItem("gender"); // ✅ ab sirf "men" ya "women"
 
-	const [verifySelfie, { isLoading }] = useVerifySelfieMutation();
-	const [updateProfileImage, { isLoading: isProfileImageLoading }] =
+	// 🔹 Mutations: gender ke hisaab se
+	const [verifySelfieMen, { isLoading: isMenLoading }] =
+		useVerifySelfieMutation();
+	const [updateProfileImageMen, { isLoading: isMenProfileLoading }] =
 		useUpdateProfileImageMutation();
 
+	const [verifySelfieWomen, { isLoading: isWomenLoading }] =
+		useVerifySelfieWomenMutation();
+	const [updateProfileImageWomen, { isLoading: isWomenProfileLoading }] =
+		useUpdateProfileImageWomenMutation();
+
+	// ✅ yahan female hata diya → ab sirf men/women
+	const verifySelfie = gender === "women" ? verifySelfieWomen : verifySelfieMen;
+	const updateProfileImage =
+		gender === "women" ? updateProfileImageWomen : updateProfileImageMen;
+
+	const isLoading = gender === "women" ? isWomenLoading : isMenLoading;
+	const isProfileImageLoading =
+		gender === "women" ? isWomenProfileLoading : isMenProfileLoading;
+
+	const [selfie, setSelfie] = useState(null);
+	const [modelsLoaded, setModelsLoaded] = useState(false);
 	const [form, setForm] = useState({
 		profileImage: user?.profile_image_url || profileImageUrl || null,
 	});
-
 	const [profileDescriptors, setProfileDescriptors] = useState([]);
 
 	// 🔹 Load face-api models once
@@ -43,11 +64,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				);
 
 				setModelsLoaded(true);
-				console.log("✅ FaceAPI models loaded");
-
-				if (form.profileImage) {
-					generateProfileDescriptor(form.profileImage);
-				}
+				if (form.profileImage) generateProfileDescriptor(form.profileImage);
 			} catch (err) {
 				console.error("❌ Error loading models:", err);
 			}
@@ -66,7 +83,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 
 			if (desc) {
 				setProfileDescriptors([desc.descriptor]);
-				console.log("📌 Profile descriptor generated");
 			} else {
 				console.warn("⚠️ No face detected in profile image");
 			}
@@ -80,9 +96,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		const file = e.target.files[0];
 		if (!file) return;
 
-		console.log("📂 Selected file:", file.name);
-
-		// Local preview first
 		const localPreview = URL.createObjectURL(file);
 		setForm((prev) => ({ ...prev, profileImage: localPreview }));
 
@@ -90,18 +103,13 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			const formData = new FormData();
 			formData.append("profile_image", file);
 
-			console.log("📡 Uploading profile image...");
 			const response = await updateProfileImage(formData).unwrap();
-			console.log("✅ API response:", response);
 
 			if (response?.profile_image_url) {
-				// Cache-busting
 				const newUrl =
 					response.profile_image_url + "?t=" + new Date().getTime();
-
 				setForm((prev) => ({ ...prev, profileImage: newUrl }));
 
-				// Update Redux user
 				dispatch(
 					setUser({
 						...user,
@@ -110,10 +118,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 					}),
 				);
 
-				// Refetch profile if parent gave a refetch function
 				refetch?.();
-
-				// Regenerate descriptor for new image
 				generateProfileDescriptor(newUrl);
 
 				Swal.fire({
@@ -125,7 +130,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				});
 			}
 		} catch (error) {
-			console.error("❌ Failed to update profile image:", error);
 			Swal.fire({
 				icon: "error",
 				title: "Upload Failed",
@@ -141,7 +145,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			Swal.fire("Error", "Selfie capture failed", "error");
 			return;
 		}
-		console.log("📸 Selfie captured");
 		setSelfie(imageSrc);
 	};
 
@@ -153,9 +156,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		}
 
 		try {
-			console.log("➡️ Comparing face...");
 			const selfieImg = await faceapi.fetchImage(selfie);
-
 			const selfieDesc = await faceapi
 				.detectSingleFace(selfieImg)
 				.withFaceLandmarks()
@@ -173,10 +174,8 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			);
 
 			const bestMatch = matcher.findBestMatch(selfieDesc.descriptor);
-			console.log("🔍 Match result:", bestMatch.toString());
 
 			if (bestMatch.distance < 0.75) {
-				console.log("✅ Face matched!");
 				await verifySelfie({ selfie_verified: 1 }).unwrap();
 				Swal.fire("Success", "Selfie verified!", "success");
 				onVerified?.(true);
@@ -184,16 +183,12 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				Swal.fire("Failed", "Faces do not match ❌", "error");
 			}
 		} catch (err) {
-			console.error("❌ Verification failed:", err);
 			Swal.fire("Error", "Verification failed", "error");
 		}
 	};
 
 	return (
 		<div className="face-verification-container">
-			<h2 className="modal-title">Selfie Verification</h2>
-
-			{/* Profile Section */}
 			<h3 className="section-title">Profile Image</h3>
 			<div className="profile-img-container">
 				<div className="profile-img-wrapper">
@@ -221,14 +216,24 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 							onChange={handleProfileChange}
 							accept="image/*"
 							hidden
-							disabled={isProfileImageLoading}
 						/>
 					</div>
 					<h5 className="profile-name">{user?.name || "John Smith"}</h5>
 				</div>
 			</div>
 
-			{/* Selfie Section */}
+			<div className="submit-container">
+				<button
+					className="btn-custom btn-submit"
+					type="button"
+					onClick={() =>
+						Swal.fire("Submitted!", "Profile changes saved.", "success")
+					}
+				>
+					Submit
+				</button>
+			</div>
+
 			<h3 className="section-title">Selfie Capture</h3>
 			{!selfie ? (
 				<>
@@ -268,19 +273,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 					</div>
 				</div>
 			)}
-
-			{/* Final Submit */}
-			<div className="submit-container">
-				<button
-					className="btn-custom btn-submit"
-					type="button"
-					onClick={() =>
-						Swal.fire("Submitted!", "Profile changes saved.", "success")
-					}
-				>
-					Submit
-				</button>
-			</div>
 		</div>
 	);
 };
