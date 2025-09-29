@@ -13,12 +13,38 @@ const AuthReducer = createSlice({
 		setUserToken: (state, action) => {
 			const { user, token, gender } = action.payload;
 
-			// ✅ Always overwrite
 			state.userToken = token || "";
-			state.user = user ? { ...user, gender } : null;
+
+			if (user) {
+				// ✅ Force cache-busting for profile image
+				const updatedUser = {
+					...user,
+					gender,
+					profile_image_url: user?.profile_image_url
+						? user.profile_image_url + "?t=" + new Date().getTime()
+						: null,
+				};
+
+				state.user = updatedUser;
+				localStorage.setItem("user", JSON.stringify(updatedUser));
+			} else {
+				state.user = null;
+			}
 		},
 		setUser: (state, action) => {
-			state.user = action.payload;
+			let user = action.payload;
+
+			// ✅ Always force cache-busting if profile_image_url exists
+			if (user?.profile_image_url) {
+				user = {
+					...user,
+					profile_image_url:
+						user.profile_image_url + "?t=" + new Date().getTime(),
+				};
+			}
+
+			state.user = user;
+			localStorage.setItem("user", JSON.stringify(user));
 		},
 		setLogoutUser: (state) => {
 			state.userToken = "";

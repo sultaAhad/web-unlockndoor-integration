@@ -20,9 +20,9 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
 
-	const gender = localStorage.getItem("gender"); // ✅ ab sirf "men" ya "women"
+	const gender = localStorage.getItem("gender"); // "men" or "women"
 
-	// 🔹 Mutations: gender ke hisaab se
+	// 🔹 Mutations
 	const [verifySelfieMen, { isLoading: isMenLoading }] =
 		useVerifySelfieMutation();
 	const [updateProfileImageMen, { isLoading: isMenProfileLoading }] =
@@ -33,7 +33,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const [updateProfileImageWomen, { isLoading: isWomenProfileLoading }] =
 		useUpdateProfileImageWomenMutation();
 
-	// ✅ yahan female hata diya → ab sirf men/women
 	const verifySelfie = gender === "women" ? verifySelfieWomen : verifySelfieMen;
 	const updateProfileImage =
 		gender === "women" ? updateProfileImageWomen : updateProfileImageMen;
@@ -45,25 +44,25 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const [selfie, setSelfie] = useState(null);
 	const [modelsLoaded, setModelsLoaded] = useState(false);
 	const [form, setForm] = useState({
-		profileImage: user?.profile_image_url || profileImageUrl || null,
+		profileImage: profileImageUrl || user?.profile_image_url || null,
 	});
 	const [profileDescriptors, setProfileDescriptors] = useState([]);
 
-	// 🔹 Load face-api models once
+	// 🔹 Load face-api models
 	useEffect(() => {
 		const loadModels = async () => {
 			try {
 				await faceapi.nets.ssdMobilenetv1.loadFromUri(
-					"./models/ssd_mobilenetv1",
+					"/models/ssd_mobilenetv1",
 				);
 				await faceapi.nets.faceLandmark68Net.loadFromUri(
-					"./models/face_landmark_68",
+					"/models/face_landmark_68",
 				);
 				await faceapi.nets.faceRecognitionNet.loadFromUri(
-					"./models/face_recognition",
+					"/models/face_recognition",
 				);
-
 				setModelsLoaded(true);
+
 				if (form.profileImage) generateProfileDescriptor(form.profileImage);
 			} catch (err) {
 				console.error("❌ Error loading models:", err);
@@ -72,62 +71,63 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		loadModels();
 	}, [form.profileImage]);
 
-	// 🔹 Generate profile descriptor
+	// 🔹 Generate face descriptor
 	const generateProfileDescriptor = async (imageUrl) => {
 		try {
+			if (!imageUrl) return;
+
 			const img = await faceapi.fetchImage(imageUrl);
 			const desc = await faceapi
 				.detectSingleFace(img)
 				.withFaceLandmarks()
 				.withFaceDescriptor();
 
-			if (desc) {
-				setProfileDescriptors([desc.descriptor]);
-			} else {
-				console.warn("⚠️ No face detected in profile image");
-			}
+			if (desc) setProfileDescriptors([desc.descriptor]);
+			else console.warn("⚠️ No face detected in profile image");
 		} catch (err) {
 			console.error("❌ Error generating profile descriptor:", err);
 		}
 	};
 
-	// 🔹 Upload & update profile image
-	const handleProfileChange = async (e) => {
+	// 🔹 Handle profile image upload
+	const handleProfileChange = (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
 
 		const localPreview = URL.createObjectURL(file);
-		setForm((prev) => ({ ...prev, profileImage: localPreview }));
+		setForm((prev) => ({
+			...prev,
+			profileImage: localPreview,
+			profileFile: file,
+		}));
+	};
+
+	const handleSubmit = async () => {
+		if (!form.profileFile)
+			return Swal.fire(
+				"Error",
+				"Please select a profile image first!",
+				"error",
+			);
 
 		try {
 			const formData = new FormData();
-			formData.append("profile_image", file);
+			formData.append("profile_image", form.profileFile);
 
 			const response = await updateProfileImage(formData).unwrap();
-
-			if (response?.profile_image_url) {
-				const newUrl =
-					response.profile_image_url + "?t=" + new Date().getTime();
-				setForm((prev) => ({ ...prev, profileImage: newUrl }));
-
-				dispatch(
-					setUser({
-						...user,
-						profile_image: response.profile_image,
-						profile_image_url: newUrl,
-					}),
-				);
-
-				refetch?.();
-				generateProfileDescriptor(newUrl);
+			if (response?.status) {
+				await refetch?.();
+				if (response?.data) dispatch(setUser(response.data));
 
 				Swal.fire({
 					icon: "success",
 					title: "Uploaded!",
-					text: "Profile image updated successfully!",
+					text: response.message || "Profile image updated!",
 					timer: 2000,
 					showConfirmButton: false,
 				});
+
+				setForm((prev) => ({ ...prev, profileFile: null }));
 			}
 		} catch (error) {
 			Swal.fire({
@@ -141,19 +141,14 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	// 🔹 Capture selfie
 	const captureSelfie = () => {
 		const imageSrc = webcamRef.current.getScreenshot();
-		if (!imageSrc) {
-			Swal.fire("Error", "Selfie capture failed", "error");
-			return;
-		}
+		if (!imageSrc) return Swal.fire("Error", "Selfie capture failed", "error");
 		setSelfie(imageSrc);
 	};
 
-	// 🔹 Verify faces
+	// 🔹 Verify selfie with profile
 	const verifyFaces = async () => {
-		if (profileDescriptors.length === 0 || !selfie) {
-			Swal.fire("Error", "Profile or Selfie missing!", "error");
-			return;
-		}
+		if (profileDescriptors.length === 0 || !selfie)
+			return Swal.fire("Error", "Profile or Selfie missing!", "error");
 
 		try {
 			const selfieImg = await faceapi.fetchImage(selfie);
@@ -161,28 +156,32 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				.detectSingleFace(selfieImg)
 				.withFaceLandmarks()
 				.withFaceDescriptor();
-
-			if (!selfieDesc) {
-				Swal.fire("Error", "Face not detected in selfie!", "error");
-				return;
-			}
+			if (!selfieDesc)
+				return Swal.fire("Error", "Face not detected in selfie!", "error");
 
 			const matcher = new faceapi.FaceMatcher(
 				profileDescriptors.map(
 					(desc) => new faceapi.LabeledFaceDescriptors("user", [desc]),
 				),
 			);
-
 			const bestMatch = matcher.findBestMatch(selfieDesc.descriptor);
 
 			if (bestMatch.distance < 0.75) {
-				await verifySelfie({ selfie_verified: 1 }).unwrap();
+				if (gender === "men") {
+					await verifySelfieMen({ selfie_verified: 1 }).unwrap();
+				} else {
+					const formData = new FormData();
+					formData.append("selfie_verified", 1);
+					const selfieBlob = await (await fetch(selfie)).blob();
+					formData.append("selfie", selfieBlob, "selfie.jpg");
+					await verifySelfieWomen(formData).unwrap();
+				}
+
 				Swal.fire("Success", "Selfie verified!", "success");
 				onVerified?.(true);
-			} else {
-				Swal.fire("Failed", "Faces do not match ❌", "error");
-			}
+			} else Swal.fire("Failed", "Faces do not match ❌", "error");
 		} catch (err) {
+			console.error("❌ verifyFaces error:", err);
 			Swal.fire("Error", "Verification failed", "error");
 		}
 	};
@@ -192,11 +191,16 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			<h3 className="section-title">Profile Image</h3>
 			<div className="profile-img-container">
 				<div className="profile-img-wrapper">
-					<img
-						src={form.profileImage || "/default-profile.png"}
-						className="profile-img"
-						alt="Profile"
-					/>
+					{form.profileImage ? (
+						<img
+							src={form.profileImage}
+							className="profile-img"
+							alt="Profile"
+						/>
+					) : (
+						<div>No profile image</div>
+					)}
+
 					<div className="upload-btn">
 						<button
 							type="button"
@@ -218,6 +222,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 							hidden
 						/>
 					</div>
+
 					<h5 className="profile-name">{user?.name || "John Smith"}</h5>
 				</div>
 			</div>
@@ -226,15 +231,16 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				<button
 					className="btn-custom btn-submit"
 					type="button"
-					onClick={() =>
-						Swal.fire("Submitted!", "Profile changes saved.", "success")
-					}
+					onClick={handleSubmit}
+					disabled={isProfileImageLoading}
 				>
-					Submit
+					{isProfileImageLoading ? "Uploading..." : "Submit"}
 				</button>
 			</div>
 
 			<h3 className="section-title">Selfie Capture</h3>
+
+			{/* 🔹 Webcam always mounts */}
 			{!selfie ? (
 				<>
 					<Webcam

@@ -3164,9 +3164,9 @@ div#swal2-html-container {
 	background: #9e42e6;
 	border: none;
 	color: #fff;
-	border-radius: 50%;
-	width: 38px;
-	height: 38px;
+	border-radius: 50% !important;
+	width: 38px !important ;
+	height: 38px !important;
 	font-size: 18px;
 	display: flex;
 	align-items: center;

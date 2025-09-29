@@ -1,3 +1,4 @@
+// src/redux/services/manAuth.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../utils/base_url";
 import {
@@ -29,8 +30,10 @@ import {
 	CHARGES_VIDEO_MAN,
 	VIDEO_CALL_PURCHASE_MAN,
 	DELETE_VIDEO_WOMAN,
+	MAN_UPGRADE_PACKAGES,
 } from "../../utils/endpoints";
 
+// ✅ Main API
 export const ManAuth = createApi({
 	reducerPath: "ManAuth",
 	baseQuery: fetchBaseQuery({
@@ -99,7 +102,7 @@ export const ManAuth = createApi({
 				url: PURCHASE_PACKAGES,
 				method: "POST",
 				body: formData,
-				headers: {}, // Let browser set multipart/form-data automatically
+				headers: {}, // browser auto-handles multipart
 			}),
 		}),
 		upgradePackage: build.mutation({
@@ -160,7 +163,6 @@ export const ManAuth = createApi({
 				body: data,
 			}),
 		}),
-
 		offerDate: build.mutation({
 			query: (data) => ({
 				url: OFFER_DATE,
@@ -182,7 +184,8 @@ export const ManAuth = createApi({
 				body: data,
 			}),
 		}),
-		// ✅ New GET APIs
+
+		// ✅ GET APIs
 		getMatchedProfiles: build.query({
 			query: (page) => ({
 				url: `${MAN_MATCHED_PRIFILE}?page=${page}`,
@@ -213,37 +216,44 @@ export const ManAuth = createApi({
 				method: "GET",
 			}),
 		}),
+
+		// ✅ Image/Video Delete via POST
 		deleteImageMan: build.mutation({
 			query: (formData) => ({
 				url: DELETE_IMAGE_MAN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
 		deleteVideoMan: build.mutation({
 			query: (formData) => ({
 				url: DELETE_VIDEO_WOMAN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+
+		// ✅ Video Call
 		VideoManPurchaseCall: build.mutation({
 			query: (formData) => ({
 				url: VIDEO_CALL_PURCHASE_MAN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+
+		// ✅ Profile Password Change
 		ManChangePassword: build.mutation({
 			query: (formData) => ({
 				url: CHANGE_PASSWORD_PROFILE,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
 	}),
 });
 
+// ✅ Hooks Export
 export const {
 	useVideoManPurchaseCallMutation,
 	useGetManVideoChargesQuery,
@@ -265,14 +275,14 @@ export const {
 	useLikeWomanMutation,
 	useSendMessageMutation,
 	useOfferDateMutation,
+	useReOfferDateMutation,
 	useWithdrawDateMutation,
+	useGetMatchedProfilesQuery,
 	useGetSponsoredDatesQuery,
 	useGetFemaleMembershipQuery,
 	useGetManDataQuery,
-	useGetMatchedProfilesQuery,
 	useDeleteImageManMutation,
 	useDeleteVideoManMutation,
-	useReOfferDateMutation,
 } = ManAuth;
 
 export default ManAuth;

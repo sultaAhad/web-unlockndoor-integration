@@ -1,29 +1,41 @@
 import React, { useEffect } from "react";
 import Swal from "sweetalert2";
-import FaceVerification from "./FaceVerification";
 import { useNavigate } from "react-router-dom";
 import { useGetManDataQuery } from "../network/services/ManAuth";
 import { useWomanDataQuery } from "../network/services/WomanAuth";
+import FaceVerification from "./FaceVerification";
 
 const SelfieModal = ({ isOpen, onClose, onVerified }) => {
-	const { data: manData } = useGetManDataQuery();
-	const { data: womanData } = useWomanDataQuery();
+	const gender = localStorage.getItem("gender"); // "men" or "women"
 
-	const gender = localStorage.getItem("gender"); // expect only "men" or "women"
+	// Fetch user data based on gender
+	const { data: manData, refetch: manDataRefetch } = useGetManDataQuery(
+		undefined,
+		{
+			skip: gender !== "men",
+		},
+	);
 
-	// ✅ user ko gender ke hisaab se set karo
+	const { data: womanData, refetch: womanDataRefetch } = useWomanDataQuery(
+		undefined,
+		{
+			skip: gender !== "women",
+		},
+	);
+
 	let user = null;
 	if (gender === "men") {
 		user = manData?.response?.data?.data;
 	} else if (gender === "women") {
-		user = womanData?.response?.data?.data;
+		user = womanData?.response?.data?.women;
 	}
 
+	const profileImageUrl =
+		user?.profile_image_url || user?.profile_image || null;
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isOpen) return;
-
 		console.log("🟡 SelfieModal opened");
 		console.log("🔹 gender:", gender);
 		console.log("👨 manData:", manData);
@@ -31,7 +43,6 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 		console.log("📌 user used:", user);
 	}, [isOpen, gender, manData, womanData, user]);
 
-	// ✅ agar already verified hai toh modal hi mat dikhao
 	if (!isOpen || localStorage.getItem("selfieVerified") === "true") return null;
 
 	return (
@@ -43,32 +54,23 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 
 				<h2 className="modal-title">Selfie Verification</h2>
 
-				{user?.profile_image_url ? (
-					<FaceVerification
-						profileImageUrl={user.profile_image_url}
-						onVerified={(status) => {
-							if (status) {
-								Swal.fire("Success", "Selfie verified!", "success").then(() => {
-									localStorage.setItem("selfieVerified", "true");
+				<FaceVerification
+					profileImageUrl={profileImageUrl}
+					refetch={gender === "men" ? manDataRefetch : womanDataRefetch}
+					onVerified={(status) => {
+						if (status) {
+							Swal.fire("Success", "Selfie verified!", "success").then(() => {
+								localStorage.setItem("selfieVerified", "true");
 
-									// ✅ Navigate based on gender
-									if (gender === "women") {
-										navigate("/women-profiles");
-									} else if (gender === "men") {
-										navigate("/profile");
-									}
+								if (gender === "women") navigate("/women-profiles");
+								else if (gender === "men") navigate("/profile");
 
-									onVerified?.();
-									onClose();
-								});
-							} else {
-								Swal.fire("Error", "Face did not match!", "error");
-							}
-						}}
-					/>
-				) : (
-					<p>No profile image found for user</p>
-				)}
+								onVerified?.();
+								onClose();
+							});
+						}
+					}}
+				/>
 
 				<style jsx>{`
 					.modal-overlay {

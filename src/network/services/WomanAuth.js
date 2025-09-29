@@ -22,24 +22,22 @@ import {
 	WOMEN_SIGNUP,
 	WOMEN_UPGRADE_PACKAGE,
 } from "../../utils/endpoints";
-import { like } from "../../Constant/Index";
 
 export const WomenAuth = createApi({
 	reducerPath: "WomenAuth",
 	baseQuery: fetchBaseQuery({
 		baseUrl: BASE_URL,
 		prepareHeaders: (headers, { getState }) => {
-			const token = getState()?.auth?.userToken; // ✅ match your reducer
+			const token = getState()?.auth?.userToken;
 			headers.set("Accept", "application/json");
-
 			if (token) {
 				headers.set("Authorization", `Bearer ${token}`);
 			}
-
 			return headers;
 		},
 	}),
 	endpoints: (build) => ({
+		// ✅ Signup
 		womenSignup: build.mutation({
 			query: (data) => ({
 				url: WOMEN_SIGNUP,
@@ -47,6 +45,7 @@ export const WomenAuth = createApi({
 				body: data,
 			}),
 		}),
+		// ✅ Login
 		womenLogin: build.mutation({
 			query: (credentials) => ({
 				url: WOMEN_LOGIN,
@@ -54,7 +53,7 @@ export const WomenAuth = createApi({
 				body: credentials,
 			}),
 		}),
-		// OTP Send
+		// ✅ OTP Send
 		womenSendOtp: build.mutation({
 			query: (data) => ({
 				url: WOMEN_LOGIN_OTP_SAND,
@@ -62,7 +61,7 @@ export const WomenAuth = createApi({
 				body: data,
 			}),
 		}),
-		// OTP Verify
+		// ✅ OTP Verify
 		womenVerifyOtp: build.mutation({
 			query: (data) => ({
 				url: WOMEN_LOGIN_OTP_VARIFY,
@@ -70,8 +69,7 @@ export const WomenAuth = createApi({
 				body: data,
 			}),
 		}),
-
-		// Reset Password
+		// ✅ Reset Password
 		resetPasswordWomen: build.mutation({
 			query: (data) => ({
 				url: WOMEN_LOGIN_CHANGEPASSWORD_RESET,
@@ -79,34 +77,38 @@ export const WomenAuth = createApi({
 				body: data,
 			}),
 		}),
+		// ✅ Get Profile Data
 		WomanData: build.query({
 			query: () => ({
-				url: WOMEN_DATA, // your GET endpoint
+				url: WOMEN_DATA,
 				method: "GET",
 			}),
 		}),
-
+		// ✅ Purchase Package
 		purchasePackageWomen: build.mutation({
 			query: (formData) => ({
 				url: PURCHASE_PACKAGES_WOMEN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+		// ✅ Delete Image
 		deleteImageWoman: build.mutation({
 			query: (formData) => ({
 				url: DELETE_IMAGE_WOMAN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+		// ✅ Delete Video
 		deleteVideoWoman: build.mutation({
 			query: (formData) => ({
 				url: DELETE_VIDEO_WOMAN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+		// ✅ Edit Profile
 		womenEditProfile: build.mutation({
 			query: (formData) => ({
 				url: WOMEN_EDIT_PROFILE,
@@ -114,26 +116,30 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		// ✅ Like Women
 		likeProfile: build.mutation({
 			query: (formData) => ({
 				url: MAN_LIKE_WOMEN,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+		// ✅ Like Man
 		likeManProfile: build.mutation({
 			query: (formData) => ({
 				url: WOMAN_LIKE_MAN_PROFILE,
 				method: "POST",
-				body: formData, // ✅ works with FormData (Stripe token + package_id)
+				body: formData,
 			}),
 		}),
+		// ✅ Get Match Profiles
 		getWomanMatchProfiles: build.query({
 			query: ({ filterBy, page }) => ({
 				url: `${WOMAN_MATCHED_PRIFILE}?page=${page}&filter_by=${filterBy}`,
 				method: "GET",
 			}),
 		}),
+		// ✅ Profile Image Update
 		updateProfileImageWomen: build.mutation({
 			query: (formData) => ({
 				url: CHANGE_PROFILE_IMAGE_WOMEN,
@@ -141,6 +147,7 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		// ✅ Cover Image Update
 		updateCoverImageWomen: build.mutation({
 			query: (formData) => ({
 				url: CHANGE_COVER_IMAGE_WOMEN,
@@ -148,12 +155,14 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		// ✅ Cancel Package
 		cancelWomenPackage: build.query({
 			query: () => ({
 				url: WOMEN_CANCEL_PACKAGE,
 				method: "GET",
 			}),
 		}),
+		// ✅ Upgrade Package
 		upgradeWomenPackage: build.mutation({
 			query: (formData) => ({
 				url: WOMEN_UPGRADE_PACKAGE,
@@ -161,19 +170,26 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
-		WomenChangePassword: build.mutation({
+		// ✅ Change Password
+		womenChangePassword: build.mutation({
 			query: (formData) => ({
 				url: CHANGE_PASSWORD_PROFILE_WOMEN,
 				method: "POST",
 				body: formData,
 			}),
 		}),
+		// ✅ Selfie Verification (FormData required)
 		verifySelfieWomen: build.mutation({
-			query: (formData) => ({
-				url: WOMEN_SELFIE,
-				method: "POST",
-				body: formData,
-			}),
+			query: ({ selfie, selfie_verified }) => {
+				const formData = new FormData();
+				formData.append("selfie", selfie);
+				formData.append("selfie_verified", selfie_verified);
+				return {
+					url: WOMEN_SELFIE,
+					method: "POST",
+					body: formData,
+				};
+			},
 		}),
 	}),
 });
