@@ -1,195 +1,196 @@
 /* AgoraVideoCall.css */
 .agora-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    /* min-height: 100vh; */
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f5f7fa;
+	/* min-height: 100vh; */
 }
 
 h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
+	text-align: center;
+	color: #2c3e50;
+	margin-bottom: 30px;
 }
 
 .join-form {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 0 auto;
+	background-color: white;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	max-width: 500px;
+	margin: 0 auto;
 }
 
 .form-group {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #2c3e50;
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+	color: #2c3e50;
 }
 
 input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    box-sizing: border-box;
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 16px;
+	box-sizing: border-box;
 }
 
 input:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+	outline: none;
+	border-color: #3498db;
+	box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 .join-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+	width: 100%;
+	padding: 12px;
+	background-color: #3498db;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s;
 }
 
 .join-btn:hover {
-    background-color: #2980b9;
+	background-color: #2980b9;
 }
 
 .video-call-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .video-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 20px;
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 20px;
 }
 
 .local-video-container {
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: white;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .remote-videos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
 }
 
 .remote-video-container {
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: white;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .video-player {
-    width: 100%;
-    height: 702px;
-    background-color: #000;
-    position: relative;
+	width: 100%;
+	height: 702px;
+	background-color: #000;
+	position: relative;
 }
 
 .video-placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: #2c3e50;
-    color: white;
-    font-size: 18px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background-color: #2c3e50;
+	color: white;
+	font-size: 18px;
 }
 
 .user-info {
-    padding: 10px;
-    background-color: #34495e;
-    font-size: 11px;
-    color: white;
-    text-align: center;
-    font-weight: 500;
+	padding: 10px;
+	background-color: #34495e;
+	font-size: 11px;
+	color: white;
+	text-align: center;
+	font-weight: 500;
 }
 
 .controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	padding: 20px;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .control-btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+	padding: 12px 20px;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all 0.3s;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 .control-btn.active {
-    background-color: #2ecc71;
-    color: white;
+	background-color: #2ecc71;
+	color: white;
 }
 
 .control-btn.muted {
-    background-color: #e74c3c;
-    color: white;
+	background-color: #e74c3c;
+	color: white;
 }
 
 .control-btn.leave {
-    background-color: #e74c3c;
-    color: white;
+	background-color: #e74c3c;
+	color: white;
 }
 
 .control-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
+	opacity: 0.9;
+	transform: translateY(-2px);
 }
 
 .chat_modal .calling-overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    right: 0;
-    left: 0;
-    height: fit-content;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	right: 0;
+	left: 0;
+	height: fit-content;
 }
 
 @media (max-width: 768px) {
-    .video-container {
-        grid-template-columns: 1fr;
-    }
+	.video-container {
+		grid-template-columns: 1fr;
+	}
 
-    .controls {
-        flex-wrap: wrap;
-    }
+	.controls {
+		flex-wrap: wrap;
+	}
 }
 .timer {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0px;
-    top: 0px;
+	object-fit: cover;
+	width: 100%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 11111;
+	color: #e74c3c !important;
 }

@@ -180,16 +180,11 @@ export const WomenAuth = createApi({
 		}),
 		// ✅ Selfie Verification (FormData required)
 		verifySelfieWomen: build.mutation({
-			query: ({ selfie, selfie_verified }) => {
-				const formData = new FormData();
-				formData.append("selfie", selfie);
-				formData.append("selfie_verified", selfie_verified);
-				return {
-					url: WOMEN_SELFIE,
-					method: "POST",
-					body: formData,
-				};
-			},
+			query: (formData) => ({
+				url: WOMEN_SELFIE,
+				method: "POST",
+				body: formData,
+			}),
 		}),
 	}),
 });
