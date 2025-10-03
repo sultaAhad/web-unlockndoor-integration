@@ -46,6 +46,8 @@ function Femalemembers({ member }) {
     };
   }, []);
 
+
+
   return (
     <>
       <Header />
@@ -69,8 +71,12 @@ function Femalemembers({ member }) {
             </div>
           ) : (
             <div className="row">
-              {members.map((member) => (
-                <FemaleMemberCard memberId={member.id} member={member} />
+              {members.map((member, index) => (
+                <FemaleMemberCard
+                  key={index}
+                  memberId={member.id}
+                  member={member}
+                />
               ))}
             </div>
           )}

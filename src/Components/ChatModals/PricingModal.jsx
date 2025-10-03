@@ -12,11 +12,7 @@ const PricingModal = ({
 	const { data, isLoading } = useGetManVideoChargesQuery();
 	const [selectedId, setSelectedId] = useState(null);
 
-	useEffect(() => {
-		if (data) {
-			console.log("📦 Plans:", data?.data);
-		}
-	}, [data]);
+
 
 	const handlePayNowOpen = () => {
 		if (!selectedId) {
