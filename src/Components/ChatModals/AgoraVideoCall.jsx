@@ -186,6 +186,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		const charges_transaction_id =
 			videoCallData?.data?.charges_transaction_id ||
 			videoCallData?.data?.transaction_id ||
+			videoCallData?.data?.member?.transaction_id || // ✅ add this
 			videoCallData?.data?.member?.minutes?.transaction?.id ||
 			null;
 
