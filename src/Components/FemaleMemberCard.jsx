@@ -12,12 +12,13 @@ const FemaleMemberCard = ({ member, memberId }) => {
 		?.replace("-package", "")
 		.toUpperCase();
 	const [femaleMember, setFemaleMember] = useState(member);
+	console.log(member, "asasd");
 
 	const navigate = useNavigate();
 
 	// --- Fetch man data (minutes, can_call) ---
 	const { data: manData, isLoading, refetch } = useGetManDataQuery();
-	console.log("✅ Man Data:", manData);
+	// console.log("✅ Man Data:", manData);
 
 	// --- Feature access check ---
 	const checkFeatureAccess = (member, feature) => {

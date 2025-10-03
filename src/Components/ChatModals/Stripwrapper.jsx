@@ -1,3 +1,4 @@
+// Stripwrapper.js
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -11,7 +12,6 @@ import Alert from "../SweetAlert/Alert";
 import { setUserToken } from "../../network/reducers/AuthReducer";
 import { useVideoManPurchaseCallMutation } from "../../network/services/ManAuth";
 
-// Stripe public key
 const stripePromise = loadStripe(
 	"pk_test_51PCJCF1n4j2NN6BKEbuBZqPcxk017JADLY9sKJRmV9BmYdRzKiBpqvkaOJdeP6dmz081n9QNC8BEbKaBMVRjM4E000c6bwOLuD",
 );
@@ -20,6 +20,8 @@ const CheckoutForm = ({
 	checkedTerm,
 	showSuccessModal,
 	setShowSuccessModal,
+	memberId,
+	refetchMemberData, // ✅ fresh data laane ke liye
 }) => {
 	const dispatch = useDispatch();
 	const { userToken } = useSelector((state) => state.auth);
@@ -31,11 +33,12 @@ const CheckoutForm = ({
 
 	const [purchaseCall, response] = useVideoManPurchaseCallMutation();
 
-	// ✅ Success
+	// ✅ success handle
 	useEffect(() => {
 		if (response?.isSuccess) {
 			setShowSuccessModal(true);
 
+			// userToken update
 			if (response?.data?.user) {
 				dispatch(
 					setUserToken({
@@ -46,8 +49,9 @@ const CheckoutForm = ({
 				);
 			}
 
-			if (response?.data?.can_call !== undefined) {
-				localStorage.setItem("can_call", response.data.can_call);
+			// ✅ minutes refresh immediately
+			if (typeof refetchMemberData === "function") {
+				refetchMemberData(memberId);
 			}
 		}
 	}, [
@@ -56,9 +60,11 @@ const CheckoutForm = ({
 		dispatch,
 		userToken,
 		setShowSuccessModal,
+		memberId,
+		refetchMemberData,
 	]);
 
-	// ❌ Error
+	// ✅ error handle
 	useEffect(() => {
 		if (response?.isError) {
 			if (response?.error?.data?.statusCode === 409) {
@@ -84,7 +90,7 @@ const CheckoutForm = ({
 		}
 	}, [response?.isError, response?.error]);
 
-	// Submit
+	// ✅ handle stripe payment
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!stripe || !elements) return;
@@ -114,6 +120,7 @@ const CheckoutForm = ({
 			const formData = new FormData();
 			formData.set("token", payload.token.id);
 			formData.set("charges_id", checkedTerm.id);
+			formData.set("women_id", memberId); // ✅ send women_id
 
 			purchaseCall(formData);
 			cardElement.clear();
@@ -157,16 +164,21 @@ const CheckoutForm = ({
 	);
 };
 
+// ✅ Wrapper
 const Stripwrapper = ({
 	checkedTerm,
 	showSuccessModal,
 	setShowSuccessModal,
+	memberId,
+	refetchMemberData,
 }) => (
 	<Elements stripe={stripePromise}>
 		<CheckoutForm
 			checkedTerm={checkedTerm}
 			showSuccessModal={showSuccessModal}
 			setShowSuccessModal={setShowSuccessModal}
+			memberId={memberId}
+			refetchMemberData={refetchMemberData}
 		/>
 	</Elements>
 );

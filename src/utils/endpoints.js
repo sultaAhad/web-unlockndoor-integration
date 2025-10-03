@@ -96,4 +96,4 @@ export const WOMEN_SELFIE = `auth-women/verify-selfie`;
 export const WOMEN_EDIT_PROFILE = `auth-women/update-women`;
 export const WOMEN_UPGRADE_PACKAGE = `auth-women/women-upgrade-package`;
 export const WOMEN_CANCEL_PACKAGE = `auth-women/women-cancel-package`;
-export const START_VIDEO_CALL = `call-action`;
+export const START_VIDEO_CALL = `/call-action`;

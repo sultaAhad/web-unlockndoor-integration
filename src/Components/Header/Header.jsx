@@ -70,6 +70,8 @@ function Header() {
 		let audio = null;
 
 		videoChannel.bind("call.action", (data) => {
+			console.log(data?.data);
+
 			audio = new Audio("/ring.mp3");
 			audio.loop = true;
 			audio.play();
