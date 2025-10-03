@@ -139,7 +139,8 @@ function VideoCallButton({ member, type = "icon" }) {
         stripeWrapperResponse={(response) => {
           setSelectedMember((prev) => ({
             ...prev,
-            minutes: response,
+            minutes: response?.minutes,
+            transaction_id: response?.transaction_id,
           }));
           setShowPayModal(false);
         }}

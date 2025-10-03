@@ -36,7 +36,10 @@ const CheckoutForm = ({
   useEffect(() => {
     if (response?.data?.status) {
       setShowSuccessModal(true);
-      videoPurchaseCallResponse(response?.data?.minutes);
+      videoPurchaseCallResponse({
+        minutes: response?.data?.minutes,
+        transaction_id: response?.data?.transaction_id,
+      });
     }
   }, [
     response?.isSuccess,
