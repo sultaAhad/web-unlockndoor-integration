@@ -107,6 +107,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		// ✅ Gender normalize
 		const userGender = user?.gender?.toLowerCase();
 		const memberGender = videoCallData?.data?.member?.gender?.toLowerCase();
+		console.log(videoCallData, "sadasd");
 
 		const formData = {
 			channel_name: `channel_${videoCallData?.data?.member?.id}`,
