@@ -248,7 +248,10 @@ function Header() {
 				</div>
 
 				{menuOpen && (
-					<div className="mobile-nav d-lg-none pt-5">
+					<div
+						className="mobile-nav d-lg-none pt-5 fixed top-0 right-0 w-3/4 h-full shadow-lg
+               animate-slide-in z-50"
+					>
 						<div className="nav_wrapper">
 							<ul className="flex-column align-items-center gap-4">
 								<li>

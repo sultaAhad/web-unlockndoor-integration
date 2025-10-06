@@ -503,6 +503,7 @@ function ChatComponent({ type }) {
           .selected_chat img {
             height: 55px;
             width: 55px;
+            object-fit:cover;
           }
         `}
       </style>
