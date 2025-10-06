@@ -205,9 +205,7 @@ function ChatComponent({ type }) {
       // },
     });
 
-    const channel = pusher.subscribe(
-      `chatunlockndoorchannel.${selectedChat.chat_id}`
-    );
+    const channel = pusher.subscribe(`chat.${selectedChat.chat_id}`);
     channel.bind("message.sent", (data) => {
       setMessages((prev) => [...prev, formateMessage(data?.message)]);
       refetch();

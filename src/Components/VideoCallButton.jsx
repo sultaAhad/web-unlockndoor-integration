@@ -6,22 +6,7 @@ import PricingModal from "./ChatModals/PricingModal";
 import PayNowModal from "./ChatModals/PayNowModal";
 import ThankYouModal from "./ChatModals/ThankYouModal";
 
-/**
- * Helper function to always generate the same channel name
- * no matter who starts the call (caller/receiver).
- */
-const getCallChannel = (id1, id2) => {
-  return `call_${Math.min(id1, id2)}_${Math.max(id1, id2)}`;
-};
 
-/**
- * VideoCallButton
- * - props:
- *    member        : the member object you want to call
- *    type          : "icon" | "button" (default: "icon")
- *    refetchManData: function to re-fetch manData after payment
- *    manData       : object from API containing can_call, minutes, etc (for the caller)
- */
 function VideoCallButton({ member, type = "icon" }) {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -58,17 +43,17 @@ function VideoCallButton({ member, type = "icon" }) {
   };
 
   const connectCall = () => {
-    const channelName = getCallChannel(user?.id, selectedMember?.id);
-
     dispatch(
       handleVideoCallModal({
         status: true,
         data: {
-          member,
-          channel: channelName,
+          calling_user: {
+            id: selectedMember?.id,
+            name: selectedMember?.name,
+            profile_image_url: selectedMember?.profile_image_url,
+            type: selectedMember?.gender,
+          },
           type: "isCalling",
-          start_call: new Date().toISOString(),
-          remark: "Video call initiated by caller",
         },
       })
     );

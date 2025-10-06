@@ -50,7 +50,10 @@ const FemaleMemberCard = ({ member, memberId }) => {
             )}
 
             {checkFeatureAccess(femaleMember, "video") && (
-              <VideoCallButton member={femaleMember} manData={manData} />
+              <VideoCallButton
+                member={femaleMember}
+                manData={{ ...manData, gender: "female" }}
+              />
             )}
 
             {checkFeatureAccess(femaleMember, "offer") && (
