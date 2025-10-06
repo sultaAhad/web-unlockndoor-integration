@@ -12,6 +12,9 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 	const [callAction] = useCallActionMutation();
 	const { user, videoCallData } = useSelector((state) => state.auth);
 	const [appId] = useState(import.meta.env.VITE_APP_AGORA_APP_ID);
+	const [callingUser, setCallingUser] = useState(
+		videoCallData?.data?.member?.member ?? null,
+	);
 	const [channel, setChannel] = useState(null);
 	const [token] = useState("");
 	const [uid] = useState(() => crypto.randomUUID());
@@ -106,28 +109,25 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 
 		// ✅ Gender normalize
 		const userGender = user?.gender?.toLowerCase();
-		const memberGender = videoCallData?.data?.member?.gender?.toLowerCase();
-		console.log(videoCallData, "sadasd");
+		const memberGender = callingUser?.gender?.toLowerCase();
 
 		const formData = {
-			channel_name: `channel_${videoCallData?.data?.member?.id}`,
+			channel_name: `channel_${callingUser?.id}`,
 			action: "start-call",
 			data: {
 				channel,
-				member: videoCallData?.data?.member,
+				member: callingUser,
 				from_id: user?.id,
 				from_user_name: user?.name,
 				from_user_profile_image_url: user?.profile_image_url,
 				from_type:
 					userGender === "male" || userGender === "men" ? "Men" : "Women",
-				to_id: videoCallData?.data?.member?.id,
+				to_id: callingUser?.id,
 				to_type:
 					memberGender === "male" || memberGender === "men" ? "Men" : "Women",
 				start_date,
 				start_time,
 				remark: "Video call started",
-
-				// ✅ caller_type bhi fix
 				caller_type:
 					userGender === "male" || userGender === "men" ? "Men" : "Women",
 			},
@@ -164,39 +164,24 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 
 		// ✅ Gender normalize
 		const userGender = user?.gender?.toLowerCase();
-		const memberGender = videoCallData?.data?.member?.gender?.toLowerCase();
+		const memberGender = callingUser?.gender?.toLowerCase();
 
-		const from_type =
+		const caller_type =
 			userGender === "male" || userGender === "men" ? "Men" : "Women";
 
-		const caller_type = from_type; // ✅ caller hamisha jisne call end kiya (local user)
-
-		// ✅ men_id / women_id decide dynamically
 		let men_id = null;
 		let women_id = null;
 
-		if (from_type === "Men") {
+		if (caller_type === "Men") {
 			men_id = user?.id;
-			women_id = videoCallData?.data?.member?.id;
+			women_id = callingUser?.id;
 		} else {
 			women_id = user?.id;
-			men_id = videoCallData?.data?.member?.id;
+			men_id = callingUser?.id;
 		}
-
-		// ✅ Transaction id uthao
-		const charges_transaction_id =
-			videoCallData?.data?.charges_transaction_id ||
-			videoCallData?.data?.transaction_id ||
-			videoCallData?.data?.member?.transaction_id || // ✅ add this
-			videoCallData?.data?.member?.minutes?.transaction?.id ||
-			null;
-
-		// ✅ Final payload
-		// ✅ Final payload
+		console.log(callingUser, "sdasdsad");
 		const formData = {
-			channel_name: `reject_call_${
-				videoCallData?.data?.member?.id || user?.id
-			}`,
+			channel_name: `reject_call_${callingUser?.id}`,
 			action: "end-call",
 			data: {
 				channel,
@@ -207,12 +192,10 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 				duration,
 				duration_seconds,
 				remark: reason,
-				men_id: men_id, // ✅ always send
-				women_id: women_id, // ✅ always send
+				men_id: men_id,
+				women_id: women_id,
 				caller_type,
-				charges_transaction_id: charges_transaction_id
-					? Number(charges_transaction_id)
-					: null,
+				charges_transaction_id: callingUser?.transaction_id,
 			},
 		};
 
