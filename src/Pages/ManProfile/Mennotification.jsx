@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import Aos from "aos";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import ProfileHeader from "../../Components/ProfileHeader";
+import Notifications from "../../Components/Notifications";
 
 function Mennotification() {
   useEffect(() => {
@@ -62,7 +63,7 @@ function Mennotification() {
                             </h4>
                           </div>
                         </div>
-                        <div className="group-wrapper-main-list1">
+                        {/* <div className="group-wrapper-main-list1">
                           <div>
                             <div className="row align-items-center border-bottom-color  position-relative ">
                               <div className="col-lg-12 border-top border-bottom pt-4 pb-4">
@@ -294,7 +295,8 @@ function Mennotification() {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
+                        <Notifications type={"type"}/>
                       </div>
                     </div>
                   </div>

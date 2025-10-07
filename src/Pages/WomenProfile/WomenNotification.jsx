@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import Aos from "aos";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import ProfileHeader from "../../Components/ProfileHeader";
+import Notifications from "../../Components/Notifications";
 
 function WomenNotification() {
   useEffect(() => {
@@ -35,36 +36,36 @@ function WomenNotification() {
     };
   }, []);
   return (
-    <>
-      <Header />
+		<>
+			<Header />
 
-      <section className="profile_sec" data-aos="fade-up">
-        <div className="container">
-          <div className="row">
-            <ProfileHeader showButtons={false} />
-          </div>
-        </div>
-      </section>
+			<section className="profile_sec" data-aos="fade-up">
+				<div className="container">
+					<div className="row">
+						<ProfileHeader showButtons={false} />
+					</div>
+				</div>
+			</section>
 
-      <section className="notification-wrapper">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-11 mx-auto">
-              {/* <Userprofilesetting />
+			<section className="notification-wrapper">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-11 mx-auto">
+							{/* <Userprofilesetting />
                             <ProfileNavbar /> */}
-              <div className="row mt-5 pt-5 mb-5 pb-4">
-                <div className="col-lg-12">
-                  <div className="row">
-                    <div className="col-lg-8  mx-auto">
-                      <div className="main-membership-plane comment-wrapper ">
-                        <div className="row border-bottom-color pb-3 mt-3">
-                          <div className="col-lg-12">
-                            <h4 className="mb-4 secondary-bold-font text-center text-white level-5 ">
-                              Notifications
-                            </h4>
-                          </div>
-                        </div>
-                        <div className="group-wrapper-main-list1">
+							<div className="row mt-5 pt-5 mb-5 pb-4">
+								<div className="col-lg-12">
+									<div className="row">
+										<div className="col-lg-8  mx-auto">
+											<div className="main-membership-plane comment-wrapper ">
+												<div className="row border-bottom-color pb-3 mt-3">
+													<div className="col-lg-12">
+														<h4 className="mb-4 secondary-bold-font text-center text-white level-5 ">
+															Notifications
+														</h4>
+													</div>
+												</div>
+												{/* <div className="group-wrapper-main-list1">
                           <div>
                             <div className="row align-items-center border-bottom-color  position-relative ">
                               <div className="col-lg-12 border-top border-bottom pt-4 pb-4">
@@ -296,20 +297,21 @@ function WomenNotification() {
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                        </div> */}
+												<Notifications type={'women'} />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default WomenNotification;

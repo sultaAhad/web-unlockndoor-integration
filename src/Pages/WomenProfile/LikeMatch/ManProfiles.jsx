@@ -60,7 +60,7 @@ function ManProfiles() {
                   <img
                     src={user?.current?.profile_image_url}
                     className="img-fluid profile_imgg"
-                  />
+                  /> 
                   <h5>{user?.current?.name}</h5>
                 </div>
 
