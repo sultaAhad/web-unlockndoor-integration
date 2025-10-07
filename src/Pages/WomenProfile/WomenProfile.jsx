@@ -86,8 +86,8 @@ function WomenProfile() {
 						<div className="col-md-12 pt-5 for-extra-space">
 							<ProfileNavbar />
 							<div className="profile_info_dv">
-								<div className="row">
-									<div className="col-md-3">
+								<div className="row align-items-lg-start align-items-center">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="info_ul">
 											<ul>
 												<li>
@@ -151,7 +151,7 @@ function WomenProfile() {
 										</div>
 									</div>
 
-									<div className="col-md-3">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="info_ul">
 											<ul>
 												<li>
@@ -205,7 +205,7 @@ function WomenProfile() {
 										</div>
 									</div>
 
-									<div className="col-md-3">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="info_ul">
 											<ul>
 												<li>
@@ -243,8 +243,8 @@ function WomenProfile() {
 											</ul>
 										</div>
 									</div>
-									<div className="col-md-3">
-										<div className="edit_btn text-end">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
+										<div className="edit_btn text-sm-end">
 											<Link to="/women-edit-profiles">
 												<button>
 													<span className="d-flex gap-3 align-content-center justify-content-center">

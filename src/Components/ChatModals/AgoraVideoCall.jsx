@@ -30,7 +30,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
   const [joined, setJoined] = useState(false);
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState([]);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const gender = localStorage.getItem("gender");
 
@@ -80,6 +80,8 @@ const AgoraVideoCall = ({ onCallEnd }) => {
   }, []);
 
   useEffect(() => {
+    console.log(channel);
+
     if (channel) startVideoCall();
   }, [channel]);
 
@@ -186,7 +188,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
   };
 
   // ---------- LEAVE ----------
-  const leaveChannel = async (reason = "User ended call") => {
+  const leaveChannel = async (reason = "User ended call", action = null) => {
     try {
       if (localTracks) {
         localTracks.forEach((track) => track.close());
@@ -195,13 +197,14 @@ const AgoraVideoCall = ({ onCallEnd }) => {
       setUsers([]);
       setLocalTracks([]);
       setJoined(false);
-      setIsAudioEnabled(true);
-      setIsVideoEnabled(true);
+      setIsAudioEnabled(false);
+      setIsVideoEnabled(false);
       setChannel(null);
-
-      await endCallAction(reason);
+      if (action === "reject-call") {
+      } else {
+        await endCallAction(reason);
+      }
       onCallEnd(false);
-
       dispatch(handleVideoCallModal({ status: false, data: {} }));
     } catch (error) {
       console.error("Leave error:", error);
@@ -239,11 +242,11 @@ const AgoraVideoCall = ({ onCallEnd }) => {
       console.log(data, "Reject Pusher Call Action");
 
       if (data?.data?.action === "reject-call") {
-        leaveChannel("Call rejected");
+        leaveChannel("Call rejected", data?.data?.action, data);
         toast.info("Call rejected by user.");
       }
       if (data?.data?.action === "end-call") {
-        leaveChannel("Call ended remotely");
+        leaveChannel("Call ended remotely", data?.data?.action, data);
         toast.info("Call has been ended.");
       }
     });

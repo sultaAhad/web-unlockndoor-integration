@@ -615,6 +615,9 @@ span.step-label.active {
 		width: 60px !important;
 		height: 60px !important;
 	}
+	.upload-section label {
+    font-size: 14px;
+}
 }
 
 @media (max-width: 768px) {
@@ -660,5 +663,8 @@ span.step-label.active {
 	form button {
 		padding: 12px;
 		font-size: 11px;
+	}
+	.profile_dv {
+		padding: 30px 10px;
 	}
 }

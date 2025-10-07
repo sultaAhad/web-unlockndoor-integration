@@ -75,7 +75,7 @@ function LikeMatchMatched() {
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
-              <div className="d-flex align-items-center gap-3 justify-content-end mb-4">
+              <div className="d-flex flex-sm-row flex-column align-items-center gap-3 justify-content-end mb-4">
                 <Link
                   onClick={() => {
                     setMatchedProfiles([]);

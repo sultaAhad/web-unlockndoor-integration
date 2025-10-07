@@ -25,7 +25,7 @@ const LikeMatchNavigation = () => {
   };
 
   return (
-    <div className="d-flex align-items-center gap-3 justify-content-end mb-4">
+    <div className="d-flex flex-sm-row flex-column align-items-center gap-3 justify-content-end mb-4">
       <Link
         to="/like-match-unmatched"
         className="secondary-medium-font"

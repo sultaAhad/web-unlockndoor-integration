@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	web_new_logo,
-	outline1,
-	outline2,
-	person_img,
-	men_profile,
+  web_new_logo,
+  outline1,
+  outline2,
+  person_img,
+  men_profile,
 } from "../../Constant/Index";
 import RoleSelectionModal from "./RoleSelectionModal";
 import LoginModal from "./LoginModal";
@@ -39,7 +39,7 @@ function Header() {
   const dispatch = useDispatch();
   const member = useRef(null);
 
-  const rejectCallAction = async (user_id, channel) => {
+  const rejectCallAction = async (user_id) => {
     const formData = {
       channel_name: `reject_call_${user_id}`,
       action: "reject-call",
@@ -128,10 +128,7 @@ function Header() {
             })
           );
         } else if (result.isDenied) {
-          rejectCallAction(
-            data.data?.caller_user?.id,
-            data?.data?.data?.channel
-          );
+          rejectCallAction(data.data?.caller_user?.id);
         }
       });
     });
