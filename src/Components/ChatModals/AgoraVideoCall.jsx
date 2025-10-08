@@ -10,69 +10,40 @@ import { toast } from "react-toastify";
 import { formatDateTime, formatTime } from "../../Constant/HelperFunction";
 
 const AgoraVideoCall = ({ onCallEnd }) => {
-<<<<<<< HEAD
 	const [callAction] = useCallActionMutation();
 	const { user, videoCallData } = useSelector((state) => state.auth);
 	const [appId] = useState(import.meta.env.VITE_APP_AGORA_APP_ID);
 	const [callingUser, setCallingUser] = useState(
-		videoCallData?.data?.member?.member ?? null,
+		videoCallData?.data?.calling_user ?? null,
 	);
+
+	const [userGender, setUserGender] = useState(
+		user?.gender?.toLowerCase() === "male" ? "Men" : "Women",
+	);
+	const [memberGender, setMemberGender] = useState(
+		callingUser?.gender?.toLowerCase() === "male" ? "Men" : "Women",
+	);
+
 	const [channel, setChannel] = useState(null);
 	const [token] = useState("");
 	const [uid] = useState(() => crypto.randomUUID());
 	const [joined, setJoined] = useState(false);
 	const [users, setUsers] = useState([]);
 	const [localTracks, setLocalTracks] = useState([]);
-	const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+	const [isAudioEnabled, setIsAudioEnabled] = useState(false);
 	const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 	const gender = localStorage.getItem("gender");
 
-	// Call timing
 	const [callStart, setCallStart] = useState(null);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const timerRef = useRef(null);
-=======
-  const [callAction] = useCallActionMutation();
-  const { user, videoCallData } = useSelector((state) => state.auth);
-  const [appId] = useState(import.meta.env.VITE_APP_AGORA_APP_ID);
-  const [callingUser, setCallingUser] = useState(
-    videoCallData?.data?.calling_user ?? null
-  );
-
-  const [userGender, setUserGender] = useState(
-    user?.gender?.toLowerCase() === "male" ? "Men" : "Women"
-  );
-  const [memberGender, setMemberGender] = useState(
-    callingUser?.gender?.toLowerCase() === "male" ? "Men" : "Women"
-  );
-
-  const [channel, setChannel] = useState(null);
-  const [token] = useState("");
-  const [uid] = useState(() => crypto.randomUUID());
-  const [joined, setJoined] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [localTracks, setLocalTracks] = useState([]);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
-  const gender = localStorage.getItem("gender");
-
-  const [callStart, setCallStart] = useState(null);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const timerRef = useRef(null);
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	const dispatch = useDispatch();
 	const client = useRef();
 
-<<<<<<< HEAD
 	useEffect(() => {
-		setChannel(videoCallData?.data?.channel);
+		setChannel(`channel_${callingUser?.id}`);
 	}, [videoCallData]);
-=======
-  useEffect(() => {
-    setChannel(`channel_${callingUser?.id}`);
-  }, [videoCallData]);
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	useEffect(() => {
 		client.current = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -108,100 +79,36 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		};
 	}, []);
 
-<<<<<<< HEAD
 	useEffect(() => {
+		console.log(channel);
+
 		if (channel) startVideoCall();
 	}, [channel]);
 
-	// Timer formatter
-	const formatTime = (seconds) => {
-		const h = Math.floor(seconds / 3600);
-		const m = Math.floor((seconds % 3600) / 60);
-		const s = seconds % 60;
-		return h > 0
-			? `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s
-					.toString()
-					.padStart(2, "0")}`
-			: `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-	};
-
-	const formatDateTime = (dateObj) => {
-		const date = dateObj.toISOString().split("T")[0];
-		const time = dateObj.toTimeString().split(" ")[0];
-		return { date, time };
-	};
-
-	// ---------- START CALL ----------
 	const startCallAction = async () => {
-		const startTime = new Date();
-		setCallStart(startTime);
-
-		if (!timerRef.current) {
-			timerRef.current = setInterval(
-				() => setElapsedSeconds((prev) => prev + 1),
-				1000,
-			);
-		}
-
-		const { date: start_date, time: start_time } = formatDateTime(startTime);
-
-		// ✅ Gender normalize
-		const userGender = user?.gender?.toLowerCase();
-		const memberGender = callingUser?.gender?.toLowerCase();
-
 		const formData = {
-			channel_name: `channel_${callingUser?.id}`,
+			channel_name: channel,
 			action: "start-call",
-			data: {
-				channel,
-				member: callingUser,
-				from_id: user?.id,
-				from_user_name: user?.name,
-				from_user_profile_image_url: user?.profile_image_url,
-				from_type:
-					userGender === "male" || userGender === "men" ? "Men" : "Women",
-				to_id: callingUser?.id,
-				to_type:
-					memberGender === "male" || memberGender === "men" ? "Men" : "Women",
-				start_date,
-				start_time,
-				remark: "Video call started",
-				caller_type:
-					userGender === "male" || userGender === "men" ? "Men" : "Women",
+			start_date: null,
+			start_time: null,
+			end_date: null,
+			end_time: null,
+			charges_transaction_id: 0,
+			remark: "Video call started",
+			caller_type: userGender,
+			calling_user: {
+				id: callingUser?.id,
+				name: callingUser?.name,
+				profile_image_url: callingUser?.profile_image_url,
+				type: callingUser?.gender,
+			},
+			caller_user: {
+				id: user?.id,
+				name: user?.name,
+				profile_image_url: user?.profile_image_url,
+				type: userGender,
 			},
 		};
-=======
-  useEffect(() => {
-    console.log(channel);
-
-    if (channel) startVideoCall();
-  }, [channel]);
-
-  const startCallAction = async () => {
-    const formData = {
-      channel_name: channel,
-      action: "start-call",
-      start_date: null,
-      start_time: null,
-      end_date: null,
-      end_time: null,
-      charges_transaction_id: 0,
-      remark: "Video call started",
-      caller_type: userGender,
-      calling_user: {
-        id: callingUser?.id,
-        name: callingUser?.name,
-        profile_image_url: callingUser?.profile_image_url,
-        type: callingUser?.gender,
-      },
-      caller_user: {
-        id: user?.id,
-        name: user?.name,
-        profile_image_url: user?.profile_image_url,
-        type: userGender,
-      },
-    };
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 		try {
 			await callAction(formData);
@@ -210,68 +117,36 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		}
 	};
 
-<<<<<<< HEAD
-	// ---------- END CALL ----------
-	// ---------- END CALL ----------
 	const endCallAction = async (reason = "Video call ended") => {
-		const endTime = new Date();
-		let duration_seconds = 0;
-		let duration = null;
-
-		if (callStart) {
-			const diff = Math.floor((endTime - callStart) / 1000);
-			duration_seconds = diff;
-			duration = {
-				hours: Math.floor(diff / 3600),
-				minutes: Math.floor((diff % 3600) / 60),
-				seconds: diff % 60,
-			};
-		}
-
-		const { date: start_date, time: start_time } = callStart
-			? formatDateTime(callStart)
-			: { date: null, time: null };
-		const { date: end_date, time: end_time } = formatDateTime(endTime);
-
-		// ✅ Gender normalize
-		const userGender = user?.gender?.toLowerCase();
-		const memberGender = callingUser?.gender?.toLowerCase();
-
-		const caller_type =
-			userGender === "male" || userGender === "men" ? "Men" : "Women";
-
+		const { date: end_date, time: end_time } = formatDateTime();
 		let men_id = null;
 		let women_id = null;
 
-		if (caller_type === "Men") {
+		if (userGender === "Men") {
 			men_id = user?.id;
 			women_id = callingUser?.id;
 		} else {
 			women_id = user?.id;
 			men_id = callingUser?.id;
 		}
-		console.log(callingUser, "sdasdsad");
 		const formData = {
-			channel_name: `reject_call_${callingUser?.id}`,
+			channel_name: `reject_call_${videoCallData?.data?.caller_user?.id}`,
 			action: "end-call",
-			data: {
-				channel,
-				start_date,
-				start_time,
-				end_date,
-				end_time,
-				duration,
-				duration_seconds,
-				remark: reason,
-				men_id: men_id,
-				women_id: women_id,
-				caller_type,
-				charges_transaction_id: callingUser?.transaction_id,
-			},
+			start_date: videoCallData?.data?.start_date,
+			start_time: videoCallData?.data?.start_time,
+			end_date: end_date,
+			end_time: end_time,
+			charges_transaction_id: videoCallData?.data?.charges_transaction_id,
+			remark: reason,
+			calling_user: {},
+			caller_user: {},
+			caller_type: videoCallData?.data?.caller_type,
+			men_id: men_id,
+			women_id: women_id,
 		};
 
 		try {
-			console.log("📤 End Call Payload:", formData);
+			console.log("ðŸ“¤ End Call Payload:", formData);
 			await callAction(formData);
 		} catch (error) {
 			console.error(error);
@@ -284,37 +159,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			setCallStart(null);
 		}
 	};
-=======
-  const endCallAction = async (reason = "Video call ended") => {
-    const { date: end_date, time: end_time } = formatDateTime();
-    let men_id = null;
-    let women_id = null;
 
-    if (userGender === "Men") {
-      men_id = user?.id;
-      women_id = callingUser?.id;
-    } else {
-      women_id = user?.id;
-      men_id = callingUser?.id;
-    }
-    const formData = {
-      channel_name: `reject_call_${videoCallData?.data?.caller_user?.id}`,
-      action: "end-call",
-      start_date: videoCallData?.data?.start_date,
-      start_time: videoCallData?.data?.start_time,
-      end_date: end_date,
-      end_time: end_time,
-      charges_transaction_id: videoCallData?.data?.charges_transaction_id,
-      remark: reason,
-      calling_user: {},
-      caller_user: {},
-      caller_type: videoCallData?.data?.caller_type,
-      men_id: men_id,
-      women_id: women_id,
-    };
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
-
-	// ---------- START VIDEO CALL ----------
 	const startVideoCall = async () => {
 		if (!appId || !channel) {
 			alert("Missing App ID or Channel Name");
@@ -326,21 +171,8 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			const videoTrack = await AgoraRTC.createCameraVideoTrack();
 			await client.current.publish([audioTrack, videoTrack]);
 
-<<<<<<< HEAD
 			setLocalTracks([audioTrack, videoTrack]);
 			setJoined(true);
-=======
-  const startVideoCall = async () => {
-    if (!appId || !channel) {
-      alert("Missing App ID or Channel Name");
-      return;
-    }
-    try {
-      await client.current.join(appId, channel, token || null, uid || null);
-      const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-      const videoTrack = await AgoraRTC.createCameraVideoTrack();
-      await client.current.publish([audioTrack, videoTrack]);
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 			if (videoCallData?.data?.type === "isCalling") {
 				startCallAction();
@@ -356,7 +188,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 	};
 
 	// ---------- LEAVE ----------
-	const leaveChannel = async (reason = "User ended call") => {
+	const leaveChannel = async (reason = "User ended call", action = null) => {
 		try {
 			if (localTracks) {
 				localTracks.forEach((track) => track.close());
@@ -365,14 +197,14 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			setUsers([]);
 			setLocalTracks([]);
 			setJoined(false);
-			setIsAudioEnabled(true);
-			setIsVideoEnabled(true);
+			setIsAudioEnabled(false);
+			setIsVideoEnabled(false);
 			setChannel(null);
-
-<<<<<<< HEAD
-			await endCallAction(reason);
+			if (action === "reject-call") {
+			} else {
+				await endCallAction(reason);
+			}
 			onCallEnd(false);
-
 			dispatch(handleVideoCallModal({ status: false, data: {} }));
 		} catch (error) {
 			console.error("Leave error:", error);
@@ -385,31 +217,6 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			setIsAudioEnabled(!isAudioEnabled);
 		}
 	};
-=======
-  // ---------- LEAVE ----------
-  const leaveChannel = async (reason = "User ended call", action = null) => {
-    try {
-      if (localTracks) {
-        localTracks.forEach((track) => track.close());
-      }
-      await client.current.leave();
-      setUsers([]);
-      setLocalTracks([]);
-      setJoined(false);
-      setIsAudioEnabled(false);
-      setIsVideoEnabled(false);
-      setChannel(null);
-      if (action === "reject-call") {
-      } else {
-        await endCallAction(reason);
-      }
-      onCallEnd(false);
-      dispatch(handleVideoCallModal({ status: false, data: {} }));
-    } catch (error) {
-      console.error("Leave error:", error);
-    }
-  };
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	const toggleVideo = async () => {
 		if (localTracks[1]) {
@@ -432,38 +239,24 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 
 		const videoChannel = pusher.subscribe(`reject_call_${user.id}`);
 		videoChannel.bind("call.action", (data) => {
+			console.log(data, "Reject Pusher Call Action");
+
 			if (data?.data?.action === "reject-call") {
-				leaveChannel("Call rejected");
+				leaveChannel("Call rejected", data?.data?.action, data);
 				toast.info("Call rejected by user.");
 			}
 			if (data?.data?.action === "end-call") {
-				leaveChannel("Call ended remotely");
+				leaveChannel("Call ended remotely", data?.data?.action, data);
 				toast.info("Call has been ended.");
 			}
 		});
 
-<<<<<<< HEAD
 		return () => {
 			videoChannel.unbind_all();
 			videoChannel.unsubscribe();
 			pusher.disconnect();
 		};
 	}, []);
-=======
-    const videoChannel = pusher.subscribe(`reject_call_${user.id}`);
-    videoChannel.bind("call.action", (data) => {
-      console.log(data, "Reject Pusher Call Action");
-
-      if (data?.data?.action === "reject-call") {
-        leaveChannel("Call rejected", data?.data?.action, data);
-        toast.info("Call rejected by user.");
-      }
-      if (data?.data?.action === "end-call") {
-        leaveChannel("Call ended remotely", data?.data?.action, data);
-        toast.info("Call has been ended.");
-      }
-    });
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	useEffect(() => {
 		if (users.length > 0) {
@@ -472,9 +265,9 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 				remoteUser.videoTrack.play("remote-video");
 			}
 		}
+		console.log(users, "users");
 	}, [users]);
 
-<<<<<<< HEAD
 	return (
 		<div className="chat_img_wrapper">
 			<figure className="position-relative">
@@ -503,17 +296,6 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 						<div id="local-video" className="video-player"></div>
 					</div>
 				</div>
-=======
-  useEffect(() => {
-    if (users.length > 0) {
-      const remoteUser = users.find((u) => u.uid !== client.current.uid);
-      if (remoteUser && remoteUser.videoTrack) {
-        remoteUser.videoTrack.play("remote-video");
-      }
-    }
-    console.log(users, "users");
-  }, [users]);
->>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 				{/* Controls */}
 				<div className="row">
