@@ -31,6 +31,7 @@ import {
 	VIDEO_CALL_PURCHASE_MAN,
 	DELETE_VIDEO_WOMAN,
 	MAN_UPGRADE_PACKAGES,
+	VIEW_MEMBER_PROFILE,
 } from "../../utils/endpoints";
 
 // ✅ Main API
@@ -250,11 +251,19 @@ export const ManAuth = createApi({
 				body: formData,
 			}),
 		}),
+		ViewMemberProfile: build.mutation({
+			query: (data) => ({
+				url: VIEW_MEMBER_PROFILE,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
 // ✅ Hooks Export
 export const {
+	useViewMemberProfileMutation,
 	useVideoManPurchaseCallMutation,
 	useGetManVideoChargesQuery,
 	useManChangePasswordMutation,
