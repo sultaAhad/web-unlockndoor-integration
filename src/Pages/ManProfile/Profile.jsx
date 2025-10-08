@@ -83,7 +83,7 @@ function Profile() {
 							<div className="profile_info_dv">
 								<div className="row">
 									{/* Left Column */}
-									<div className="col-md-3">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="info_ul">
 											<ul>
 												<li>
@@ -132,7 +132,7 @@ function Profile() {
 									</div>
 
 									{/* Middle Columns */}
-									<div className="col-md-3">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="info_ul">
 											<ul>
 												<li>
@@ -165,7 +165,7 @@ function Profile() {
 										</div>
 									</div>
 
-									<div className="col-md-3">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="info_ul">
 											<ul>
 												<li>
@@ -199,7 +199,7 @@ function Profile() {
 									</div>
 
 									{/* Edit Button */}
-									<div className="col-md-3">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
 										<div className="edit_btn text-end">
 											<Link to="/edit-men-profile">
 												<button>

@@ -6,16 +6,15 @@ import { useWomanDataQuery } from "../network/services/WomanAuth";
 import FaceVerification from "./FaceVerification";
 
 const SelfieModal = ({ isOpen, onClose, onVerified }) => {
-	const gender = localStorage.getItem("gender"); // "men" or "women"
+	const gender = localStorage.getItem("gender");
+	const navigate = useNavigate();
 
-	// Fetch user data based on gender
 	const { data: manData, refetch: manDataRefetch } = useGetManDataQuery(
 		undefined,
 		{
 			skip: gender !== "men",
 		},
 	);
-
 	const { data: womanData, refetch: womanDataRefetch } = useWomanDataQuery(
 		undefined,
 		{
@@ -32,16 +31,12 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 
 	const profileImageUrl =
 		user?.profile_image_url || user?.profile_image || null;
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isOpen) return;
 		console.log("🟡 SelfieModal opened");
-		console.log("🔹 gender:", gender);
-		console.log("👨 manData:", manData);
-		console.log("👩 womanData:", womanData);
-		console.log("📌 user used:", user);
-	}, [isOpen, gender, manData, womanData, user]);
+		console.log("📸 profileImageUrl:", profileImageUrl);
+	}, [isOpen, profileImageUrl]);
 
 	if (!isOpen || localStorage.getItem("selfieVerified") === "true") return null;
 
@@ -54,23 +49,25 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 
 				<h2 className="modal-title">Selfie Verification</h2>
 
-				<FaceVerification
-					profileImageUrl={profileImageUrl}
-					refetch={gender === "men" ? manDataRefetch : womanDataRefetch}
-					onVerified={(status) => {
-						if (status) {
-							Swal.fire("Success", "Selfie verified!", "success").then(() => {
-								localStorage.setItem("selfieVerified", "true");
-
-								if (gender === "women") navigate("/women-profiles");
-								else if (gender === "men") navigate("/profile");
-
-								onVerified?.();
-								onClose();
-							});
-						}
-					}}
-				/>
+				{profileImageUrl ? (
+					<FaceVerification
+						profileImageUrl={profileImageUrl}
+						refetch={gender === "men" ? manDataRefetch : womanDataRefetch}
+						onVerified={(status) => {
+							if (status) {
+								Swal.fire("Success", "Selfie verified!", "success").then(() => {
+									localStorage.setItem("selfieVerified", "true");
+									if (gender === "women") navigate("/women-profiles");
+									else if (gender === "men") navigate("/profile");
+									onVerified?.();
+									onClose();
+								});
+							}
+						}}
+					/>
+				) : (
+					<p style={{ marginTop: 20 }}>Loading your profile image...</p>
+				)}
 
 				<style jsx>{`
 					.modal-overlay {

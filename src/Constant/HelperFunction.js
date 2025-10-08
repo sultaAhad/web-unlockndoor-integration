@@ -494,3 +494,20 @@ export const validateSubscriptionForm = (values, setErrors) => {
 	setErrors(errors);
 	return isValid;
 };
+export const formatTime = (seconds) => {
+	const h = Math.floor(seconds / 3600);
+	const m = Math.floor((seconds % 3600) / 60);
+	const s = seconds % 60;
+	return h > 0
+		? `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s
+			.toString()
+			.padStart(2, "0")}`
+		: `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+};
+
+export const formatDateTime = () => {
+	const dateObject = new Date();
+	const date = dateObject.toISOString().split("T")[0];
+	const time = dateObject.toTimeString().split(" ")[0];
+	return { date, time };
+};

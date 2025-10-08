@@ -60,7 +60,7 @@ function ManProfiles() {
                   <img
                     src={user?.current?.profile_image_url}
                     className="img-fluid profile_imgg"
-                  />
+                  /> 
                   <h5>{user?.current?.name}</h5>
                 </div>
 
@@ -85,7 +85,7 @@ function ManProfiles() {
             <div className="col-md-12 pt-5 for-extra-space">
               <div className="profile_info_dv">
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
                     <div className="info_ul">
                       <ul>
                         <li>
@@ -134,7 +134,7 @@ function ManProfiles() {
                     </div>
                   </div>
 
-                  <div className="col-md-3">
+                  <div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
                     <div className="info_ul">
                       <ul>
                         <li>
@@ -168,7 +168,7 @@ function ManProfiles() {
                     </div>
                   </div>
 
-                  <div className="col-md-3">
+                  <div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
                     <div className="info_ul">
                       <ul>
                         <li>

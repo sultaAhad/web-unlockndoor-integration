@@ -19,15 +19,12 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const profileInputRef = useRef(null);
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
+	const gender = localStorage.getItem("gender");
 
-	const gender = localStorage.getItem("gender"); // "men" or "women"
-
-	// API mutations
 	const [verifySelfieMen, { isLoading: isMenLoading }] =
 		useVerifySelfieMutation();
 	const [updateProfileImageMen, { isLoading: isMenProfileLoading }] =
 		useUpdateProfileImageMutation();
-
 	const [verifySelfieWomen, { isLoading: isWomenLoading }] =
 		useVerifySelfieWomenMutation();
 	const [updateProfileImageWomen, { isLoading: isWomenProfileLoading }] =
@@ -40,10 +37,10 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const [selfie, setSelfie] = useState(null);
 	const [modelsLoaded, setModelsLoaded] = useState(false);
 	const [cameraReady, setCameraReady] = useState(false);
+	const [profileDescriptors, setProfileDescriptors] = useState([]);
 	const [form, setForm] = useState({
 		profileImage: profileImageUrl || user?.profile_image_url || null,
 	});
-	const [profileDescriptors, setProfileDescriptors] = useState([]);
 
 	// Load face-api models
 	useEffect(() => {
@@ -62,32 +59,70 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				console.log("🟢 Face-api models loaded");
 			} catch (err) {
 				console.error("❌ Error loading models:", err);
+				Swal.fire("Error", "Failed to load face detection models", "error");
 			}
 		};
 		loadModels();
 	}, []);
 
-	// Generate profile descriptor when profile image changes
+	// Update when profileImageUrl changes from parent
 	useEffect(() => {
-		if (form.profileImage) generateProfileDescriptor(form.profileImage);
-	}, [form.profileImage]);
+		if (profileImageUrl && !form.profileImage) {
+			setForm((prev) => ({ ...prev, profileImage: profileImageUrl }));
+		}
+	}, [profileImageUrl]);
+
+	// Generate face descriptor after models + image ready
+	useEffect(() => {
+		if (!modelsLoaded) return;
+		if (!form.profileImage) return;
+
+		const timer = setTimeout(() => {
+			generateProfileDescriptor(form.profileImage);
+		}, 800);
+
+		return () => clearTimeout(timer);
+	}, [form.profileImage, modelsLoaded]);
 
 	const generateProfileDescriptor = async (imageUrl) => {
-		if (!imageUrl) return;
 		try {
-			const img = await faceapi.fetchImage(imageUrl);
+			if (!imageUrl) return;
+
+			const img = new Image();
+			img.crossOrigin = "anonymous";
+			img.src = imageUrl;
+
+			await new Promise((resolve, reject) => {
+				img.onload = resolve;
+				img.onerror = reject;
+			});
+
+			const canvas = document.createElement("canvas");
+			const scale = 0.5;
+			canvas.width = img.width * scale;
+			canvas.height = img.height * scale;
+			const ctx = canvas.getContext("2d");
+			ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
 			const desc = await faceapi
-				.detectSingleFace(img)
+				.detectSingleFace(canvas)
 				.withFaceLandmarks()
 				.withFaceDescriptor();
-			if (desc) setProfileDescriptors([desc.descriptor]);
-			else console.warn("⚠️ No face detected in profile image");
+
+			if (desc) {
+				setProfileDescriptors([desc.descriptor]);
+				console.log("🟢 Face detected in profile image!");
+			} else {
+				setProfileDescriptors([]);
+				console.warn("⚠️ No face detected in profile image!");
+				Swal.fire("Error", "No face detected in profile image!", "error");
+			}
 		} catch (err) {
 			console.error("❌ Error generating profile descriptor:", err);
+			Swal.fire("Error", "Failed to process profile image", "error");
 		}
 	};
 
-	// Profile image upload
 	const handleProfileChange = (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
@@ -135,14 +170,12 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		}
 	};
 
-	// Capture selfie
 	const captureSelfie = () => {
 		const imageSrc = webcamRef.current.getScreenshot();
 		if (!imageSrc) return Swal.fire("Error", "Selfie capture failed", "error");
 		setSelfie(imageSrc);
 	};
 
-	// Compress image for faster upload
 	const compressImage = async (dataUrl) => {
 		const img = new Image();
 		img.src = dataUrl;
@@ -154,13 +187,11 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		canvas.height = img.height * scale;
 		const ctx = canvas.getContext("2d");
 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
 		return await new Promise((resolve) =>
 			canvas.toBlob(resolve, "image/jpeg", 0.7),
 		);
 	};
 
-	// Verify selfie
 	const verifyFaces = async () => {
 		if (profileDescriptors.length === 0 || !selfie)
 			return Swal.fire("Error", "Profile or Selfie missing!", "error");
@@ -171,6 +202,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				.detectSingleFace(selfieImg)
 				.withFaceLandmarks()
 				.withFaceDescriptor();
+
 			if (!selfieDesc)
 				return Swal.fire("Error", "Face not detected in selfie!", "error");
 
@@ -183,15 +215,12 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 
 			if (bestMatch.distance < 0.65) {
 				if (gender === "men") {
-					// ✅ Men API -> JSON
 					await verifySelfieMen({ selfie_verified: 1 }).unwrap();
 				} else {
-					// ✅ Women API -> FormData
 					const formData = new FormData();
-					formData.append("selfie_verified", 1); // must be 1 or 0
+					formData.append("selfie_verified", 1);
 					const selfieBlob = await compressImage(selfie);
 					formData.append("selfie", selfieBlob, "selfie.jpg");
-
 					await verifySelfieWomen(formData).unwrap();
 				}
 

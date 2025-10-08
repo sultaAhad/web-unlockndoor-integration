@@ -226,7 +226,7 @@ function DatesTab() {
                                         <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
                                           {sponsorDate.men?.name}
                                         </h4>
-                                        <p className="mb-0 text-white ">
+                                        <p className="mb-0 text-white text-sm-center text-start">
                                           {sponsorDate.comment}
                                         </p>
                                       </div>
@@ -247,7 +247,7 @@ function DatesTab() {
                                       {sponsorDate.status}
                                     </h4>
                                   </td>
-                                  <td className="secondary-medium-font level-8 text-center d-flex">
+                                  <td className="secondary-medium-font level-8 text-center">
                                     {Actions(sponsorDate)}
                                   </td>
                                 </tr>

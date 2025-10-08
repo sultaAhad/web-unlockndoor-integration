@@ -79,7 +79,6 @@
 	--secondary-secondbold-font: "TomatoGrotesk-Bold";
 	--secondary-secondsemibold-font: "TomatoGrotesk-SemiBold";
 	--secondary-secondlight-font: "TomatoGrotesk-Light";
-
 }
 /* Fonts family */
 .secondary-secondlight-font {
@@ -222,11 +221,11 @@
 	}
 
 	.level-7 {
-		font-size: 13px;
+		font-size: 12px;
 	}
 
 	.level-8 {
-		font-size: 12px;
+		font-size: 11px;
 	}
 	.usd-btn {
 		width: 150px;
@@ -265,11 +264,14 @@
 	}
 
 	.level-8 {
-		font-size: 14px;
+		font-size: 12px;
 	}
 	.usd-btn {
 		width: 150px;
 	}
+	p {
+    font-size: 13px;
+}
 }
 @media (max-width: 576px) {
 	.level-1 {
@@ -304,7 +306,7 @@
 	}
 
 	.level-8 {
-		font-size: 15px !important;
+		font-size: 11px !important;
 	}
 }
 @media (max-width: 281px) {
@@ -341,6 +343,9 @@
 
 	.level-8 {
 		font-size: 11px !important;
+	}
+	p {
+		font-size: 12px;
 	}
 }
 
@@ -463,8 +468,8 @@ button.btn.arrow {
 }
 
 .table td {
-    font-size: 14px;
-    vertical-align: middle;
+	font-size: 14px;
+	vertical-align: middle;
 }
 
 .table img {

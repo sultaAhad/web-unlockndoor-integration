@@ -31,7 +31,8 @@ function Peopleimg() {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          centerPadding: "20px",
+          centerPadding: "0px",
+          dots:true,
         },
       },
     ],
@@ -39,7 +40,7 @@ function Peopleimg() {
 
   return (
     <section className="people_img-sec relative">
-      <div className="slider-container relative overflow-hidden px-4">
+      <div className="slider-container relative overflow-hidden px-sm-4">
         {/* Shadows */}
         <div className="left-shadow" />
         <div className="right-shadow" />

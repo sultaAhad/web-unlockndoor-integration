@@ -10,6 +10,7 @@ import {
 	LOGIN_MAN,
 	LOGIN_OTP,
 	LOGIN_URL,
+	NOTIFICATIONS_API,
 	PRIVACYPOLICY,
 	TERMCONDITION,
 } from "../../utils/endpoints";
@@ -125,6 +126,13 @@ const AuthServices = createApi({
 				method: "GET",
 			}),
 		}),
+
+		authNotifications: build.query({
+			query: (data) => ({
+				url: NOTIFICATIONS_API(data),
+				method: "GET",
+			}),
+		}),
 	}),
 });
 
@@ -142,4 +150,5 @@ export const {
 	useManupUatepPofileImageMutation,
 	useUpdateManCoverImageMutation,
 	useHelpAndSupportQuery,
+	useAuthNotificationsQuery,
 } = AuthServices;

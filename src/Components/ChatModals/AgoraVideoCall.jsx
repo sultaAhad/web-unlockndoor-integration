@@ -7,8 +7,10 @@ import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
 import { useCallActionMutation } from "../../network/services/Chat";
 import Pusher from "pusher-js";
 import { toast } from "react-toastify";
+import { formatDateTime, formatTime } from "../../Constant/HelperFunction";
 
 const AgoraVideoCall = ({ onCallEnd }) => {
+<<<<<<< HEAD
 	const [callAction] = useCallActionMutation();
 	const { user, videoCallData } = useSelector((state) => state.auth);
 	const [appId] = useState(import.meta.env.VITE_APP_AGORA_APP_ID);
@@ -29,13 +31,48 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 	const [callStart, setCallStart] = useState(null);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const timerRef = useRef(null);
+=======
+  const [callAction] = useCallActionMutation();
+  const { user, videoCallData } = useSelector((state) => state.auth);
+  const [appId] = useState(import.meta.env.VITE_APP_AGORA_APP_ID);
+  const [callingUser, setCallingUser] = useState(
+    videoCallData?.data?.calling_user ?? null
+  );
+
+  const [userGender, setUserGender] = useState(
+    user?.gender?.toLowerCase() === "male" ? "Men" : "Women"
+  );
+  const [memberGender, setMemberGender] = useState(
+    callingUser?.gender?.toLowerCase() === "male" ? "Men" : "Women"
+  );
+
+  const [channel, setChannel] = useState(null);
+  const [token] = useState("");
+  const [uid] = useState(() => crypto.randomUUID());
+  const [joined, setJoined] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [localTracks, setLocalTracks] = useState([]);
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
+  const gender = localStorage.getItem("gender");
+
+  const [callStart, setCallStart] = useState(null);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const timerRef = useRef(null);
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	const dispatch = useDispatch();
 	const client = useRef();
 
+<<<<<<< HEAD
 	useEffect(() => {
 		setChannel(videoCallData?.data?.channel);
 	}, [videoCallData]);
+=======
+  useEffect(() => {
+    setChannel(`channel_${callingUser?.id}`);
+  }, [videoCallData]);
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	useEffect(() => {
 		client.current = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -71,6 +108,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		};
 	}, []);
 
+<<<<<<< HEAD
 	useEffect(() => {
 		if (channel) startVideoCall();
 	}, [channel]);
@@ -132,6 +170,38 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 					userGender === "male" || userGender === "men" ? "Men" : "Women",
 			},
 		};
+=======
+  useEffect(() => {
+    console.log(channel);
+
+    if (channel) startVideoCall();
+  }, [channel]);
+
+  const startCallAction = async () => {
+    const formData = {
+      channel_name: channel,
+      action: "start-call",
+      start_date: null,
+      start_time: null,
+      end_date: null,
+      end_time: null,
+      charges_transaction_id: 0,
+      remark: "Video call started",
+      caller_type: userGender,
+      calling_user: {
+        id: callingUser?.id,
+        name: callingUser?.name,
+        profile_image_url: callingUser?.profile_image_url,
+        type: callingUser?.gender,
+      },
+      caller_user: {
+        id: user?.id,
+        name: user?.name,
+        profile_image_url: user?.profile_image_url,
+        type: userGender,
+      },
+    };
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 		try {
 			await callAction(formData);
@@ -140,6 +210,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		}
 	};
 
+<<<<<<< HEAD
 	// ---------- END CALL ----------
 	// ---------- END CALL ----------
 	const endCallAction = async (reason = "Video call ended") => {
@@ -213,6 +284,35 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			setCallStart(null);
 		}
 	};
+=======
+  const endCallAction = async (reason = "Video call ended") => {
+    const { date: end_date, time: end_time } = formatDateTime();
+    let men_id = null;
+    let women_id = null;
+
+    if (userGender === "Men") {
+      men_id = user?.id;
+      women_id = callingUser?.id;
+    } else {
+      women_id = user?.id;
+      men_id = callingUser?.id;
+    }
+    const formData = {
+      channel_name: `reject_call_${videoCallData?.data?.caller_user?.id}`,
+      action: "end-call",
+      start_date: videoCallData?.data?.start_date,
+      start_time: videoCallData?.data?.start_time,
+      end_date: end_date,
+      end_time: end_time,
+      charges_transaction_id: videoCallData?.data?.charges_transaction_id,
+      remark: reason,
+      calling_user: {},
+      caller_user: {},
+      caller_type: videoCallData?.data?.caller_type,
+      men_id: men_id,
+      women_id: women_id,
+    };
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	// ---------- START VIDEO CALL ----------
 	const startVideoCall = async () => {
@@ -226,8 +326,21 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			const videoTrack = await AgoraRTC.createCameraVideoTrack();
 			await client.current.publish([audioTrack, videoTrack]);
 
+<<<<<<< HEAD
 			setLocalTracks([audioTrack, videoTrack]);
 			setJoined(true);
+=======
+  const startVideoCall = async () => {
+    if (!appId || !channel) {
+      alert("Missing App ID or Channel Name");
+      return;
+    }
+    try {
+      await client.current.join(appId, channel, token || null, uid || null);
+      const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+      const videoTrack = await AgoraRTC.createCameraVideoTrack();
+      await client.current.publish([audioTrack, videoTrack]);
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 			if (videoCallData?.data?.type === "isCalling") {
 				startCallAction();
@@ -256,6 +369,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			setIsVideoEnabled(true);
 			setChannel(null);
 
+<<<<<<< HEAD
 			await endCallAction(reason);
 			onCallEnd(false);
 
@@ -271,6 +385,31 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			setIsAudioEnabled(!isAudioEnabled);
 		}
 	};
+=======
+  // ---------- LEAVE ----------
+  const leaveChannel = async (reason = "User ended call", action = null) => {
+    try {
+      if (localTracks) {
+        localTracks.forEach((track) => track.close());
+      }
+      await client.current.leave();
+      setUsers([]);
+      setLocalTracks([]);
+      setJoined(false);
+      setIsAudioEnabled(false);
+      setIsVideoEnabled(false);
+      setChannel(null);
+      if (action === "reject-call") {
+      } else {
+        await endCallAction(reason);
+      }
+      onCallEnd(false);
+      dispatch(handleVideoCallModal({ status: false, data: {} }));
+    } catch (error) {
+      console.error("Leave error:", error);
+    }
+  };
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	const toggleVideo = async () => {
 		if (localTracks[1]) {
@@ -303,12 +442,28 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 			}
 		});
 
+<<<<<<< HEAD
 		return () => {
 			videoChannel.unbind_all();
 			videoChannel.unsubscribe();
 			pusher.disconnect();
 		};
 	}, []);
+=======
+    const videoChannel = pusher.subscribe(`reject_call_${user.id}`);
+    videoChannel.bind("call.action", (data) => {
+      console.log(data, "Reject Pusher Call Action");
+
+      if (data?.data?.action === "reject-call") {
+        leaveChannel("Call rejected", data?.data?.action, data);
+        toast.info("Call rejected by user.");
+      }
+      if (data?.data?.action === "end-call") {
+        leaveChannel("Call ended remotely", data?.data?.action, data);
+        toast.info("Call has been ended.");
+      }
+    });
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 	useEffect(() => {
 		if (users.length > 0) {
@@ -319,6 +474,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		}
 	}, [users]);
 
+<<<<<<< HEAD
 	return (
 		<div className="chat_img_wrapper">
 			<figure className="position-relative">
@@ -347,6 +503,17 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 						<div id="local-video" className="video-player"></div>
 					</div>
 				</div>
+=======
+  useEffect(() => {
+    if (users.length > 0) {
+      const remoteUser = users.find((u) => u.uid !== client.current.uid);
+      if (remoteUser && remoteUser.videoTrack) {
+        remoteUser.videoTrack.play("remote-video");
+      }
+    }
+    console.log(users, "users");
+  }, [users]);
+>>>>>>> 8993d2531d154114df8d3aa94e41e2c79cbc81e6
 
 				{/* Controls */}
 				<div className="row">
