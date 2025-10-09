@@ -20,50 +20,50 @@ import ProfileHeader from "../../Components/ProfileHeader";
 import Notifications from "../../Components/Notifications";
 
 function Mennotification() {
-  useEffect(() => {
-    Aos.init({ duration: 1000, once: true }); // Initialize AOS with options
-  }, []);
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${innerpages1})`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.minHeight = "100vh";
+	useEffect(() => {
+		Aos.init({ duration: 1000, once: true }); // Initialize AOS with options
+	}, []);
+	useEffect(() => {
+		document.body.style.backgroundImage = `url(${innerpages1})`;
+		document.body.style.backgroundSize = "cover";
+		document.body.style.backgroundPosition = "center";
+		document.body.style.minHeight = "100vh";
 
-    return () => {
-      document.body.style.backgroundImage = "";
-    };
-  }, []);
-  return (
-    <>
-      <Header />
+		return () => {
+			document.body.style.backgroundImage = "";
+		};
+	}, []);
+	return (
+		<>
+			<Header />
 
-      <section className="profile_sec" data-aos="fade-up">
-        <div className="container">
-          <div className="row">
-            <ProfileHeader />
-          </div>
-        </div>
-      </section>
+			<section className="profile_sec" data-aos="fade-up">
+				<div className="container">
+					<div className="row">
+						<ProfileHeader />
+					</div>
+				</div>
+			</section>
 
-      <section className="notification-wrapper">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-11 mx-auto">
-              {/* <Userprofilesetting />
+			<section className="notification-wrapper">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-11 mx-auto">
+							{/* <Userprofilesetting />
 							<ProfileNavbar /> */}
-              <div className="row mt-5 pt-5 mb-5 pb-4">
-                <div className="col-lg-12">
-                  <div className="row">
-                    <div className="col-lg-8  mx-auto">
-                      <div className="main-membership-plane comment-wrapper ">
-                        <div className="row border-bottom-color pb-3 mt-3">
-                          <div className="col-lg-12">
-                            <h4 className="mb-4 secondary-bold-font text-center text-white level-5 ">
-                              Notifications
-                            </h4>
-                          </div>
-                        </div>
-                        {/* <div className="group-wrapper-main-list1">
+							<div className="row mt-5 pt-5 mb-5 pb-4">
+								<div className="col-lg-12">
+									<div className="row">
+										<div className="col-lg-8  mx-auto">
+											<div className="main-membership-plane comment-wrapper ">
+												<div className="row border-bottom-color pb-3 mt-3">
+													<div className="col-lg-12">
+														<h4 className="mb-4 secondary-bold-font text-center text-white level-5 ">
+															Notifications
+														</h4>
+													</div>
+												</div>
+												{/* <div className="group-wrapper-main-list1">
                           <div>
                             <div className="row align-items-center border-bottom-color  position-relative ">
                               <div className="col-lg-12 border-top border-bottom pt-4 pb-4">
@@ -296,20 +296,20 @@ function Mennotification() {
                             </div>
                           </div>
                         </div> */}
-                        <Notifications type={"type"}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+												<Notifications type={"men"} />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default Mennotification;

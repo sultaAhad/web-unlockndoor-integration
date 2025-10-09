@@ -249,18 +249,18 @@ input[type="number"] {
 
 /* Mobile Header  */
 @keyframes slideIn {
-  from {
-    transform: translate(100%, -10%);
-    opacity: 0;
-  }
-  to {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
+	from {
+		transform: translate(100%, -10%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(0, 0);
+		opacity: 1;
+	}
 }
 
 .animate-slide-in {
-  animation: slideIn 0.4s ease-out forwards;
+	animation: slideIn 0.4s ease-out forwards;
 }
 /* Mobile Header  */
 
@@ -3161,7 +3161,13 @@ div#swal2-html-container {
 	display: inline-block;
 	text-align: center;
 }
-
+.view-detail-wrapper1 {
+	background: rgb(163, 12, 12);
+	padding: 10px 26px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: #160527;
+}
 .profile-img {
 	width: 130px;
 	height: 130px;

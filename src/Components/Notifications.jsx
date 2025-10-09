@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { notify_img } from "../Constant/Index";
 import { useAuthNotificationsQuery } from "../network/services/AuthServices";
 import Spinner from "./Spinner";
+import SponsoredDates from "./SponsoredDates";
 
 const Notifications = ({ type }) => {
 	const { user, refreshNotifications } = useSelector((state) => state.auth);
@@ -99,15 +100,6 @@ const Notifications = ({ type }) => {
 		}
 	};
 
-	// ✅ Dummy handlers
-	const acceptOfferHandle = (id) => {
-		console.log("✅ Accepted offer ID:", id);
-	};
-
-	const rejectOfferHandle = (id) => {
-		console.log("❌ Rejected offer ID:", id);
-	};
-
 	if (isError) return <p>Error loading notifications.</p>;
 
 	return (
@@ -145,8 +137,8 @@ const Notifications = ({ type }) => {
 								{/* ✅ Date-Time + Buttons */}
 								<div className="notify_para">
 									<p className="mb-3 text-end level-9 text-white">
-										({new Date(item.notify_date_time).toLocaleTimeString()} |{" "}
-										{new Date(item.notify_date_time).toLocaleDateString()})
+										({new Date(item.created_at).toLocaleTimeString()} |{" "}
+										{new Date(item.created_at).toLocaleDateString()})
 									</p>
 
 									{/* ✅ Buttons only when action is true */}
@@ -166,18 +158,7 @@ const Notifications = ({ type }) => {
 											{/* Offer Date */}
 											{item?.type === "offer_date" && (
 												<div className="d-flex align-items-center gap-2">
-													<Link
-														onClick={() => acceptOfferHandle(item.ref_id)}
-														className="view-detail-wrapper secondary-regular-font"
-													>
-														Accept
-													</Link>
-													<Link
-														onClick={() => rejectOfferHandle(item.ref_id)}
-														className="view-detail-wrapper reject secondary-regular-font text-white"
-													>
-														Reject
-													</Link>
+													<SponsoredDates selectedDateId={item.ref_id} />
 												</div>
 											)}
 										</>

@@ -144,8 +144,9 @@ const AuthReducer = createSlice({
 		},
 
 		// ✅ Trigger notifications to refresh (used by Pusher or new fetch)
+		// AuthReducer.js
 		triggerNotificationRefresh: (state) => {
-			state.refreshNotifications = !state.refreshNotifications;
+			state.refreshNotifications = !state.refreshNotifications; // ✅ toggles
 		},
 	},
 });
