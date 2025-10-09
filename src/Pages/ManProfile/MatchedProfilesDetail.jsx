@@ -78,6 +78,17 @@ function MatchedProfilesDetail() {
 			document.body.style.backgroundImage = "";
 		};
 	}, []);
+	const StartVideoCall = () => {
+		if (user.gender === "men") {
+			if (selectedMember?.minutes > 0) {
+				connectCall();
+				return;
+			}
+			setShowPricingModal(true);
+		} else {
+			connectCall();
+		}
+	};
 	return (
 		<>
 			<Header />
@@ -138,7 +149,7 @@ function MatchedProfilesDetail() {
 									</div>
 									{/* Video Call */}
 									<button
-										onClick={setShowPricingModal}
+										onClick={StartVideoCall}
 										className="wrapper-bg-good btn rounded-pill text-white  px-4 d-flex align-items-center gap-2"
 										style={{ backgroundColor: "transparent" }}
 									>

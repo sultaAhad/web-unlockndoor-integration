@@ -5,7 +5,7 @@ import { useLikeManProfileMutation } from "../network/services/WomanAuth";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 
-const LikeMatchCard = ({ card, type, index, responseAction }) => {
+const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 	const [likeManProfile, { isLoading: isProcessing }] =
 		useLikeManProfileMutation();
 
@@ -29,7 +29,7 @@ const LikeMatchCard = ({ card, type, index, responseAction }) => {
 					<img src={mchat} alt="chat" />
 				</Link>
 			</div>
-			<VideoCallButton member={card} />
+			<VideoCallButton member={card} gender={gender} type="icon" />
 		</div>
 	);
 
