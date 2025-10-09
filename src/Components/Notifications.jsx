@@ -65,11 +65,15 @@ const Notifications = ({ type }) => {
 			setLastPage(pagination?.last_page || 1);
 
 			if (currentPage === 1) {
-				setNotifications(newNotifications);
-				console.log("🆕 Notifications replaced for page 1");
-			} else {
-				setNotifications((prev) => [...prev, ...newNotifications]);
-				console.log("➕ Appended new notifications to existing list");
+				setNotifications((prev) => {
+					const unique = [
+						...new Map(
+							[...newNotifications, ...prev].map((n) => [n.id, n]),
+						).values(),
+					];
+					return unique;
+				});
+				console.log("🔁 Merged new notifications at top");
 			}
 		}
 	}, [data]);
@@ -84,10 +88,10 @@ const Notifications = ({ type }) => {
 
 	// ✅ Real-time refetch trigger
 	useEffect(() => {
-		if (refreshNotifications) {
-			console.log("🛰 Real-time event → Refetching notifications...");
-			refetch();
-		}
+		console.log(
+			"🛰 Real-time Pusher event detected → Refetching notifications...",
+		);
+		refetch();
 	}, [refreshNotifications]);
 
 	// ✅ Load More Button
