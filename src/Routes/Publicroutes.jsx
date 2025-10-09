@@ -36,6 +36,7 @@ import Mansetting from "../Pages/ManProfile/Mansetting";
 import Mansettingpassword from "../Pages/ManProfile/Mansettingpassword";
 import Subscription from "../Pages/ManProfile/Subscription";
 import WomenProfile from "../Pages/WomenProfile/WomenProfile";
+import ViewManProfile from "../Pages/ManProfile/ViewManProfile";
 
 // Wrapper component to use useLocation
 function AppRoutes() {
@@ -69,6 +70,7 @@ function AppRoutes() {
 				<Route path="/man-settings" element={<Mansetting />} />
 				<Route path="/man-change-password" element={<Mansettingpassword />} />
 				<Route path="/man-subscription" element={<Subscription />} />
+				<Route path="/view-profile/:id" element={<ViewManProfile />} />
 
 				{/* Woman Pages */}
 				<Route path="/women-profiles" element={<WomenProfile />} />

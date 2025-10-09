@@ -17,68 +17,98 @@ const Notifications = ({ type }) => {
 			currentPage,
 		});
 
-	// ✅ Debug log: show raw API data when fetched
+	// ✅ Full API response log
 	useEffect(() => {
 		if (data) {
-			console.log("📦 API response:", data);
-			console.log("📄 Current Page:", currentPage);
-			console.log("🔢 Last Page:", data?.response?.data?.pagination?.last_page);
+			console.group("📦 API Full Response");
+			console.log("✅ Status:", data?.status);
+			console.log("✅ Status Code:", data?.statusCode);
+			console.log("✅ Message:", data?.message);
+			console.log("📄 User Type:", data?.response?.data?.user_type);
+			console.log("📊 Pagination:", data?.response?.data?.pagination);
+			console.log(
+				"🔔 Notifications Array:",
+				data?.response?.data?.notifications,
+			);
+			console.groupEnd();
 		}
 	}, [data]);
 
-	// ✅ Update notifications and pagination info when data changes
+	// ✅ Detailed per-notification logging (color-coded)
+	useEffect(() => {
+		if (data?.response?.data?.notifications?.length) {
+			console.group("🔔 Notifications Received");
+			data.response.data.notifications.forEach((n, i) => {
+				const color = n.is_read === 0 ? "color: red" : "color: green";
+				console.groupCollapsed(`%c#${i + 1} ${n.title} — ${n.message}`, color);
+				console.log("🧾 ref_id (sender):", n.ref_id);
+				console.log("👤 reciever_id (receiver):", n.reciever_id);
+				console.log("📌 title:", n.title);
+				console.log("💬 message:", n.message);
+				console.log("🏷️ type:", n.type);
+				console.log("🎬 action:", n.action);
+				console.log("📅 notify_date_time:", n.notify_date_time);
+				console.log("📖 is_read:", n.is_read);
+				console.groupEnd();
+			});
+			console.groupEnd();
+		}
+	}, [data]);
+
+	// ✅ Update local state
 	useEffect(() => {
 		if (data?.response?.data?.notifications) {
 			const newNotifications = data.response.data.notifications;
 			const pagination = data.response.data.pagination;
 
-			console.log("🧩 New Notifications (fetched):", newNotifications);
-			console.log("📑 Pagination Object:", pagination);
-
 			setLastPage(pagination?.last_page || 1);
 
-			// ✅ If it's the first page, replace data; otherwise append
 			if (currentPage === 1) {
 				setNotifications(newNotifications);
-				console.log("🆕 Replaced notifications for page 1");
+				console.log("🆕 Notifications replaced for page 1");
 			} else {
-				setNotifications((prev) => {
-					const merged = [...prev, ...newNotifications];
-					console.log("➕ Appended new notifications:", merged);
-					return merged;
-				});
+				setNotifications((prev) => [...prev, ...newNotifications]);
+				console.log("➕ Appended new notifications to existing list");
 			}
 		}
 	}, [data]);
 
-	// ✅ Trigger refetch when page changes (after first)
+	// ✅ Page change trigger refetch
 	useEffect(() => {
 		if (currentPage > 1) {
-			console.log("🔁 Fetching next page:", currentPage);
+			console.log("🔁 Refetching page:", currentPage);
 			refetch();
 		}
 	}, [currentPage]);
+
+	// ✅ Real-time refetch trigger
 	useEffect(() => {
 		if (refreshNotifications) {
-			console.log("🔁 Refetching notifications due to real-time event...");
+			console.log("🛰 Real-time event → Refetching notifications...");
 			refetch();
 		}
 	}, [refreshNotifications]);
 
-	// ✅ Handle Load More click
+	// ✅ Load More Button
 	const handleLoadMore = () => {
 		if (currentPage < lastPage) {
-			console.log("👉 Load More clicked — Next Page:", currentPage + 1);
+			console.log("⏭ Load More clicked → next page:", currentPage + 1);
 			setCurrentPage((prev) => prev + 1);
 		} else {
-			console.log("✅ No more pages to load");
+			console.log("🚫 No more pages to load.");
 		}
 	};
 
+	// ✅ Dummy handlers
+	const acceptOfferHandle = (id) => {
+		console.log("✅ Accepted offer ID:", id);
+	};
+
+	const rejectOfferHandle = (id) => {
+		console.log("❌ Rejected offer ID:", id);
+	};
+
 	if (isError) return <p>Error loading notifications.</p>;
-	useEffect(() => {
-		refetch(); // refetch your notifications API
-	}, [refreshNotifications]);
 
 	return (
 		<div className="group-wrapper-main-list1">
@@ -112,23 +142,29 @@ const Notifications = ({ type }) => {
 									</div>
 								</div>
 
+								{/* ✅ Date-Time + Buttons */}
 								<div className="notify_para">
 									<p className="mb-3 text-end level-9 text-white">
-										({new Date(item.created_at).toLocaleTimeString()} |{" "}
-										{new Date(item.created_at).toLocaleDateString()})
+										({new Date(item.notify_date_time).toLocaleTimeString()} |{" "}
+										{new Date(item.notify_date_time).toLocaleDateString()})
 									</p>
 
+									{/* ✅ Buttons only when action is true */}
 									{item?.action === "true" && (
 										<>
-											{item?.type === "type1" && (
+											{/* View Profile */}
+											{item?.type === "visit_profile" && (
 												<Link
-													to=""
+													to={`/view-profile/${item?.ref_id}`}
+													state={item?.ref} // ✅ send the visitor's (ref) full data
 													className="view-detail-wrapper secondary-regular-font"
 												>
-													View Details
+													View Profile
 												</Link>
 											)}
-											{item?.type === "type2" && (
+
+											{/* Offer Date */}
+											{item?.type === "offer_date" && (
 												<div className="d-flex align-items-center gap-2">
 													<Link
 														onClick={() => acceptOfferHandle(item.ref_id)}
@@ -137,7 +173,7 @@ const Notifications = ({ type }) => {
 														Accept
 													</Link>
 													<Link
-														onClick={() => setShowRejectModal(true)}
+														onClick={() => rejectOfferHandle(item.ref_id)}
 														className="view-detail-wrapper reject secondary-regular-font text-white"
 													>
 														Reject
@@ -151,7 +187,7 @@ const Notifications = ({ type }) => {
 						</div>
 					))}
 
-					{/* ✅ Load More Button */}
+					{/* ✅ Load More */}
 					{currentPage < lastPage && (
 						<div className="text-center mt-4 mb-4">
 							<button

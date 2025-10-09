@@ -66,6 +66,8 @@ function Header() {
 	}, [videoCallData]);
 
 	useEffect(() => {
+		if (!user) return; // ✅ Do nothing if logged out
+
 		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
 			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
 			encrypted: false,
@@ -160,10 +162,7 @@ function Header() {
 				position: "top-end",
 			});
 
-			// 🔄 Trigger Redux toggle so Notifications.jsx can refetch
-			const dispatch = useDispatch();
-
-			// when new notification received
+			// ✅ Use existing dispatch from top of component
 			dispatch(triggerNotificationRefresh());
 		});
 
