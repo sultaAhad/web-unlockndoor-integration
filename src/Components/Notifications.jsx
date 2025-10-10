@@ -64,17 +64,17 @@ const Notifications = ({ type }) => {
 
 			setLastPage(pagination?.last_page || 1);
 
-			if (currentPage === 1) {
-				setNotifications((prev) => {
-					const unique = [
-						...new Map(
-							[...newNotifications, ...prev].map((n) => [n.id, n]),
-						).values(),
-					];
+			setNotifications((prev) => {
+				if (currentPage === 1) {
+					// 🔁 First page — replace
+					return newNotifications;
+				} else {
+					// ➕ Append unique notifications for next pages
+					const merged = [...prev, ...newNotifications];
+					const unique = [...new Map(merged.map((n) => [n.id, n])).values()];
 					return unique;
-				});
-				console.log("🔁 Merged new notifications at top");
-			}
+				}
+			});
 		}
 	}, [data]);
 
@@ -91,6 +91,7 @@ const Notifications = ({ type }) => {
 		console.log(
 			"🛰 Real-time Pusher event detected → Refetching notifications...",
 		);
+		setCurrentPage(1);
 		refetch();
 	}, [refreshNotifications]);
 
@@ -122,7 +123,11 @@ const Notifications = ({ type }) => {
 									<div className="row align-items-center">
 										<div className="col-lg-2">
 											<img
-												src={item.image || notify_img}
+												src={
+													item?.ref?.profile_image_url ||
+													item?.sender?.profile_image_url ||
+													notify_img
+												}
 												className="img-fluid wrapper-fluid-notification"
 												alt={item.title}
 											/>
@@ -162,7 +167,11 @@ const Notifications = ({ type }) => {
 											{/* Offer Date */}
 											{item?.type === "offer_date" && (
 												<div className="d-flex align-items-center gap-2">
-													<SponsoredDates selectedDateId={item.ref_id} />
+													<SponsoredDates
+														selectedDateId={item.ref_id} // ✅ actual date id
+														notificationId={item.id} // ✅ this is the notification.id
+														notificationType={item.type} // ✅ e.g. "offer_date"
+													/>{" "}
 												</div>
 											)}
 										</>
@@ -176,7 +185,7 @@ const Notifications = ({ type }) => {
 					{currentPage < lastPage && (
 						<div className="text-center mt-4 mb-4">
 							<button
-								className="btn btn-primary px-4 py-2 rounded-pill"
+								className="btn-write secondary-medium-font load-more-wrapper rounded-0 extra-bg-1 border-none"
 								onClick={handleLoadMore}
 								disabled={isFetching}
 							>

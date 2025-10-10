@@ -57,7 +57,10 @@ function DatesTab() {
 
 	const handleRejectSubmit = async (data) => {
 		try {
-			let response = rejectDateRequest(data).unwrap();
+			let response = await rejectDateRequest({
+				...data,
+				source: "Date_tab", // ✅ Added here
+			}).unwrap();
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -69,6 +72,7 @@ function DatesTab() {
 			let response = rejectDateRequest({
 				date_id: date_id,
 				status: "accepted",
+				source: "Date_tab",
 			}).unwrap();
 		} catch (error) {
 			console.log(error);

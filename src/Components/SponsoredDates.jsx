@@ -6,7 +6,11 @@ import {
 	useRejectDateRequestMutation,
 } from "../network/services/woman/SponsoredDates";
 
-const SponsoredDates = ({ selectedDateId }) => {
+const SponsoredDates = ({
+	selectedDateId,
+	notificationId,
+	notificationType,
+}) => {
 	const [singleDate, setSingleDate] = useState(null);
 	const [showRejectModal, setShowRejectModal] = useState(false);
 
@@ -39,6 +43,9 @@ const SponsoredDates = ({ selectedDateId }) => {
 			const response = await rejectDateRequest({
 				date_id,
 				status: "accepted",
+				source: "notification",
+				notification_id: notificationId, // 👈 This is the notification.id
+				notification_type: notificationType || "offer_date",
 			}).unwrap();
 			setSingleDate((prev) => ({ ...prev, status: "accepted" }));
 		} catch (error) {
@@ -58,6 +65,9 @@ const SponsoredDates = ({ selectedDateId }) => {
 				status: "rejected",
 				reason,
 				counter_price,
+				source: "notification",
+				notification_id: notificationId, // 👈 This is the notification.id
+				notification_type: notificationType || "offer_date",
 			}).unwrap();
 
 			setSingleDate((prev) => ({ ...prev, status: "rejected" }));

@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { edit, massagewrapper, message, notification } from "../Constant/Index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Pusher from "pusher-js";
 
 function ProfileHeader({ showButtons = true }) {
 	const { user } = useSelector((state) => state.auth);
@@ -11,6 +12,26 @@ function ProfileHeader({ showButtons = true }) {
 		message: 0,
 		notification: 0,
 	});
+
+	useEffect(() => {
+		if (!user) return;
+		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
+			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
+			encrypted: false,
+		});
+
+		const genderChannelName =
+			user.gender === "women"
+				? `women-notifications-${user?.id}`
+				: `men-notifications-${user?.id}`;
+
+		const channel = pusher.subscribe(genderChannelName);
+		channel.bind(genderChannelName, (data) => {});
+		return () => {
+			channel.unsubscribe();
+			pusher.disconnect();
+		};
+	}, [user]);
 
 	return (
 		<div className="col-md-12 pb-5">

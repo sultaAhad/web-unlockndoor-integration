@@ -689,7 +689,11 @@
 	color: #ccc;
 	font-family: "TomatoGrotesk-Regular";
 }
-
+.profile-card .card-footer {
+	padding: 0.5rem 1rem;
+	background-color: rgb(0 0 0 / 56%) !important;
+	border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
 .card-actions {
 	position: absolute;
 	bottom: 15px;
