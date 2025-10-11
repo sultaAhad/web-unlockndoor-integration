@@ -14,24 +14,64 @@ function ProfileHeader({ showButtons = true }) {
 	});
 
 	useEffect(() => {
-		if (!user) return;
+		// ✅ agar user available nahi to kuch mat karo
+		if (!user?.id) return;
+
+		// ✅ prevent duplicate Pusher connection
+		if (window.__PROFILE_PUSHER_CONNECTED__) {
+			console.log("⚠️ ProfileHeader: Pusher already connected, skipping...");
+			return;
+		}
+		window.__PROFILE_PUSHER_CONNECTED__ = true;
+
+		// ✅ Pusher secure connection (no encrypted:false)
 		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
 			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-			encrypted: false,
+			forceTLS: true, // use secure wss:// connection
 		});
 
+		// ✅ dynamic channel name
 		const genderChannelName =
 			user.gender === "women"
-				? `women-notifications-${user?.id}`
-				: `men-notifications-${user?.id}`;
+				? `women-notifications-${user.id}`
+				: `men-notifications-${user.id}`;
+
+		console.log("📡 Subscribing to channel:", genderChannelName);
 
 		const channel = pusher.subscribe(genderChannelName);
-		channel.bind(genderChannelName, (data) => {});
+
+		// ✅ event listener
+		channel.bind(genderChannelName, (data) => {
+			console.log("📩 Pusher event received:", data);
+
+			// Example handling: update notification count
+			if (data.type === "unread_notifications_count") {
+				setCounts((prev) => ({
+					...prev,
+					notification: data.unread_notification_count,
+				}));
+			}
+
+			if (data.type === "unread_messages_count") {
+				setCounts((prev) => ({
+					...prev,
+					message: data.unread_message_count,
+				}));
+			}
+		});
+
+		// ✅ Cleanup on unmount
 		return () => {
-			channel.unsubscribe();
-			pusher.disconnect();
+			try {
+				console.log("🧹 Cleaning up Pusher connection...");
+				channel.unsubscribe();
+				pusher.disconnect();
+				window.__PROFILE_PUSHER_CONNECTED__ = false;
+			} catch (err) {
+				console.warn("⚠️ Cleanup failed:", err);
+			}
 		};
-	}, [user]);
+	}, [user?.id]);
 
 	return (
 		<div className="col-md-12 pb-5">
@@ -39,31 +79,35 @@ function ProfileHeader({ showButtons = true }) {
 				<img
 					src={user?.cover_image_url || user?.cover_images_url}
 					className="img-fluid banner_img"
+					alt="cover"
 				/>
 				<div className="profile_img_div11">
 					<img
 						src={user?.profile_image_url}
 						className="img-fluid profile_imgg11"
+						alt="profile"
 					/>
 					<h5 className="text-white secondary-secondmedium-font">
 						{user?.name}
 					</h5>
 				</div>
+
 				{showButtons ? (
 					<div className="account_access_dv">
 						<div className="notify_edit_dv">
 							<ul>
 								<Link
 									className="text-decoration-none text-white secondary-secondregular-font"
-									to={`${gender === "male" ? "/chat" : "/chat-women"}`}
+									to={`${gender === "men" ? "/chat" : "/chat-women"}`}
 								>
 									<li className="wrapper-navigate-main position-relative">
-										<img src={massagewrapper} /> <span>Message</span>
+										<img src={massagewrapper} alt="msg" /> <span>Message</span>
 										{counts.message > 0 && (
 											<span className="number_move_dv">{counts.message}</span>
 										)}
 									</li>
 								</Link>
+
 								<Link
 									to={`${
 										gender === "men"
@@ -71,9 +115,8 @@ function ProfileHeader({ showButtons = true }) {
 											: "/women-notification"
 									}`}
 								>
-									{" "}
 									<li className="position-relative">
-										<img src={notification} />
+										<img src={notification} alt="notification" />
 										{counts.notification > 0 && (
 											<span className="number_move_dv">
 												{counts.notification}
@@ -81,17 +124,16 @@ function ProfileHeader({ showButtons = true }) {
 										)}
 									</li>
 								</Link>
-								<Link to={`/${gender === "male" ? "man" : "women"}-settings`}>
+
+								<Link to={`/${gender === "men" ? "man" : "women"}-settings`}>
 									<li>
-										<img src={edit} />
+										<img src={edit} alt="edit" />
 									</li>
 								</Link>
 							</ul>
 						</div>
 					</div>
-				) : (
-					""
-				)}
+				) : null}
 			</div>
 		</div>
 	);
