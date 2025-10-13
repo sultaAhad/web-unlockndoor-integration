@@ -77,6 +77,7 @@ function ChatComponent({ type }) {
 	});
 
 	const { data, isLoading: isChatLoading, refetch } = useGetChatsQuery(type);
+	console.log(data);
 	const {
 		data: messagesData,
 		isLoading: isChatMessagesLoading,
@@ -404,11 +405,35 @@ function ChatComponent({ type }) {
                 `}
 						>
 							<div className="d-flex align-items-center gap-3">
-								<img
-									src={chat.participant_profile}
-									className="img-fluid chat-users rounded-circle"
-									alt={chat.participant_name}
-								/>
+								<div className="wrapper-navigate-main position-relative">
+									<img
+										src={chat.participant_profile}
+										className="img-fluid chat-users rounded-circle"
+										alt={chat.participant_name}
+									/>
+									<span
+										className="unread-badge"
+										style={{
+											position: "absolute",
+											top: "-4px",
+											right: "-2px",
+											backgroundColor: "#ff4757",
+											color: "#fff",
+											fontSize: "10px",
+											fontWeight: "600",
+											borderRadius: "50%",
+											minWidth: "18px",
+											height: "18px",
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "center",
+											boxShadow: "0 0 4px rgba(0,0,0,0.3)",
+										}}
+									>
+										{chat.unread_count}
+									</span>
+								</div>
+
 								<div>
 									<div className="d-flex align-items-start gap-2">
 										<h4 className="secondary-semibold-font mb-1 text-white level-8 text-capitalize">
