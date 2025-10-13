@@ -209,9 +209,25 @@ function ChatComponent({ type }) {
 
 		const channel = pusher.subscribe(`chat.${selectedChat.chat_id}`);
 		channel.bind("message.sent", (data) => {
-			setMessages((prev) => [...prev, formateMessage(data?.message)]);
+			const newMsg = data?.message;
+			setMessages((prev) => [...prev, formateMessage(newMsg)]);
 			refetch();
+
+			// ✅ Update unread count in chat list
+			setChats((prevChats) =>
+				prevChats.map((chat) => {
+					// if message belongs to another chat, increment its count
+					if (
+						chat.chat_id !== selectedChat?.chat_id &&
+						chat.chat_id === newMsg.chat_id
+					) {
+						return { ...chat, unread_count: (chat.unread_count || 0) + 1 };
+					}
+					return chat;
+				}),
+			);
 		});
+
 		return () => {
 			channel.unbind_all();
 			channel.unsubscribe();
@@ -399,13 +415,23 @@ function ChatComponent({ type }) {
 									...pre,
 									to_id: chat.participant_id,
 								}));
+
+								// ✅ Reset unread count instantly when chat opens
+								setChats((prevChats) =>
+									prevChats.map((c) =>
+										c.chat_id === chat.chat_id ? { ...c, unread_count: 0 } : c,
+									),
+								);
+
+								// Optional: also call API to mark messages as read
+								// markMessagesAsRead(chat.chat_id);
 							}}
 							className={`d-flex align-items-start border-bottom justify-content-between py-3 px-3 
                 ${chat.chat_id == selectedChat?.chat_id ? "bg-massage" : ""}
                 `}
 						>
 							<div className="d-flex align-items-center gap-3">
-								<div className="wrapper-navigate-main position-relative">
+								<div className="wrapper-navigate-main1 position-relative">
 									<img
 										src={chat.participant_profile}
 										className="img-fluid chat-users rounded-circle"

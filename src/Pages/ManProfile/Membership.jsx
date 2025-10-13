@@ -1,167 +1,190 @@
 import React, { useEffect, useState } from "react";
-import {
-	alert_icon,
-	edit,
-	innerpages1,
-	manproimage2,
-	manproimage3,
-	massagewrapper,
-	message,
-	notification,
-	profilebanner,
-	profileimg,
-	tick,
-} from "../../Constant/Index";
-import { Link } from "react-router-dom";
+import { alert_icon, innerpages1, tick } from "../../Constant/Index";
+import { useSelector } from "react-redux";
+import Aos from "aos";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
-import Aos from "aos";
 import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
 import ProfileHeader from "../../Components/ProfileHeader";
-import { useSelector } from "react-redux";
+import PlaceOrderstripe from "../../Components/PlaceOrderstripe";
+import { useGetMenPackagesQuery } from "../../network/services/ManAuth";
 
 function Membership() {
-  const [activeTab, setActiveTab] = useState("men");
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showPackageModal, setShowPackageModal] = useState(false);
+	const { user } = useSelector((state) => state.auth);
+	const [subscriptionPackage, setSubscriptionPackage] = useState(user?.package);
+	const [checkedTerm, setCheckedTerm] = useState(null);
+	const [showStripeForm, setShowStripeForm] = useState(false);
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { user } = useSelector((state) => state.auth);
-  const [subscriptionPackage, setSubscriptionPackage] = useState(user?.package);
-  const descriptions = JSON.parse(subscriptionPackage?.description);
+	const descriptions = JSON.parse(subscriptionPackage?.description || "[]");
 
-  useEffect(() => {
-    Aos.init({ duration: 1000, once: true });
-  }, []);
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${innerpages1})`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.minHeight = "100vh";
+	// ✅ Fetch all Men Packages
+	const { data, isLoading } = useGetMenPackagesQuery();
+	const packagesman = data?.response?.data?.men || [];
 
-    return () => {
-      document.body.style.backgroundImage = "";
-    };
-  }, []);
-  return (
-    <>
-      <Header />
+	useEffect(() => {
+		Aos.init({ duration: 1000, once: true });
+	}, []);
 
-      <section className="profile_sec mb-5" data-aos="fade-up">
-        <div className="container">
-          <div className="row">
-            <ProfileHeader />
-            <div className="col-md-12 pt-5 for-extra-space">
-              <ProfileNavbartwo />
-            </div>
+	useEffect(() => {
+		document.body.style.backgroundImage = `url(${innerpages1})`;
+		document.body.style.backgroundSize = "cover";
+		document.body.style.backgroundPosition = "center";
+		document.body.style.minHeight = "100vh";
 
-            <section className="pack_sec p-0 py-5">
-              <div className="container">
-                <div className="row mt-3">
-                  {subscriptionPackage != null && (
-                    <div className="col-md-4">
-                      <div className="package_card card-hri-er px-3 py-4  main_bg rounded">
-                        <div className="pack_heading text-center px-3 border-bottom py-3 border-white">
-                          <h3 className="text-white font_semibold font_level3">
-                            {subscriptionPackage.title}
-                          </h3>
-                          <p className="text-white font_reg font_level4 mb-0">
-                            ${subscriptionPackage.price}
-                          </p>
-                        </div>
-                        <div className="pack_bullets">
-                          <ul className="ps-0 py-3">
-                            {descriptions &&
-                              descriptions.length > 0 &&
-                              descriptions.map((benefit, benefitIndex) => (
-                                <li
-                                  key={benefitIndex}
-                                  className="bullet_Wrapper d-flex align-items-baseline  py-2"
-                                >
-                                  <div className="bullet_img">
-                                    <img
-                                      src={tick}
-                                      alt=""
-                                      className="img-fluid"
-                                    />
-                                  </div>
-                                  <div className="bullet_point text-white font_reg font_level4">
-                                    {benefit}
-                                  </div>
-                                </li>
-                              ))}
-                          </ul>
-                        </div>
-                        <div className="pack_btns d-flex  gap-2"></div>
-                        <div className="pack_buttons">
-                          <button
-                            className="btn rounded-pill py-3 px-4 bg-white  font_reg text-capitalize w-100 my-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#membershipcancelmodal"
-                          >
-                            Cancel Subscription
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </section>
+		return () => {
+			document.body.style.backgroundImage = "";
+		};
+	}, []);
 
-      <div className="membershipcancel_modal">
-        <div>
-          {/* Bootstrap Modal */}
-          <div
-            className="modal fade"
-            id="membershipcancelmodal"
-            tabIndex="-1"
-            aria-labelledby="membershipcancelModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-dialog-centered bg-transparent border-0 success__dialog">
-              <div className="modal-content bg-transparent border-0">
-                <div className="modal-head  d-flex justify-content-center">
-                  <div className="congrat_img position-relative top-0">
-                    <img src={alert_icon} alt="" className="img-fluid" />
-                  </div>
-                </div>
-                <div className="modal-body modal__body  congrat-body text-center pt-4 bg-white position-relative ">
-                  <h3 className="font_semibold font_level3 text-danger mt-3 mb-2 text-capitalize">
-                    cancel membership
-                  </h3>
-                  <p className="font_reg  text-dark my-2">
-                    Are you sure you want <br />
-                    to cancel membership
-                  </p>
-                </div>
-                <div className="modal_btn modal__withdraw_btn bg-white d-flex  ">
-                  <button
-                    type="button"
-                    className="btn   btn btn-secondary   rounded-0 text-center text-capitalize text-white py-3 w-50 bg-danger "
-                    data-bs-dismiss="modal"
-                  >
-                    yes
-                  </button>
-                  <button
-                    type="button"
-                    className="btn  withdraw_btn_2  btn btn-secondary  rounded-0 text-center text-capitalize py-3 w-50"
-                    data-bs-dismiss="modal"
-                  >
-                    no
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </>
-  );
+	// ✅ Open Stripe Modal for Upgrade
+	const handleSelectPackage = (pkg) => {
+		console.log("🎯 Selected Package:", pkg);
+		if (pkg?.id === subscriptionPackage?.id) {
+			console.warn("⚠️ Same package selected — upgrade not allowed!");
+			return;
+		}
+		setCheckedTerm(pkg);
+		setShowStripeForm(true);
+	};
+
+	return (
+		<>
+			<Header />
+
+			<section className="profile_sec mb-5" data-aos="fade-up">
+				<div className="container">
+					<div className="row">
+						<ProfileHeader />
+						<div className="col-md-12 pt-5 for-extra-space">
+							<ProfileNavbartwo />
+						</div>
+
+						<section className="pack_sec p-0 py-5">
+							<div className="container">
+								<div className="row mt-3">
+									{/* ✅ Current Active Package */}
+									<div className="col-md-4">
+										<div className="package_card card-hri-er px-3 py-4 main_bg rounded text-center">
+											<div className="pack_heading px-3 border-bottom py-3 border-white">
+												<h3 className="text-white font_semibold font_level3">
+													{subscriptionPackage?.title || "No Active Plan"}
+												</h3>
+												<p className="text-white font_reg font_level4 mb-0">
+													${subscriptionPackage?.price || 0}
+												</p>
+											</div>
+
+											<div className="pack_bullets mt-3">
+												<ul className="ps-0">
+													{descriptions.length > 0 ? (
+														descriptions.map((benefit, i) => (
+															<li
+																key={i}
+																className="bullet_Wrapper d-flex align-items-baseline py-2 text-start"
+															>
+																<div className="bullet_img me-2">
+																	<img
+																		src={tick}
+																		alt=""
+																		className="img-fluid"
+																	/>
+																</div>
+																<div className="bullet_point text-white font_reg font_level4">
+																	{benefit}
+																</div>
+															</li>
+														))
+													) : (
+														<li className="text-white">
+															No features available.
+														</li>
+													)}
+												</ul>
+											</div>
+
+											<div className="pack_buttons mt-4">
+												<button
+													className="btn rounded-pill py-3 px-4 bg-white text-dark font_reg text-capitalize w-100 my-2"
+													data-bs-toggle="modal"
+													data-bs-target="#membershipcancelmodal"
+												>
+													Cancel Subscription
+												</button>
+											</div>
+										</div>
+									</div>
+
+									{/* ✅ Available Packages to Upgrade */}
+									<div className="col-md-8">
+										<div className="row">
+											{isLoading ? (
+												<p className="text-white">Loading packages...</p>
+											) : (
+												packagesman
+													.filter((pkg) => pkg.id !== subscriptionPackage?.id) // 👈 skip current
+													.map((pkg, i) => (
+														<div className="col-md-6 mb-4" key={i}>
+															<div className="card h-100 text-center p-3 shadow">
+																<h5 className="text-dark">{pkg.title}</h5>
+																<p className="text-dark">${pkg.price}</p>
+																<ul className="text-start">
+																	{JSON.parse(pkg.description || "[]").map(
+																		(b, j) => (
+																			<li key={j}>{b}</li>
+																		),
+																	)}
+																</ul>
+																<button
+																	className="btn btn-warning text-white w-100 mt-2"
+																	onClick={() => handleSelectPackage(pkg)}
+																>
+																	Upgrade with Stripe
+																</button>
+															</div>
+														</div>
+													))
+											)}
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</section>
+
+			{/* ✅ Stripe Payment Modal */}
+			{showStripeForm && (
+				<div
+					className="modal fade show"
+					style={{ display: "block", background: "rgba(0,0,0,0.6)" }}
+				>
+					<div className="modal-dialog modal-dialog-centered modal-md">
+						<div className="modal-content bg-dark text-white">
+							<div className="modal-header border-0">
+								<h5 className="modal-title">Complete Payment</h5>
+								<button
+									type="button"
+									className="btn-close btn-close-white"
+									onClick={() => setShowStripeForm(false)}
+								></button>
+							</div>
+							<div className="modal-body">
+								<PlaceOrderstripe
+									checkedTerm={checkedTerm}
+									showSuccessModal={showSuccessModal}
+									setShowSuccessModal={setShowSuccessModal}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+
+			<Footer />
+		</>
+	);
 }
 
 export default Membership;
