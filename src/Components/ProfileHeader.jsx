@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { edit, massagewrapper, message, notification } from "../Constant/Index";
+import { edit, massagewrapper, notification } from "../Constant/Index";
 import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
 
 function ProfileHeader({ showButtons = true }) {
 	const { user } = useSelector((state) => state.auth);
-	let gender = localStorage.getItem("gender");
+	const gender = localStorage.getItem("gender");
 
 	const [counts, setCounts] = useState({
 		message: 0,
@@ -14,53 +14,50 @@ function ProfileHeader({ showButtons = true }) {
 	});
 
 	useEffect(() => {
-		// ✅ agar user available nahi to kuch mat karo
+		// ✅ if user not available, do nothing
 		if (!user?.id) return;
 
-		// ✅ prevent duplicate Pusher connection
+		// ✅ prevent duplicate connections
 		if (window.__PROFILE_PUSHER_CONNECTED__) {
 			console.log("⚠️ ProfileHeader: Pusher already connected, skipping...");
 			return;
 		}
 		window.__PROFILE_PUSHER_CONNECTED__ = true;
 
-		// ✅ Pusher secure connection (no encrypted:false)
+		// ✅ Pusher setup
 		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
 			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-			forceTLS: true, // use secure wss:// connection
+			forceTLS: true,
 		});
 
 		// ✅ dynamic channel name
 		const genderChannelName =
 			user.gender === "women"
-				? `women-notifications-${user.id}`
-				: `men-notifications-${user.id}`;
+				? `women-unread_count-${user.id}`
+				: `men-unread_count-${user.id}`;
 
 		console.log("📡 Subscribing to channel:", genderChannelName);
 
 		const channel = pusher.subscribe(genderChannelName);
 
-		// ✅ event listener
+		// ✅ unified event listener
 		channel.bind(genderChannelName, (data) => {
 			console.log("📩 Pusher event received:", data);
 
-			// Example handling: update notification count
-			if (data.type === "unread_notifications_count") {
-				setCounts((prev) => ({
-					...prev,
-					notification: data.unread_notification_count,
-				}));
-			}
-
-			if (data.type === "unread_messages_count") {
-				setCounts((prev) => ({
-					...prev,
-					message: data.unread_message_count,
-				}));
-			}
+			setCounts((prev) => ({
+				...prev,
+				notification:
+					data.unread_notification_count !== undefined
+						? data.unread_notification_count
+						: prev.notification,
+				message:
+					data.unread_messages_count !== undefined
+						? data.unread_messages_count
+						: prev.message,
+			}));
 		});
 
-		// ✅ Cleanup on unmount
+		// ✅ cleanup
 		return () => {
 			try {
 				console.log("🧹 Cleaning up Pusher connection...");
@@ -92,10 +89,11 @@ function ProfileHeader({ showButtons = true }) {
 					</h5>
 				</div>
 
-				{showButtons ? (
+				{showButtons && (
 					<div className="account_access_dv">
 						<div className="notify_edit_dv">
 							<ul>
+								{/* Message Button */}
 								<Link
 									className="text-decoration-none text-white secondary-secondregular-font"
 									to={`${gender === "men" ? "/chat" : "/chat-women"}`}
@@ -108,6 +106,7 @@ function ProfileHeader({ showButtons = true }) {
 									</li>
 								</Link>
 
+								{/* Notification Button */}
 								<Link
 									to={`${
 										gender === "men"
@@ -125,6 +124,7 @@ function ProfileHeader({ showButtons = true }) {
 									</li>
 								</Link>
 
+								{/* Edit Button */}
 								<Link to={`/${gender === "men" ? "man" : "women"}-settings`}>
 									<li>
 										<img src={edit} alt="edit" />
@@ -133,7 +133,7 @@ function ProfileHeader({ showButtons = true }) {
 							</ul>
 						</div>
 					</div>
-				) : null}
+				)}
 			</div>
 		</div>
 	);

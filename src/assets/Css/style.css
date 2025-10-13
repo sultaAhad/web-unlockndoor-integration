@@ -3168,6 +3168,23 @@ div#swal2-html-container {
 	text-decoration: none;
 	color: #160527;
 }
+.unread-badge {
+	position: absolute;
+	top: -4px;
+	right: -2px;
+	background-color: #ff4757;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 600;
+	border-radius: 50%;
+	min-width: 18px;
+	height: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
 .profile-img {
 	width: 130px;
 	height: 130px;
