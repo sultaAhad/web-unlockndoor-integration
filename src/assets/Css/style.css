@@ -55,7 +55,7 @@ html {
 }
 
 body {
-	background-image: url("/src/assets/img/Final.png");
+	background-image: url("/src/assets/img/final.webp");
 	z-index: -1 !important;
 	width: 100%;
 	background-position: cover;
@@ -624,7 +624,7 @@ button.main-wrapper-btn-wrap {
 
 .love_you_deserve_sec {
 	padding: 60px 0px;
-	background-image: url("/src/assets/img/loveudeserveimg.png");
+	background-image: url("/src/assets/img/loveudeserveimg.webp");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;

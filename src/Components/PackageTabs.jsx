@@ -115,8 +115,10 @@ const PackageTabs = () => {
 									{/* Card */}
 									<div
 										className={`package_card ${
-											activeTab === "women" ? "women-card" : "men-card"
-										} text-white p-3 rounded ${cssClass}`}
+											activeTab === "women"
+												? `women-card ${cssClass}`
+												: "men-card"
+										} text-white p-3 rounded  main_bg`}
 									>
 										<div className="pack_heading text-center px-3 py-3 border-bottom3">
 											<h3 className="text-white font_semibold font_level3">
@@ -168,17 +170,17 @@ const PackageTabs = () => {
 												className="btn get-started-btn rounded-pill py-3 px-4 bg-white font_reg text-capitalize font_level4"
 												onClick={() => {
 													if (userToken) {
-                            setSelectedPackage(packageData);
-                            setShowPackageModal(true);
-                          } else {
-                            // User not logged in
-                            Swal.fire({
-                              icon: "error",
-                              title: "Login Required",
-                              text: "Please login to continue with the payment.",
-                              confirmButtonText: "OK",
-                            });
-                          }
+														setSelectedPackage(packageData);
+														setShowPackageModal(true);
+													} else {
+														// User not logged in
+														Swal.fire({
+															icon: "error",
+															title: "Login Required",
+															text: "Please login to continue with the payment.",
+															confirmButtonText: "OK",
+														});
+													}
 												}}
 											>
 												Get Started
