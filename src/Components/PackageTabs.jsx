@@ -115,8 +115,10 @@ const PackageTabs = () => {
 									{/* Card */}
 									<div
 										className={`package_card ${
-											activeTab === "women" ? "women-card" : "men-card"
-										} text-white p-3 rounded ${cssClass}`}
+											activeTab === "women"
+												? `women-card ${cssClass}`
+												: "men-card"
+										} text-white p-3 rounded  main_bg`}
 									>
 										<div className="pack_heading text-center px-3 py-3 border-bottom3">
 											<h3 className="text-white font_semibold font_level3">

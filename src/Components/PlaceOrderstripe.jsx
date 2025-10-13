@@ -136,7 +136,7 @@ const CheckoutForm = ({
 					style: {
 						base: {
 							fontSize: "16px",
-							color: "#fff",
+							color: "#000",
 							"::placeholder": { color: "#aab7c4" },
 						},
 						invalid: { color: "#9e2146" },
@@ -157,7 +157,7 @@ const CheckoutForm = ({
 			)}
 			<button
 				type="submit"
-				className="btn btn-success w-100 mt-3"
+				className="btn btn-success main-wrapper-btn-wrap border w-100 mt-3"
 				disabled={!stripe || !elements || payButton}
 			>
 				{response?.isLoading ? "Processing..." : "Pay Now"}

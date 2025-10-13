@@ -114,40 +114,40 @@ const CheckoutForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#000",
-              "::placeholder": { color: "#aab7c4" },
-            },
-            invalid: { color: "#9e2146" },
-          },
-        }}
-        onChange={(e) => {
-          if (e.error) {
-            setCardError(e.error.message);
-            setPayButton(true);
-          } else {
-            setCardError("");
-            setPayButton(!e.complete);
-          }
-        }}
-      />
-      {cardError && (
-        <div style={{ color: "red", marginTop: "10px" }}>{cardError}</div>
-      )}
-      <button
-        type="submit"
-        className="btn btn-success w-100 mt-3"
-        disabled={!stripe || !elements || payButton}
-      >
-        {response?.isLoading ? "Processing..." : "Pay Now"}
-      </button>
-    </form>
-  );
+		<form onSubmit={handleSubmit}>
+			<CardElement
+				options={{
+					style: {
+						base: {
+							fontSize: "16px",
+							color: "#000",
+							"::placeholder": { color: "#aab7c4" },
+						},
+						invalid: { color: "#9e2146" },
+					},
+				}}
+				onChange={(e) => {
+					if (e.error) {
+						setCardError(e.error.message);
+						setPayButton(true);
+					} else {
+						setCardError("");
+						setPayButton(!e.complete);
+					}
+				}}
+			/>
+			{cardError && (
+				<div style={{ color: "red", marginTop: "10px" }}>{cardError}</div>
+			)}
+			<button
+				type="submit"
+				className="btn btn-success main-wrapper-btn-wrap border w-100 mt-3"
+				disabled={!stripe || !elements || payButton}
+			>
+				{response?.isLoading ? "Processing..." : "Pay Now"}
+			</button>
+		</form>
+	);
 };
 
 // ✅ Wrapper
