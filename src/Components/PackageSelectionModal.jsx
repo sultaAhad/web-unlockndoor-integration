@@ -5,6 +5,7 @@ import { blacktick } from "../Constant/Index";
 import { useGetMenPackagesQuery } from "../network/services/ManAuth";
 import { useSelector } from "react-redux";
 import { useUpgradeWomenPackageMutation } from "../network/services/WomanAuth";
+import Swal from "sweetalert2";
 
 const PackageSelectionModal = ({
 	isOpen,
@@ -24,12 +25,32 @@ const PackageSelectionModal = ({
 	// women packages from API
 	const packages = data?.response?.data?.women || [];
 
+	// ✅ Upgrade logic with success alert
 	const upgradePackage = async (id) => {
 		try {
-			await upgradeWomenPackage({ package_id: id }).unwrap();
-			navigate("/women-profiles");
+			const res = await upgradeWomenPackage({ package_id: id }).unwrap();
+
+			// ✅ Show success SweetAlert
+			Swal.fire({
+				title: "Success!",
+				text: "Your package has been upgraded successfully.",
+				icon: "success",
+				confirmButtonText: "OK",
+				confirmButtonColor: "#3085d6",
+			}).then(() => {
+				navigate("/women-profiles");
+			});
 		} catch (error) {
 			console.log(error);
+
+			// ✅ Show error SweetAlert
+			Swal.fire({
+				title: "Error",
+				text: error?.data?.message || "Something went wrong during upgrade.",
+				icon: "error",
+				confirmButtonText: "OK",
+				confirmButtonColor: "#d33",
+			});
 		}
 	};
 
