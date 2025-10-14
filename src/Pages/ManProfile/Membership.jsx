@@ -115,32 +115,58 @@ function Membership() {
 										</div>
 									</div>
 
-									{/* ✅ Available Packages to Upgrade */}
+									{/* ✅ Available Packages to Upgrade (same UI style) */}
 									<div className="col-md-8">
 										<div className="row">
 											{isLoading ? (
 												<p className="text-white">Loading packages...</p>
 											) : (
 												packagesman
-													.filter((pkg) => pkg.id !== subscriptionPackage?.id) // 👈 skip current
+													.filter((pkg) => pkg.id !== subscriptionPackage?.id)
 													.map((pkg, i) => (
 														<div className="col-md-6 mb-4" key={i}>
-															<div className="card h-100 text-center p-3 shadow">
-																<h5 className="text-dark">{pkg.title}</h5>
-																<p className="text-dark">${pkg.price}</p>
-																<ul className="text-start">
-																	{JSON.parse(pkg.description || "[]").map(
-																		(b, j) => (
-																			<li key={j}>{b}</li>
-																		),
-																	)}
-																</ul>
-																<button
-																	className="btn btn-warning text-white w-100 mt-2"
-																	onClick={() => handleSelectPackage(pkg)}
-																>
-																	Upgrade with Stripe
-																</button>
+															<div className="package_card card-hri-er px-3 py-4 bg-white rounded text-center shadow">
+																<div className="pack_heading px-3 border-bottom py-3 border-dark">
+																	<h3 className="text-dark font_semibold font_level3">
+																		{pkg.title}
+																	</h3>
+																	<p className="text-dark font_reg font_level4 mb-0">
+																		${pkg.price}
+																	</p>
+																</div>
+
+																<div className="pack_bullets mt-3">
+																	<ul className="ps-0">
+																		{JSON.parse(pkg.description || "[]").map(
+																			(b, j) => (
+																				<li
+																					key={j}
+																					className="bullet_Wrapper d-flex align-items-baseline py-2 text-start"
+																				>
+																					<div className="bullet_img me-2">
+																						<img
+																							src={tick}
+																							alt=""
+																							className="img-fluid"
+																						/>
+																					</div>
+																					<div className="bullet_point text-dark font_reg font_level4">
+																						{b}
+																					</div>
+																				</li>
+																			),
+																		)}
+																	</ul>
+																</div>
+
+																<div className="pack_buttons mt-4">
+																	<button
+																		className="btn rounded-pill py-3 px-4 bg-warning text-white font_reg text-capitalize w-100 my-2"
+																		onClick={() => handleSelectPackage(pkg)}
+																	>
+																		Upgrade with Stripe
+																	</button>
+																</div>
 															</div>
 														</div>
 													))

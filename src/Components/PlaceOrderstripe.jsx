@@ -11,7 +11,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Alert from "./SweetAlert/Alert";
 import { setUserToken } from "../network/reducers/AuthReducer";
-import { usePurchasePackageMutation } from "../network/services/ManAuth";
+import {
+	usePurchasePackageMutation,
+	useUpgradePackageMutation,
+} from "../network/services/ManAuth";
 import { useNavigate } from "react-router-dom";
 
 // ✅ Stripe key
@@ -25,22 +28,29 @@ const CheckoutForm = ({
 	setShowSuccessModal,
 }) => {
 	const dispatch = useDispatch();
-	const { userToken } = useSelector((state) => state.auth);
+	const { userToken, user } = useSelector((state) => state.auth);
 	const stripe = useStripe();
 	const elements = useElements();
-	const navigate = useNavigate(); // ✅ add navigate
+	const navigate = useNavigate();
 
 	const [cardError, setCardError] = useState("");
 	const [payButton, setPayButton] = useState(true);
 
-	const [purchasePackage, response] = usePurchasePackageMutation();
+	// ✅ Mutations
+	const [purchasePackage, purchaseResponse] = usePurchasePackageMutation();
+	const [upgradePackage, upgradeResponse] = useUpgradePackageMutation();
+
+	// ✅ Detect upgrade
+	const isUpgrade = !!user?.package;
+
+	// ✅ Pick correct response
+	const response = isUpgrade ? upgradeResponse : purchaseResponse;
 
 	// ✅ Handle success
 	useEffect(() => {
 		if (response?.isSuccess) {
 			setShowSuccessModal(true);
 
-			// update redux user
 			if (response?.data?.user) {
 				dispatch(
 					setUserToken({
@@ -50,18 +60,17 @@ const CheckoutForm = ({
 					}),
 				);
 			}
+
 			localStorage.setItem("hasPackage", "true");
-			// ✅ navigate after short delay
-			setTimeout(() => {
-				navigate("/profile");
-			}, 1500);
+
+			setTimeout(() => navigate("/profile"), 1500);
 		}
 	}, [response?.isSuccess]);
 
 	// ✅ Handle error
 	useEffect(() => {
 		if (response?.isError) {
-			console.error("❌ Purchase Error:", response.error);
+			console.error("❌ Purchase/Upgrade Error:", response.error);
 
 			if (response?.error?.data?.statusCode === 409) {
 				Alert({
@@ -91,10 +100,9 @@ const CheckoutForm = ({
 		}
 	}, [response?.isError, response?.error, navigate, setShowSuccessModal]);
 
-	// ✅ Submit handler
+	// ✅ Handle submit
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!stripe || !elements) return;
 
 		if (!checkedTerm?.id) {
 			Alert({
@@ -106,7 +114,40 @@ const CheckoutForm = ({
 			return;
 		}
 
+		// ✅ Free package (no payment)
+		if (checkedTerm.is_paid === 0) {
+			const formData = new FormData();
+			formData.set("package_id", checkedTerm.id);
+
+			console.log("Sending Free Package FormData:");
+			for (let [k, v] of formData.entries()) console.log(k, v);
+
+			isUpgrade ? upgradePackage(formData) : purchasePackage(formData);
+			return;
+		}
+
+		// ✅ Paid package
+		if (!stripe || !elements) {
+			Alert({
+				iconStyle: "error",
+				title: "Error",
+				text: "Stripe is not loaded. Please try again.",
+				icon: "error",
+			});
+			return;
+		}
+
 		const cardElement = elements.getElement(CardElement);
+		if (!cardElement) {
+			Alert({
+				iconStyle: "error",
+				title: "Error",
+				text: "Card element not found.",
+				icon: "error",
+			});
+			return;
+		}
+
 		const payload = await stripe.createToken(cardElement);
 
 		if (payload.error) {
@@ -116,17 +157,27 @@ const CheckoutForm = ({
 			return;
 		}
 
-		if (payload?.token?.id) {
-			setCardError("");
-
-			const formData = new FormData();
-			formData.set("stripe_token", payload.token.id);
-			formData.set("package_id", checkedTerm.id);
-
-
-			purchasePackage(formData);
-			cardElement.clear();
+		if (!payload?.token?.id) {
+			Alert({
+				iconStyle: "error",
+				title: "Error",
+				text: "Stripe token not generated. Please check your card details.",
+				icon: "error",
+			});
+			return;
 		}
+
+		// ✅ Send token + package_id
+		const formData = new FormData();
+		formData.set("stripe_token", payload.token.id);
+		formData.set("package_id", checkedTerm.id);
+
+		console.log("Sending Paid Package FormData:");
+		for (let [k, v] of formData.entries()) console.log(k, v);
+
+		isUpgrade ? upgradePackage(formData) : purchasePackage(formData);
+
+		cardElement.clear();
 	};
 
 	return (
@@ -158,9 +209,19 @@ const CheckoutForm = ({
 			<button
 				type="submit"
 				className="btn btn-success main-wrapper-btn-wrap border w-100 mt-3"
-				disabled={!stripe || !elements || payButton}
+				disabled={
+					checkedTerm?.is_paid === 1 && (!stripe || !elements || payButton)
+				}
 			>
-				{response?.isLoading ? "Processing..." : "Pay Now"}
+				{response?.isLoading
+					? "Processing..."
+					: checkedTerm?.is_paid === 0
+					? isUpgrade
+						? "Upgrade to Free Plan"
+						: "Activate Free Plan"
+					: isUpgrade
+					? "Upgrade Now"
+					: "Pay Now"}
 			</button>
 		</form>
 	);

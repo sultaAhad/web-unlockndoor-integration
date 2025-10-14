@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Swal from "sweetalert2"; // <-- Added Swal
-import { useSelector } from "react-redux"; // <-- Added Redux selector
+import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 import {
 	blacktick,
 	outline1,
@@ -9,9 +9,11 @@ import {
 	tick,
 	tick_circle,
 } from "../Constant/Index";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetMenPackagesQuery } from "../network/services/ManAuth";
 import PlaceOrderstripe from "./PlaceOrderstripe";
+import WomenPlaceOrderStrip from "./WomenPlaceOrderStrip";
+import { useUpgradeWomenPackageMutation } from "../network/services/WomanAuth";
 
 const PackageTabs = () => {
 	const [activeTab, setActiveTab] = useState("women");
@@ -19,12 +21,29 @@ const PackageTabs = () => {
 	const [showPackageModal, setShowPackageModal] = useState(false);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-	// ✅ Redux selector to check login
-	const userToken = useSelector((state) => state.auth.userToken);
+	const navigate = useNavigate();
+	const { user, userToken } = useSelector((state) => state.auth);
 
 	const { data, isLoading, error } = useGetMenPackagesQuery();
+	const [upgradeWomenPackage, { isLoading: isUpgrading }] =
+		useUpgradeWomenPackageMutation();
+
 	const packages = data?.response?.data?.women || [];
 	const packagesman = data?.response?.data?.men || [];
+
+	const upgradePackage = async (id) => {
+		try {
+			await upgradeWomenPackage({ package_id: id }).unwrap();
+			Swal.fire({
+				icon: "success",
+				title: "Upgraded!",
+				text: "Your package has been successfully upgraded.",
+			});
+			navigate("/women-profiles");
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const packagesData = {
 		women: packages.map((pkg) => ({
@@ -98,93 +117,107 @@ const PackageTabs = () => {
 				{/* Packages Cards */}
 				<div className="row mt-3 justify-content-center">
 					<AnimatePresence mode="wait">
-						{packagesData[activeTab].map((packageData, index) => {
+						{packagesData[activeTab].map((pkg, index) => {
 							const cssClasses = ["firstclass", "secondclass", "thirdclass"];
 							const cssClass = cssClasses[index % cssClasses.length];
+							const benefits = pkg.benefits || [];
+
+							const isCurrentPackage =
+								activeTab === "women" &&
+								user?.package?.id &&
+								user?.package?.id === pkg.id;
 
 							return (
 								<motion.div
 									className="col-lg-4 col-md-6 mb-lg-0 mb-4"
-									key={index}
+									key={pkg.id || index}
 									variants={cardVariants}
 									initial="hidden"
 									animate="visible"
 									custom={index}
 									exit={{ opacity: 0, y: 30 }}
 								>
-									{/* Card */}
 									<div
-										className={`package_card ${
+										className={`package_card text-white p-3 rounded main_bg ${
 											activeTab === "women"
 												? `women-card ${cssClass}`
 												: "men-card"
-										} text-white p-3 rounded  main_bg`}
+										}`}
 									>
-										<div className="pack_heading text-center px-3 py-3 border-bottom3">
-											<h3 className="text-white font_semibold font_level3">
-												{packageData.title}{" "}
-												{activeTab === "women" ? `- $${packageData.price}` : ""}
-											</h3>
+										<div className="text-center border-bottom1 mb-2 pb-2">
+											<h4 className="text-white font_semibold font_level3">
+												{pkg.title} - ${pkg.price}
+											</h4>
 											<p className="text-white font_reg font_level4 mb-0">
-												{activeTab === "women"
-													? `${packageData.duration} Days`
-													: packageData.price
-													? `$${packageData.price}`
-													: "Free"}
+												{pkg.duration} Days
+											</p>
+											<p className="text-warning font_reg font_level5 mb-0">
+												Type: {pkg.type}
 											</p>
 										</div>
 
-										<div className="pack_bullets">
-											<ul className="ps-0 py-3">
-												{packageData.benefits.map((benefit, i) => (
-													<li
-														key={i}
-														className="bullet_Wrapper wrapper-bullet align-items-baseline py-2"
-													>
-														<div className="row">
-															<div className="col-md-2 col-3">
-																<div className="bullet_img">
-																	<img
-																		src={
-																			activeTab === "women" ? blacktick : tick
-																		}
-																		alt=""
-																		className="img-fluid"
-																	/>
-																</div>
-															</div>
-															<div className="col-md-10 col-9 ps-0">
-																<div className="bullet_point text-white font_reg font_level4">
-																	{benefit}
-																</div>
+										<ul className="ps-1 list-ssss">
+											{benefits.map((benefit, i) => (
+												<li
+													key={i}
+													className="bullet_Wrapper wrapper-bullet align-items-baseline py-2"
+												>
+													<div className="row">
+														<div className="col-lg-2">
+															<img
+																src={blacktick}
+																alt=""
+																className="img-fluid"
+															/>
+														</div>
+														<div className="col-lg-10 ps-0">
+															<div className="bullet_point text-white font_reg font_level4">
+																{benefit}
 															</div>
 														</div>
-													</li>
-												))}
-											</ul>
-										</div>
+													</div>
+												</li>
+											))}
+										</ul>
 
+										{/* ✅ Button Logic Same As PackageSelectionModal */}
 										<div className="pack_btn d-flex justify-content-center">
-											{/* ✅ Updated onClick with login check */}
-											<button
-												className="btn get-started-btn rounded-pill py-3 px-4 bg-white font_reg text-capitalize font_level4"
-												onClick={() => {
-													if (userToken) {
-														setSelectedPackage(packageData);
-														setShowPackageModal(true);
-													} else {
-														// User not logged in
-														Swal.fire({
-															icon: "error",
-															title: "Login Required",
-															text: "Please login to continue with the payment.",
-															confirmButtonText: "OK",
-														});
-													}
-												}}
-											>
-												Get Started
-											</button>
+											{isCurrentPackage ? (
+												<button className="btn rounded-pill text-white py-2 px-4 mb-3 bg-success font_reg text-capitalize font_level wrapper-bg-eere">
+													Current Package
+												</button>
+											) : (
+												<>
+													{/* Upgrade Mode */}
+													{pkg.type === "paid" && user?.package ? (
+														<button
+															className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
+															onClick={() => upgradePackage(pkg?.id)}
+															disabled={isUpgrading}
+														>
+															{isUpgrading ? "Upgrading..." : "Upgrade Package"}
+														</button>
+													) : (
+														/* New Purchase */
+														<button
+															className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
+															onClick={() => {
+																if (!userToken) {
+																	return Swal.fire({
+																		icon: "error",
+																		title: "Login Required",
+																		text: "Please login to continue.",
+																	});
+																}
+																setSelectedPackage(pkg);
+																setShowPackageModal(true);
+															}}
+														>
+															Get Started
+														</button>
+													)}
+												</>
+											)}
 										</div>
 									</div>
 								</motion.div>
@@ -194,7 +227,7 @@ const PackageTabs = () => {
 				</div>
 			</div>
 
-			{/* Package Modal with Stripe */}
+			{/* Stripe Payment Modal */}
 			<AnimatePresence>
 				{showPackageModal && selectedPackage && (
 					<motion.div
@@ -231,6 +264,7 @@ const PackageTabs = () => {
 												Subscription Detail
 											</h3>
 										</div>
+
 										<div className="modal_detail border-bottom py-2 d-flex justify-content-between">
 											<h4 className="font_semibold font_level4 text-black">
 												{selectedPackage.title}
@@ -241,77 +275,27 @@ const PackageTabs = () => {
 													: "Free"}
 											</h4>
 										</div>
-										{selectedPackage.price && (
-											<div className="modal_detail border-bottom">
-												<div className="border-bottom py-2">
-													<h4 className="font_semibold font_level4 text-black">
-														Recurring (from Next Month)
-													</h4>
-												</div>
-												<div className="text-end py-2">
-													<h4 className="font_semibold font_level4 text-black">
-														${selectedPackage.price} /Month
-													</h4>
-												</div>
-											</div>
-										)}
 
 										{selectedPackage.price && (
-											<PlaceOrderstripe
-												checkedTerm={selectedPackage}
-												showSuccessModal={showSuccessModal}
-												setShowSuccessModal={setShowSuccessModal}
-												redirectPath={
-													activeTab === "women" ? "/women-profiles" : "/profile"
-												}
-											/>
+											<>
+												{activeTab === "women" ? (
+													<WomenPlaceOrderStrip
+														checkedTerm={selectedPackage}
+														showSuccessModal={showSuccessModal}
+														setShowSuccessModal={setShowSuccessModal}
+													/>
+												) : (
+													<PlaceOrderstripe
+														checkedTerm={selectedPackage}
+														showSuccessModal={showSuccessModal}
+														setShowSuccessModal={setShowSuccessModal}
+													/>
+												)}
+											</>
 										)}
 									</div>
 								</div>
 							</motion.div>
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
-
-			{/* Success Modal */}
-			<AnimatePresence>
-				{showSuccessModal && (
-					<motion.div
-						className="modal fade show"
-						tabIndex="-1"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						style={{ display: "block" }}
-					>
-						<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-							<div className="modal-content bg-transparent border-none">
-								<div className="modal-head d-flex border-none justify-content-center">
-									<button
-										type="button"
-										className="btn-close position-absolute top-0 end-0 m-2 z-1"
-										aria-label="Close"
-										onClick={() => setShowSuccessModal(false)}
-									></button>
-									<div className="congrat_img position-relative top-0">
-										<img src={tick_circle} alt="" className="img-fluid" />
-									</div>
-								</div>
-								<motion.div
-									className="modal-body congrat-body text-center py-4 bg-white position-relative"
-									initial={{ y: 30, opacity: 0 }}
-									animate={{ y: 0, opacity: 1 }}
-									exit={{ y: 30, opacity: 0 }}
-								>
-									<h3 className="font_semibold font_level3 text-black mt-3">
-										Congratulations
-									</h3>
-									<p className="font_reg font_level4 text-dark">
-										Payment has been successfully completed
-									</p>
-								</motion.div>
-							</div>
 						</div>
 					</motion.div>
 				)}
