@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { handleVideoCallModal } from "../network/reducers/AuthReducer";
-import PricingModal from "./ChatModals/PricingModal";
 import PayNowModal from "./ChatModals/PayNowModal";
 import ThankYouModal from "./ChatModals/ThankYouModal";
 
@@ -10,35 +9,22 @@ function VideoCallButton({ member, gender, type = "icon" }) {
 	const { user } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 
-	const [showPricingModal, setShowPricingModal] = useState(false);
 	const [showPayModal, setShowPayModal] = useState(false);
 	const [showThankYou, setShowThankYou] = useState(false);
 	const [selectedPlan, setSelectedPlan] = useState(null);
 	const [selectedMember, setSelectedMember] = useState(member);
 
-	// ---- Start Video Call ----
-	// const StartVideoCall = () => {
-	// 	// member ke andar nested minutes object
-	// 	const availableMinutes = selectedMember?.minutes?.minutes ?? 0;
+	const isPaid = Number(user?.package?.is_paid) === 1;
 
-	// 	if (availableMinutes > 0) {
-	// 		connectCall();
-	// 		return;
-	// 	}
+	// ❌ Hide button if not paid
+	if (!isPaid) return null;
 
-	// 	setShowPricingModal(true);
-	// };
-	// ---- Start Video Call ----
 	const StartVideoCall = () => {
-		// const availableMinutes = Number(
-		//   selectedMember?.minutes?.transaction?.minutes_left ?? 0
-		// );
-
 		if (selectedMember?.minutes > 0) {
 			connectCall();
 			return;
 		}
-		setShowPricingModal(true);
+		setShowPayModal(true);
 	};
 
 	const connectCall = () => {
@@ -60,20 +46,6 @@ function VideoCallButton({ member, gender, type = "icon" }) {
 
 	const handleThankYouClose = async () => {
 		setShowThankYou(false);
-		// if (typeof videoCallButtonResponse === "function") {
-		//   try {
-		//     await videoCallButtonResponse(selectedMember?.id);
-		//   } catch (err) {
-		//   }
-		// }
-
-		// const refreshedMinutes = Number(
-		//   selectedMember?.minutes?.transaction?.minutes_left ?? 0
-		// );
-
-		// if (refreshedMinutes > 0) {
-		//   connectCall();
-		// }
 	};
 
 	return (
@@ -102,15 +74,6 @@ function VideoCallButton({ member, gender, type = "icon" }) {
 					</Link>
 				</div>
 			)}
-
-			{/* Pricing Modal */}
-			<PricingModal
-				showPricingModal={showPricingModal}
-				handlePricingClose={() => setShowPricingModal(false)}
-				setShowPricingModal={setShowPricingModal}
-				setShowPayModal={setShowPayModal}
-				setSelectedPlan={setSelectedPlan}
-			/>
 
 			{/* PayNow Modal */}
 			<PayNowModal

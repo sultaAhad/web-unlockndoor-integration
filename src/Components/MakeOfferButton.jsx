@@ -1,22 +1,25 @@
-import { useEffect, useState } from "react";
-
-import "react-loading-skeleton/dist/skeleton.css";
-import PricingModal from "./ChatModals/PricingModal";
-import PayNowModal from "./ChatModals/PayNowModal";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-// import ThankYouModal from "./ChatModals/ThankYouModal";
-// import VideoChatModal from "./ChatModals/videoChatModal";
 import OfferModal from "../Pages/ManProfile/OfferModal";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function MakeOfferButton({ member, type = "icon" }) {
+	const [showofferModal, setShowofferModal] = useState(false);
+	const { user } = useSelector((state) => state.auth);
+
+	// Convert to number just in case API sends string
+	const isPaid = Number(user?.package?.is_paid) === 1;
+
 	const handleofferClose = () => setShowofferModal(false);
 	const handleofferShow = () => setShowofferModal(true);
-	const [showofferModal, setShowofferModal] = useState(false);
+
+	// ❌ Hide if not paid
+	if (!isPaid) return null;
 
 	return (
 		<>
-			{type == "button" && (
+			{type === "button" && (
 				<Button
 					onClick={(e) => {
 						e.preventDefault();
@@ -27,7 +30,8 @@ function MakeOfferButton({ member, type = "icon" }) {
 					<h5 className="secondary-regular-font">Create Date Offer</h5>
 				</Button>
 			)}
-			{type == "icon" && (
+
+			{type === "icon" && (
 				<div className="icon-circle iconwra2">
 					<Link
 						to="#"
@@ -41,7 +45,7 @@ function MakeOfferButton({ member, type = "icon" }) {
 				</div>
 			)}
 
-			{/* Modals */}
+			{/* Offer Modal */}
 			<OfferModal
 				showofferModal={showofferModal}
 				handleofferClose={handleofferClose}
