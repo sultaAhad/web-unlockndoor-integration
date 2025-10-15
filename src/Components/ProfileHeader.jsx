@@ -49,6 +49,8 @@ function ProfileHeader({ showButtons = true }) {
 
     const channel = pusher.subscribe(genderChannelName);
     channel.bind(genderChannelName, (data) => {
+      console.log(data);
+      
       localStorage.setItem(
         "unread_messages_count",
         data?.unread_messages_count ?? 0
