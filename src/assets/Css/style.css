@@ -2191,6 +2191,8 @@ li.bullet_Wrapper.wrapper-bullet {
 
 .contact_imgbox img {
 	min-height: 415px;
+	object-fit: cover;
+	border-radius: 10px;
 }
 
 /*  */
@@ -3329,7 +3331,7 @@ button.btn-custom.btn-custom1 {
 		padding: 0px 20px;
 	}
 	.pack_btn {
-		width: 60% !important;
+		width: 70% !important;
 	}
 	.package_header_button a {
 		width: 27% !important;
@@ -3420,7 +3422,7 @@ button.btn-custom.btn-custom1 {
 		padding: 10px;
 	}
 	.slider-container {
-		margin: 10px 10px;
+		margin: 10px 0px;
 	}
 	.banner_sec .text_wrapper h2 {
 		font-size: 25px;
@@ -3483,5 +3485,27 @@ button.btn-custom.btn-custom1 {
 	}
 	.header_sec {
 		padding: 45px 0px 10px;
+	}
+	.banner_sec .text_wrapper p {
+		font-size: 12px;
+		width: 100%;
+	}
+	.specialist_Sec .text_wrapper p {
+		font-size: 14px;
+	}
+	.specialist_Sec .button_width h4 {
+		font-size: 11px;
+	}
+	.contact_imgbox img {
+		min-height: 330px;
+	}
+	.people_img-sec .img_wrapper {
+		padding: 10px;
+	}
+	.reality_sec .reality_head {
+		padding: 30px 10px 10px;
+	}
+	.reality_sec .boy_img_wrapper img {
+		height: 400px;
 	}
 }

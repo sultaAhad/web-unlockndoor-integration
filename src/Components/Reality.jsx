@@ -13,7 +13,7 @@ function Reality() {
 			<div className="container">
 				<div className="row">
 					{/* Left Column */}
-					<div className="col-md-6 p-0">
+					<div className="col-md-6 p-sm-0">
 						<motion.div
 							className="reality_head"
 							initial={{ opacity: 0, y: 50 }}
@@ -56,7 +56,7 @@ function Reality() {
 					</div>
 
 					{/* Right Column */}
-					<div className="col-md-6 p-0">
+					<div className="col-md-6 p-sm-0">
 						<motion.div
 							className="boy_img_wrapper"
 							initial={{ opacity: 0, scale: 0.8 }}

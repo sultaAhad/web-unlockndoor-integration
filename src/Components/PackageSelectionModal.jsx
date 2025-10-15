@@ -92,7 +92,7 @@ const PackageSelectionModal = ({
 						const cssClass = cssClasses[index % cssClasses.length];
 
 						return (
-							<div key={pkg.id || index} className="col-md-4 mb-4">
+							<div key={pkg.id || index} className="col-lg-4 col-md-6 mb-4">
 								<div
 									className={`package_card text-white p-3 rounded ${cssClass}`}
 								>
@@ -115,10 +115,10 @@ const PackageSelectionModal = ({
 												className="bullet_Wrapper wrapper-bullet align-items-baseline py-2"
 											>
 												<div className="row">
-													<div className="col-lg-2">
+													<div className="col-2">
 														<img src={blacktick} alt="" className="img-fluid" />
 													</div>
-													<div className="col-lg-10 ps-0">
+													<div className="col-10 ps-0">
 														<div className="bullet_point text-white font_reg font_level4">
 															{benefit}
 														</div>
@@ -131,7 +131,7 @@ const PackageSelectionModal = ({
 									{/* Get Started button */}
 									<div className="pack_btn d-flex justify-content-center">
 										{user?.package?.id == pkg.id ? (
-											<button className="btn rounded-pill text-white py-2 px-4 mb-3 bg-success font_reg text-capitalize font_level wrapper-bg-eere">
+											<button className="btn rounded-pill text-white py-2 px-4 mb-sm-3 bg-success font_reg text-capitalize font_level wrapper-bg-eere">
 												Current Package
 											</button>
 										) : (

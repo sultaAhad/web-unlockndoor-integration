@@ -1196,14 +1196,23 @@ section.notification-wrapper .wrapper-fluid-notification {
 	}
 }
 
-/* @media (max-width: 768px) {
-	.account_access_dv {
+@media (max-width: 768px) {
+	/* .account_access_dv {
 		bottom: -170px;
 		left: 0;
 		margin: auto;
 		justify-content: center;
+	} */
+	.profile_imgg11 {
+		height: 90px;
+		max-width: 150px;
 	}
-} */
+	.profile_img_div11 {
+		width: 30%;
+		left: 30px;
+		word-wrap: break-word;
+	}
+}
 
 /* Mobile Responsive  */
 
@@ -1276,6 +1285,7 @@ section.notification-wrapper .wrapper-fluid-notification {
 	.profile_imgg11 {
 		height: 90px;
 		max-width: 150px;
+		margin: auto;
 	}
 	.chat-users {
 		width: 40px;
