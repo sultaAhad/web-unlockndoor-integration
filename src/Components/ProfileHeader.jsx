@@ -12,7 +12,18 @@ function ProfileHeader({ showButtons = true }) {
 		message: 0,
 		notification: 0,
 	});
+	// ✅ Load saved counts from localStorage on mount
+	useEffect(() => {
+		const savedCounts = localStorage.getItem("user_counts");
+		if (savedCounts) {
+			setCounts(JSON.parse(savedCounts));
+		}
+	}, []);
 
+	// ✅ Whenever counts change, save to localStorage
+	useEffect(() => {
+		localStorage.setItem("user_counts", JSON.stringify(counts));
+	}, [counts]);
 	useEffect(() => {
 		// ✅ if user not available, do nothing
 		if (!user?.id) return;

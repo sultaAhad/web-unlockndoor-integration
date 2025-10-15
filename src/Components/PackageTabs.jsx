@@ -10,7 +10,10 @@ import {
 	tick_circle,
 } from "../Constant/Index";
 import { Link, useNavigate } from "react-router-dom";
-import { useGetMenPackagesQuery } from "../network/services/ManAuth";
+import {
+	useGetMenPackagesQuery,
+	useUpgradePackageMutation,
+} from "../network/services/ManAuth";
 import PlaceOrderstripe from "./PlaceOrderstripe";
 import WomenPlaceOrderStrip from "./WomenPlaceOrderStrip";
 import { useUpgradeWomenPackageMutation } from "../network/services/WomanAuth";
@@ -27,21 +30,59 @@ const PackageTabs = () => {
 	const { data, isLoading, error } = useGetMenPackagesQuery();
 	const [upgradeWomenPackage, { isLoading: isUpgrading }] =
 		useUpgradeWomenPackageMutation();
+	const [upgradeManPackage, { isLoading: isUpgradingMen }] =
+		useUpgradePackageMutation();
 
 	const packages = data?.response?.data?.women || [];
 	const packagesman = data?.response?.data?.men || [];
 
 	const upgradePackage = async (id) => {
 		try {
-			await upgradeWomenPackage({ package_id: id }).unwrap();
+			let res;
+
+			// ✅ Use correct API depending on active tab
+			if (activeTab === "women") {
+				res = await upgradeWomenPackage({ package_id: id }).unwrap();
+			} else {
+				res = await upgradeManPackage({ package_id: id }).unwrap();
+			}
+
+			// ✅ Success Alert
 			Swal.fire({
 				icon: "success",
 				title: "Upgraded!",
 				text: "Your package has been successfully upgraded.",
+				confirmButtonColor: "#3085d6",
 			});
-			navigate("/women-profiles");
+
+			// ✅ Redirect based on active tab
+			navigate(activeTab === "women" ? "/women-profiles" : "/men-profiles");
 		} catch (error) {
-			console.log(error);
+			console.log("Upgrade Error:", error);
+
+			// ✅ Extract readable message
+			const msg =
+				error?.data?.message || "Something went wrong. Please try again.";
+
+			// ✅ Handle known responses gracefully
+			if (
+				msg === "You already have an active package." ||
+				msg === "You already have the most upgraded package."
+			) {
+				Swal.fire({
+					icon: "info",
+					title: "Notice",
+					text: msg,
+					confirmButtonColor: "#3085d6",
+				});
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: msg,
+					confirmButtonColor: "#d33",
+				});
+			}
 		}
 	};
 
@@ -188,17 +229,30 @@ const PackageTabs = () => {
 												</button>
 											) : (
 												<>
-													{/* Upgrade Mode */}
-													{pkg.type === "paid" && user?.package ? (
-														<button
-															className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
-															onClick={() => upgradePackage(pkg?.id)}
-															disabled={isUpgrading}
-														>
-															{isUpgrading ? "Upgrading..." : "Upgrade Package"}
-														</button>
+													{/* If user already has a package */}
+													{user?.package ? (
+														/* If this is the same package → disable Upgrade */
+														user?.package?.id === pkg.id ? (
+															<button
+																className="btn rounded-pill text-white py-2 px-4 mb-3 bg-secondary font_reg text-capitalize font_level wrapper-bg-eere"
+																disabled
+															>
+																Active Package
+															</button>
+														) : (
+															/* Different package → show Upgrade button */
+															<button
+																className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
+																onClick={() => upgradePackage(pkg?.id)}
+																disabled={isUpgrading}
+															>
+																{isUpgrading
+																	? "Upgrading..."
+																	: "Upgrade Package"}
+															</button>
+														)
 													) : (
-														/* New Purchase */
+														/* If user has no active package → allow Get Started */
 														<button
 															className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
 															onClick={() => {

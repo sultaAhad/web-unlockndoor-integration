@@ -255,7 +255,9 @@ function DatesTab() {
 																		</h4>
 																	</td>
 																	<td className="secondary-medium-font level-8 text-center">
-																		{Actions(sponsorDate)}
+																		<div className="d-flex align-items-center justify-content-end">
+																			{Actions(sponsorDate)}
+																		</div>
 																	</td>
 																</tr>
 															))}

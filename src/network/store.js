@@ -14,7 +14,7 @@ import WomenAuth from "./services/WomanAuth";
 import SponsoredDates from "./services/woman/SponsoredDates";
 import Chat from "./services/Chat";
 
-// ✅ combine all reducers
+// ✅ combine reducers
 const rootReducer = combineReducers({
 	auth: authReducer,
 	[HelpServices.reducerPath]: HelpServices.reducer,

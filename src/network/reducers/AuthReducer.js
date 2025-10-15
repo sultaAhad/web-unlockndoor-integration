@@ -136,6 +136,8 @@ const AuthReducer = createSlice({
 			localStorage.removeItem("gender");
 			localStorage.removeItem("selfieVerified");
 			localStorage.removeItem("hasPackage");
+
+			localStorage.clear();
 		},
 
 		// ✅ Control video call modal open/close and data
