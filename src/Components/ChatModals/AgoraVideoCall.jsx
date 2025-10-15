@@ -202,7 +202,15 @@ const AgoraVideoCall = ({ onCallEnd }) => {
       setIsAudioEnabled(false);
       setIsVideoEnabled(false);
       setChannel(null);
+      let id =
+        videoCallData?.data?.caller_user?.id ??
+        videoCallData?.data?.calling_user?.id;
       if (action === "reject-call") {
+        await callAction({
+          channel_name: `reject_call_${id}`,
+          action: "end-call",
+          data: {},
+        });
       } else {
         await endCallAction(reason);
       }
@@ -349,7 +357,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
               <Button
                 type="button"
                 className="bg-transparent border-0 p-0"
-                onClick={() => leaveChannel("User ended call")}
+                onClick={() => leaveChannel("User ended call", "reject-call")}
               >
                 <span className="chat_span chat_end">
                   <svg width="46" height="46" viewBox="0 0 46 46" fill="none">
