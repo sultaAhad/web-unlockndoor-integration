@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import { handleVideoCallModal } from "../network/reducers/AuthReducer";
 import PayNowModal from "./ChatModals/PayNowModal";
 import ThankYouModal from "./ChatModals/ThankYouModal";
+import PricingModal from "./ChatModals/PricingModal";
 
 function VideoCallButton({ member, gender, type = "icon" }) {
 	const { user } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 
+	const [showPricingModal, setShowPricingModal] = useState(false);
 	const [showPayModal, setShowPayModal] = useState(false);
 	const [showThankYou, setShowThankYou] = useState(false);
 	const [selectedPlan, setSelectedPlan] = useState(null);
@@ -24,7 +26,7 @@ function VideoCallButton({ member, gender, type = "icon" }) {
 			connectCall();
 			return;
 		}
-		setShowPayModal(true);
+		setShowPricingModal(true);
 	};
 
 	const connectCall = () => {
@@ -74,7 +76,14 @@ function VideoCallButton({ member, gender, type = "icon" }) {
 					</Link>
 				</div>
 			)}
-
+			{/* Pricing Modal */}
+			<PricingModal
+				showPricingModal={showPricingModal}
+				handlePricingClose={() => setShowPricingModal(false)}
+				setShowPricingModal={setShowPricingModal}
+				setShowPayModal={setShowPayModal}
+				setSelectedPlan={setSelectedPlan}
+			/>
 			{/* PayNow Modal */}
 			<PayNowModal
 				show={showPayModal}
