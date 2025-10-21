@@ -33,7 +33,7 @@ import { setUser, setUserToken } from "../../network/reducers/AuthReducer";
 function Profile() {
 	const { data, isLoading, error, refetch } = useGetManDataQuery();
 	const user = data?.response?.data?.data;
-	console.log(user, "sasdsasd");
+
 
 	const [deleteImageMan] = useDeleteImageManMutation();
 	const [deleteVideoMan] = useDeleteVideoManMutation();
