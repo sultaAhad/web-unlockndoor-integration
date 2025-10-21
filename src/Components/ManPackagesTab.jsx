@@ -53,7 +53,7 @@ const ManPackagesTab = ({ isOpen, onClose }) => {
 												onClose();
 												navigate("/man-subscription", {
 													state: { selected: pack },
-												});
+												}); 
 											}}
 										>
 											Get Started
