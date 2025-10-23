@@ -65,7 +65,7 @@ const Stepper = () => {
 		}
 
 		const data = new FormData();
-		data.append("user_type", "female"); // ✅ Tell backend this is a female user
+		data.append("user_type", "women"); // ✅ Tell backend this is a female user
 
 		Object.keys(registerWomen).forEach((key) => {
 			const value = registerWomen[key];
@@ -116,7 +116,7 @@ const Stepper = () => {
 					user: response?.data,
 					//   token,
 					remember: true,
-					gender: "female", // ✅ pass gender
+					gender: "women", // ✅ pass gender
 				}),
 			);
 			Swal.fire({

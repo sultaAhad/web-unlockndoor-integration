@@ -57,10 +57,12 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 							if (status) {
 								Swal.fire("Success", "Selfie verified!", "success").then(() => {
 									localStorage.setItem("selfieVerified", "true");
-									if (gender === "women") navigate("/women-profiles");
-									else if (gender === "men") navigate("/profile");
-									onVerified?.();
-									onClose();
+									setTimeout(() => {
+										if (gender === "women") navigate("/women-profiles");
+										else if (gender === "men") navigate("/profile");
+										onVerified?.();
+										onClose();
+									}, 1500); // 1.5 second delay
 								});
 							}
 						}}

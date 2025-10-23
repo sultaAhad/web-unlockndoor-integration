@@ -65,7 +65,7 @@ const StepperMale = () => {
 		}
 
 		const data = new FormData();
-		data.append("user_type", "male");
+		data.append("user_type", "men");
 		Object.keys(registerMan).forEach((key) => {
 			const value = registerMan[key];
 			if (key === "images" || key === "videos")
@@ -94,7 +94,7 @@ const StepperMale = () => {
 					user: response?.data,
 					token,
 					remember: true,
-					gender: "male", // ✅ pass gender
+					gender: "men", // ✅ pass gender
 				}),
 			);
 
