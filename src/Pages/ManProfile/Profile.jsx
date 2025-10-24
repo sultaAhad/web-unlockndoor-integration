@@ -57,19 +57,15 @@ function Profile() {
 	}, []);
 
 	useEffect(() => {
-		document.body.style.backgroundImage = `url(${innerpages})`;
-		document.body.style.backgroundSize = "cover";
-		document.body.style.backgroundPosition = "center";
-		document.body.style.minHeight = "100vh";
+    document.body.style.backgroundImage = `url(${innerpages})`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.minHeight = "100vh";
 
-		return () => {
-			document.body.style.backgroundImage = "";
-		};
-	}, []);
-
-	if (isLoading) return <div>Loading...</div>;
-	if (error) return <div>Error loading profile.</div>;
-
+    return () => {
+      document.body.style.backgroundImage = "";
+    };
+  }, []);
 	return (
 		<>
 			<Header />

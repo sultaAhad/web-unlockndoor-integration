@@ -94,6 +94,14 @@ const Setting = () => {
                       <div className="col-lg-12 mb-2">
                         <Link
                           className="btn bg-wra-bg secondary-medium-font text-white input_style"
+                          to="/my-cards"
+                        >
+                          My Cards
+                        </Link>
+                      </div>
+                      <div className="col-lg-12 mb-2">
+                        <Link
+                          className="btn bg-wra-bg secondary-medium-font text-white input_style"
                           to="/women-change-password"
                         >
                           Change Password
