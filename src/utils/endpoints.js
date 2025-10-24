@@ -92,6 +92,9 @@ export const SEND_CHAT_MESSAGE_API = (type) => `auth-${type}/send-message`;
 export const GET_CHAT_MESSAGES_API = (type, chat_id) =>
 	`auth-${type}/single-chat?chat_id=${chat_id}`;
 export const WOMEN_SELFIE = `auth-women/verify-selfie`;
+export const WOMEN_PAYMENT_METHODS = `auth-women/payment-methods`;
+export const WOMEN_PAYMENT_METHODS_DEFAULT = `auth-women/payment-methods/default`;
+export const WOMEN_PAYMENT_METHODS_STORE = `auth-women/payment-methods-store`;
 
 // Edit WmonenProfile
 export const WOMEN_EDIT_PROFILE = `auth-women/update-women`;

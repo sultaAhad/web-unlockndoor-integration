@@ -18,6 +18,9 @@ import {
 	WOMEN_LOGIN_CHANGEPASSWORD_RESET,
 	WOMEN_LOGIN_OTP_SAND,
 	WOMEN_LOGIN_OTP_VARIFY,
+	WOMEN_PAYMENT_METHODS,
+	WOMEN_PAYMENT_METHODS_DEFAULT,
+	WOMEN_PAYMENT_METHODS_STORE,
 	WOMEN_SELFIE,
 	WOMEN_SIGNUP,
 	WOMEN_UPGRADE_PACKAGE,
@@ -178,10 +181,37 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
-		// ✅ Selfie Verification (FormData required)
 		verifySelfieWomen: build.mutation({
 			query: (formData) => ({
 				url: WOMEN_SELFIE,
+				method: "POST",
+				body: formData,
+			}),
+		}),
+
+		getPaymentMethods: build.query({
+			query: () => ({
+				url: WOMEN_PAYMENT_METHODS,
+				method: "GET",
+			}),
+		}),
+
+		deletePaymentMethods: build.mutation({
+			query: (id) => ({
+				url: `${WOMEN_PAYMENT_METHODS}/${id}`,
+				method: "DELETE",
+			}),
+		}),
+		addPaymentMethod: build.mutation({
+			query: (formData) => ({
+				url: WOMEN_PAYMENT_METHODS_STORE,
+				method: "POST",
+				body: formData,
+			}),
+		}),
+		makePaymentMethodDefault: build.mutation({
+			query: (formData) => ({
+				url: WOMEN_PAYMENT_METHODS_DEFAULT,
 				method: "POST",
 				body: formData,
 			}),
@@ -209,6 +239,10 @@ export const {
 	useLikeManProfileMutation,
 	useLazyCancelWomenPackageQuery,
 	useUpgradeWomenPackageMutation,
+	useGetPaymentMethodsQuery,
+	useAddPaymentMethodMutation,
+	useMakePaymentMethodDefaultMutation,
+	useDeletePaymentMethodsMutation,
 } = WomenAuth;
 
 export default WomenAuth;

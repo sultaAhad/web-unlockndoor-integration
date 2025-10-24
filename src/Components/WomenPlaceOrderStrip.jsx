@@ -14,9 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { usePurchasePackageWomenMutation } from "../network/services/WomanAuth";
 
 // ✅ Stripe key
-const stripePromise = loadStripe(
-	"pk_test_51PCJCF1n4j2NN6BKEbuBZqPcxk017JADLY9sKJRmV9BmYdRzKiBpqvkaOJdeP6dmz081n9QNC8BEbKaBMVRjM4E000c6bwOLuD",
-);
+const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_KEY);
 
 const CheckoutForm = ({
 	checkedTerm,

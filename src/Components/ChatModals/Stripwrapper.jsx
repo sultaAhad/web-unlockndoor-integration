@@ -12,9 +12,7 @@ import Alert from "../SweetAlert/Alert";
 import { setUserToken } from "../../network/reducers/AuthReducer";
 import { useVideoManPurchaseCallMutation } from "../../network/services/ManAuth";
 
-const stripePromise = loadStripe(
-  "pk_test_51PCJCF1n4j2NN6BKEbuBZqPcxk017JADLY9sKJRmV9BmYdRzKiBpqvkaOJdeP6dmz081n9QNC8BEbKaBMVRjM4E000c6bwOLuD"
-);
+const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_KEY);
 
 const CheckoutForm = ({
   checkedTerm,
