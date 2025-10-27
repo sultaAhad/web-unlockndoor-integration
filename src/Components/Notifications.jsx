@@ -8,7 +8,7 @@ import SponsoredDates from "./SponsoredDates";
 import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 const Notifications = ({ type }) => {
-  const { user, refreshNotifications } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const pusherCounts = usePusherCounts(user);
   const [notifications, setNotifications] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,58 +20,15 @@ const Notifications = ({ type }) => {
       currentPage,
     });
 
-  // ✅ Full API response log
-  useEffect(() => {
-    if (data) {
-      console.group("📦 API Full Response");
-      console.log("✅ Status:", data?.status);
-      console.log("✅ Status Code:", data?.statusCode);
-      console.log("✅ Message:", data?.message);
-      console.log("📄 User Type:", data?.response?.data?.user_type);
-      console.log("📊 Pagination:", data?.response?.data?.pagination);
-      console.log(
-        "🔔 Notifications Array:",
-        data?.response?.data?.notifications
-      );
-      console.groupEnd();
-    }
-  }, [data]);
-
-  // ✅ Detailed per-notification logging (color-coded)
-  useEffect(() => {
-    if (data?.response?.data?.notifications?.length) {
-      console.group("🔔 Notifications Received");
-      data.response.data.notifications.forEach((n, i) => {
-        const color = n.is_read === 0 ? "color: red" : "color: green";
-        console.groupCollapsed(`%c#${i + 1} ${n.title} — ${n.message}`, color);
-        console.log("🧾 ref_id (sender):", n.ref_id);
-        console.log("👤 reciever_id (receiver):", n.reciever_id);
-        console.log("📌 title:", n.title);
-        console.log("💬 message:", n.message);
-        console.log("🏷️ type:", n.type);
-        console.log("🎬 action:", n.action);
-        console.log("📅 notify_date_time:", n.notify_date_time);
-        console.log("📖 is_read:", n.is_read);
-        console.groupEnd();
-      });
-      console.groupEnd();
-    }
-  }, [data]);
-
-  // ✅ Update local state
   useEffect(() => {
     if (data?.response?.data?.notifications) {
       const newNotifications = data.response.data.notifications;
       const pagination = data.response.data.pagination;
-
       setLastPage(pagination?.last_page || 1);
-
       setNotifications((prev) => {
         if (currentPage === 1) {
-          // 🔁 First page — replace
           return newNotifications;
         } else {
-          // ➕ Append unique notifications for next pages
           const merged = [...prev, ...newNotifications];
           const unique = [...new Map(merged.map((n) => [n.id, n])).values()];
           return unique;
@@ -80,30 +37,20 @@ const Notifications = ({ type }) => {
     }
   }, [data]);
 
-  // ✅ Page change trigger refetch
   useEffect(() => {
     if (currentPage > 1) {
-      console.log("🔁 Refetching page:", currentPage);
       refetch();
     }
   }, [currentPage]);
 
-  // ✅ Real-time refetch trigger
   useEffect(() => {
-    console.log(
-      "🛰 Real-time Pusher event detected → Refetching notifications..."
-    );
     setCurrentPage(1);
     refetch();
-  }, [refreshNotifications]);
+  }, []);
 
-  // ✅ Load More Button
   const handleLoadMore = () => {
     if (currentPage < lastPage) {
-      console.log("⏭ Load More clicked → next page:", currentPage + 1);
       setCurrentPage((prev) => prev + 1);
-    } else {
-      console.log("🚫 No more pages to load.");
     }
   };
 

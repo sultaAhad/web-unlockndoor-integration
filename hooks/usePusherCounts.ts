@@ -27,6 +27,8 @@ export const usePusherCounts = (
     if (!pusher) return;
 
     const handleCountData = (data: any) => {
+      console.log("count_data", data);
+
       localStorage.setItem(
         "unread_messages_count",
         data?.unread_messages_count ?? 0
