@@ -106,24 +106,7 @@ const MyCards = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [defaultCardId, setDefaultCardId] = useState(null);
-  const [savedCards, setSavedCards] = useState([
-    {
-      id: 1,
-      brand: "visa",
-      last4: "4242",
-      exp_month: "12",
-      exp_year: "2025",
-      isDefault: true,
-    },
-    {
-      id: 2,
-      brand: "mastercard",
-      last4: "8888",
-      exp_month: "08",
-      exp_year: "2026",
-      isDefault: false,
-    },
-  ]);
+  const [savedCards, setSavedCards] = useState([]);
 
   const { data, isLoading, refetch } = useGetPaymentMethodsQuery();
   const [makePaymentMethodDefault, { isLoading: isDefaultLoading }] =
@@ -203,9 +186,6 @@ const MyCards = () => {
                           <p className="text-muted mb-4">
                             You haven't added any payment cards yet.
                           </p>
-                          <button className="border text-white btn mt-2 w-100 main_bg white_color text-capitalize pt-2 pb-2">
-                            Add Your First Card
-                          </button>
                         </div>
                       </div>
                     ) : (
