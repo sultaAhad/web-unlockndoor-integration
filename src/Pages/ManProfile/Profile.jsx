@@ -34,7 +34,6 @@ function Profile() {
 	const { data, isLoading, error, refetch } = useGetManDataQuery();
 	const user = data?.response?.data?.data;
 
-
 	const [deleteImageMan] = useDeleteImageManMutation();
 	const [deleteVideoMan] = useDeleteVideoManMutation();
 	const dispatch = useDispatch();
@@ -57,15 +56,15 @@ function Profile() {
 	}, []);
 
 	useEffect(() => {
-    document.body.style.backgroundImage = `url(${innerpages})`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.minHeight = "100vh";
+		document.body.style.backgroundImage = `url(${innerpages})`;
+		document.body.style.backgroundSize = "cover";
+		document.body.style.backgroundPosition = "center";
+		document.body.style.minHeight = "100vh";
 
-    return () => {
-      document.body.style.backgroundImage = "";
-    };
-  }, []);
+		return () => {
+			document.body.style.backgroundImage = "";
+		};
+	}, []);
 	return (
 		<>
 			<Header />

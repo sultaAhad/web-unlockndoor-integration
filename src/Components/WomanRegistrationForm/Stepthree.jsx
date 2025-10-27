@@ -83,7 +83,7 @@ const StepThree = ({
 
 			return (
 				<div
-				className="mt-2"
+					className="mt-2"
 					key={idx}
 					style={{
 						display: "inline-block",
@@ -130,7 +130,9 @@ const StepThree = ({
 									<form onSubmit={handleSubmit}>
 										{/* Gallery Images Upload */}
 										<div className="form-group upload-section mt-3">
-											<label>Upload 5 pictures minimum</label>
+											<label className="text-white">
+												Upload 5 pictures minimum
+											</label>
 											<div className="uploader py-3 rounded mt-2">
 												<div className="upload_pic text-center">
 													<div className="content_uploader">
@@ -169,7 +171,9 @@ const StepThree = ({
 
 										{/* Video Upload */}
 										<div className="form-group upload-section mt-3">
-											<label>Introduction video at least 2</label>
+											<label className="text-white">
+												Introduction video at least 2
+											</label>
 											<div className="uploader py-3 rounded mt-2">
 												<div className="upload_pic text-center">
 													<div className="content_uploader">
@@ -200,7 +204,7 @@ const StepThree = ({
 
 										{/* Cover Photo Upload */}
 										<div className="form-group upload-section mt-3">
-											<label>Cover Photo</label>
+											<label className="text-white">Cover Photo</label>
 											<div className="uploader py-3 rounded mt-2">
 												<div className="upload_pic text-center">
 													<div className="content_uploader">

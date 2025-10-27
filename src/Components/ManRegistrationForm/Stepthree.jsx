@@ -135,7 +135,7 @@ const StepThree = ({
 
 									{/* Cover Photo Upload */}
 									<div className="form-group upload-section mt-3">
-										<label>Cover Photo</label>
+										<label className="text-white">Cover Photo</label>
 										<div className="uploader py-3 rounded mt-2">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">
@@ -165,7 +165,7 @@ const StepThree = ({
 
 									{/* Gallery Images Upload */}
 									<div className="form-group upload-section mt-3">
-										<label>Upload 5+ Images</label>
+										<label className="text-white">Upload 5+ Images</label>
 										<div className="uploader py-3 rounded mt-2">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">
@@ -196,7 +196,7 @@ const StepThree = ({
 
 									{/* Video Upload */}
 									<div className="form-group upload-section mt-3">
-										<label>Upload 2+ Videos</label>
+										<label className="text-white">Upload 2+ Videos</label>
 										<div className="uploader py-3 rounded mt-2">
 											<div className="upload_pic text-center">
 												<div className="content_uploader">

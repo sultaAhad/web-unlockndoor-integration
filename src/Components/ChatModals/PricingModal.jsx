@@ -79,7 +79,7 @@ const PricingModal = ({
 				<Modal.Footer className="border-0 pt-0">
 					<Button
 						variant="primary"
-						className="w-100"
+						className="w-100 border radius-8 py-3 w-100 secondary-regular-font btn btn-primary"
 						onClick={handlePayNowOpen}
 					>
 						Pay Now
