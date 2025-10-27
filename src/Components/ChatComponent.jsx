@@ -20,9 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
 import { toast, ToastContainer } from "react-toastify";
 import VideoCallButton from "./VideoCallButton";
+import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
+	  const pusherCounts = usePusherCounts(user);
 	const [chats, setChats] = useState([]);
 	const [filteredChats, setFilteredChats] = useState([]);
 	const [selectedChat, setSelectedChat] = useState(null);
