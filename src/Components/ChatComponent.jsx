@@ -495,7 +495,7 @@ function ChatComponent({ type }) {
 		if (!selectedChat) return null;
 		return (
 			<>
-				<div className="col-lg-6 selected_chat">
+				<div className="col-md-6 selected_chat mb-md-0 mb-3">
 					<div className="d-flex align-items-center gap-3">
 						<img
 							src={selectedChat?.participant_profile}
@@ -507,7 +507,7 @@ function ChatComponent({ type }) {
 						</h4>
 					</div>
 				</div>
-				<div className="col-lg-3">
+				<div className="col-md-3">
 					<div className="dot-drop-down chat-dot">
 						<div className="camera-link-ww">
 							{/* ✅ Replace button with VideoCallButton */}
@@ -570,7 +570,7 @@ function ChatComponent({ type }) {
 			</style>
 			<div className="chat-wrapper">
 				<div className="row">
-					<div className="col-lg-4">
+					<div className="col-lg-4 mb-lg-0 mb-4">
 						<div className="wrapper-member-pp wrapper-chat-input d-flex align-items-center gap-2">
 							<img src={searchchat} className="img-fluid" alt="" />
 							<div className="input-group ">

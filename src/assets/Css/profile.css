@@ -1309,4 +1309,8 @@ section.notification-wrapper .wrapper-fluid-notification {
 		width: 90px;
 		font-size: 12px;
 	}
+	.notify_para {
+		position: unset;
+		margin-top: 10px;
+	}
 }
