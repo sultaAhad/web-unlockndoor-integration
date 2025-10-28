@@ -32,6 +32,7 @@ import {
 	DELETE_VIDEO_WOMAN,
 	MAN_UPGRADE_PACKAGES,
 	VIEW_MEMBER_PROFILE,
+	MEN_SWAP_WOMEN,
 } from "../../utils/endpoints";
 
 // ✅ Main API
@@ -258,11 +259,19 @@ export const ManAuth = createApi({
 				body: data,
 			}),
 		}),
+		SwapWomen: build.mutation({
+			query: (data) => ({
+				url: MEN_SWAP_WOMEN,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
 // ✅ Hooks Export
 export const {
+	useSwapWomenMutation,
 	useViewMemberProfileMutation,
 	useVideoManPurchaseCallMutation,
 	useGetManVideoChargesQuery,

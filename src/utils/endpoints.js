@@ -69,6 +69,7 @@ export const DELETE_VIDEO_MAN = `auth-men/delete-video`;
 export const CHARGES_VIDEO_MAN = `auth-men/video-call-charges`;
 export const VIDEO_CALL_PURCHASE_MAN = `auth-men/video-call-purchase`;
 export const VIEW_MEMBER_PROFILE = `auth-men/view_member_profile`;
+export const MEN_SWAP_WOMEN = `auth-men/swap-women`;
 
 // Endpoints women
 export const CHANGE_PASSWORD_PROFILE_WOMEN = `auth-women/change-password`;
