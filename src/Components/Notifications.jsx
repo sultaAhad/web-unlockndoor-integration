@@ -81,7 +81,7 @@ const Notifications = ({ type }) => {
                         alt={item.title}
                       />
                     </div>
-                    <div className="col-lg-10">
+                    <div className="col-lg-10 mt-sm-0 mt-3">
                       <h4 className="secondary-medium-font mb-0 text-white level-8">
                         {item.title}
                       </h4>

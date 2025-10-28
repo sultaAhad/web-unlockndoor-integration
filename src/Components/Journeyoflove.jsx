@@ -31,7 +31,7 @@ function Journeyoflove() {
       <div className="container-fluid p-0">
         <div className="row align-items-center">
           {/* Left Image */}
-          <div className="col-md-6">
+          <div className="col-lg-6">
             {isLoading ? (
               <div className="skeleton skeleton-img w-100 h-100"></div>
             ) : (
@@ -46,7 +46,7 @@ function Journeyoflove() {
           </div>
 
           {/* Right Slider */}
-          <div className="col-md-6">
+          <div className="col-lg-6">
             <div
               className="wrapper p-lg-3 p-md-5 p-2"
               onMouseEnter={handlePause}
