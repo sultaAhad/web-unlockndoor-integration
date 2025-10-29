@@ -144,7 +144,7 @@ const ImageVideo = ({ file, type, onDelete, refetch }) => {
 
 						{/* Fancybox trigger */}
 						<a data-fancybox="gallery" href={file}>
-							<video className="w-100 h-100" muted>
+							<video className="w-100" muted>
 								<source src={file} type="video/mp4" />
 							</video>
 							<div className="pic_icon cursor-pointer">
