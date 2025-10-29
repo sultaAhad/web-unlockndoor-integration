@@ -120,3 +120,89 @@ const FemaleMemberCard = ({ member, memberId }) => {
 };
 
 export default FemaleMemberCard;
+
+// import { Link, useNavigate } from "react-router-dom";
+// import { useState } from "react";
+// import LikeSwapButtons from "./LikeSwapButtons";
+// import MakeOfferButton from "./MakeOfferButton";
+// import VideoCallButton from "./VideoCallButton";
+// import { mchat } from "../Constant/Index";
+
+// const FemaleMemberCard = ({ member }) => {
+// 	const [femaleMember, setFemaleMember] = useState(member);
+// 	const navigate = useNavigate();
+
+// 	// ✅ Hide the card if profile is swapped
+// 	if (femaleMember?.is_swapped) return null;
+
+// 	const packageTitle = member?.package?.slug
+// 		?.replace("-package", "")
+// 		.toUpperCase();
+
+// 	const responseAction = (updated) => {
+// 		setFemaleMember((prev) => ({
+// 			...prev,
+// 			...updated,
+// 		}));
+// 	};
+
+// 	return (
+// 		<div className="col-lg-4 col-md-6 mb-4">
+// 			<div className="profile-card">
+// 				<span className={`card-badge ${packageTitle.toLowerCase()}`}>
+// 					{packageTitle}
+// 				</span>
+
+// 				<div className="card-icons">
+// 					<Link to={`/chat`} state={femaleMember} className="icon-circle">
+// 						<img src={mchat} alt="chat" />
+// 					</Link>
+
+// 					<VideoCallButton member={femaleMember} />
+// 					<MakeOfferButton member={femaleMember} />
+// 				</div>
+
+// 				<img
+// 					src={femaleMember.profile_image_url}
+// 					alt="profile"
+// 					className="card-image"
+// 				/>
+
+// 				<div
+// 					className="card-footer"
+// 					onClick={() =>
+// 						navigate(`/women-details/${femaleMember.id}`, {
+// 							state: { member: femaleMember },
+// 						})
+// 					}
+// 					style={{ cursor: "pointer" }}
+// 				>
+// 					<h4>{femaleMember.name}</h4>
+// 					<p>{femaleMember.nationality || femaleMember.address}</p>
+// 				</div>
+
+// 				<div className="card-actions">
+// 					<div>
+// 						<span className="like-count me-0 ms-1">
+// 							{femaleMember.likes_count ?? 0}
+// 						</span>
+
+// 						<LikeSwapButtons
+// 							type={"like"}
+// 							femaleMember={femaleMember}
+// 							responseAction={responseAction}
+// 						/>
+// 					</div>
+
+// 					<LikeSwapButtons
+// 						type={"swap"}
+// 						femaleMember={femaleMember}
+// 						responseAction={responseAction}
+// 					/>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	);
+// };
+
+// export default FemaleMemberCard;

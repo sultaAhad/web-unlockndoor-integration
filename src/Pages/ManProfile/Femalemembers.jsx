@@ -100,3 +100,91 @@ function Femalemembers({ member }) {
 }
 
 export default Femalemembers;
+
+// import { useEffect, useState } from "react";
+// import "../../assets/Css/profile.css";
+// import Header from "../../Components/Header/Header";
+// import Footer from "../../Components/Footer";
+// import { innerpages1 } from "../../Constant/Index";
+// import AOS from "aos";
+// import ProfileNavbartwo from "../../Components/ProfileNavbartwo";
+// import Spinner from "../../Components/Spinner";
+// import ProfileHeader from "../../Components/ProfileHeader";
+// import FemaleMemberCard from "../../Components/FemaleMemberCard";
+// import { ToastContainer } from "react-toastify";
+// import { useGetFemaleMembershipQuery } from "../../network/services/ManAuth";
+
+// function Femalemembers() {
+// 	const [currentPage, setCurrentPage] = useState(1);
+// 	const [lastPage, setLastPage] = useState(1);
+// 	const [members, setMembers] = useState([]);
+
+// 	const { data, isLoading } = useGetFemaleMembershipQuery(currentPage);
+
+// 	// ✅ Load new paginated data
+// 	useEffect(() => {
+// 		if (data?.response?.data?.Women?.data) {
+// 			const newMembers = data.response.data.Women.data;
+// 			setLastPage(data.response.data.Women?.last_page);
+
+// 			setMembers((prev) =>
+// 				currentPage === 1 ? newMembers : [...prev, ...newMembers],
+// 			);
+// 		}
+// 	}, [data]);
+
+// 	// ✅ Sync swap state from LocalStorage
+// 	useEffect(() => {
+// 		const swapped = JSON.parse(localStorage.getItem("swapped_members")) || [];
+
+// 		setMembers((prevMembers) =>
+// 			prevMembers.map((m) =>
+// 				swapped.includes(m.id) ? { ...m, is_swapped: true } : m,
+// 			),
+// 		);
+// 	}, [members.length]);
+
+// 	useEffect(() => {
+// 		AOS.init({ duration: 1000, once: true });
+// 	}, []);
+
+// 	return (
+// 		<>
+// 			<Header />
+// 			<ToastContainer />
+
+// 			<section className="videos_sec">
+// 				<div className="container">
+// 					{isLoading ? (
+// 						<div className="row justify-content-center">
+// 							<Spinner />
+// 						</div>
+// 					) : (
+// 						<div className="row">
+// 							{members.map((member) => (
+// 								<FemaleMemberCard key={member.id} member={member} />
+// 							))}
+// 						</div>
+// 					)}
+
+// 					{lastPage > currentPage && (
+// 						<div className="row">
+// 							<div className="col-lg-2 mx-auto">
+// 								<button
+// 									className="btn-write load-more-wrapper"
+// 									onClick={() => setCurrentPage((p) => p + 1)}
+// 								>
+// 									{isLoading ? "Fetching..." : "Load More"}
+// 								</button>
+// 							</div>
+// 						</div>
+// 					)}
+// 				</div>
+// 			</section>
+
+// 			<Footer />
+// 		</>
+// 	);
+// }
+
+// export default Femalemembers;
