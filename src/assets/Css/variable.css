@@ -308,6 +308,9 @@
 	.level-8 {
 		font-size: 11px !important;
 	}
+		p {
+		font-size: 10px;
+	}
 }
 @media (max-width: 281px) {
 	.level-1 {
@@ -345,7 +348,7 @@
 		font-size: 11px !important;
 	}
 	p {
-		font-size: 12px;
+		font-size: 10px;
 	}
 }
 

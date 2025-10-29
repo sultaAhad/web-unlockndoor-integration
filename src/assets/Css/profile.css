@@ -1335,8 +1335,30 @@ section.notification-wrapper .wrapper-fluid-notification {
 	.notify_para {
 		position: unset;
 		margin-top: 10px;
+		text-align: center;
 	}
 	.notify_edit_dv ul li img {
 		max-width: 20px;
+	}
+	.notification____image {
+		width: fit-content;
+		margin: auto;
+	}
+	.notification___content {
+		text-align: center;
+	}
+	.notify_para p {
+		font-size: 10px;
+	}
+	a.view-detail-wrapper {
+		padding: 8px 26px;
+		font-size: 12px;
+	}
+	section.notification-wrapper .wrapper-fluid-notification {
+		width: 70px;
+		height: 70px;
+	}
+	.main-membership-plane.comment-wrapper {
+		padding: 20px;
 	}
 }

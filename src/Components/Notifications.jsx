@@ -70,29 +70,33 @@ const Notifications = ({ type }) => {
 							<div className="col-lg-12 border-top border-bottom pt-4 pb-4">
 								{/* <div className="d-flex align-items-center gap-2"> */}
 								<div className="row align-items-center">
-									<div className="col-lg-2">
-										<img
-											src={
-												item?.ref?.profile_image_url ||
-												item?.sender?.profile_image_url ||
-												notify_img
-											}
-											className="img-fluid wrapper-fluid-notification"
-											alt={item.title}
-										/>
+									<div className="col-md-2">
+										<div className="notification____image">
+											<img
+												src={
+													item?.ref?.profile_image_url ||
+													item?.sender?.profile_image_url ||
+													notify_img
+												}
+												className="img-fluid wrapper-fluid-notification"
+												alt={item.title}
+											/>
+										</div>
 									</div>
-									<div className="col-lg-7 mt-sm-0 mt-3">
-										<h4 className="secondary-medium-font mb-0 text-white level-8">
-											{item.title}
-										</h4>
-										<p className="mb-0 text-white secondary-regular-font">
-											{item.message}
-										</p>
+									<div className="col-lg-7 col-md-6 mt-md-0 mt-3">
+										<div className="notification___content">
+											<h4 className="secondary-medium-font mb-0 text-white level-8">
+												{item.title}
+											</h4>
+											<p className="mb-0 text-white secondary-regular-font">
+												{item.message}
+											</p>
+										</div>
 									</div>
-									<div className="col-lg-3">
+									<div className="col-lg-3 col-md-4">
 										{/* ✅ Date-Time + Buttons */}
 										<div className="notify_para">
-											<p className="mb-3 text-end level-9 text-white">
+											<p className="mb-3 text-sm-end level-9 text-white">
 												({new Date(item.created_at).toLocaleTimeString()} |{" "}
 												{new Date(item.created_at).toLocaleDateString()})
 											</p>
