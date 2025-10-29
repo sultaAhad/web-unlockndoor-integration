@@ -54,7 +54,7 @@ function Mennotification() {
 							<div className="row mt-5 pt-5 mb-5 pb-4">
 								<div className="col-lg-12">
 									<div className="row">
-										<div className="col-lg-8  mx-auto">
+										<div className="col-xxl-8 col-lg-10  mx-auto">
 											<div className="main-membership-plane comment-wrapper ">
 												<div className="row border-bottom-color pb-3 mt-3">
 													<div className="col-lg-12">
