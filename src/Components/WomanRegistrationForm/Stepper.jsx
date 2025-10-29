@@ -7,15 +7,27 @@ import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import { useWomenSignupMutation } from "../../network/services/WomanAuth";
 import { validateWomenRegistration } from "../../Constant/HelperFunction";
+
+// 🔹 Auth modals
 import LoginModal from "../Header/LoginModal";
+import ForgotPasswordModal from "../Header/ForgotPasswordModal";
+import OtpModal from "../Header/OtpModal";
+import NewPasswordModal from "../Header/NewPasswordModal";
 
 const Stepper = () => {
 	const steps = [1, 2, 3];
 	const [step, setStep] = useState(0);
 	const [formErrors, setFormErrors] = useState({});
-	const dispatch = useDispatch();
 	const [submitting, setSubmitting] = useState(false);
-	const [showLogin, setShowLogin] = useState(false);
+	const dispatch = useDispatch();
+
+	// 🔹 modal states
+	const [showModal2, setShowModal2] = useState(false); // Login
+	const [showModal3, setShowModal3] = useState(false); // Forgot Password
+	const [showModal4, setShowModal4] = useState(false); // OTP
+	const [showModal5, setShowModal5] = useState(false); // New Password
+	const [selectedGender, setSelectedGender] = useState("women");
+	const [userEmail, setUserEmail] = useState("");
 
 	// ✅ consistent initial state
 	const [registerWomen, setRegisterWomen] = useState({
@@ -39,6 +51,8 @@ const Stepper = () => {
 	});
 
 	const [WomenSignup, response] = useWomenSignupMutation();
+
+	// 🔹 Step Controls
 	const next = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
 	const prev = () => setStep((prev) => Math.max(prev - 1, 0));
 
@@ -52,6 +66,7 @@ const Stepper = () => {
 		next();
 	};
 
+	// 🔹 Submit Function
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (submitting) return;
@@ -109,14 +124,14 @@ const Stepper = () => {
 		}
 	};
 
+	// 🔹 API Response Handling
 	useEffect(() => {
 		if (response?.isSuccess) {
 			dispatch(
 				setUserToken({
 					user: response?.data,
-					//   token,
 					remember: true,
-					gender: "women", // ✅ pass gender
+					gender: "women",
 				}),
 			);
 			Swal.fire({
@@ -125,7 +140,7 @@ const Stepper = () => {
 				icon: "success",
 				confirmButtonText: "OK",
 			}).then(() => {
-				setShowLogin(true); // ✅ registration ke baad login modal khulega
+				setShowModal2(true); // ✅ open login modal after success
 			});
 			setSubmitting(false);
 		}
@@ -147,6 +162,7 @@ const Stepper = () => {
 
 	return (
 		<>
+			{/* 🔹 Stepper Progress Bar */}
 			<div className="stepper-container">
 				{steps.map((s, index) => (
 					<div key={index} className="step-wrapper">
@@ -171,6 +187,7 @@ const Stepper = () => {
 				))}
 			</div>
 
+			{/* 🔹 Step Forms */}
 			{step === 0 && (
 				<StepOne
 					formData={registerWomen}
@@ -199,8 +216,45 @@ const Stepper = () => {
 				/>
 			)}
 
-			{/* ✅ Login Modal hamesha render hoga */}
-			<LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
+			{/* 🔹 Modals */}
+			<LoginModal
+				show={showModal2}
+				onClose={() => setShowModal2(false)}
+				onForgotPassword={(gender) => {
+					setSelectedGender(gender);
+					setShowModal2(false);
+					setShowModal3(true);
+				}}
+			/>
+
+			<ForgotPasswordModal
+				show={showModal3}
+				onClose={() => setShowModal3(false)}
+				gender={selectedGender}
+				onContinue={(email) => {
+					setUserEmail(email);
+					setShowModal3(false);
+					setShowModal4(true);
+				}}
+			/>
+
+			<OtpModal
+				show={showModal4}
+				onClose={() => setShowModal4(false)}
+				onContinue={() => {
+					setShowModal4(false);
+					setShowModal5(true);
+				}}
+				gender={selectedGender}
+				email={userEmail}
+			/>
+
+			<NewPasswordModal
+				show={showModal5}
+				onClose={() => setShowModal5(false)}
+				role={selectedGender}
+				email={userEmail}
+			/>
 		</>
 	);
 };

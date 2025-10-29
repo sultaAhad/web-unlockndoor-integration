@@ -10,14 +10,22 @@ import StepThree from "./StepThree";
 import LoginModal from "../Header/LoginModal";
 import SelfieModal from "../SelfieModal";
 import { validateMenRegistration } from "../../Constant/HelperFunction";
+import ForgotPasswordModal from "../Header/ForgotPasswordModal";
+import OtpModal from "../Header/OtpModal";
+import NewPasswordModal from "../Header/NewPasswordModal";
 
 const StepperMale = () => {
 	const steps = [1, 2, 3];
 	const [step, setStep] = useState(0);
 	const [formErrors, setFormErrors] = useState({});
 	const [submitting, setSubmitting] = useState(false);
-	const [showLogin, setShowLogin] = useState(false);
 	const [showSelfie, setShowSelfie] = useState(false);
+	const [showModal2, setShowModal2] = useState(false); // Login
+	const [showModal3, setShowModal3] = useState(false); // Forgot Password
+	const [showModal4, setShowModal4] = useState(false); // OTP
+	const [showModal5, setShowModal5] = useState(false); // New Password
+	const [selectedGender, setSelectedGender] = useState(""); // "men" or "women"
+	const [userEmail, setUserEmail] = useState(""); // store email from Forgot Password
 	const dispatch = useDispatch();
 
 	const [registerMan, setRegisterMan] = useState({
@@ -86,15 +94,14 @@ const StepperMale = () => {
 
 	useEffect(() => {
 		if (response?.isSuccess) {
-			// const apiData = response?.data?.data.men;
-			const token = response?.data?.data.token;
+			const token = response?.data?.data?.token;
 
 			dispatch(
 				setUserToken({
 					user: response?.data,
 					token,
 					remember: true,
-					gender: "men", // ✅ pass gender
+					gender: "men",
 				}),
 			);
 
@@ -102,7 +109,10 @@ const StepperMale = () => {
 				title: "Success",
 				text: response?.data?.message || "Registration successful",
 				icon: "success",
-			}).then(() => setShowLogin(true));
+			}).then(() => {
+				// ✅ Open Login Modal after successful registration
+				setShowModal2(true);
+			});
 		}
 
 		if (response?.isError) {
@@ -120,6 +130,7 @@ const StepperMale = () => {
 
 	return (
 		<>
+			{/* Stepper Header */}
 			<div className="stepper-container">
 				{steps.map((s, i) => (
 					<div key={i} className="step-wrapper">
@@ -140,6 +151,7 @@ const StepperMale = () => {
 				))}
 			</div>
 
+			{/* Step Forms */}
 			{step === 0 && (
 				<StepOne
 					formData={registerMan}
@@ -168,7 +180,47 @@ const StepperMale = () => {
 				/>
 			)}
 
-			<LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
+			{/* ✅ Login & Password Flow */}
+			<LoginModal
+				show={showModal2}
+				onClose={() => setShowModal2(false)}
+				onForgotPassword={(gender) => {
+					setSelectedGender(gender);
+					setShowModal2(false);
+					setShowModal3(true);
+				}}
+			/>
+
+			<ForgotPasswordModal
+				show={showModal3}
+				onClose={() => setShowModal3(false)}
+				gender={selectedGender}
+				onContinue={(email) => {
+					setUserEmail(email);
+					setShowModal3(false);
+					setShowModal4(true);
+				}}
+			/>
+
+			<OtpModal
+				show={showModal4}
+				onClose={() => setShowModal4(false)}
+				onContinue={() => {
+					setShowModal4(false);
+					setShowModal5(true);
+				}}
+				gender={selectedGender}
+				email={userEmail}
+			/>
+
+			<NewPasswordModal
+				show={showModal5}
+				onClose={() => setShowModal5(false)}
+				role={selectedGender}
+				email={userEmail}
+			/>
+
+			{/* Selfie Verification Modal */}
 			<SelfieModal
 				isOpen={showSelfie}
 				onClose={() => setShowSelfie(false)}
