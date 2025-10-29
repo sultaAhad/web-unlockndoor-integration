@@ -3,6 +3,7 @@ import { BASE_URL } from "../../utils/base_url";
 import {
 	CHANGE_COVER_IMAGE,
 	CHANGE_PROFILE_IMAGE,
+	CHECK_ATUH_API,
 	HELPANDSUPPORT,
 	LOGIN_CHANGEPASSWORD,
 	LOGIN_CHANGEPASSWORDMAN,
@@ -133,6 +134,12 @@ const AuthServices = createApi({
 				method: "GET",
 			}),
 		}),
+		checkAuth: build.query({
+			query: () => ({
+				url: CHECK_ATUH_API,
+				method: "GET",
+			}),
+		}),
 	}),
 });
 
@@ -151,4 +158,5 @@ export const {
 	useUpdateManCoverImageMutation,
 	useHelpAndSupportQuery,
 	useAuthNotificationsQuery,
+	useCheckAuthQuery
 } = AuthServices;

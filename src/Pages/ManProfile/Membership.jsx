@@ -65,7 +65,7 @@ function Membership() {
 								<div className="row mt-3">
 									{/* ✅ Current Active Package */}
 									<div className="col-md-4">
-										<div className="package_card card-hri-er px-3 py-4 main_bg rounded text-center">
+										<div className="package_card card-hri-er px-3 py-4 main_bg rounded text-center mb-md-0 mb-4">
 											<div className="pack_heading px-3 border-bottom py-3 border-white">
 												<h3 className="text-white font_semibold font_level3">
 													{subscriptionPackage?.title || "No Active Plan"}
