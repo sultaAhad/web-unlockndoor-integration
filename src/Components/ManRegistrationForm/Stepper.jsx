@@ -94,16 +94,16 @@ const StepperMale = () => {
 
 	useEffect(() => {
 		if (response?.isSuccess) {
-			const token = response?.data?.data?.token;
+			// const token = response?.data?.data?.token;
 
-			dispatch(
-				setUserToken({
-					user: response?.data,
-					token,
-					remember: true,
-					gender: "men",
-				}),
-			);
+			// dispatch(
+			// 	setUserToken({
+			// 		user: response?.data,
+			// 		token,
+			// 		remember: true,
+			// 		gender: "men",
+			// 	}),
+			// );
 
 			Swal.fire({
 				title: "Success",

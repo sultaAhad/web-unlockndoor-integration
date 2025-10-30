@@ -158,5 +158,5 @@ export const {
 	useUpdateManCoverImageMutation,
 	useHelpAndSupportQuery,
 	useAuthNotificationsQuery,
-	useCheckAuthQuery
+	useCheckAuthQuery,
 } = AuthServices;

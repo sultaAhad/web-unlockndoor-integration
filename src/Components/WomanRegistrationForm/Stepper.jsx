@@ -127,13 +127,13 @@ const Stepper = () => {
 	// 🔹 API Response Handling
 	useEffect(() => {
 		if (response?.isSuccess) {
-			dispatch(
-				setUserToken({
-					user: response?.data,
-					remember: true,
-					gender: "women",
-				}),
-			);
+			// dispatch(
+			// 	setUserToken({
+			// 		user: response?.data,
+			// 		remember: true,
+			// 		gender: "women",
+			// 	}),
+			// );
 			Swal.fire({
 				title: "Success",
 				text: response?.data?.message || "Registration successful",
