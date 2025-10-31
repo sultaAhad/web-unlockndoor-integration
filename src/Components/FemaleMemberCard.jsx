@@ -246,6 +246,8 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useGetManDataQuery } from "../network/services/ManAuth";
+
 import LikeSwapButtons from "./LikeSwapButtons";
 import MakeOfferButton from "./MakeOfferButton";
 import VideoCallButton from "./VideoCallButton";
@@ -255,10 +257,24 @@ const FemaleMemberCard = ({ member }) => {
 	const [femaleMember, setFemaleMember] = useState(member);
 	const navigate = useNavigate();
 
-	// ✅ Sync femaleMember whenever member prop changes
+	// --- Fetch man data (minutes, can_call, etc.) ---
+	const { data: manData, isLoading, refetch } = useGetManDataQuery();
+
 	useEffect(() => {
 		setFemaleMember(member);
 	}, [member]);
+
+	// --- Feature Access Logic (Silver/Gold/Platinum) ---
+	const checkFeatureAccess = (member, feature) => {
+		const pkg = member?.package?.slug || "";
+		if (!pkg) return false;
+
+		if (pkg.includes("silver")) return feature === "chat";
+		if (pkg.includes("gold")) return feature === "chat" || feature === "video";
+		if (pkg.includes("platinum")) return true;
+
+		return false;
+	};
 
 	const packageTitle = member?.package?.slug
 		?.replace("-package", "")
@@ -278,15 +294,27 @@ const FemaleMemberCard = ({ member }) => {
 					{packageTitle}
 				</span>
 
+				{/* --- Icons: Chat, Video, Offer --- */}
 				<div className="card-icons">
-					<Link to={`/chat`} state={femaleMember} className="icon-circle">
-						<img src={mchat} alt="chat" />
-					</Link>
+					{checkFeatureAccess(femaleMember, "chat") && (
+						<Link to={`/chat`} state={femaleMember} className="icon-circle">
+							<img src={mchat} alt="chat" />
+						</Link>
+					)}
 
-					<VideoCallButton member={femaleMember} />
-					<MakeOfferButton member={femaleMember} />
+					{checkFeatureAccess(femaleMember, "video") && (
+						<VideoCallButton
+							member={femaleMember}
+							manData={{ ...manData, gender: "female" }}
+						/>
+					)}
+
+					{checkFeatureAccess(femaleMember, "offer") && (
+						<MakeOfferButton member={femaleMember} />
+					)}
 				</div>
 
+				{/* --- Profile Image --- */}
 				<img
 					src={femaleMember.profile_image_url}
 					alt="profile"
@@ -306,6 +334,7 @@ const FemaleMemberCard = ({ member }) => {
 					<p>{femaleMember.nationality || femaleMember.address}</p>
 				</div>
 
+				{/* --- Like & Swap Buttons --- */}
 				<div className="card-actions">
 					<div>
 						<span className="like-count me-0 ms-1">

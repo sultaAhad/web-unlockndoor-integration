@@ -56,14 +56,14 @@ const ImageVideo = ({ file, type, onDelete, refetch }) => {
 			confirmButtonText: "Yes, delete it!",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				if (gender === "female") {
+				if (gender === "women") {
 					if (type === "image") {
 						deleteImageWoman({ image: fileName?.current });
 					} else if (type === "video") {
 						deleteVideoWoman({ video: fileName?.current });
 					}
 				}
-				if (gender === "male") {
+				if (gender === "men") {
 					if (type === "image") {
 						deleteImageMan({ image: fileName?.current });
 					} else if (type === "video") {
