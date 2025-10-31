@@ -3,7 +3,6 @@ import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import { innerpages1 } from "../../Constant/Index";
 import ChatComponent from "../../Components/ChatComponent";
-import ProfileHeader from "../../Components/ProfileHeader";
 
 const WomenChat = () => {
   useEffect(() => {
@@ -23,9 +22,6 @@ const WomenChat = () => {
       <section className="chat pt-5 mt-4 mb-4 pb-5">
         <div className="container">
           <div className="row">
-            <div className="col-lg-12 ">
-              <ProfileHeader visibility={false} />
-            </div>
             <div className="col-lg-12 ">
               <ChatComponent type={"women"} />
             </div>

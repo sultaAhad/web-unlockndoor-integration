@@ -5,7 +5,6 @@ import { notify_img } from "../Constant/Index";
 import { useAuthNotificationsQuery } from "../network/services/AuthServices";
 import Spinner from "./Spinner";
 import SponsoredDates from "./SponsoredDates";
-import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 const Notifications = ({ type }) => {
   const { user } = useSelector((state) => state.auth);
@@ -20,7 +19,6 @@ const Notifications = ({ type }) => {
       currentPage,
     });
 
-  const pusherCounts = usePusherCounts(user);
   useEffect(() => {
     if (data?.response?.data?.notifications) {
       const newNotifications = data.response.data.notifications;
@@ -118,7 +116,7 @@ const Notifications = ({ type }) => {
 
                           {/* Offer Date */}
                           {item?.type === "offer_date" && (
-                            <div className="d-flex align-items-center gap-2">
+                            <div className="d-flex align-items-center justify-content-sm-end justify-content-center gap-2">
                               <SponsoredDates
                                 selectedDateId={item.ref_id} // ✅ actual date id
                                 notificationId={item.id} // ✅ this is the notification.id

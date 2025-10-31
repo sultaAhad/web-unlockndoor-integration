@@ -3,47 +3,23 @@ import { Link } from "react-router-dom";
 import { edit, massagewrapper, notification } from "../Constant/Index";
 import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
-import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 function ProfileHeader({ showButtons = true, visibility = true }) {
-  const { user } = useSelector((state) => state.auth);
-  const pusherCounts = usePusherCounts(user);
+  const { user, unread_messages_count, unread_notification_count } =
+    useSelector((state) => state.auth);
+
   const gender = localStorage.getItem("gender");
 
-  const [counts, setCounts] = useState({
-    message: 0,
-    notification: 0,
-  });
-  // ✅ Load saved counts from localStorage on mount
-  useEffect(() => {
-    const savedCounts = localStorage.getItem("user_counts");
-    if (savedCounts) {
-      setCounts(JSON.parse(savedCounts));
-    }
-  }, []);
-  useEffect(() => {
-    setCounts({
-      message: pusherCounts.message,
-      notification: pusherCounts.notification,
-    });
-  }, [pusherCounts]);
+  // useEffect(() => {
+  //   const savedCounts = localStorage.getItem("user_counts");
+  //   if (savedCounts) {
+  //     setCounts(JSON.parse(savedCounts));
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    setCounts({
-      message: localStorage.getItem("unread_messages_count") ?? 0,
-      notification: localStorage.getItem("unread_notification_count") ?? 0,
-    });
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("user_counts", JSON.stringify(counts));
-  }, [counts]);
-
-  if (!visibility) {
-    console.log(pusherCounts, "pusherCounts");
-
-    return;
-  }
+  // useEffect(() => {
+  //   localStorage.setItem("user_counts", JSON.stringify(counts));
+  // }, [counts]);
 
   return (
     <div className="col-md-12 pb-5">
@@ -75,8 +51,10 @@ function ProfileHeader({ showButtons = true, visibility = true }) {
                 >
                   <li className="wrapper-navigate-main position-relative">
                     <img src={massagewrapper} alt="msg" /> <span>Message</span>
-                    {counts.message > 0 && (
-                      <span className="number_move_dv">{counts.message}</span>
+                    {unread_messages_count > 0 && (
+                      <span className="number_move_dv">
+                        {unread_messages_count}
+                      </span>
                     )}
                   </li>
                 </Link>
@@ -90,9 +68,9 @@ function ProfileHeader({ showButtons = true, visibility = true }) {
                 >
                   <li className="position-relative">
                     <img src={notification} alt="notification" />
-                    {counts.notification > 0 && (
+                    {unread_notification_count > 0 && (
                       <span className="number_move_dv">
-                        {counts.notification}
+                        {unread_notification_count}
                       </span>
                     )}
                   </li>

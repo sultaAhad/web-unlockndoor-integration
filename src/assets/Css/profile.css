@@ -1279,11 +1279,18 @@ section.notification-wrapper .wrapper-fluid-notification {
 	.table {
 		min-width: 820px;
 	}
-	.account_access_dv {
+	/* .account_access_dv {
 		bottom: -170px;
 		left: 0;
 		margin: auto;
 		justify-content: center;
+	} */
+	.account_access_dv {
+		position: unset;
+		flex-wrap: wrap;
+	}
+	.wrapper-bg-good {
+		padding: 9px 20px !important;
 	}
 	.for-extra-space1 {
 		padding-top: 140px !important;
@@ -1360,5 +1367,8 @@ section.notification-wrapper .wrapper-fluid-notification {
 	}
 	.main-membership-plane.comment-wrapper {
 		padding: 20px;
+	}
+	.for-extra-space {
+		padding-top: 10px !important;
 	}
 }

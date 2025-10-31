@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
 import { toast, ToastContainer } from "react-toastify";
 import VideoCallButton from "./VideoCallButton";
-import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 function ChatComponent({ type }) {
   const { user, userToken } = useSelector((state) => state.auth);
@@ -78,7 +77,13 @@ function ChatComponent({ type }) {
     files: [],
   });
 
-  const { data, isLoading: isChatLoading, refetch } = useGetChatsQuery(type);
+  const {
+    data,
+    isLoading: isChatLoading,
+    refetch,
+  } = useGetChatsQuery(type, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const {
     data: messagesData,
@@ -110,6 +115,7 @@ function ChatComponent({ type }) {
   useEffect(() => {
     if (selectedChat?.chat_id != undefined && selectedChat?.chat_id > 0) {
       refetchMessages();
+      refetch();
     }
   }, [selectedChat?.chat_id, refetchMessages]);
 
@@ -549,8 +555,6 @@ function ChatComponent({ type }) {
       </>
     );
   };
-
-  usePusherCounts(user, [messagesData]);
 
   return (
     <>
