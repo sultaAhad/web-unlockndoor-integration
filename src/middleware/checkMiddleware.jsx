@@ -9,48 +9,48 @@ export function checkMiddleware(
 	checkPackage = false,
 ) {
 	return function ProtectedComponent(props) {
-		const [showSelfie, setShowSelfie] = useState(false);
-		const [showPackages, setShowPackages] = useState(false);
+    const [showSelfie, setShowSelfie] = useState(false);
+    const [showPackages, setShowPackages] = useState(false);
 
-		const hasPackage = localStorage.getItem("hasPackage") === "true";
-		const selfieVerified = localStorage.getItem("selfieVerified") === "true";
-		// const selfieVerified = true;
-		const gender = localStorage.getItem("gender");
+    const hasPackage = localStorage.getItem("hasPackage") === "true";
+    // const selfieVerified = localStorage.getItem("selfieVerified") === "true";
+    const selfieVerified = true;
+    const gender = localStorage.getItem("gender");
 
-		if (checkPackage && !hasPackage) {
-			if (gender === "women") {
-				return (
-					<PackageSelectionModal
-						isOpen={true}
-						closeModal={() => setShowPackages(false)}
-						onRequestClose={() => setShowPackages(false)}
-					/>
-				);
-			}
-			if (gender === "men") {
-				return (
-					<ManPackagesTab
-						isOpen={true}
-						onClose={() => setShowPackages(false)}
-					/>
-				);
-			}
-		}
+    if (checkPackage && !hasPackage) {
+      if (gender === "women") {
+        return (
+          <PackageSelectionModal
+            isOpen={true}
+            closeModal={() => setShowPackages(false)}
+            onRequestClose={() => setShowPackages(false)}
+          />
+        );
+      }
+      if (gender === "men") {
+        return (
+          <ManPackagesTab
+            isOpen={true}
+            onClose={() => setShowPackages(false)}
+          />
+        );
+      }
+    }
 
-		if (checkSelfie && !selfieVerified) {
-			return (
-				<SelfieModal
-					isOpen={true}
-					onClose={() => {}}
-					onVerified={() => {
-						localStorage.setItem("selfieVerified", "true");
-						setShowSelfie(false);
-						window.location.reload();
-					}}
-				/>
-			);
-		}
+    if (checkSelfie && !selfieVerified) {
+      return (
+        <SelfieModal
+          isOpen={true}
+          onClose={() => {}}
+          onVerified={() => {
+            localStorage.setItem("selfieVerified", "true");
+            setShowSelfie(false);
+            window.location.reload();
+          }}
+        />
+      );
+    }
 
-		return <Component {...props} />;
-	};
+    return <Component {...props} />;
+  };
 }

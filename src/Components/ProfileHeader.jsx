@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
 import { usePusherCounts } from "../../hooks/usePusherCounts";
 
-function ProfileHeader({ showButtons = true }) {
+function ProfileHeader({ showButtons = true, visibility = true }) {
   const { user } = useSelector((state) => state.auth);
-    const pusherCounts = usePusherCounts(user);
+  const pusherCounts = usePusherCounts(user);
   const gender = localStorage.getItem("gender");
 
   const [counts, setCounts] = useState({
@@ -27,7 +27,7 @@ function ProfileHeader({ showButtons = true }) {
       notification: pusherCounts.notification,
     });
   }, [pusherCounts]);
-  
+
   useEffect(() => {
     setCounts({
       message: localStorage.getItem("unread_messages_count") ?? 0,
@@ -39,61 +39,11 @@ function ProfileHeader({ showButtons = true }) {
     localStorage.setItem("user_counts", JSON.stringify(counts));
   }, [counts]);
 
+  if (!visibility) {
+    console.log(pusherCounts, "pusherCounts");
 
-  // useEffect(() => {
-  //   if (!user?.id) return;
-  //   if (window.__PROFILE_PUSHER_CONNECTED__) {
-  //     console.log("⚠️ ProfileHeader: Pusher already connected, skipping...");
-  //     return;
-  //   }
-  //   window.__PROFILE_PUSHER_CONNECTED__ = true;
-
-  //   const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-  //     cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-  //     forceTLS: true,
-  //   });
-
-  //   const genderChannelName =
-  //     user.gender === "women"
-  //       ? `women-unread_count-${user.id}`
-  //       : `men-unread_count-${user.id}`;
-
-  //   const channel = pusher.subscribe(genderChannelName);
-  //   channel.bind(genderChannelName, (data) => {
-  //     console.log("count_data", data);
-
-  //     localStorage.setItem(
-  //       "unread_messages_count",
-  //       data?.unread_messages_count ?? 0
-  //     );
-  //     localStorage.setItem(
-  //       "unread_notification_count",
-  //       data?.unread_notification_count ?? 0
-  //     );
-  //     setCounts((prev) => ({
-  //       ...prev,
-  //       notification:
-  //         data.unread_notification_count !== undefined
-  //           ? data.unread_notification_count
-  //           : prev.notification,
-  //       message:
-  //         data.unread_messages_count !== undefined
-  //           ? data.unread_messages_count
-  //           : prev.message,
-  //     }));
-  //   });
-
-  //   return () => {
-  //     try {
-  //       console.log("🧹 Cleaning up Pusher connection...");
-  //       channel.unsubscribe();
-  //       pusher.disconnect();
-  //       window.__PROFILE_PUSHER_CONNECTED__ = false;
-  //     } catch (err) {
-  //       console.warn("⚠️ Cleanup failed:", err);
-  //     }
-  //   };
-  // }, [user?.id]);
+    return;
+  }
 
   return (
     <div className="col-md-12 pb-5">
@@ -131,7 +81,6 @@ function ProfileHeader({ showButtons = true }) {
                   </li>
                 </Link>
 
-                {/* Notification Button */}
                 <Link
                   to={`${
                     gender === "men"
