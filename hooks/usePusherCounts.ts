@@ -10,9 +10,9 @@ interface Counts {
 export const usePusherCounts = (
   user: { id: string; gender: string } | null
 ) => {
-  const [counts, setCounts] = useState<Counts>({
-    notification: 0,
-    message: 0,
+  const [counts, setCounts] = useState({
+    notification: localStorage.getItem("unread_notification_count") ?? 0,
+    message: localStorage.getItem("unread_messages_count") ?? 0,
   });
 
   const { initializePusher, subscribeToChannel, cleanupPusher } = usePusher(
@@ -27,8 +27,6 @@ export const usePusherCounts = (
     if (!pusher) return;
 
     const handleCountData = (data: any) => {
-      console.log("count_data", data);
-
       localStorage.setItem(
         "unread_messages_count",
         data?.unread_messages_count ?? 0

@@ -5,7 +5,6 @@ import { notify_img } from "../Constant/Index";
 import { useAuthNotificationsQuery } from "../network/services/AuthServices";
 import Spinner from "./Spinner";
 import SponsoredDates from "./SponsoredDates";
-import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 const Notifications = ({ type }) => {
   const { user } = useSelector((state) => state.auth);
@@ -20,7 +19,6 @@ const Notifications = ({ type }) => {
       currentPage,
     });
 
-  const pusherCounts = usePusherCounts(user);
   useEffect(() => {
     if (data?.response?.data?.notifications) {
       const newNotifications = data.response.data.notifications;
