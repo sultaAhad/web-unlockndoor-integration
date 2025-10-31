@@ -13,7 +13,11 @@ const PricingModal = ({
 	const { user } = useSelector((state) => state.auth);
 	const { data, isLoading } = useGetManVideoChargesQuery();
 	const [selectedId, setSelectedId] = useState(null);
-  const isPaid = Number(user?.package?.is_paid) === 1;
+	console.log(user);
+
+	// ✅ FIXED: Convert is_paid to number before comparing
+	const isPaid = Number(user?.package?.is_paid) === 1;
+	console.log("isPaid:", isPaid, "Raw:", user?.package?.is_paid);
 
 	const handlePayNowOpen = () => {
 		if (!selectedId) {
