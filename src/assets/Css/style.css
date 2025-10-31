@@ -1009,11 +1009,30 @@ button.main-wrapper-btn-wrap {
 .map_img {
 	width: 20px;
 }
-
+.bg-ddd {
+	background: linear-gradient(
+		90deg,
+		rgba(158, 66, 230, 1) 0%,
+		rgba(157, 44, 151, 1) 48%,
+		rgba(156, 29, 98, 1) 70%,
+		rgba(156, 22, 72, 1) 100%
+	);
+}
+.sub__pricing.sub__pricing_wrapper .ElementsApp,
+.ElementsApp .InputElement {
+	font-size: 16px;
+	color: #fff !important;
+}
+.modal-body.wrapper-text-dd .ElementsApp,
+.ElementsApp .InputElement {
+	font-size: 16px;
+	color: #fff !important;
+}
 .wrapper-img-video-beck {
-	width: 100%;
+	width: 70px;
 	height: 70px;
-	object-fit: fill;
+	object-fit: cover;
+	border-radius: 10px;
 }
 
 img.img-fluid.mb-3.wrapperlogo {
@@ -2454,7 +2473,11 @@ li.bullet_Wrapper.wrapper-bullet {
 .card_modal .modal-content {
 	border-radius: 15px;
 }
-
+.pack_buttons1 span {
+	font-size: 14px;
+	color: #f01313;
+	font-family: TomatoGrotesk-SemiBold;
+}
 .congrats_modal .modal-content {
 	border-radius: 15px;
 	max-width: 70%;
@@ -3165,9 +3188,18 @@ div#swal2-html-container {
 	background-image: none;
 	transform: none;
 }
-
+.view-detail-wrapper11 {
+	background: #71c341;
+	padding: 6px 11px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: #160527;
+}
+.view-detail-wrapper11.reject {
+	background: #ffffff1f;
+}
 .face-verification-container {
-	padding: 20px;
+	padding: 0px 15px;
 	text-align: center;
 	font-family: "TomatoGrotesk-Regular", sans-serif;
 }

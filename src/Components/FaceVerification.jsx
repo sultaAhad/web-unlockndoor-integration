@@ -249,7 +249,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 
 	return (
 		<div className="face-verification-container">
-			<h3 className="section-title">Profile Image</h3>
+			<p>Please update your profile image</p>
 			<div className="profile-img-container">
 				<div className="profile-img-wrapper">
 					{form.profileImage ? (

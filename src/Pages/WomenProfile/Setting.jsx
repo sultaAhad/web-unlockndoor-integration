@@ -93,14 +93,14 @@ const Setting = () => {
 								<div className="col-lg-5">
 									<div className="col-lg-12">
 										<div className="row">
-											{/* <div className="col-lg-12 mb-2">
+											<div className="col-lg-12 mb-2">
 												<Link
 													className="btn bg-wra-bg secondary-medium-font text-white input_style"
 													to="/my-cards"
 												>
 													My Cards
 												</Link>
-											</div> */}
+											</div>
 											<div className="col-lg-12 mb-2">
 												<Link
 													className="btn bg-wra-bg secondary-medium-font text-white input_style"

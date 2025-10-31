@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { alert_icon, innerpages1, tick } from "../../Constant/Index";
+import { innerpages1, tick } from "../../Constant/Index";
 import { useSelector } from "react-redux";
 import Aos from "aos";
 import Header from "../../Components/Header/Header";
@@ -37,9 +37,8 @@ function Membership() {
 		};
 	}, []);
 
-	// ✅ Open Stripe Modal for Upgrade
+	// ✅ Handle package select
 	const handleSelectPackage = (pkg) => {
-		console.log("🎯 Selected Package:", pkg);
 		if (pkg?.id === subscriptionPackage?.id) {
 			console.warn("⚠️ Same package selected — upgrade not allowed!");
 			return;
@@ -65,13 +64,15 @@ function Membership() {
 								<div className="row mt-3">
 									{/* ✅ Current Active Package */}
 									<div className="col-md-4">
-										<div className="package_card card-hri-er px-3 py-4 main_bg rounded text-center mb-md-0 mb-4">
+										<div className="package_card card-hri-er px-3 py-4 main_bg rounded text-center mb-md-0 mb-4 position-relative">
 											<div className="pack_heading px-3 border-bottom py-3 border-white">
 												<h3 className="text-white font_semibold font_level3">
 													{subscriptionPackage?.title || "No Active Plan"}
 												</h3>
 												<p className="text-white font_reg font_level4 mb-0">
-													${subscriptionPackage?.price || 0}
+													{subscriptionPackage?.price
+														? `$${subscriptionPackage.price}`
+														: "Free"}
 												</p>
 											</div>
 
@@ -102,36 +103,49 @@ function Membership() {
 													)}
 												</ul>
 											</div>
-
-											<div className="pack_buttons mt-4">
-												<button
-													className="btn rounded-pill py-3 px-4 bg-white text-dark font_reg text-capitalize w-100 my-2"
-													data-bs-toggle="modal"
-													data-bs-target="#membershipcancelmodal"
+											<div className="pack_buttons1">
+												<span
+													className={`btn rounded-pill py-3 px-4   font_reg text-capitalize w-100 my-3 ${
+														subscriptionPackage?.is_paid === 1
+															? "bg-white"
+															: "bg-info text-white"
+													}`}
+													style={{ fontSize: "0.9rem", borderRadius: "12px" }}
 												>
-													Cancel Subscription
-												</button>
+													{subscriptionPackage?.is_paid === 1
+														? "Active Plan"
+														: "Free Active Plan"}
+												</span>
 											</div>
 										</div>
 									</div>
 
-									{/* ✅ Available Packages to Upgrade (same UI style) */}
+									{/* ✅ Available Packages to Upgrade */}
 									<div className="col-md-8">
 										<div className="row">
 											{isLoading ? (
 												<p className="text-white">Loading packages...</p>
 											) : (
 												packagesman
-													.filter((pkg) => pkg.id !== subscriptionPackage?.id)
+													// 🔥 Hide Free Tier if user already has a paid plan
+													.filter((pkg) => {
+														if (
+															subscriptionPackage?.is_paid === 1 &&
+															pkg.is_paid === 0
+														) {
+															return false;
+														}
+														return pkg.id !== subscriptionPackage?.id;
+													})
 													.map((pkg, i) => (
 														<div className="col-md-6 mb-4" key={i}>
-															<div className="package_card card-hri-er px-3 py-4 bg-white rounded text-center shadow">
+															<div className="package_card card-hri-er px-3 py-4 bg-white rounded text-center shadow position-relative">
 																<div className="pack_heading px-3 border-bottom py-3 border-dark">
 																	<h3 className="text-dark font_semibold font_level3">
 																		{pkg.title}
 																	</h3>
 																	<p className="text-dark font_reg font_level4 mb-0">
-																		${pkg.price}
+																		{pkg.price ? `$${pkg.price}` : "Free"}
 																	</p>
 																</div>
 
@@ -161,10 +175,16 @@ function Membership() {
 
 																<div className="pack_buttons mt-4">
 																	<button
-																		className="btn rounded-pill py-3 px-4 bg-warning text-white font_reg text-capitalize w-100 my-2"
+																		className={`btn rounded-pill py-3 px-4 w-100 my-2 ${
+																			pkg.is_paid === 1
+																				? "bg-warning text-white"
+																				: "bg-dark text-white"
+																		}`}
 																		onClick={() => handleSelectPackage(pkg)}
 																	>
-																		Upgrade with Stripe
+																		{pkg.is_paid === 1
+																			? "Upgrade with Stripe"
+																			: "Select Free Plan"}
 																	</button>
 																</div>
 															</div>
@@ -187,16 +207,16 @@ function Membership() {
 					style={{ display: "block", background: "rgba(0,0,0,0.6)" }}
 				>
 					<div className="modal-dialog modal-dialog-centered modal-md">
-						<div className="modal-content bg-dark text-white">
+						<div className="modal-content  text-white">
 							<div className="modal-header border-0">
-								<h5 className="modal-title">Complete Payment</h5>
+								<h5 className="modal-title dark-color">Complete Payment</h5>
 								<button
 									type="button"
 									className="btn-close btn-close-white"
 									onClick={() => setShowStripeForm(false)}
 								></button>
 							</div>
-							<div className="modal-body">
+							<div className="modal-body wrapper-text-dd">
 								<PlaceOrderstripe
 									checkedTerm={checkedTerm}
 									showSuccessModal={showSuccessModal}

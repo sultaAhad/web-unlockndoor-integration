@@ -95,22 +95,22 @@ const SponsoredDates = ({
 	return (
 		<div className="">
 			{singleDate.status === "pending" || singleDate.status === "countered" ? (
-				<div className="d-flex gap-2">
+				<div className="d-flex align-items-center gap-2">
 					<button
-						className="btn btn-success btn-sm"
+						className="view-detail-wrapper11 secondary-regular-font"
 						onClick={() => acceptOfferHandle(singleDate.id)}
 					>
 						Accept
 					</button>
 					<button
-						className="btn btn-danger btn-sm"
+						className="view-detail-wrapper11 reject secondary-regular-font text-white"
 						onClick={() => setShowRejectModal(true)}
 					>
 						Reject
 					</button>
 				</div>
 			) : singleDate.status === "accepted" ? (
-				<a className="view-detail-wrapper">Accepted</a>
+				<a className="view-detail-wrapper w-100">Accepted</a>
 			) : singleDate.status === "rejected" ? (
 				<div className="d-flex justify-content-end align-item-center text-end">
 					<span className="view-detail-wrapper1 text-white text-end">

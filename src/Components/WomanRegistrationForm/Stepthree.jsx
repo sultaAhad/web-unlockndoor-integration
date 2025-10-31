@@ -102,14 +102,13 @@ const StepThree = ({
 							position: "absolute",
 							top: 0,
 							right: 0,
-							background: "red",
 							color: "#fff",
 							border: "none",
 							borderRadius: "50%",
 							width: "20px",
 							height: "20px",
 						}}
-						className="position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
+						className=" bg-ddd position-absolute d-flex align-items-center justify-content-center top-0 end-0 bg-danger text-white rounded-circle border-0"
 						onClick={() => removeFile(idx, type)}
 					>
 						✖

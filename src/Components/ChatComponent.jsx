@@ -24,7 +24,7 @@ import { usePusherCounts } from "../../hooks/usePusherCounts";
 
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
-	  const pusherCounts = usePusherCounts(user);
+	const pusherCounts = usePusherCounts(user);
 	const [chats, setChats] = useState([]);
 	const [filteredChats, setFilteredChats] = useState([]);
 	const [selectedChat, setSelectedChat] = useState(null);

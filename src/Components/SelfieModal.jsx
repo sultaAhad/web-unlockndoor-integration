@@ -47,7 +47,7 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 					&times;
 				</button>
 
-				<h2 className="modal-title">Selfie Verification</h2>
+				<h2 className="modal-title mb-0">Selfie Verification</h2>
 
 				{profileImageUrl ? (
 					<FaceVerification
