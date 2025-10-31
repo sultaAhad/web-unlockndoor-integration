@@ -305,7 +305,7 @@ const FemaleMemberCard = ({ member }) => {
 					{checkFeatureAccess(femaleMember, "video") && (
 						<VideoCallButton
 							member={femaleMember}
-							manData={{ ...manData, gender: "female" }}
+							manData={{ ...manData, gender: "women" }}
 						/>
 					)}
 
