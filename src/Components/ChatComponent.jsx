@@ -20,15 +20,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
 import { toast, ToastContainer } from "react-toastify";
 import VideoCallButton from "./VideoCallButton";
+import { BASE_URL } from "../utils/base_url";
+import { GET_CHAT_MESSAGES_API } from "../utils/endpoints";
 
 function ChatComponent({ type }) {
   const { user, userToken } = useSelector((state) => state.auth);
 
   const [chats, setChats] = useState([]);
   const [filteredChats, setFilteredChats] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChat, setSelectedChat] = useState({ chat_id: 0 });
   const [messages, setMessages] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isChatMessagesLoading, setIsChatMessagesLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -85,14 +88,44 @@ function ChatComponent({ type }) {
     refetchOnMountOrArgChange: true,
   });
 
-  const {
-    data: messagesData,
-    isLoading: isChatMessagesLoading,
-    refetch: refetchMessages,
-  } = useGetChatMessagesQuery({
-    type: type,
-    chat_id: selectedChat?.chat_id,
-  });
+  // const {
+  //   data: messagesData,
+  //   isLoading: isChatMessagesLoading,
+  //   refetch: refetchMessages,
+  // } = useGetChatMessagesQuery(
+  //   {
+  //     type: type,
+  //     chat_id: selectedChat?.chat_id,
+  //   },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     refetchOnReconnect: true,
+  //     refetchOnFocus: true,
+  //     pollingInterval: 0,
+  //   }
+  //   );
+
+  const getChatMessages = async () => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `${BASE_URL}${GET_CHAT_MESSAGES_API(type, selectedChat?.chat_id)}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+    if (data?.chat) {
+      let messages = data?.chat?.messages.map((message) =>
+        formateMessage(message)
+      );
+      setMessages(messages);
+    }
+  };
 
   const [sendMessage, sendMessageResponse] = useSendMessageMutation();
 
@@ -103,21 +136,21 @@ function ChatComponent({ type }) {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (messagesData?.chat) {
-      let messages = messagesData?.chat?.messages.map((message) =>
-        formateMessage(message)
-      );
-      setMessages(messages);
-    }
-  }, [messagesData]);
+  // useEffect(() => {
+  // if (messagesData?.chat) {
+  //   let messages = messagesData?.chat?.messages.map((message) =>
+  //     formateMessage(message)
+  //   );
+  //   setMessages(messages);
+  // }
+  // }, [messagesData]);
 
   useEffect(() => {
     if (selectedChat?.chat_id != undefined && selectedChat?.chat_id > 0) {
-      refetchMessages();
+      getChatMessages();
       refetch();
     }
-  }, [selectedChat?.chat_id, refetchMessages]);
+  }, [selectedChat?.chat_id]);
 
   const sendMessageHandle = async () => {
     try {
@@ -510,7 +543,6 @@ function ChatComponent({ type }) {
         <div className="col-md-3">
           <div className="dot-drop-down chat-dot">
             <div className="camera-link-ww">
-              {/* ✅ Replace button with VideoCallButton */}
               <VideoCallButton
                 member={{
                   id: selectedChat?.participant_id,

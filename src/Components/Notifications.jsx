@@ -5,6 +5,8 @@ import { notify_img } from "../Constant/Index";
 import { useAuthNotificationsQuery } from "../network/services/AuthServices";
 import Spinner from "./Spinner";
 import SponsoredDates from "./SponsoredDates";
+import { BASE_URL } from "../utils/base_url";
+import { NOTIFICATIONS_API } from "../utils/endpoints";
 
 const Notifications = ({ type }) => {
   const { user } = useSelector((state) => state.auth);
@@ -14,44 +16,94 @@ const Notifications = ({ type }) => {
   const [lastPage, setLastPage] = useState(1);
 
   const { data, isLoading, isError, refetch, isFetching } =
-    useAuthNotificationsQuery({
-      type,
-      currentPage,
-    });
+    useAuthNotificationsQuery(
+      {
+        type,
+        currentPage,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+        refetchOnReconnect: true,
+        refetchOnFocus: true,
+        pollingInterval: 0,
+      }
+    );
 
-  useEffect(() => {
-    if (data?.response?.data?.notifications) {
-      const newNotifications = data.response.data.notifications;
-      const pagination = data.response.data.pagination;
-      setLastPage(pagination?.last_page || 1);
-      setNotifications((prev) => {
-        if (currentPage === 1) {
-          return newNotifications;
-        } else {
-          const merged = [...prev, ...newNotifications];
-          const unique = [...new Map(merged.map((n) => [n.id, n])).values()];
-          return unique;
+  const getNotifications = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${BASE_URL}${NOTIFICATIONS_API({
+          type: type,
+          currentPage: currentPage,
+        })}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-      });
-    }
-  }, [data]);
+      );
 
-  useEffect(() => {
-    if (currentPage > 1) {
-      refetch();
-    }
-  }, [currentPage]);
+      const data = await response.json();
 
-  useEffect(() => {
-    setCurrentPage(1);
-    refetch();
-  }, []);
-
-  const handleLoadMore = () => {
-    if (currentPage < lastPage) {
-      setCurrentPage((prev) => prev + 1);
+      if (data?.response?.data?.notifications) {
+        const newNotifications = data.response.data.notifications;
+        const pagination = data.response.data.pagination;
+        setLastPage(pagination?.last_page || 1);
+        setNotifications((prev) => {
+          if (currentPage === 1) {
+            return newNotifications;
+          } else {
+            const merged = [...prev, ...newNotifications];
+            const unique = [...new Map(merged.map((n) => [n.id, n])).values()];
+            return unique;
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
     }
   };
+
+  useEffect(() => {
+    getNotifications();
+  }, [currentPage]);
+
+  // useEffect(() => {
+  //   if (data?.response?.data?.notifications) {
+  //     const newNotifications = data.response.data.notifications;
+  //     const pagination = data.response.data.pagination;
+  //     setLastPage(pagination?.last_page || 1);
+  //     setNotifications((prev) => {
+  //       if (currentPage === 1) {
+  //         return newNotifications;
+  //       } else {
+  //         const merged = [...prev, ...newNotifications];
+  //         const unique = [...new Map(merged.map((n) => [n.id, n])).values()];
+  //         return unique;
+  //       }
+  //     });
+  //   }
+  // }, [data]);
+
+  // useEffect(() => {
+  //   if (currentPage > 1) {
+  //     refetch();
+  //   }
+  // }, [currentPage]);
+
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  //   refetch();
+  // }, []);
+
+  // const handleLoadMore = () => {
+  //   if (currentPage < lastPage) {
+  //     setCurrentPage((prev) => prev + 1);
+  //   }
+  // };
 
   if (isError) return <p>Error loading notifications.</p>;
 
@@ -139,7 +191,7 @@ const Notifications = ({ type }) => {
             <div className="text-center mt-4 mb-4">
               <button
                 className="btn-write secondary-medium-font load-more-wrapper rounded-0 extra-bg-1 border-none"
-                onClick={handleLoadMore}
+                onClick={()=> setCurrentPage((pre)=>pre+1)}
                 disabled={isFetching}
               >
                 {isFetching ? "Loading..." : "Load More"}

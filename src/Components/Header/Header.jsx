@@ -48,17 +48,33 @@ function Header() {
   const { data: checkAuthData } = useCheckAuthQuery();
   const [callAction] = useCallActionMutation();
   const dispatch = useDispatch();
-  const member = useRef(null);
-  const pusherCounts = usePusherCounts(user);
-  console.log(pusherCounts);
+
   useEffect(() => {
-    dispatch(
-      setCount({
-        unread_messages_count: pusherCounts?.message,
-        unread_notification_count: pusherCounts.notification,
-      })
-    );
-  }, [pusherCounts]);
+    if (!user) return;
+    const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
+      cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
+      encrypted: false,
+    });
+    const genderChannelName =
+      user?.gender === "women"
+        ? `women-unread_count-${user?.id}`
+        : `men-unread_count-${user?.id}`;
+
+    const countPusher = pusher.subscribe(genderChannelName);
+    countPusher.bind(genderChannelName, (data) => {
+      dispatch(
+        setCount({
+          unread_messages_count: data?.unread_messages_count,
+          unread_notification_count: data.unread_notification_count,
+        })
+      );
+    });
+    return () => {
+      countPusher.unbind_all();
+      countPusher.unsubscribe();
+      countPusher.disconnect();
+    };
+  }, []);
 
   const rejectCallAction = async (user_id) => {
     const formData = {
@@ -221,8 +237,6 @@ function Header() {
 
   useEffect(() => {
     if (!checkAuthData) return;
-    console.log("🔎 Auth Check Data:", checkAuthData);
-    // 🛑 CASE 1: Unauthenticated, token missing, or invalid
     if (
       checkAuthData?.status === false ||
       checkAuthData?.message?.toLowerCase().includes("unauthenticated") ||
