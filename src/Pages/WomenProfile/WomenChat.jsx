@@ -3,12 +3,9 @@ import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import { innerpages1 } from "../../Constant/Index";
 import ChatComponent from "../../Components/ChatComponent";
+import ProfileHeader from "../../Components/ProfileHeader";
 
 const WomenChat = () => {
-  const [showModal, setShowModal] = useState(false);
-
-  const handleModalOpen = () => setShowModal(true);
-  const handleModalClose = () => setShowModal(false);
   useEffect(() => {
     document.body.style.backgroundImage = `url(${innerpages1})`;
     document.body.style.backgroundSize = "cover";
@@ -26,6 +23,9 @@ const WomenChat = () => {
       <section className="chat pt-5 mt-4 mb-4 pb-5">
         <div className="container">
           <div className="row">
+            <div className="col-lg-12 ">
+              <ProfileHeader visibility={false} />
+            </div>
             <div className="col-lg-12 ">
               <ChatComponent type={"women"} />
             </div>
