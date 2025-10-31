@@ -118,7 +118,7 @@ const Notifications = ({ type }) => {
 
                           {/* Offer Date */}
                           {item?.type === "offer_date" && (
-                            <div className="d-flex align-items-center gap-2">
+                            <div className="d-flex align-items-center justify-content-sm-end justify-content-center gap-2">
                               <SponsoredDates
                                 selectedDateId={item.ref_id} // ✅ actual date id
                                 notificationId={item.id} // ✅ this is the notification.id

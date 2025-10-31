@@ -3590,7 +3590,9 @@ button.btn-custom.btn-custom1 {
 	}
 
 	.profile_img_div {
-		left: 10px;
+		/* left: 10px; */
+		position: unset;
+		margin-bottom: 30px;
 	}
 
 	.profile_img_div h5 {

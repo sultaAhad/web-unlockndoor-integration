@@ -270,8 +270,8 @@
 		width: 150px;
 	}
 	p {
-    font-size: 13px;
-}
+		font-size: 13px;
+	}
 }
 @media (max-width: 576px) {
 	.level-1 {
@@ -308,7 +308,7 @@
 	.level-8 {
 		font-size: 11px !important;
 	}
-		p {
+	p {
 		font-size: 10px;
 	}
 }
@@ -481,4 +481,18 @@ button.btn.arrow {
 }
 .focus_none {
 	box-shadow: none !important;
+}
+
+/* Laptop Responsive  */
+@media (max-width: 992px) {
+	.table th,
+	.table td {
+		padding: 15px;
+	}
+}
+
+@media (max-width: 768px) {
+	.table {
+		min-width: 680px;
+	}
 }
