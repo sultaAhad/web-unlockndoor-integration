@@ -29,7 +29,6 @@ import { useCallActionMutation } from "../../network/services/Chat";
 import { formatDateTime } from "../../Constant/HelperFunction";
 import { toast } from "react-toastify";
 import { useCheckAuthQuery } from "../../network/services/AuthServices";
-import { usePusherCounts } from "../../../hooks/usePusherCounts";
 
 function Header() {
   const [showModal1, setShowModal1] = useState(false); // Role selection

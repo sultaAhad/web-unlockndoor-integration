@@ -23,15 +23,15 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 		}
 	};
 	const MatchedAction = () => (
-		<div className="card-left-icons">
-			<div className="icon-circle iconwra1">
-				<Link to={`/chat`} state={card}>
-					<img src={mchat} alt="chat" />
-				</Link>
-			</div>
-			<VideoCallButton member={card} gender={gender} type="icon" />
-		</div>
-	);
+    <div className="card-left-icons">
+      <div className="icon-circle iconwra1">
+        <Link to={`/chat-women`} state={card}>
+          <img src={mchat} alt="chat" />
+        </Link>
+      </div>
+      <VideoCallButton member={card} gender={gender} type="icon" />
+    </div>
+  );
 
 	const UnmatchedAction = () => (
 		<div className="card-left-icons">
