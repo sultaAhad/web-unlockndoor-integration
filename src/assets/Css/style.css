@@ -6,47 +6,47 @@
 /* Font cdn starts here */
 @font-face {
 	font-family: "TomatoGrotesk-Regular";
-	src: url("../Fonts/TomatoGrotesk-Regular.otf");
+	src: url("/Fonts/TomatoGrotesk-Regular.otf");
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-Medium";
-	src: url("../Fonts/TomatoGrotesk-Medium.otf");
+	src: url("/Fonts/TomatoGrotesk-Medium.otf");
 }
 
 @font-face {
 	font-family: "tomato-gostek-black";
-	src: url("../Fonts/TomatoGrotesk-Black.otf");
+	src: url("/Fonts/TomatoGrotesk-Black.otf");
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-BlackSlanted";
-	src: url("../Fonts/TomatoGrotesk-BlackSlanted.otf");
+	src: url("/Fonts/TomatoGrotesk-BlackSlanted.otf");
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-Bold";
-	src: url("../Fonts/TomatoGrotesk-Bold.otf");
+	src: url("/Fonts/TomatoGrotesk-Bold.otf");
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-BoldSlanted";
-	src: url("../Fonts/TomatoGrotesk-BoldSlanted.otf");
+	src: url("/Fonts/TomatoGrotesk-BoldSlanted.otf");
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-Light";
-	src: url("../Fonts/TomatoGrotesk-Light.otf");
+	src: url("/Fonts/TomatoGrotesk-Light.otf");
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-SemiBold";
-	src: url("../Fonts/TomatoGrotesk-SemiBold.otf");
+	src: url("/Fonts/TomatoGrotesk-SemiBold.otf");
 }
 
 @font-face {
 	font-family: "Montserrat-Regular";
-	src: url("../Fonts/Montserrat-Regular.ttf");
+	src: url("/Fonts/Montserrat-Regular.ttf");
 }
 
 /* ===================== */
