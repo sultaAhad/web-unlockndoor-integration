@@ -36,12 +36,13 @@ function MatchedProfileCard({ card, index }) {
 
 					<div className="card-right-actions text-end">
 						<Link
-							to={`/matched-Profiles/${card.id}`}
-							state={{ card }} // 👈 object me wrap karo, direct card nahi
+							to={`/women-details/${card.id}`}
+							state={{ member: card }} // ✅ Pass member object in state
 							className="view-profile-btn secondary-secondmedium-font"
 						>
 							View Profile
 						</Link>
+
 						<img
 							src={card.profile_image_url}
 							alt="thumb"

@@ -33,6 +33,7 @@ import {
 	MAN_UPGRADE_PACKAGES,
 	VIEW_MEMBER_PROFILE,
 	MEN_SWAP_WOMEN,
+	CHAT_DELETE_MAN,
 } from "../../utils/endpoints";
 
 // ✅ Main API
@@ -266,6 +267,13 @@ export const ManAuth = createApi({
 				body: data,
 			}),
 		}),
+		ChatDeleteMan: build.mutation({
+			query: (data) => ({
+				url: CHAT_DELETE_MAN,
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -301,6 +309,7 @@ export const {
 	useGetManDataQuery,
 	useDeleteImageManMutation,
 	useDeleteVideoManMutation,
+	useChatDeleteManMutation,
 } = ManAuth;
 
 export default ManAuth;

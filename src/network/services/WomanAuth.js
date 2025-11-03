@@ -5,6 +5,7 @@ import {
 	CHANGE_COVER_IMAGE_WOMEN,
 	CHANGE_PASSWORD_PROFILE_WOMEN,
 	CHANGE_PROFILE_IMAGE_WOMEN,
+	CHAT_DELETE_WOMEN,
 	DELETE_IMAGE_WOMAN,
 	DELETE_VIDEO_WOMAN,
 	MAN_LIKE_WOMEN,
@@ -216,6 +217,13 @@ export const WomenAuth = createApi({
 				body: formData,
 			}),
 		}),
+		ChatDeleteWomen: build.mutation({
+			query: (formData) => ({
+				url: CHAT_DELETE_WOMEN,
+				method: "POST",
+				body: formData,
+			}),
+		}),
 	}),
 });
 
@@ -243,6 +251,7 @@ export const {
 	useAddPaymentMethodMutation,
 	useMakePaymentMethodDefaultMutation,
 	useDeletePaymentMethodsMutation,
+	useChatDeleteWomenMutation,
 } = WomenAuth;
 
 export default WomenAuth;

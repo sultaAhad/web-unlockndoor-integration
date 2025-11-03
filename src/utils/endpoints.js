@@ -70,8 +70,10 @@ export const CHARGES_VIDEO_MAN = `auth-men/video-call-charges`;
 export const VIDEO_CALL_PURCHASE_MAN = `auth-men/video-call-purchase`;
 export const VIEW_MEMBER_PROFILE = `auth-men/view_member_profile`;
 export const MEN_SWAP_WOMEN = `auth-men/swap-women`;
+export const CHAT_DELETE_MAN = `auth-men/delete-chat`;
 
 // Endpoints women
+export const CHAT_DELETE_WOMEN = `auth-women/delete-chat`;
 export const CHANGE_PASSWORD_PROFILE_WOMEN = `auth-women/change-password`;
 export const CHANGE_PROFILE_IMAGE_WOMEN = `auth-women/update-profile-image`;
 export const CHANGE_COVER_IMAGE_WOMEN = `auth-women/update-cover-image`;
