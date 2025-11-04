@@ -27,6 +27,8 @@ import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
+	const [showPriceModal, setShowPriceModal] = useState(false);
+	console.log(user);
 
 	const [deleteManChat] = useChatDeleteManMutation();
 	const [deleteWomenChat] = useChatDeleteWomenMutation();
@@ -329,7 +331,7 @@ function ChatComponent({ type }) {
 		date: formatDate(message.created_at),
 		attachment: message.file_urls?.[0] || null,
 	});
-
+	const minutes = selectedChat?.minutes || 0;
 	const handleChatSearch = (e) => {
 		const { value } = e.target;
 		if (!value.trim()) {
@@ -587,18 +589,44 @@ function ChatComponent({ type }) {
 				<div className="col-md-3">
 					<div className="dot-drop-down chat-dot">
 						<div className="camera-link-ww">
-							<VideoCallButton
-								member={{
-									id: selectedChat?.participant_id,
-									name: selectedChat?.participant_name,
-									profile_image_url: selectedChat?.participant_profile,
-									gender: user.gender === "men" ? "women" : "men",
-									minutes: selectedChat?.minutes,
+							<div
+								onClick={() => {
+									const minutes =
+										typeof selectedChat?.minutes === "object"
+											? selectedChat?.minutes?.minutes || 0
+											: selectedChat?.minutes || 0;
+
+									if (minutes > 0) {
+										// ✅ Start the video call directly
+										console.log("Starting video call...");
+										// Trigger the call through your existing VideoCallButton logic
+										document.getElementById("videoCallButton")?.click();
+									} else {
+										// ⚠️ No minutes left → Show price modal
+										console.log("Opening price modal...");
+										setShowPriceModal(true);
+									}
 								}}
-								gender={user.gender}
-								type="icon"
-							/>
+								style={{ cursor: "pointer" }}
+							>
+								<VideoCallButton
+									id="videoCallButton"
+									member={{
+										id: selectedChat?.participant_id,
+										name: selectedChat?.participant_name,
+										profile_image_url: selectedChat?.participant_profile,
+										gender: user.gender === "men" ? "women" : "men",
+										minutes:
+											typeof selectedChat?.minutes === "object"
+												? selectedChat?.minutes?.minutes
+												: selectedChat?.minutes,
+									}}
+									gender={user.gender}
+									type="icon"
+								/>
+							</div>
 						</div>
+
 						<div
 							className=" wrapper-dot d-flex align-items-center gap-1"
 							type="button"
