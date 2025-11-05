@@ -252,112 +252,115 @@ import LikeSwapButtons from "./LikeSwapButtons";
 import MakeOfferButton from "./MakeOfferButton";
 import VideoCallButton from "./VideoCallButton";
 import { mchat } from "../Constant/Index";
+import { useSelector } from "react-redux";
 
 const FemaleMemberCard = ({ member }) => {
-	const [femaleMember, setFemaleMember] = useState(member);
-	const navigate = useNavigate();
+  const [femaleMember, setFemaleMember] = useState(member);
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
-	// --- Fetch man data (minutes, can_call, etc.) ---
-	const { data: manData, isLoading, refetch } = useGetManDataQuery();
+  // --- Fetch man data (minutes, can_call, etc.) ---
+  const { data: manData, isLoading, refetch } = useGetManDataQuery();
 
-	useEffect(() => {
-		setFemaleMember(member);
-	}, [member]);
+  useEffect(() => {
+    setFemaleMember(member);
+  }, [member]);
 
-	// --- Feature Access Logic (Silver/Gold/Platinum) ---
-	const checkFeatureAccess = (member, feature) => {
-		const pkg = member?.package?.slug || "";
-		if (!pkg) return false;
+  // --- Feature Access Logic (Silver/Gold/Platinum) ---
+  const checkFeatureAccess = (member, feature) => {
+    const pkg = member?.package?.slug || "";
+    if (!pkg) return false;
+    if (user?.package?.slug == "free-tier") {
+      return false;
+    }
+    if (pkg.includes("silver")) return feature === "chat";
+    if (pkg.includes("gold")) return feature === "chat" || feature === "video";
+    if (pkg.includes("platinum")) return true;
 
-		if (pkg.includes("silver")) return feature === "chat";
-		if (pkg.includes("gold")) return feature === "chat" || feature === "video";
-		if (pkg.includes("platinum")) return true;
+    return false;
+  };
 
-		return false;
-	};
+  const packageTitle = member?.package?.slug
+    ?.replace("-package", "")
+    .toUpperCase();
 
-	const packageTitle = member?.package?.slug
-		?.replace("-package", "")
-		.toUpperCase();
+  const responseAction = (updated) => {
+    setFemaleMember((prev) => ({
+      ...prev,
+      ...updated,
+    }));
+  };
 
-	const responseAction = (updated) => {
-		setFemaleMember((prev) => ({
-			...prev,
-			...updated,
-		}));
-	};
+  return (
+    <div className="col-lg-4 col-md-6 mb-4">
+      <div className="profile-card">
+        <span className={`card-badge ${packageTitle.toLowerCase()}`}>
+          {packageTitle}
+        </span>
 
+        {/* --- Icons: Chat, Video, Offer --- */}
+        <div className="card-icons">
+          {checkFeatureAccess(femaleMember, "chat") && (
+            <Link to={`/chat`} state={femaleMember} className="icon-circle">
+              <img src={mchat} alt="chat" />
+            </Link>
+          )}
 
-	return (
-		<div className="col-lg-4 col-md-6 mb-4">
-			<div className="profile-card">
-				<span className={`card-badge ${packageTitle.toLowerCase()}`}>
-					{packageTitle}
-				</span>
+          {checkFeatureAccess(femaleMember, "video") && (
+            <VideoCallButton
+              member={femaleMember}
+              manData={{ ...manData, gender: "women" }}
+            />
+          )}
 
-				{/* --- Icons: Chat, Video, Offer --- */}
-				<div className="card-icons">
-					{checkFeatureAccess(femaleMember, "chat") && (
-						<Link to={`/chat`} state={femaleMember} className="icon-circle">
-							<img src={mchat} alt="chat" />
-						</Link>
-					)}
+          {checkFeatureAccess(femaleMember, "offer") && (
+            <MakeOfferButton member={femaleMember} />
+          )}
+        </div>
 
-					{checkFeatureAccess(femaleMember, "video") && (
-						<VideoCallButton
-							member={femaleMember}
-							manData={{ ...manData, gender: "women" }}
-						/>
-					)}
+        {/* --- Profile Image --- */}
+        <img
+          src={femaleMember.profile_image_url}
+          alt="profile"
+          className="card-image"
+        />
 
-					{checkFeatureAccess(femaleMember, "offer") && (
-						<MakeOfferButton member={femaleMember} />
-					)}
-				</div>
+        <div
+          className="card-footer"
+          onClick={() =>
+            navigate(`/women-details/${femaleMember.id}`, {
+              state: { member: femaleMember },
+            })
+          }
+          style={{ cursor: "pointer" }}
+        >
+          <h4>{femaleMember.name}</h4>
+          <p>{femaleMember.nationality || femaleMember.address}</p>
+        </div>
 
-				{/* --- Profile Image --- */}
-				<img
-					src={femaleMember.profile_image_url}
-					alt="profile"
-					className="card-image"
-				/>
+        {/* --- Like & Swap Buttons --- */}
+        <div className="card-actions">
+          <div>
+            <span className="like-count me-0 ms-1">
+              {femaleMember.likes_count ?? 0}
+            </span>
 
-				<div
-					className="card-footer"
-					onClick={() =>
-						navigate(`/women-details/${femaleMember.id}`, {
-							state: { member: femaleMember },
-						})
-					}
-					style={{ cursor: "pointer" }}
-				>
-					<h4>{femaleMember.name}</h4>
-					<p>{femaleMember.nationality || femaleMember.address}</p>
-				</div>
+            <LikeSwapButtons
+              type={"like"}
+              femaleMember={femaleMember}
+              responseAction={responseAction}
+            />
+          </div>
 
-				{/* --- Like & Swap Buttons --- */}
-				<div className="card-actions">
-					<div>
-						<span className="like-count me-0 ms-1">
-							{femaleMember.likes_count ?? 0}
-						</span>
-
-						<LikeSwapButtons
-							type={"like"}
-							femaleMember={femaleMember}
-							responseAction={responseAction}
-						/>
-					</div>
-
-					<LikeSwapButtons
-						type={"swap"}
-						femaleMember={femaleMember}
-						responseAction={responseAction}
-					/>
-				</div>
-			</div>
-		</div>
-	);
+          <LikeSwapButtons
+            type={"swap"}
+            femaleMember={femaleMember}
+            responseAction={responseAction}
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default FemaleMemberCard;
