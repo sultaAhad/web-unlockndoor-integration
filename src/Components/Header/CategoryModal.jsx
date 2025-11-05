@@ -80,88 +80,96 @@ const CategoryModal = ({
 	};
 
 	return (
-		<Modal
-			show={showcategoryModal}
-			className="category_modal"
-			onHide={handlecategoryClose}
-			centered
-		>
-			<Modal.Body className="text-center p-4">
-				<form onSubmit={handleSubmit}>
-					<div className="form-group mb-3">
-						<input
-							type="text"
-							name="name"
-							value={values.name}
-							onChange={handleChange}
-							placeholder="Name"
-							className="form-control"
-						/>
-						{errors.name && (
-							<small className="text-danger">{errors.name[0]}</small>
-						)}
-					</div>
+    <Modal
+      show={showcategoryModal}
+      className="category_modal"
+      onHide={handlecategoryClose}
+      centered
+    >
+      <Modal.Body className="text-center p-4">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+            <input
+              type="text"
+              name="name"
+              maxLength={40}
+              value={values.name}
+              onChange={handleChange}
+              placeholder="Name"
+              className="form-control"
+            />
+            {errors.name && (
+              <small className="text-danger">{errors.name[0]}</small>
+            )}
+          </div>
 
-					<div className="form-group mb-3">
-						<input
-							type="email"
-							name="email"
-							value={values.email}
-							onChange={handleChange}
-							placeholder="Email Address"
-							className="form-control"
-						/>
-						{errors.email && (
-							<small className="text-danger">{errors.email[0]}</small>
-						)}
-					</div>
+          <div className="form-group mb-3">
+            <input
+              type="email"
+              name="email"
+              maxLength={40}
+              value={values.email}
+              onChange={handleChange}
+              placeholder="Email Address"
+              className="form-control"
+            />
+            {errors.email && (
+              <small className="text-danger">{errors.email[0]}</small>
+            )}
+          </div>
 
-					<div className="form-group mb-3">
-						<input
-							type="number"
-							name="phone"
-							value={values.phone}
-							onChange={handleChange}
-							placeholder="Contact Number"
-							className="form-control"
-						/>
-						{errors.phone && (
-							<small className="text-danger">{errors.phone[0]}</small>
-						)}
-					</div>
-					{/* Hidden gender */}
-					<input type="hidden" name="gender" value={values.gender} />
+          <div className="form-group mb-3">
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={15}
+              name="phone"
+              value={values.phone}
+              onChange={handleChange}
+              placeholder="Contact Number"
+              className="form-control"
+            />
+            {errors.phone && (
+              <small className="text-danger">{errors.phone[0]}</small>
+            )}
+          </div>
+          {/* Hidden gender */}
+          <input type="hidden" name="gender" value={values.gender} />
 
-					<div className="form-group mb-3">
-						<select
-							name="interest"
-							value={values.interest}
-							onChange={handleChange}
-							className="form-select form-control custom-select-arrow"
-						>
-							<option value="">interest?</option>
-							<option value="male">Male</option>
-							<option value="female">Female</option>
-						</select>
-						{errors.interest && (
-							<small className="text-danger">{errors.interest[0]}</small>
-						)}
-					</div>
+          <div className="form-group mb-3">
+            <select
+              name="interest"
+              required
+              value={values.interest}
+              onChange={handleChange}
+              className="form-select form-control custom-select-arrow"
+            >
+              <option value="" selected>
+                Interest?
+              </option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+            {errors.interest && (
+              <small className="text-danger">{errors.interest[0]}</small>
+            )}
+          </div>
 
-					<div className="form-btn">
-						<Button
-							type="submit"
-							variant="primary"
-							className="border radius-8 py-3 w-100"
-							disabled={isLoading}
-						>
-							{isLoading ? "Submitting..." : "Submit"}
-						</Button>
-					</div>
-				</form>
-			</Modal.Body>
-		</Modal>
-	);
+          <div className="form-btn">
+            <Button
+              type="submit"
+              variant="primary"
+              className="border radius-8 py-3 w-100"
+              disabled={isLoading}
+            >
+              {isLoading ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
+        </form>
+      </Modal.Body>
+    </Modal>
+  );
 };
 
 export default CategoryModal;

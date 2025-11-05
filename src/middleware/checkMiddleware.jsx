@@ -2,17 +2,25 @@ import { useState } from "react";
 import SelfieModal from "../Components/SelfieModal";
 import ManPackagesTab from "../Components/ManPackagesTab";
 import PackageSelectionModal from "../Components/PackageSelectionModal";
+import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function checkMiddleware(
-	Component,
-	checkSelfie = false,
-	checkPackage = false,
+  Component,
+  checkSelfie = false,
+  checkPackage = false
 ) {
-	return function ProtectedComponent(props) {
+  return function ProtectedComponent(props) {
     const [showSelfie, setShowSelfie] = useState(false);
     const [showPackages, setShowPackages] = useState(false);
 
+    const over18 = localStorage.getItem("over18") === "true";
+    if (!over18) {
+      return <Navigate to={"/access-not-allowed"}></Navigate>;
+    }
+
     const hasPackage = localStorage.getItem("hasPackage") === "true";
+
     // const selfieVerified = localStorage.getItem("selfieVerified") === "true";
     const selfieVerified = true;
     const gender = localStorage.getItem("gender");
