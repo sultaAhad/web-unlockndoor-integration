@@ -113,27 +113,28 @@ function DatesTab() {
 	const Actions = (sponsor) => {
 		if (sponsor?.status == "pending" || sponsor?.status == "countered") {
 			return (
-				<>
-					<Link
-						onClick={() => acceptOfferHandle(sponsor?.id)}
-						className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-12`}
-					>
-						Accept
-					</Link>
-					<Link
-						className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-1`}
-						onClick={() => setShowRejectModal(true)}
-					>
-						Reject
-					</Link>
-					<RejectModal
-						show={showRejectModal}
-						dateId={sponsor?.id}
-						onClose={() => setShowRejectModal(false)}
-						onSubmit={handleRejectSubmit}
-					/>
-				</>
-			);
+        <>
+          <Link
+            onClick={() => acceptOfferHandle(sponsor?.id)}
+            className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-12`}
+          >
+            Accept
+          </Link>
+          <Link
+            className={`btn-write rounded-0 w-100 ms-2 d-flex align-items-center justify-content-center extra-bg-1`}
+            onClick={() => setShowRejectModal(true)}
+          >
+            Reject
+          </Link>
+          <RejectModal
+            sponsor={sponsor}
+            show={showRejectModal}
+            dateId={sponsor?.id}
+            onClose={() => setShowRejectModal(false)}
+            onSubmit={handleRejectSubmit}
+          />
+        </>
+      );
 		}
 		if (sponsor?.status == "accepted") {
 			return (

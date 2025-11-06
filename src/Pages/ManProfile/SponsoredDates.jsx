@@ -112,7 +112,7 @@ function SponsoredDates() {
         </button>
       );
     }
-    if (status == "rejected" || status == "countered") {
+    if (status == "rejected") {
       return (
         <>
           <button

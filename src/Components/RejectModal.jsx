@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 
 Modal.setAppElement("#root");
 
-const RejectModal = ({ show, onClose, dateId, onSubmit }) => {
+const RejectModal = ({ sponsor, show, onClose, dateId, onSubmit }) => {
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
+  console.log(sponsor.offer_price);
 
   const handleSubmit = () => {
     if (!amount || !reason) {
       alert("Please fill all fields");
       return;
     }
+
+    if (parseInt(sponsor.offer_price) <= parseInt(amount)) {
+      toast.warning("Desired amount must be greater then offer ammount.");
+      return;
+    }
+
     onSubmit({
       counter_price: amount,
       reason: reason,
@@ -72,22 +80,21 @@ const RejectModal = ({ show, onClose, dateId, onSubmit }) => {
 export default RejectModal;
 
 const customStyles = {
-	content: {
-		top: "50%",
-		left: "50%",
-		right: "auto",
-		bottom: "auto",
-		marginRight: "-50%",
-		transform: "translate(-50%, -50%)",
-		width: "400px",
-		padding: "30px",
-		borderRadius: "10px",
-	},
-	overlay: {
-		backgroundColor: "#35353596",
-		zIndex: 1000,
-		backdropFilter: "blur(1px)", // <-- this is your blur
-		WebkitBackdropFilter: "blur(1px)", // for Safari support
-	},
-	
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "400px",
+    padding: "30px",
+    borderRadius: "10px",
+  },
+  overlay: {
+    backgroundColor: "#35353596",
+    zIndex: 1000,
+    backdropFilter: "blur(1px)", // <-- this is your blur
+    WebkitBackdropFilter: "blur(1px)", // for Safari support
+  },
 };
