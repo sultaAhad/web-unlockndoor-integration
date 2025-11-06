@@ -2496,6 +2496,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	font-size: 14px;
 	color: #f01313;
 	font-family: TomatoGrotesk-SemiBold;
+	cursor: not-allowed;
 }
 
 .congrats_modal .modal-content {

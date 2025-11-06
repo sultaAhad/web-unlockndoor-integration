@@ -42,11 +42,13 @@ const Contactus = () => {
         Swal.fire("Error!", response.message || "Something went wrong.", "error");
       }
     } catch (error) {
-      Swal.fire(
-        "Error!",
-        error?.data?.message || "Something went wrong. Please try again later.",
-        "error"
-      );
+      setErrors({ phone: error.data?.["Error messages"] });
+
+      // Swal.fire(
+      //   "Error!",
+      //   error?.data?.message || "Something went wrong. Please try again later.",
+      //   "error"
+      // );
     }
   };
 
