@@ -148,7 +148,11 @@ const Mansettingpassword = () => {
 								<div className="col-lg-5">
 									<form onSubmit={handleSubmit}>
 										{/* Current Password */}
-										<div className="form-group password_input position-relative mb-3">
+										<div
+											className={`form-group password_input position-relative mb-3 ${
+												errors?.current_password ? "pass___error" : ""
+											}`}
+										>
 											<input
 												type={showOldPassword ? "text" : "password"}
 												className="form-control pe-5 w-100"
@@ -182,7 +186,10 @@ const Mansettingpassword = () => {
 										</div>
 
 										{/* New Password */}
-										<div className="form-group password_input position-relative mb-3">
+										<div
+											className={`form-group password_input position-relative mb-3"
+										${errors?.password ? "pass___error" : ""}`}
+										>
 											<input
 												type={showNewPassword ? "text" : "password"}
 												className="form-control pe-5 w-100"
@@ -216,7 +223,10 @@ const Mansettingpassword = () => {
 										</div>
 
 										{/* Confirm Password */}
-										<div className="form-group password_input position-relative mb-3">
+										<div
+											className={`form-group password_input position-relative mb-3
+											${errors?.confirm_password ? "pass___error" : ""}`}
+										>
 											<input
 												type={showConfirmPassword ? "text" : "password"}
 												className="form-control pe-5 w-100"

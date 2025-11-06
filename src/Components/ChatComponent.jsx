@@ -574,7 +574,7 @@ function ChatComponent({ type }) {
 						</li>
 					))
 				) : (
-					<p className="py-5 text-capitalize text-center text-secondary">
+					<p className="py-5 secondary-medium-font text-capitalize text-center text-white">
 						No Chat found
 					</p>
 				)}

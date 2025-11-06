@@ -141,7 +141,7 @@ function DatesTab() {
 					to={"/chat"}
 					className={`btn-write rounded-0 d-flex align-items-center justify-content-center extra-bg-4`}
 				>
-					Accepted
+					Chat
 				</Link>
 			);
 		}
@@ -218,26 +218,28 @@ function DatesTab() {
 															sponsoredDates.map((sponsorDate, index) => (
 																<tr className="wrapper-table-d" key={index}>
 																	<td className="secondary-medium-font  level-8 ">
-																		<div className="d-flex align-items-center gap-3">
-																			<div className="">
-																				{" "}
-																				<img
-																					src={
-																						sponsorDate.men?.profile_image_url
-																					}
-																					className="img-fluid wrapper-fluid-notification w-25"
-																					alt=""
-																				/>
+																		<Link to={"/chat"} className="text-decoration-none">
+																			<div className="d-flex align-items-center gap-3">
+																				<div className="">
+																					{" "}
+																					<img
+																						src={
+																							sponsorDate.men?.profile_image_url
+																						}
+																						className="img-fluid wrapper-fluid-notification w-25"
+																						alt=""
+																					/>
+																				</div>
+																				<div className="">
+																					<h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
+																						{sponsorDate.men?.name}
+																					</h4>
+																					<p className="mb-0 text-white text-start">
+																						{sponsorDate.comment}
+																					</p>
+																				</div>
 																			</div>
-																			<div className="">
-																				<h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
-																					{sponsorDate.men?.name}
-																				</h4>
-																				<p className="mb-0 text-white text-start">
-																					{sponsorDate.comment}
-																				</p>
-																			</div>
-																		</div>
+																		</Link>
 																	</td>
 																	<td className="secondary-medium-font text-white level-8 text-center">
 																		{sponsorDate.date}

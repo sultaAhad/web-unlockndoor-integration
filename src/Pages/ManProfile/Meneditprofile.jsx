@@ -424,39 +424,45 @@ function Meneditprofile() {
 
 						<div className="profile_img_div">
 							<div className="position-relative text-center">
-								<img
-									src={form.profileImage}
-									className="img-fluid profile_imgg"
-									alt="Profile"
-								/>
-								<div className="camera-wrapper-pp wrapp-camera-po position-absolute bottom-50">
-									<button
-										type="button"
-										className="btn p-0"
-										onClick={() => profileInputRef.current.click()}
-										disabled={isProfileImageLoading}
-									>
-										{isProfileImageLoading ? (
-											<div
-												className="spinner-border spinner-border-sm text-light"
-												role="status"
-											>
-												<span className="visually-hidden">Loading...</span>
-											</div>
-										) : (
-											<i className="fa-solid fa-camera"></i>
-										)}
-									</button>
-									<input
-										type="file"
-										ref={profileInputRef}
-										onChange={handleProfileChange}
-										accept="image/*"
-										hidden
-										disabled={isProfileImageLoading}
+								<figure className="position-relative mb-0">
+									<img
+										src={form.profileImage}
+										className="img-fluid profile_imgg"
+										alt="Profile"
 									/>
-								</div>
-								<h5>{form?.name || "John Smith"}</h5>
+									<div className="camera-wrapper-pp wrapp-camera-po position-absolute bottom-50">
+										<button
+											type="button"
+											className="btn p-0"
+											onClick={() => profileInputRef.current.click()}
+											disabled={isProfileImageLoading}
+										>
+											{isProfileImageLoading ? (
+												<div
+													className="spinner-border spinner-border-sm text-light"
+													role="status"
+												>
+													<span className="visually-hidden">Loading...</span>
+												</div>
+											) : (
+												<i className="fa-solid fa-camera"></i>
+											)}
+										</button>
+										<input
+											type="file"
+											ref={profileInputRef}
+											onChange={handleProfileChange}
+											accept="image/*"
+											hidden
+											disabled={isProfileImageLoading}
+										/>
+									</div>
+								</figure>
+								<h5>
+									{(form?.name && form.name.length > 20
+										? form.name.slice(0, 20) + "..."
+										: form?.name) || "John Smith"}
+								</h5>
 							</div>
 						</div>
 					</div>
@@ -490,7 +496,12 @@ function Meneditprofile() {
 								{/* Email */}
 								<div className="col-md-4">
 									<div className="form-group">
-										<input type="email" value={form.email} disabled />
+										<input
+											type="email"
+											value={form.email}
+											disabled
+											style={{ backgroundColor: "#f0f0f0", color: "#6c757d" }}
+										/>
 									</div>
 								</div>
 
@@ -697,6 +708,7 @@ function Meneditprofile() {
 															height: 20,
 															lineHeight: "14px",
 															fontSize: 14,
+															cursor:"pointer",
 														}}
 														onClick={() => removeFile(i, "images")}
 													>
@@ -761,6 +773,7 @@ function Meneditprofile() {
 															height: 20,
 															lineHeight: "14px",
 															fontSize: 14,
+															cursor:"pointer",
 														}}
 														onClick={() => removeFile(i, "videos")}
 													>

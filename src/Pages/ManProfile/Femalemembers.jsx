@@ -268,7 +268,7 @@ function Femalemembers() {
 						<div className="row">
 							<div className="col-lg-2 mx-auto">
 								<button
-									className="btn-write load-more-wrapper"
+									className="btn-write load-more-wrapper loadmore____btn"
 									onClick={() => setCurrentPage((p) => p + 1)}
 								>
 									{isLoading ? "Fetching..." : "Load More"}

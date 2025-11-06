@@ -18,6 +18,9 @@ function MatchedProfileCard({ card, index }) {
 	return (
 		<div className="col-lg-4 col-md-6 mb-4" key={index}>
 			<div className="profile-card">
+				<p className="bg-massage ms-3 mt-3 position-absolute ps-3 rounded-0 w-75 text-capitalize">
+					{card.name}
+				</p>
 				<img
 					src={card.profile_image_url}
 					alt="profile"

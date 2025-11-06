@@ -201,53 +201,69 @@ function SponsoredDates() {
                             </tr>
                           </thead>
                           <tbody>
-                            {sponsoredDates != null &&
-                              sponsoredDates.map((sponsorDate, index) => (
-                                <tr className="wrapper-table-d" key={index}>
-                                  <td className="secondary-medium-font  level-8 ">
-                                    <div className="d-flex align-items-center gap-3">
-                                      <div className="w-25">
-                                        {" "}
-                                        <img
-                                          src={
-                                            sponsorDate.women?.profile_image_url
-                                          }
-                                          className="img-fluid wrapper-fluid-notification w-25"
-                                          alt=""
-                                        />
+                            {sponsoredDates && sponsoredDates.length > 0 ? (
+                              <>
+                                {sponsoredDates.map((sponsorDate, index) => (
+                                  <tr className="wrapper-table-d" key={index}>
+                                    <td className="secondary-medium-font  level-8 ">
+                                      <div className="d-flex align-items-center gap-3">
+                                        <div className="w-25">
+                                          {" "}
+                                          <img
+                                            src={
+                                              sponsorDate.women
+                                                ?.profile_image_url
+                                            }
+                                            className="img-fluid wrapper-fluid-notification w-25"
+                                            alt=""
+                                          />
+                                        </div>
+                                        <div className="">
+                                          <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
+                                            {sponsorDate.women?.name}
+                                          </h4>
+                                          <p className="mb-0 text-white ">
+                                            {sponsorDate.comment}
+                                          </p>
+                                        </div>
                                       </div>
-                                      <div className="">
-                                        <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
-                                          {sponsorDate.women?.name}
-                                        </h4>
-                                        <p className="mb-0 text-white ">
-                                          {sponsorDate.comment}
-                                        </p>
+                                    </td>
+                                    <td className="secondary-medium-font text-white level-8 text-center">
+                                      {sponsorDate.date}
+                                    </td>
+                                    <td className="secondary-medium-font text-white level-8 text-center">
+                                      ${sponsorDate.offer_price}
+                                    </td>
+                                    <td className="secondary-medium-font text-white level-8 text-center">
+                                      <h4
+                                        className={`${getStatusClass(
+                                          sponsorDate.status
+                                        )} mb-0 secondary-medium-font level-8 text-capitalize`}
+                                      >
+                                        {sponsorDate.status}
+                                      </h4>
+                                    </td>
+                                    <td className="secondary-medium-font level-8 text-center">
+                                      <div className="btn-wrapper">
+                                        {Actions(
+                                          sponsorDate.status,
+                                          sponsorDate
+                                        )}
                                       </div>
-                                    </div>
-                                  </td>
-                                  <td className="secondary-medium-font text-white level-8 text-center">
-                                    {sponsorDate.date}
-                                  </td>
-                                  <td className="secondary-medium-font text-white level-8 text-center">
-                                    ${sponsorDate.offer_price}
-                                  </td>
-                                  <td className="secondary-medium-font text-white level-8 text-center">
-                                    <h4
-                                      className={`${getStatusClass(
-                                        sponsorDate.status
-                                      )} mb-0 secondary-medium-font level-8 text-capitalize`}
-                                    >
-                                      {sponsorDate.status}
-                                    </h4>
-                                  </td>
-                                  <td className="secondary-medium-font level-8 text-center">
-                                    <div className="btn-wrapper">
-                                      {Actions(sponsorDate.status, sponsorDate)}
-                                    </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </>
+                            ) : (
+                              <>
+                                <tr>
+                                  <td colSpan={5} className="text-white">
+                                    {" "}
+                                    No Sponsor date found
                                   </td>
                                 </tr>
-                              ))}
+                              </>
+                            )}
                           </tbody>
                         </table>
                       </div>
