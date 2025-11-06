@@ -211,7 +211,11 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
 												)}
 											</div>
 
-											<div className="form-group password_input position-relative mb-3">
+											<div
+												className={`form-group password_input position-relative mb-3 ${
+													formErrors?.password ? "pass___error" : ""
+												}`}
+											>
 												<input
 													type={showPassword ? "text" : "password"}
 													name="password"

@@ -385,28 +385,36 @@ function WomenEditProfile() {
 
 								<div className="profile_img_div">
 									<div className="position-relative text-center">
-										<img
-											src={form.profileImage}
-											className="img-fluid profile_imgg"
-											alt="Profile"
-										/>
-										<div className="camera-wrapper-pp wrapp-camera-po position-absolute bottom-50">
-											<button
-												type="button"
-												className="btn p-0"
-												onClick={() => profileInputRef.current.click()}
-											>
-												<i className="fa-solid fa-camera"></i>
-											</button>
-											<input
-												type="file"
-												ref={profileInputRef}
-												onChange={handleProfileChange}
-												accept="image/*"
-												hidden
+										<figure className="position-relative mb-0">
+											<img
+												src={form.profileImage}
+												className="img-fluid profile_imgg"
+												alt="Profile"
 											/>
-										</div>
-										<h5>{user?.name}</h5>
+											<div className="camera-wrapper-pp wrapp-camera-po position-absolute bottom-50">
+												<button
+													type="button"
+													className="btn p-0"
+													onClick={() => profileInputRef.current.click()}
+												>
+													<i className="fa-solid fa-camera"></i>
+												</button>
+												<input
+													type="file"
+													ref={profileInputRef}
+													onChange={handleProfileChange}
+													accept="image/*"
+													hidden
+												/>
+											</div>
+										</figure>
+										<h5 title={user?.name}>
+											{user?.name
+												? user.name.length > 20
+													? user.name.slice(0, 20) + "..."
+													: user.name
+												: ""}
+										</h5>
 									</div>
 								</div>
 							</div>
@@ -466,6 +474,7 @@ function WomenEditProfile() {
 																			height: 20,
 																			lineHeight: "14px",
 																			fontSize: 14,
+																			cursor: "pointer",
 																		}}
 																		onClick={() => removeFile(i, "images")}
 																	>
@@ -532,6 +541,7 @@ function WomenEditProfile() {
 																			height: 20,
 																			lineHeight: "14px",
 																			fontSize: 14,
+																			cursor: "pointer",
 																		}}
 																		onClick={() => removeFile(i, "videos")}
 																	>

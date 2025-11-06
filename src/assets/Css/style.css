@@ -188,11 +188,18 @@ input[type="number"] {
 	box-shadow: 0px 0px 9px rgba(250, 160, 0, 0.35);
 }
 
-.my_header_button {
+.my_header_button:hover {
 	border-style: solid;
-	border-image: linear-gradient(to bottom, #9c1648, #9752fc) 1 !important;
 	background: linear-gradient(#9c1648, #9752fc) padding-box,
 		linear-gradient(to bottom, #9c1648, #9752fc) border-box;
+}
+
+.my_header_button img {
+    filter: brightness(0) saturate(100%) invert(22%) sepia(45%) saturate(3239%) hue-rotate(313deg) brightness(81%) contrast(106%);
+}
+
+.my_header_button:hover img {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(99%) saturate(23%) hue-rotate(120deg) brightness(105%) contrast(100%);
 }
 
 .header_modal_dv .modal-body {
@@ -353,9 +360,10 @@ button.main-wrapper-btn-wrap {
 .my_header_button {
 	width: 39%;
 	height: 120px;
-	border: none;
+	border: 2px solid #9a2e91;
 	margin: 10px 2px;
-	color: #ffffff;
+	background: transparent;
+	color: #9c1648;
 	border-radius: 30px;
 	font-family: "TomatoGrotesk-Regular";
 	text-transform: capitalize;
@@ -2172,6 +2180,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	gap: 10px;
 	display: flex;
 	flex-direction: column;
+	max-width: 180px;
 }
 
 .wrapper-navigate-main {
@@ -2191,6 +2200,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	display: flex;
 	flex-direction: column;
 	width: fit-content;
+	max-width: 180px;
 }
 
 .btn-wrapper .btn-write:hover {
@@ -2594,22 +2604,26 @@ select.form-select.form-control.custom-select-arrow {
 	margin: auto;
 }
 
-.banner_sec .slick-dots li {
+.banner_sec .slick-dots li button::before {
 	background: var(--color-2);
 	height: 12px;
 	width: 12px;
 	margin: 0 6px;
 	border-radius: 50%;
 	transition: 0.4s ease;
+	color: transparent;
+	opacity: 1;
+	cursor: pointer;
 }
 
-.banner_sec .slick-dots li.slick-active {
+.banner_sec .slick-dots li.slick-active button::before {
 	background: var(--color-1);
+	opacity: 1;
 }
 
-.banner_sec .slick-dots button {
+/* .banner_sec .slick-dots button {
 	display: none;
-}
+} */
 
 .girl_img_wrapper {
 	position: relative;
@@ -2637,7 +2651,7 @@ select.form-select.form-control.custom-select-arrow {
 .offer_modal .form-control {
 	font-size: 15px;
 	font-family: var(--secondary-secondregular-font);
-	color: #00000036;
+	color: #000000d4;
 	border-radius: 15px;
 	border: 1px solid #d9d9d9;
 	padding: 14px 20px;

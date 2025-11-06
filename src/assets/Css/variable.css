@@ -231,7 +231,7 @@
 		width: 150px;
 	}
 }
-@media (max-width: 912px) {
+@media (max-width: 992px) {
 	.level-1 {
 		font-size: 60px;
 	}

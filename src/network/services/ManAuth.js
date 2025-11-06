@@ -230,7 +230,7 @@ export const ManAuth = createApi({
 		}),
 		deleteVideoMan: build.mutation({
 			query: (formData) => ({
-				url: DELETE_VIDEO_WOMAN,
+				url: DELETE_VIDEO_MAN,
 				method: "POST",
 				body: formData,
 			}),
