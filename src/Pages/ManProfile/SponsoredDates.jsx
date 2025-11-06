@@ -201,7 +201,7 @@ function SponsoredDates() {
                             </tr>
                           </thead>
                           <tbody>
-                            {sponsoredDates.length > 0 ? (
+                            {sponsoredDates && sponsoredDates.length > 0 ? (
                               <>
                                 {sponsoredDates.map((sponsorDate, index) => (
                                   <tr className="wrapper-table-d" key={index}>
