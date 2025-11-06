@@ -160,171 +160,171 @@ import { useGetWomanMatchProfilesQuery } from "../../../network/services/WomanAu
 import { ToastContainer } from "react-toastify";
 
 function LikeMatchMatched() {
-  const [filterBy, setFilterBy] = useState("matched");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
-  const [matchedProfiles, setMatchedProfiles] = useState([]);
-  // keep previousProfiles so UI doesn't flicker/hide pagination while loading
-  const [previousProfiles, setPreviousProfiles] = useState([]);
+	const [filterBy, setFilterBy] = useState("matched");
+	const [currentPage, setCurrentPage] = useState(1);
+	const [lastPage, setLastPage] = useState(1);
+	const [matchedProfiles, setMatchedProfiles] = useState([]);
+	// keep previousProfiles so UI doesn't flicker/hide pagination while loading
+	const [previousProfiles, setPreviousProfiles] = useState([]);
 
-  const { data, isLoading, refetch, isFetching } =
-    useGetWomanMatchProfilesQuery({
-      filterBy,
-      page: currentPage,
-    });
+	const { data, isLoading, refetch, isFetching } =
+		useGetWomanMatchProfilesQuery({
+			filterBy,
+			page: currentPage,
+		});
 
-  // Debug logs (remove in production)
-  useEffect(() => {
-    console.log("[API DATA]", data);
-    console.log(
-      "[STATE] currentPage:",
-      currentPage,
-      "lastPage:",
-      lastPage,
-      "isLoading:",
-      isLoading,
-      "isFetching:",
-      isFetching
-    );
-  }, [data, currentPage, lastPage, isLoading, isFetching]);
+	// Debug logs (remove in production)
+	useEffect(() => {
+		console.log("[API DATA]", data);
+		console.log(
+			"[STATE] currentPage:",
+			currentPage,
+			"lastPage:",
+			lastPage,
+			"isLoading:",
+			isLoading,
+			"isFetching:",
+			isFetching,
+		);
+	}, [data, currentPage, lastPage, isLoading, isFetching]);
 
-  // Update states when new data arrives — but preserve previousProfiles until new arrives
-  useEffect(() => {
-    if (data?.data) {
-      // save previous to avoid empty UI while fetching
-      setPreviousProfiles(matchedProfiles);
-      setMatchedProfiles(Array.isArray(data.data.data) ? data.data.data : []);
-      setCurrentPage(data.data.current_page ?? currentPage);
-      setLastPage(data.data.last_page ?? 1);
-    }
-  }, [data]); // only run when data changes
+	// Update states when new data arrives — but preserve previousProfiles until new arrives
+	useEffect(() => {
+		if (data?.data) {
+			// save previous to avoid empty UI while fetching
+			setPreviousProfiles(matchedProfiles);
+			setMatchedProfiles(Array.isArray(data.data.data) ? data.data.data : []);
+			setCurrentPage(data.data.current_page ?? currentPage);
+			setLastPage(data.data.last_page ?? 1);
+		}
+	}, [data]); // only run when data changes
 
-  const activeStyle = {
-    backgroundColor: "#c22751",
-    color: "#fff",
-    border: "1px solid #c22751",
-  };
+	const activeStyle = {
+		backgroundColor: "#c22751",
+		color: "#fff",
+		border: "1px solid #c22751",
+	};
 
-  const buttonBaseStyle = {
-    padding: "10px 24px",
-    borderRadius: "999px",
-    fontWeight: "500",
-    fontSize: "14px",
-    border: "1px solid #c22751",
-    backgroundColor: "transparent",
-    color: "#c22751",
-    cursor: "pointer",
-    textDecoration: "none",
-    transition: "all 0.3s ease",
-  };
+	const buttonBaseStyle = {
+		padding: "10px 24px",
+		borderRadius: "999px",
+		fontWeight: "500",
+		fontSize: "14px",
+		border: "1px solid #c22751",
+		backgroundColor: "transparent",
+		color: "#c22751",
+		cursor: "pointer",
+		textDecoration: "none",
+		transition: "all 0.3s ease",
+	};
 
-  // Choose what to display while fetching: show previousProfiles if available, else spinner/no-data
-  const displayProfiles = isFetching
-    ? previousProfiles.length > 0
-      ? previousProfiles
-      : matchedProfiles
-    : matchedProfiles;
+	// Choose what to display while fetching: show previousProfiles if available, else spinner/no-data
+	const displayProfiles = isFetching
+		? previousProfiles.length > 0
+			? previousProfiles
+			: matchedProfiles
+		: matchedProfiles;
 
-  return (
-    <>
-      <Header />
-      <ToastContainer />
+	return (
+		<>
+			<Header />
+			<ToastContainer />
 
-      <section className="profile_sec">
-        <div className="container">
-          <div className="row">
-            <ProfileHeader />
-            <div className="col-md-12 pt-5 for-extra-space mt-5">
-              <ProfileNavbar />
-            </div>
-          </div>
-        </div>
-      </section>
+			<section className="profile_sec">
+				<div className="container">
+					<div className="row">
+						<ProfileHeader />
+						<div className="col-md-12 pt-5 for-extra-space mt-5">
+							<ProfileNavbar />
+						</div>
+					</div>
+				</div>
+			</section>
 
-      <section className="videos_sec">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="d-flex flex-sm-row flex-column align-items-center gap-3 justify-content-end mb-4">
-                <Link
-                  onClick={() => {
-                    setCurrentPage(1);
-                    setMatchedProfiles([]);
-                    setFilterBy("matched");
-                  }}
-                  className="secondary-medium-font text-white"
-                  style={{
-                    ...buttonBaseStyle,
-                    ...(filterBy === "matched" ? activeStyle : {}),
-                  }}
-                >
-                  Matched Members
-                </Link>
+			<section className="videos_sec">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-12">
+							<div className="d-flex flex-sm-row flex-column align-items-center gap-3 justify-content-end mb-4">
+								<Link
+									onClick={() => {
+										setCurrentPage(1);
+										setMatchedProfiles([]);
+										setFilterBy("matched");
+									}}
+									className="secondary-medium-font text-white"
+									style={{
+										...buttonBaseStyle,
+										...(filterBy === "matched" ? activeStyle : {}),
+									}}
+								>
+									Matched Members
+								</Link>
 
-                <Link
-                  className="secondary-medium-font"
-                  onClick={() => {
-                    setCurrentPage(1);
-                    setMatchedProfiles([]);
-                    setFilterBy("liked");
-                  }}
-                  style={{
-                    ...buttonBaseStyle,
-                    ...(filterBy === "liked" ? activeStyle : {}),
-                  }}
-                >
-                  Unmatched Members
-                </Link>
-              </div>
-            </div>
-          </div>
+								<Link
+									className="secondary-medium-font"
+									onClick={() => {
+										setCurrentPage(1);
+										setMatchedProfiles([]);
+										setFilterBy("liked");
+									}}
+									style={{
+										...buttonBaseStyle,
+										...(filterBy === "liked" ? activeStyle : {}),
+									}}
+								>
+									Unmatched Members
+								</Link>
+							</div>
+						</div>
+					</div>
 
-          {/* Spinner overlay at top while fetching */}
-          {isFetching ? (
-            <div className="row justify-content-center">
-              <Spinner />
-            </div>
-          ) : (
-            <div className="row">
-              {displayProfiles && displayProfiles.length > 0
-                ? displayProfiles.map((card, index) => (
-                    <LikeMatchCard
-                      key={card?.id ?? index}
-                      type={filterBy}
-                      card={card?.liker}
-                      responseAction={() => refetch()}
-                    />
-                  ))
-                : !isFetching && (
-                    <div className="text-center py-5">
-                      <p>No members found.</p>
-                    </div>
-                  )}
-            </div>
-          )}
+					{/* Spinner overlay at top while fetching */}
+					{isFetching ? (
+						<div className="row justify-content-center">
+							<Spinner />
+						</div>
+					) : (
+						<div className="row">
+							{displayProfiles && displayProfiles.length > 0
+								? displayProfiles.map((card, index) => (
+										<LikeMatchCard
+											key={card?.id ?? index}
+											type={filterBy}
+											card={card?.liker}
+											responseAction={() => refetch()}
+										/>
+								  ))
+								: !isFetching && (
+										<div className="text-center py-5">
+											<p>No members found.</p>
+										</div>
+								  )}
+						</div>
+					)}
 
-          {typeof lastPage === "number" && lastPage > 1 && (
-            <div className="row mt-5 pt-4">
-              <div className="col-lg-2 mx-auto">
-                <div className="btn-wrapper">
-                  <Pagination
-                    currentPage={currentPage}
-                    lastPage={lastPage}
-                    onPageChange={(page) => {
-                      const p = Number(page) || 1;
-                      if (p !== currentPage) setCurrentPage(p);
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+					{typeof lastPage === "number" && lastPage > 1 && (
+						<div className="row mt-5 pt-4">
+							<div className="col-lg-2 mx-auto">
+								<div className="btn-wrapper">
+									<Pagination
+										currentPage={currentPage}
+										lastPage={lastPage}
+										onPageChange={(page) => {
+											const p = Number(page) || 1;
+											if (p !== currentPage) setCurrentPage(p);
+										}}
+									/>
+								</div>
+							</div>
+						</div>
+					)}
+				</div>
+			</section>
 
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default LikeMatchMatched;

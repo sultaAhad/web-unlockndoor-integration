@@ -190,7 +190,7 @@ const PackageTabs = () => {
 												{pkg.title} - ${pkg.price}
 											</h4>
 											<p className="text-white font_reg font_level4 mb-0">
-												{pkg.duration} Days
+												{pkg.duration} Month
 											</p>
 											<p className="text-warning font_reg font_level5 mb-0">
 												Type: {pkg.type}

@@ -1994,8 +1994,19 @@ li.bullet_Wrapper.wrapper-bullet {
 
 .terms_para p {
 	font-size: 16px;
-	color: #ffffff;
+	color: #ffffff !important;
 	font-family: "FontAwesome";
+}
+.terms_para p span {
+	font-size: 16px;
+	color: #ffffff !important;
+	font-family: "FontAwesome";
+}
+.terms_para h5 span {
+	color: #ffffff !important;
+}
+.terms_para ul li span {
+	color: #ffffff !important;
 }
 
 .terms_head {

@@ -15,6 +15,7 @@ function Banner() {
 
 	const { data: homePageContent, isLoading } = useHomeContentQuery();
 	const HomePageData = homePageContent?.data?.sectionOne;
+	console.log(HomePageData);
 
 	return (
 		<section className="banner_sec py-5" ref={ref}>
@@ -39,17 +40,7 @@ function Banner() {
 								</h5>
 
 								{/* Meta Keywords Heading */}
-								<h2>
-									{isLoading ? (
-										<Skeleton width={300} height={30} />
-									) : (
-										HomePageData?.meta_keywords?.map((word, index) => (
-											<span key={index} className="gradient-text me-2">
-												{word}
-											</span>
-										))
-									)}
-								</h2>
+								<h2 className="gradient-text">{HomePageData?.subtitle_1}</h2>
 
 								{/* Content */}
 								<p>

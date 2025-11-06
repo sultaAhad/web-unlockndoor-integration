@@ -6,6 +6,7 @@ import { usePrivacyPolicyQuery } from "../network/services/AuthServices";
 function Privacypolicy() {
 	const { data, isLoading, error, refetch } = usePrivacyPolicyQuery();
 	const pageData = data?.response?.data;
+	console.log(pageData);
 
 	return (
 		<>

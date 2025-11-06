@@ -287,7 +287,6 @@ const FemaleMemberCard = ({ member }) => {
 		}));
 	};
 
-
 	return (
 		<div className="col-lg-4 col-md-6 mb-4">
 			<div className="profile-card">
