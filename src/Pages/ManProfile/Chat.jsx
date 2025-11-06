@@ -5,25 +5,33 @@ import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer";
 import { motion } from "framer-motion";
 import {
-	chatimg1,
-	searchchat,
-	chatimg2,
-	chatimg3,
-	chatimg4,
-	chatimg5,
-	camerachat,
-	chatimgg,
-	chatimgg1,
-	paperclip,
-	innerpages2,
+  chatimg1,
+  searchchat,
+  chatimg2,
+  chatimg3,
+  chatimg4,
+  chatimg5,
+  camerachat,
+  chatimgg,
+  chatimgg1,
+  paperclip,
+  innerpages2,
 } from "../../Constant/Index";
 import PricingModal from "../../Components/ChatModals/PricingModal";
 import PayNowModal from "../../Components/ChatModals/PayNowModal";
 import ThankYouModal from "../../Components/ChatModals/ThankYouModal";
 import VideoChatModal from "../../Components/ChatModals/videoChatModal";
 import ChatComponent from "../../Components/ChatComponent";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 const Chat = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  if (user?.package?.slug == "free-tier") {
+    return <Navigate to={"/"} />;
+  }
+
   // Pricing Modal States
   const [showPricingModal, setShowPricingModal] = useState(false);
   const handlePricingClose = () => setShowPricingModal(false);

@@ -252,10 +252,12 @@ import LikeSwapButtons from "./LikeSwapButtons";
 import MakeOfferButton from "./MakeOfferButton";
 import VideoCallButton from "./VideoCallButton";
 import { mchat } from "../Constant/Index";
+import { useSelector } from "react-redux";
 
 const FemaleMemberCard = ({ member }) => {
 	const [femaleMember, setFemaleMember] = useState(member);
 	const navigate = useNavigate();
+	const { user } = useSelector((state) => state.auth);
 
 	// --- Fetch man data (minutes, can_call, etc.) ---
 	const { data: manData, isLoading, refetch } = useGetManDataQuery();
@@ -268,7 +270,9 @@ const FemaleMemberCard = ({ member }) => {
 	const checkFeatureAccess = (member, feature) => {
 		const pkg = member?.package?.slug || "";
 		if (!pkg) return false;
-
+		if (user?.package?.slug == "free-tier") {
+			return false;
+		}
 		if (pkg.includes("silver")) return feature === "chat";
 		if (pkg.includes("gold")) return feature === "chat" || feature === "video";
 		if (pkg.includes("platinum")) return true;
