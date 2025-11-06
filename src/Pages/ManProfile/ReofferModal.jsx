@@ -14,6 +14,11 @@ const ReofferModal = ({ offer, showreofferModal, handlereofferClose }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (parseInt(form.offer_price) <= parseInt(offer.offer_price)) {
+        toast.error("Offer price must be above last offer price");
+        return;
+      }
+
       let response = await reOfferDate(form);
       if (response.data?.status) {
         toast.success(response.data?.message);
@@ -66,7 +71,8 @@ const ReofferModal = ({ offer, showreofferModal, handlereofferClose }) => {
                     Enter New Offer
                   </label>
                   <input
-                    type="text"
+                    type="number"
+                    minLength={offer?.offer_price + 1}
                     required
                     name="offer_price"
                     onChange={(e) => {
