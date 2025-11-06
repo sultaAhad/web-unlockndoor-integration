@@ -297,7 +297,7 @@ function LikeMatchMatched() {
 								  ))
 								: !isFetching && (
 										<div className="text-center py-5">
-											<p>No members found.</p>
+											<p className="level-7 secondary-bold-font text-white">No members found.</p>
 										</div>
 								  )}
 						</div>

@@ -606,6 +606,12 @@ span.step-label.active {
 	font-size: 20px !important;
 }
 
+.pass___error i {
+    top: 37% !important;
+    bottom: 0;
+	height: fit-content;
+}
+
 /* Laptop Responsive  */
 
 @media (max-width: 1200px) {

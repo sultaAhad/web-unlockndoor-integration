@@ -32,7 +32,7 @@ const RoleSelectionModal = ({ show, onClose, onLoginClick }) => {
 								</Button>
 							</Link>
 							<Link to="/man-registration">
-								<Button className=" wrapper-hideen wrapper-centered-wrapppp hide_border">
+								<Button className="my_header_button wrapper-hideen ">
 									<span className="move-icon">
 										<img src={ww_img} alt="" />
 									</span>
