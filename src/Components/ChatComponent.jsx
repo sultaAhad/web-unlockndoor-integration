@@ -28,7 +28,18 @@ import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
 	const [showPriceModal, setShowPriceModal] = useState(false);
-	console.log(user);
+	console.log("Logged-in user:", user);
+
+	// ✅ Extract package slug safely
+	// ✅ Safe condition — agar package slug hai tab hi check kare
+	let canVideoCall = false;
+
+	if (user?.has_women_package?.slug) {
+		const pkgSlug = user.has_women_package.slug.toLowerCase();
+		canVideoCall = pkgSlug.includes("gold") || pkgSlug.includes("platinum");
+	} else {
+		canVideoCall = false; // fallback: agar package hi nahi mila
+	}
 
 	const [deleteManChat] = useChatDeleteManMutation();
 	const [deleteWomenChat] = useChatDeleteWomenMutation();
@@ -588,44 +599,46 @@ function ChatComponent({ type }) {
 				</div>
 				<div className="col-md-3">
 					<div className="dot-drop-down chat-dot">
-						<div className="camera-link-ww">
-							<div
-								onClick={() => {
-									const minutes =
-										typeof selectedChat?.minutes === "object"
-											? selectedChat?.minutes?.minutes || 0
-											: selectedChat?.minutes || 0;
-
-									if (minutes > 0) {
-										// ✅ Start the video call directly
-										console.log("Starting video call...");
-										// Trigger the call through your existing VideoCallButton logic
-										document.getElementById("videoCallButton")?.click();
-									} else {
-										// ⚠️ No minutes left → Show price modal
-										console.log("Opening price modal...");
-										setShowPriceModal(true);
-									}
-								}}
-								style={{ cursor: "pointer" }}
-							>
-								<VideoCallButton
-									id="videoCallButton"
-									member={{
-										id: selectedChat?.participant_id,
-										name: selectedChat?.participant_name,
-										profile_image_url: selectedChat?.participant_profile,
-										gender: user.gender === "men" ? "women" : "men",
-										minutes:
+						{canVideoCall && (
+							<div className="camera-link-ww">
+								<div
+									onClick={() => {
+										const minutes =
 											typeof selectedChat?.minutes === "object"
-												? selectedChat?.minutes?.minutes
-												: selectedChat?.minutes,
+												? selectedChat?.minutes?.minutes || 0
+												: selectedChat?.minutes || 0;
+
+										if (minutes > 0) {
+											// ✅ Start the video call directly
+											console.log("Starting video call...");
+											// Trigger the call through your existing VideoCallButton logic
+											document.getElementById("videoCallButton")?.click();
+										} else {
+											// ⚠️ No minutes left → Show price modal
+											console.log("Opening price modal...");
+											setShowPriceModal(true);
+										}
 									}}
-									gender={user.gender}
-									type="icon"
-								/>
+									style={{ cursor: "pointer" }}
+								>
+									<VideoCallButton
+										id="videoCallButton"
+										member={{
+											id: selectedChat?.participant_id,
+											name: selectedChat?.participant_name,
+											profile_image_url: selectedChat?.participant_profile,
+											gender: user.gender === "men" ? "women" : "men",
+											minutes:
+												typeof selectedChat?.minutes === "object"
+													? selectedChat?.minutes?.minutes
+													: selectedChat?.minutes,
+										}}
+										gender={user.gender}
+										type="icon"
+									/>
+								</div>
 							</div>
-						</div>
+						)}
 
 						<div
 							className=" wrapper-dot d-flex align-items-center gap-1"

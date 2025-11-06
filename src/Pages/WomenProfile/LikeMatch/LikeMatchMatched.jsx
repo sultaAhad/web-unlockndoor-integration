@@ -164,7 +164,6 @@ function LikeMatchMatched() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [lastPage, setLastPage] = useState(1);
 	const [matchedProfiles, setMatchedProfiles] = useState([]);
-	// keep previousProfiles so UI doesn't flicker/hide pagination while loading
 	const [previousProfiles, setPreviousProfiles] = useState([]);
 
 	const { data, isLoading, refetch, isFetching } =
@@ -173,31 +172,15 @@ function LikeMatchMatched() {
 			page: currentPage,
 		});
 
-	// Debug logs (remove in production)
-	useEffect(() => {
-		console.log("[API DATA]", data);
-		console.log(
-			"[STATE] currentPage:",
-			currentPage,
-			"lastPage:",
-			lastPage,
-			"isLoading:",
-			isLoading,
-			"isFetching:",
-			isFetching,
-		);
-	}, [data, currentPage, lastPage, isLoading, isFetching]);
-
-	// Update states when new data arrives — but preserve previousProfiles until new arrives
+	// Update profiles when new data arrives
 	useEffect(() => {
 		if (data?.data) {
-			// save previous to avoid empty UI while fetching
 			setPreviousProfiles(matchedProfiles);
 			setMatchedProfiles(Array.isArray(data.data.data) ? data.data.data : []);
 			setCurrentPage(data.data.current_page ?? currentPage);
 			setLastPage(data.data.last_page ?? 1);
 		}
-	}, [data]); // only run when data changes
+	}, [data]);
 
 	const activeStyle = {
 		backgroundColor: "#c22751",
@@ -218,7 +201,6 @@ function LikeMatchMatched() {
 		transition: "all 0.3s ease",
 	};
 
-	// Choose what to display while fetching: show previousProfiles if available, else spinner/no-data
 	const displayProfiles = isFetching
 		? previousProfiles.length > 0
 			? previousProfiles
@@ -279,27 +261,36 @@ function LikeMatchMatched() {
 						</div>
 					</div>
 
-					{/* Spinner overlay at top while fetching */}
+					{/* Spinner while fetching */}
 					{isFetching ? (
 						<div className="row justify-content-center">
 							<Spinner />
 						</div>
 					) : (
 						<div className="row">
-							{displayProfiles && displayProfiles.length > 0
-								? displayProfiles.map((card, index) => (
-										<LikeMatchCard
-											key={card?.id ?? index}
-											type={filterBy}
-											card={card?.liker}
-											responseAction={() => refetch()}
-										/>
-								  ))
-								: !isFetching && (
-										<div className="text-center py-5">
-											<p>No members found.</p>
-										</div>
-								  )}
+							{displayProfiles && displayProfiles.length > 0 ? (
+								displayProfiles.map((card, index) => (
+									<LikeMatchCard
+										key={card?.id ?? index}
+										type={filterBy}
+										card={card?.liker}
+										responseAction={(actionType) => {
+											if (actionType === "matched") {
+												// switch to matched and fetch new data
+												setFilterBy("matched");
+												setCurrentPage(1);
+												setTimeout(() => refetch(), 300);
+											} else {
+												refetch();
+											}
+										}}
+									/>
+								))
+							) : (
+								<div className="text-center py-5">
+									<p>No members found.</p>
+								</div>
+							)}
 						</div>
 					)}
 

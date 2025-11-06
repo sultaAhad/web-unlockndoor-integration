@@ -4,32 +4,54 @@ import { mchat } from "../Constant/Index";
 import { useLikeManProfileMutation } from "../network/services/WomanAuth";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 	const [likeManProfile, { isLoading: isProcessing }] =
 		useLikeManProfileMutation();
+	const { user, userToken } = useSelector((state) => state.auth);
+
+	console.log("Logged-in user:", user);
+
+	// ✅ Extract package slug safely
+	const pkgSlug = user?.has_women_package?.slug?.toLowerCase() || "";
+	console.log("📦 Card Data:", card);
+
+	// ✅ Access logic
+	const canChat =
+		pkgSlug.includes("silver") ||
+		pkgSlug.includes("gold") ||
+		pkgSlug.includes("platinum");
+
+	const canVideoCall = pkgSlug.includes("gold") || pkgSlug.includes("platinum");
 
 	const likeMan = async () => {
 		try {
-			const response = await likeManProfile({
-				liked_id: card?.id,
-			}).unwrap();
+			const response = await likeManProfile({ liked_id: card?.id }).unwrap();
 			if (response.status) {
 				toast.success(response?.message);
-				responseAction(true);
+				responseAction("matched"); // 🔥 trigger parent update
 			}
 		} catch (error) {
-			toast.error(error?.data?.message);
+			toast.error(error?.data?.message || "Something went wrong.");
 		}
 	};
+
 	const MatchedAction = () => (
 		<div className="card-left-icons">
-			<div className="icon-circle iconwra1">
-				<Link to={`/chat-women`} state={card}>
-					<img src={mchat} alt="chat" />
-				</Link>
-			</div>
-			<VideoCallButton member={card} gender={gender} type="icon" />
+			{/* ✅ Chat visible for Silver, Gold, Platinum */}
+			{canChat && (
+				<div className="icon-circle iconwra1">
+					<Link to={`/chat-women`} state={card}>
+						<img src={mchat} alt="chat" />
+					</Link>
+				</div>
+			)}
+
+			{/* ✅ Video Call only for Gold & Platinum */}
+			{canVideoCall && (
+				<VideoCallButton member={card} gender={gender} type="icon" />
+			)}
 		</div>
 	);
 
@@ -41,7 +63,7 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 				rel="noopener noreferrer"
 				className="border only_for_img wrapper-anchor"
 			>
-				{isProcessing ? <Spinner /> : "Match Now"}
+				{isProcessing ? <Spinner animation="border" size="sm" /> : "Match Now"}
 			</a>
 		</div>
 	);
@@ -54,11 +76,6 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 					alt="profile"
 					className="card-image"
 				/>
-
-				{/* <div className="card-footer">
-          <h4>{card?.name}</h4>
-          <p>{card?.location}</p>
-        </div> */}
 
 				<div className="card-bottom d-flex justify-content-between align-items-end">
 					{type === "matched" && <MatchedAction />}
