@@ -22,7 +22,10 @@ import { toast, ToastContainer } from "react-toastify";
 import VideoCallButton from "./VideoCallButton";
 import { BASE_URL } from "../utils/base_url";
 import { GET_CHAT_MESSAGES_API } from "../utils/endpoints";
-import { useChatDeleteManMutation } from "../network/services/ManAuth";
+import {
+	useChatDeleteManMutation,
+	useGetMatchedProfilesQuery,
+} from "../network/services/ManAuth";
 import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 
 function ChatComponent({ type }) {
@@ -30,15 +33,32 @@ function ChatComponent({ type }) {
 	const [showPriceModal, setShowPriceModal] = useState(false);
 	console.log("Logged-in user:", user);
 
-	// ✅ Extract package slug safely
-	// ✅ Safe condition — agar package slug hai tab hi check kare
 	let canVideoCall = false;
+	const { data: womanData } = useGetMatchedProfilesQuery;
+	console.log(womanData, "asdasds");
 
-	if (user?.has_women_package?.slug) {
-		const pkgSlug = user.has_women_package.slug.toLowerCase();
-		canVideoCall = pkgSlug.includes("gold") || pkgSlug.includes("platinum");
+	// Pick correct package info based on gender
+	const packageInfo =
+		user?.gender === "women"
+			? user?.has_women_package || user?.package
+			: user?.has_men_package || user?.package;
+
+	// ✅ Check for valid slug
+	if (packageInfo?.slug) {
+		const slug = packageInfo.slug.toLowerCase();
+
+		// ✅ Allow only these packages
+		if (
+			slug.includes("gold") ||
+			slug.includes("platinum") ||
+			slug.includes("one-time-payment")
+		) {
+			canVideoCall = true;
+		} else {
+			canVideoCall = false;
+		}
 	} else {
-		canVideoCall = false; // fallback: agar package hi nahi mila
+		canVideoCall = false; // fallback if no package found
 	}
 
 	const [deleteManChat] = useChatDeleteManMutation();
