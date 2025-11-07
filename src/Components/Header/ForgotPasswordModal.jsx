@@ -29,12 +29,12 @@ const ForgotPasswordModal = ({ show, onClose, onContinue, gender }) => {
 			else response = await sendWomenOtp(formData).unwrap();
 
 			Swal.fire(
-				"Success",
-				response?.message || "OTP sent successfully",
-				"success",
-			);
-			onContinue(email); // pass email to OTP modal
-			setEmail("");
+        "Success",
+        response?.message || "OTP sent successfully",
+        "success"
+      );
+      setEmail("");
+      onContinue(email); 
 		} catch (err) {
 			Swal.fire("Error", err?.data?.message || "Failed to send OTP", "error");
 		} finally {
