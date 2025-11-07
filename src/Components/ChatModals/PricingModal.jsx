@@ -41,7 +41,9 @@ const PricingModal = ({
 			keyboard={false}
 		>
 			<Modal.Header closeButton>
-				<Modal.Title>Video Call Pricing</Modal.Title>
+				<Modal.Title className="secondary-medium-font level-7 extra-color-1 mb-0">
+					Video Call Pricing
+				</Modal.Title>
 			</Modal.Header>
 
 			<Modal.Body>
