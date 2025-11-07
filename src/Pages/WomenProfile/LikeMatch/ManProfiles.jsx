@@ -44,225 +44,230 @@ function ManProfiles() {
 	console.log(user);
 
 	return (
-    <>
-      <Header />
+		<>
+			<Header />
 
-      <section className="profile_sec">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12 pb-5">
-              <div className="profile_banner_img">
-                <img
-                  src={user?.current?.cover_image_url}
-                  className="img-fluid banner_img"
-                />
-                <div className="profile_img_div">
-                  <img
-                    src={user?.current?.profile_image_url}
-                    className="img-fluid profile_imgg"
-                  />
-                  <h5>{user?.current?.name}</h5>
-                </div>
+			<section className="profile_sec">
+				<div className="container">
+					<div className="row">
+						<div className="col-md-12 pb-5">
+							<div className="profile_banner_img">
+								<img
+									src={user?.current?.cover_image_url}
+									className="img-fluid banner_img"
+								/>
+								<div className="profile_img_div">
+									<img
+										src={user?.current?.profile_image_url}
+										className="img-fluid profile_imgg"
+									/>
+									<h5>{user?.current?.name}</h5>
+								</div>
 
-                <div className="account_access_dv">
-                  <div className="notify_edit_dv">
-                    <ul>
-                      <Link
-                        className="text-decoration-none text-white secondary-secondregular-font"
-                        to="/chat-women"
-                        state={user?.current}
-                      >
-                        <li className="wrapper-navigate-main position-relative">
-                          <img src={massagewrapper} /> <span>Message</span>
-                          {/* <span className="number_move_dv">21</span> */}
-                        </li>
-                      </Link>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+								<div className="account_access_dv">
+									<div className="notify_edit_dv">
+										<ul>
+											<Link
+												className="text-decoration-none text-white secondary-secondregular-font"
+												to="/chat-women"
+												state={user?.current}
+											>
+												<li className="wrapper-navigate-main position-relative">
+													<img src={massagewrapper} /> <span>Message</span>
+													{/* <span className="number_move_dv">21</span> */}
+												</li>
+											</Link>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
 
-            <div className="col-md-12 pt-5 for-extra-space">
-              <div className="profile_info_dv">
-                <div className="row">
-                  <div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
-                    <div className="info_ul">
-                      <ul>
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={p1} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area">Name : </span>
-                                {user?.current?.name}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={p2} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area"> DOB : </span>
-                                {user?.current?.date_of_birth}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={mdi_dollar} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area">
-                                  {" "}
-                                  Annual Income :{" "}
-                                </span>
-                                $ {user?.current?.income}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+						<div className="col-md-12 pt-5 for-extra-space">
+							<div className="profile_info_dv">
+								<div className="row">
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
+										<div className="info_ul">
+											<ul>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={p1} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area">Name : </span>
+																{user?.current?.name}
+															</h5>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={p2} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area"> DOB : </span>
+																{user?.current?.date_of_birth}
+															</h5>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={mdi_dollar} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area">
+																	{" "}
+																	Annual Income :{" "}
+																</span>
+																$ {user?.current?.income}
+															</h5>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
 
-                  <div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
-                    <div className="info_ul">
-                      <ul>
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={p5} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area">Email : </span>
-                                {user?.current?.email}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
+										<div className="info_ul">
+											<ul>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={p5} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area">Email : </span>
+																{user?.current?.email}
+															</h5>
+														</div>
+													</div>
+												</li>
 
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={skillimg} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area"> Skills : </span>
-                                {user?.current?.skills}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={skillimg} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area"> Skills : </span>
+																{user?.current?.skills}
+															</h5>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
 
-                  <div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
-                    <div className="info_ul">
-                      <ul>
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={p8} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area">
-                                  Phone Number :{" "}
-                                </span>
-                                {user?.current?.phone}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="dv_for_flex">
-                            <div className="img_dv">
-                              <img src={p4} />
-                            </div>
-                            <div className="text_dv">
-                              <h5>
-                                <span className="blod_area">Occupation :</span>
-                                {user?.current?.occupation}
-                              </h5>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <p className="text-white secondary-semibold-font p-2">
-                      Message:{" "}
-                      <span className="secondary-regular-font">
-                        {user?.current?.message}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+									<div className="col-lg-3 col-md-6 mb-lg-0 mb-4">
+										<div className="info_ul">
+											<ul>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={p8} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area">
+																	Phone Number :{" "}
+																</span>
+																{user?.current?.phone}
+															</h5>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div className="dv_for_flex">
+														<div className="img_dv">
+															<img src={p4} />
+														</div>
+														<div className="text_dv">
+															<h5>
+																<span className="blod_area">Occupation :</span>
+																{user?.current?.occupation}
+															</h5>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div className="col-lg-12">
+										<p className="text-white secondary-semibold-font p-2">
+											Message:{" "}
+											<span className="secondary-regular-font">
+												{user?.current?.message}
+											</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      {/* ---- Images Section ---- */}
-      {user?.current?.images_urls?.length > 0 && (
-        <section className="pictures_sec">
-          <div className="container">
-            <div className="pic_head d-flex justify-content-between">
-              <h3>Pictures</h3>
-            </div>
-            <div className="row mt-3">
-              {user.current.images_urls.map((image, idx) => (
-                <div key={idx} className="col-md-6 mb-3">
-                  <div className="pic_dv">
-                    <img src={image} alt="user" className="img-fluid rounded" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+			{/* ---- Images Section ---- */}
+			{user?.current?.images_urls?.length > 0 && (
+				<section className="pictures_sec">
+					<div className="container">
+						<div className="pic_head d-flex justify-content-between">
+							<h3>Pictures</h3>
+						</div>
+						<div className="row mt-3">
+							{user.current.images_urls.map((image, idx) => (
+								<div key={idx} className="col-md-6 mb-3">
+									<div className="pic_dv">
+										<img src={image} alt="user" className="img-fluid" />
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</section>
+			)}
 
-      {/* ---- Videos Section ---- */}
-      <section className="videos_sec">
-        <div className="container">
-          {user?.current?.videos_urls?.length > 0 && (
-            <div className="col-md-12 mt-5">
-              <div className="pic_head d-flex justify-content-between">
-                <h3>Videos</h3>
-              </div>
-              <div className="row mt-3">
-                {user.current.videos_urls.map((video, idx) => (
-                  <div key={idx} className="col-md-6 mb-3">
-                    <video controls width="100%" className="rounded">
-                      <source src={video} type="video/mp4" />
-                    </video>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+			{/* ---- Videos Section ---- */}
+			<section className="videos_sec">
+				<div className="container">
+					{user?.current?.videos_urls?.length > 0 && (
+						<div className="col-md-12 mt-5">
+							<div className="pic_head d-flex justify-content-between">
+								<h3>Videos</h3>
+							</div>
+							<div className="row mt-3">
+								{user.current.videos_urls.map((video, idx) => (
+									<div key={idx} className="col-md-6 mb-3">
+										<div className="pic_dv position-relative">
+											<video controls width="100%" className="w-100">
+												<source src={video} type="video/mp4" />
+											</video>
+											<div className="pic_icon position-absolute top-50 start-50 translate-middle">
+												<i className="fa fa-play" aria-hidden="true"></i>
+											</div>
+										</div>
+									</div>
+								))}
+							</div>
+						</div>
+					)}
+				</div>
+			</section>
 
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default ManProfiles;

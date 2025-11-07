@@ -1232,6 +1232,12 @@ section.notification-wrapper .wrapper-fluid-notification {
 		height: 80px;
 		width: 80px !important;
 	}
+	.pictures_sec {
+		padding: 40px 0px;
+	}
+	.videos_sec {
+		padding-bottom: 60px;
+	}
 }
 
 @media (max-width: 768px) {
@@ -1268,6 +1274,8 @@ section.notification-wrapper .wrapper-fluid-notification {
 		left: 0;
 		right: 0;
 		margin: auto;
+		position: unset;
+		margin-top: 20px;
 	}
 	.horizontal-navbar {
 		flex-direction: column;
@@ -1306,6 +1314,7 @@ section.notification-wrapper .wrapper-fluid-notification {
 	.account_access_dv {
 		position: unset;
 		flex-wrap: wrap;
+		margin-top: 15px;
 	}
 	.wrapper-bg-good {
 		padding: 9px 20px !important;
@@ -1388,5 +1397,9 @@ section.notification-wrapper .wrapper-fluid-notification {
 	}
 	.for-extra-space {
 		padding-top: 10px !important;
+	}
+
+	.card-footer {
+		max-width: 150px;
 	}
 }

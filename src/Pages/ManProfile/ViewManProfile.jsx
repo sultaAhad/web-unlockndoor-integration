@@ -223,7 +223,7 @@ function ViewManProfile() {
 							{user.current.images_urls.map((image, idx) => (
 								<div key={idx} className="col-md-6 mb-3">
 									<div className="pic_dv">
-										<img src={image} alt="user" className="img-fluid rounded" />
+										<img src={image} alt="user" className="img-fluid" />
 									</div>
 								</div>
 							))}
@@ -236,16 +236,18 @@ function ViewManProfile() {
 			<section className="videos_sec">
 				<div className="container">
 					{user?.current?.videos_urls?.length > 0 && (
-						<div className="col-md-12 mt-5">
+						<div className="col-md-12 mt-lg-5 mt-3">
 							<div className="pic_head d-flex justify-content-between">
 								<h3>Videos</h3>
 							</div>
 							<div className="row mt-3">
 								{user.current.videos_urls.map((video, idx) => (
 									<div key={idx} className="col-md-6 mb-3">
-										<video controls width="100%" className="rounded">
-											<source src={video} type="video/mp4" />
-										</video>
+										<div className="pic_dv">
+											<video controls width="100%" className="w-100">
+												<source src={video} type="video/mp4" />
+											</video>
+										</div>
 									</div>
 								))}
 							</div>
