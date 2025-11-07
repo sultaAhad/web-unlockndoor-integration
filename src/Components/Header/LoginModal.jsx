@@ -92,12 +92,16 @@ const LoginModal = ({ show, onClose, onForgotPassword }) => {
     }
 
     if (response?.isError) {
-      const errorMessage =
+      let errorMessage =
         response?.error?.data?.message ||
         Object.values(response?.error?.data?.errors || {})
           .flat()
           .join("\n") ||
         "Login failed";
+      if (response?.error?.data?.errors) {
+        errorMessage = response?.error?.data?.errors?.email[0];
+      }
+      
       Swal.fire("Error", errorMessage, "error");
     }
   }, [manResponse, womenResponse, activeTab]);
