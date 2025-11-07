@@ -33,34 +33,6 @@ function ChatComponent({ type }) {
 	const [showPriceModal, setShowPriceModal] = useState(false);
 	console.log("Logged-in user:", user);
 
-	let canVideoCall = false;
-	const { data: womanData } = useGetMatchedProfilesQuery;
-	console.log(womanData, "asdasds");
-
-	// Pick correct package info based on gender
-	const packageInfo =
-		user?.gender === "women"
-			? user?.has_women_package || user?.package
-			: user?.has_men_package || user?.package;
-
-	// ✅ Check for valid slug
-	if (packageInfo?.slug) {
-		const slug = packageInfo.slug.toLowerCase();
-
-		// ✅ Allow only these packages
-		if (
-			slug.includes("gold") ||
-			slug.includes("platinum") ||
-			slug.includes("one-time-payment")
-		) {
-			canVideoCall = true;
-		} else {
-			canVideoCall = false;
-		}
-	} else {
-		canVideoCall = false; // fallback if no package found
-	}
-
 	const [deleteManChat] = useChatDeleteManMutation();
 	const [deleteWomenChat] = useChatDeleteWomenMutation();
 
@@ -73,6 +45,52 @@ function ChatComponent({ type }) {
 	const messagesEndRef = useRef(null);
 	const location = useLocation();
 	const dispatch = useDispatch();
+
+	const canVideoCall = (() => {
+		const packageSlug = selectedChat?.package_slug;
+		if (!packageSlug) {
+			console.log("No package_slug found for selected chat.");
+			return false;
+		}
+
+		const fromPackage = (packageSlug.from_package || "").toLowerCase();
+		const toPackage = (packageSlug.to_package || "").toLowerCase();
+
+		console.log("Selected Chat ID:", selectedChat.chat_id);
+		console.log("From Package:", fromPackage);
+		console.log("To Package:", toPackage);
+
+		const blockedKeywords = ["silver", "free-tier"]; // use includes
+		const allowedKeywords = ["gold", "platinum", "one-time-payment"];
+
+		// ✅ Step 1: Block if either package contains blocked keyword
+		if (
+			blockedKeywords.some(
+				(keyword) =>
+					fromPackage.includes(keyword) || toPackage.includes(keyword),
+			)
+		) {
+			console.log("Video Call Blocked due to silver or free-tier package.");
+			return false;
+		}
+
+		// ✅ Step 2: Allow if either package contains allowed keyword
+		if (
+			allowedKeywords.some(
+				(keyword) =>
+					fromPackage.includes(keyword) || toPackage.includes(keyword),
+			)
+		) {
+			console.log("Video Call Allowed due to allowed package.");
+			return true;
+		}
+
+		// ✅ Step 3: Otherwise hide
+		console.log("Video Call Not Allowed - package not in allowed list.");
+		return false;
+	})();
+
+	console.log("canVideoCall:", canVideoCall);
 
 	useEffect(() => {
 		if (location?.state != null) {
