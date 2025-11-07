@@ -57,6 +57,10 @@ const StepOne = ({ formData, setFormData, next, formErrors }) => {
       formErrors.phone = ["phone number must be between 10 to 15 digits"];
       return;
     }
+    if (formData.password.lenght < 8 || formData.password.lenght > 8) {
+      formErrors.password = ["The password must be at least 8 characters long"];
+      return;
+    }
     next();
   };
 
