@@ -22,13 +22,44 @@ import { toast, ToastContainer } from "react-toastify";
 import VideoCallButton from "./VideoCallButton";
 import { BASE_URL } from "../utils/base_url";
 import { GET_CHAT_MESSAGES_API } from "../utils/endpoints";
-import { useChatDeleteManMutation } from "../network/services/ManAuth";
+import {
+	useChatDeleteManMutation,
+	useGetMatchedProfilesQuery,
+} from "../network/services/ManAuth";
 import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
 	const [showPriceModal, setShowPriceModal] = useState(false);
-	console.log(user);
+	console.log("Logged-in user:", user);
+
+	let canVideoCall = false;
+	const { data: womanData } = useGetMatchedProfilesQuery;
+	console.log(womanData, "asdasds");
+
+	// Pick correct package info based on gender
+	const packageInfo =
+		user?.gender === "women"
+			? user?.has_women_package || user?.package
+			: user?.has_men_package || user?.package;
+
+	// ✅ Check for valid slug
+	if (packageInfo?.slug) {
+		const slug = packageInfo.slug.toLowerCase();
+
+		// ✅ Allow only these packages
+		if (
+			slug.includes("gold") ||
+			slug.includes("platinum") ||
+			slug.includes("one-time-payment")
+		) {
+			canVideoCall = true;
+		} else {
+			canVideoCall = false;
+		}
+	} else {
+		canVideoCall = false; // fallback if no package found
+	}
 
 	const [deleteManChat] = useChatDeleteManMutation();
 	const [deleteWomenChat] = useChatDeleteWomenMutation();
@@ -588,44 +619,46 @@ function ChatComponent({ type }) {
 				</div>
 				<div className="col-md-3">
 					<div className="dot-drop-down chat-dot">
-						<div className="camera-link-ww">
-							<div
-								onClick={() => {
-									const minutes =
-										typeof selectedChat?.minutes === "object"
-											? selectedChat?.minutes?.minutes || 0
-											: selectedChat?.minutes || 0;
-
-									if (minutes > 0) {
-										// ✅ Start the video call directly
-										console.log("Starting video call...");
-										// Trigger the call through your existing VideoCallButton logic
-										document.getElementById("videoCallButton")?.click();
-									} else {
-										// ⚠️ No minutes left → Show price modal
-										console.log("Opening price modal...");
-										setShowPriceModal(true);
-									}
-								}}
-								style={{ cursor: "pointer" }}
-							>
-								<VideoCallButton
-									id="videoCallButton"
-									member={{
-										id: selectedChat?.participant_id,
-										name: selectedChat?.participant_name,
-										profile_image_url: selectedChat?.participant_profile,
-										gender: user.gender === "men" ? "women" : "men",
-										minutes:
+						{canVideoCall && (
+							<div className="camera-link-ww">
+								<div
+									onClick={() => {
+										const minutes =
 											typeof selectedChat?.minutes === "object"
-												? selectedChat?.minutes?.minutes
-												: selectedChat?.minutes,
+												? selectedChat?.minutes?.minutes || 0
+												: selectedChat?.minutes || 0;
+
+										if (minutes > 0) {
+											// ✅ Start the video call directly
+											console.log("Starting video call...");
+											// Trigger the call through your existing VideoCallButton logic
+											document.getElementById("videoCallButton")?.click();
+										} else {
+											// ⚠️ No minutes left → Show price modal
+											console.log("Opening price modal...");
+											setShowPriceModal(true);
+										}
 									}}
-									gender={user.gender}
-									type="icon"
-								/>
+									style={{ cursor: "pointer" }}
+								>
+									<VideoCallButton
+										id="videoCallButton"
+										member={{
+											id: selectedChat?.participant_id,
+											name: selectedChat?.participant_name,
+											profile_image_url: selectedChat?.participant_profile,
+											gender: user.gender === "men" ? "women" : "men",
+											minutes:
+												typeof selectedChat?.minutes === "object"
+													? selectedChat?.minutes?.minutes
+													: selectedChat?.minutes,
+										}}
+										gender={user.gender}
+										type="icon"
+									/>
+								</div>
 							</div>
-						</div>
+						)}
 
 						<div
 							className=" wrapper-dot d-flex align-items-center gap-1"

@@ -767,6 +767,7 @@
 	display: flex;
 	align-items: anchor-center;
 	gap: 30px;
+	justify-content: end;
 }
 
 .wrapper-chat-input {
