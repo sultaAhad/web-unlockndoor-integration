@@ -90,7 +90,7 @@ const SponsoredDates = ({
 		);
 	}
 
-	if (!singleDate) return <p>No sponsored date found for this ID.</p>;
+	if (!singleDate) return <p className="text-white">No sponsored date found for this ID.</p>;
 
 	return (
 		<div className="">

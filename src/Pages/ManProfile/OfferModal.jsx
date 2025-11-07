@@ -47,8 +47,11 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
 				onHide={handleofferClose}
 				centered
 			>
-				<Modal.Header className="justify-content-center border-bottom-0">
-					<Modal.Title className="secondary-medium-font level-7 extra-color-1">
+				<Modal.Header
+					closeButton
+					className="justify-content-center border-bottom-0"
+				>
+					<Modal.Title className="secondary-medium-font level-7 extra-color-1 mb-0">
 						{" "}
 						Create Offer
 					</Modal.Title>
