@@ -248,99 +248,113 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	};
 
 	return (
-		<div className="face-verification-container">
-			<p>Please update your profile image</p>
-			<div className="profile-img-container">
-				<div className="profile-img-wrapper">
-					{form.profileImage ? (
-						<img
-							src={form.profileImage}
-							className="profile-img"
-							alt="Profile"
-						/>
-					) : (
-						<div>No profile image</div>
-					)}
-					<div className="upload-btn">
-						<button
-							type="button"
-							className="btn-custom btn-upload"
-							onClick={() => profileInputRef.current.click()}
-							disabled={isProfileImageLoading}
-						>
-							{isProfileImageLoading ? (
-								<div className="spinner"></div>
-							) : (
-								<i className="fa-solid fa-camera"></i>
-							)}
-						</button>
-						<input
-							type="file"
-							ref={profileInputRef}
-							onChange={handleProfileChange}
-							accept="image/*"
-							hidden
-						/>
-					</div>
-					<h5 className="profile-name">{user?.name || "John Smith"}</h5>
-				</div>
-			</div>
+    <div className="face-verification-container">
+      <p>Please update your profile image</p>
+      <span className="bg-light d-flex justify-content-around pt-4 rounded-2">
+        <div className="profile-img-container">
+          <div className="profile-img-wrapper">
+            {form.profileImage ? (
+              <img
+                src={form.profileImage}
+                className="profile-img"
+                alt="Profile"
+              />
+            ) : (
+              <div>No profile image</div>
+            )}
+            <div className="upload-btn">
+              <button
+                type="button"
+                className="btn-custom btn-upload"
+                onClick={() => profileInputRef.current.click()}
+                disabled={isProfileImageLoading}
+              >
+                {isProfileImageLoading ? (
+                  <div className="spinner"></div>
+                ) : (
+                  <i className="fa-solid fa-camera"></i>
+                )}
+              </button>
+              <input
+                type="file"
+                ref={profileInputRef}
+                onChange={handleProfileChange}
+                accept="image/*"
+                hidden
+              />
+            </div>
+            <h5 className="profile-name">{user?.name || "John Smith"}</h5>
+          </div>
+        </div>
 
-			<div className="submit-container">
-				<button
-					className="btn-custom btn-submit"
-					type="button"
-					onClick={handleSubmit}
-					disabled={isProfileImageLoading}
-				>
-					{isProfileImageLoading ? "Uploading..." : "Submit"}
-				</button>
-			</div>
+        <div className="submit-container align-content-center">
+          <button
+            className="btn-custom btn-submit"
+            type="button"
+            onClick={handleSubmit}
+            disabled={isProfileImageLoading}
+          >
+            {isProfileImageLoading ? "Uploading..." : "Submit"}
+          </button>
+        </div>
+      </span>
 
-			<h3 className="section-title">Selfie Capture</h3>
+      <h3 className="section-title">Selfie Capture</h3>
 
-			{!selfie ? (
-				<>
-					<Webcam
-						ref={webcamRef}
-						audio={false}
-						screenshotFormat="image/jpeg"
-						width={300}
-						videoConstraints={{ facingMode: "user" }}
-						onUserMedia={() => setCameraReady(true)}
-						onUserMediaError={(err) => console.error("❌ Camera error:", err)}
-					/>
-					<button
-						className="btn-custom btn-capture"
-						onClick={captureSelfie}
-						disabled={!modelsLoaded || !cameraReady}
-					>
-						{modelsLoaded ? "Capture Selfie" : "Loading Models..."}
-					</button>
-				</>
-			) : (
-				<div className="selfie-preview">
-					<img src={selfie} alt="Selfie" className="captured-selfie" />
-					<div className="action-buttons">
-						<button
-							className="btn-custom btn-retake"
-							onClick={() => setSelfie(null)}
-						>
-							Retake
-						</button>
-						<button
-							className="btn-custom btn-verify"
-							type="button"
-							onClick={verifyFaces}
-							disabled={isLoading}
-						>
-							{isLoading ? "Verifying..." : "Verify"}
-						</button>
-					</div>
-				</div>
-			)}
-		</div>
-	);
+      {!selfie ? (
+        <span className="bg-light d-flex justify-content-around py-3 rounded-2">
+          <Webcam
+            ref={webcamRef}
+            className="rounded-pill"
+            audio={false}
+            screenshotFormat="image/jpeg"
+            height={200}
+            width={200}
+            videoConstraints={{ facingMode: "user" }}
+            onUserMedia={() => setCameraReady(true)}
+            onUserMediaError={(err) => console.error("❌ Camera error:", err)}
+          />
+          {/* <button
+            className="btn-custom btn-capture"
+            onClick={captureSelfie}
+            disabled={!modelsLoaded || !cameraReady}
+          >
+            {modelsLoaded ? "Capture Selfie" : "Loading Models..."}
+          </button> */}
+
+          <div className="submit-container align-content-center">
+            <button
+              className="btn-custom btn-capture"
+              onClick={captureSelfie}
+              disabled={!modelsLoaded || !cameraReady}
+            >
+              {modelsLoaded ? "Capture Selfie" : "Loading Models..."}
+            </button>
+          </div>
+        </span>
+      ) : (
+        <div className="selfie-preview">
+          <img src={selfie} alt="Selfie" className="captured-selfie" />
+          <div className="action-buttons">
+            <button
+              className="btn-custom btn-retake"
+              onClick={() => setSelfie(null)}
+            >
+              Retake
+            </button>
+            <button
+              className="btn-custom btn-verify"
+              type="button"
+              onClick={verifyFaces}
+              disabled={isLoading}
+            >
+              {isLoading ? "Verifying..." : "Verify"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default FaceVerification;

@@ -3259,7 +3259,7 @@ div#swal2-html-container {
 .profile-img-container {
 	display: flex;
 	justify-content: center;
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
 }
 
 .profile-img-wrapper {
