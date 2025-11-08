@@ -126,10 +126,10 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 												/>
 												<div className="slider-labels d-flex justify-content-between">
 													<span>10k</span>
-													<span>25k</span>
-													<span>50k</span>
-													<span>75k</span>
-													<span>100k+</span>
+													<span className="left-k">25k</span>
+													<span className="left-k1">50k</span>
+													<span className="left-k2">75k</span>
+													<span className="left-k3">100k+</span>
 												</div>
 											</div>
 										</div>
@@ -175,7 +175,7 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 												>
 													Previous
 												</button>
-												<div className="profile_img ms-2">
+												<div className="profile_img rotate-wrapper ms-2">
 													<img src={right_arrow} alt="next" />
 												</div>
 											</div>

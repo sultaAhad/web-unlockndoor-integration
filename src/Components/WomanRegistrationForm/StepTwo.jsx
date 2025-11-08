@@ -189,7 +189,7 @@ const StepTwo = ({ formData, setFormData, next, prev, formErrors }) => {
 												>
 													Previous
 												</button>
-												<div className="profile_img ms-2">
+												<div className="profile_img rotate-wrapper ms-2">
 													<img src={right_arrow} alt="prev" />
 												</div>
 											</div>

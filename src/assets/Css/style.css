@@ -2005,7 +2005,10 @@ li.bullet_Wrapper.wrapper-bullet {
 	color: #ffffff;
 	font-family: "TomatoGrotesk-SemiBold";
 }
-
+.rotate-wrapper {
+	transform: rotate(180deg);
+	top: 28px !important;
+}
 .login_input .login_email input:focus {
 	color: #fff !important;
 }
