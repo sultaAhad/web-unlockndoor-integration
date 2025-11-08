@@ -31,11 +31,9 @@ import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 function ChatComponent({ type }) {
   const { user, userToken } = useSelector((state) => state.auth);
   const [showPriceModal, setShowPriceModal] = useState(false);
-  console.log("Logged-in user:", user);
 
   let canVideoCall = false;
   const { data: womanData } = useGetMatchedProfilesQuery;
-  console.log(womanData, "asdasds");
 
   // Pick correct package info based on gender
   const packageInfo =
@@ -154,7 +152,7 @@ function ChatComponent({ type }) {
     to_id: 0,
     to_type: type === "women" ? "Men" : "Women",
     message: "",
-    files: [],
+    files: [], // This will now store File objects
   });
 
   const {
@@ -196,15 +194,6 @@ function ChatComponent({ type }) {
     }
   }, [data]);
 
-  // useEffect(() => {
-  // if (messagesData?.chat) {
-  //   let messages = messagesData?.chat?.messages.map((message) =>
-  //     formateMessage(message)
-  //   );
-  //   setMessages(messages);
-  // }
-  // }, [messagesData]);
-
   useEffect(() => {
     if (selectedChat?.chat_id != undefined && selectedChat?.chat_id > 0) {
       getChatMessages();
@@ -214,24 +203,27 @@ function ChatComponent({ type }) {
 
   const sendMessageHandle = async () => {
     try {
-      let sendForm = { ...form };
-
-      const hasMessage = sendForm.message.trim().length > 0;
-      const hasFiles = form.files && form.files.length > 0;
-
-      if (!hasMessage && !hasFiles) {
-        toast.error("Please enter a message or attach a file");
+      // Validation - check if both message and files are empty
+      if (form.message.trim().length === 0 && form.files.length === 0) {
+        toast.error("Neither text message nor any file to send to user");
         return;
       }
 
-      if (form.files.length > 0) {
-        sendForm.files = form.files.map((file) => file.file);
-      }
-      if (sendForm.message.length == 0) {
-        sendForm.message = "n-a";
-      }
+      // Create FormData object
+      const formData = new FormData();
 
-      let response = await sendMessage(sendForm).unwrap();
+      // Add text fields
+      formData.append("type", form.type);
+      formData.append("to_id", form.to_id.toString());
+      formData.append("to_type", form.to_type);
+      formData.append("message", form.message);
+
+      // Add files
+      form.files.forEach((fileObj, index) => {
+        formData.append(`files[${index}]`, fileObj.file); // Append the actual File object
+      });
+
+      let response = await sendMessage({ formData, type }).unwrap();
       if (response.success) {
         setForm((pre) => ({
           ...pre,
@@ -263,26 +255,31 @@ function ChatComponent({ type }) {
 
   const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
-    const mapped = await Promise.all(
-      selectedFiles.map(async (file) => {
-        const toBase64 = (file) =>
-          new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          });
-        const base64 = await toBase64(file);
-        return {
-          file: base64,
-          type: file.type.startsWith("video") ? "video" : "image",
-        };
-      })
-    );
-    setForm((prev) => ({ ...prev, files: [...prev.files, ...mapped] }));
+
+    // Create file objects with metadata
+    const mappedFiles = selectedFiles.map((file) => ({
+      file: file, // Store the actual File object
+      type: file.type.startsWith("video") ? "video" : "image",
+      preview: URL.createObjectURL(file), // Create preview URL for display
+      name: file.name,
+      size: file.size,
+    }));
+
+    setForm((prev) => ({
+      ...prev,
+      files: [...prev.files, ...mappedFiles],
+    }));
+
+    // Clear the input to allow selecting same files again
+    e.target.value = "";
   };
 
   const removeFile = (index) => {
+    // Revoke the object URL to prevent memory leaks
+    if (form.files[index].preview) {
+      URL.revokeObjectURL(form.files[index].preview);
+    }
+
     setForm((prev) => ({
       ...prev,
       files: prev.files.filter((_, i) => i !== index),
@@ -310,13 +307,6 @@ function ChatComponent({ type }) {
     const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
       cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
       encrypted: true,
-      // authEndpoint: `${import.meta.env.VITE_APP_API_URL}/broadcasting/auth`,
-      // auth: {
-      //   headers: {
-      //     Authorization: `Bearer ${userToken}`,
-      //     Accept: "application/json",
-      //   },
-      // },
     });
 
     const channel = pusher.subscribe(`chat.${selectedChat.chat_id}`);
@@ -345,6 +335,17 @@ function ChatComponent({ type }) {
     };
   }, [selectedChat?.chat_id]);
 
+  // Clean up object URLs when component unmounts or files change
+  useEffect(() => {
+    return () => {
+      form.files.forEach((file) => {
+        if (file.preview) {
+          URL.revokeObjectURL(file.preview);
+        }
+      });
+    };
+  }, [form.files]);
+
   const formateMessage = (message) => ({
     id: message.id || message.message_id,
     file_urls: message.file_urls,
@@ -353,9 +354,11 @@ function ChatComponent({ type }) {
     type: message.from_id === user.id ? "outgoing" : "incoming",
     time: formatDate(message.created_at),
     date: formatDate(message.created_at),
-    attachment: message.file_urls?.[0] || null,
+    attachments: message.file_urls,
   });
+
   const minutes = selectedChat?.minutes || 0;
+
   const handleChatSearch = (e) => {
     const { value } = e.target;
     if (!value.trim()) {
@@ -367,6 +370,7 @@ function ChatComponent({ type }) {
     );
     setFilteredChats(filtered);
   };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -377,11 +381,13 @@ function ChatComponent({ type }) {
     }
     return "";
   };
+
   const Loader = () => (
     <div className="btn-loader spinner-border text-warning" role="status">
       <span className="visually-hidden">Loading...</span>
     </div>
   );
+
   const sendMessageFormHTML = () => {
     if (!selectedChat) return null;
     return (
@@ -392,7 +398,7 @@ function ChatComponent({ type }) {
               <div className="position-relative" key={index}>
                 {item.type === "image" ? (
                   <img
-                    src={item.file}
+                    src={item.preview} // Use the preview URL
                     className="img-fluid "
                     style={{
                       width: "60px",
@@ -401,12 +407,12 @@ function ChatComponent({ type }) {
                       objectFit: "cover",
                       padding: "2px",
                     }}
-                    alt=""
+                    alt={`Preview ${index}`}
                   />
                 ) : (
                   <div style={{ position: "relative" }}>
                     <img
-                      src={chatimgg}
+                      src={chatimgg} // Use your video placeholder
                       className="img-fluid"
                       style={{
                         width: "80px",
@@ -497,6 +503,90 @@ function ChatComponent({ type }) {
       </div>
     );
   };
+  const renderAttachments = (attachments) => {
+    const getFileType = (url) => {
+      const extension = url.split(".").pop().toLowerCase();
+      if (["mp4", "mov", "avi", "webm", "ogg"].includes(extension))
+        return "video";
+      if (["png", "jpg", "jpeg", "gif", "webp", "bmp"].includes(extension))
+        return "image";
+      return "other";
+    };
+
+    return (
+      <div
+        className="attachments-container"
+        style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
+      >
+        {attachments.map((attachment, index) => {
+          const fileType = getFileType(attachment);
+
+          switch (fileType) {
+            case "video":
+              return (
+                <div key={index} className="attachment-video">
+                  <video
+                    controls
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "8px",
+                      objectFit: "cover",
+                    }}
+                  >
+                    <source
+                      src={attachment}
+                      type={`video/${attachment.split(".").pop()}`}
+                    />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              );
+
+            case "image":
+              return (
+                <div key={index} className="attachment-image">
+                  <img
+                    src={attachment}
+                    alt={`Attachment ${index}`}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "8px",
+                      objectFit: "cover",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => window.open(attachment, "_blank")}
+                  />
+                </div>
+              );
+
+            default:
+              return (
+                <div key={index} className="attachment-other">
+                  <a
+                    href={attachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      padding: "8px 12px",
+                      background: "#f0f0f0",
+                      borderRadius: "4px",
+                      textDecoration: "none",
+                      color: "#333",
+                      display: "inline-block",
+                    }}
+                  >
+                    📎 File {index + 1}
+                  </a>
+                </div>
+              );
+          }
+        })}
+      </div>
+    );
+  };
+
   const chatsHTML = () => {
     if (isChatLoading) {
       return (
@@ -525,9 +615,6 @@ function ChatComponent({ type }) {
                     c.chat_id === chat.chat_id ? { ...c, unread_count: 0 } : c
                   )
                 );
-
-                // Optional: also call API to mark messages as read
-                // markMessagesAsRead(chat.chat_id);
               }}
               className={`d-flex align-items-start border-bottom justify-content-between py-3 px-3 
                 ${chat.chat_id == selectedChat?.chat_id ? "bg-massage" : ""}
@@ -594,6 +681,7 @@ function ChatComponent({ type }) {
       </ul>
     );
   };
+
   const selectedChatHTML = () => {
     if (!selectedChat) return null;
     return (
@@ -622,12 +710,9 @@ function ChatComponent({ type }) {
                         : selectedChat?.minutes || 0;
 
                     if (minutes > 0) {
-                      // ✅ Start the video call directly
                       console.log("Starting video call...");
-                      // Trigger the call through your existing VideoCallButton logic
                       document.getElementById("videoCallButton")?.click();
                     } else {
-                      // ⚠️ No minutes left → Show price modal
                       console.log("Opening price modal...");
                       setShowPriceModal(true);
                     }
@@ -746,7 +831,7 @@ function ChatComponent({ type }) {
                     }}
                   >
                     <img
-                      src={chatimg1} // 👈 use your existing chat placeholder image
+                      src={chatimg1}
                       alt="Chat Placeholder"
                       style={{
                         width: "100%",
@@ -815,18 +900,14 @@ function ChatComponent({ type }) {
                                   {message.time}
                                 </h4>
                               </div>
-                              {message.message && message.message != "n-a" && (
+                              {message.message && (
                                 <p className="mb-0 extra-color-13 secondary-light-font">
                                   {message.message}
                                 </p>
                               )}
-                              {message.attachment && (
-                                <img
-                                  src={message.attachment}
-                                  alt="Attachment"
-                                  className="img-fluid mt-2 w-25"
-                                />
-                              )}
+                              {message.attachments &&
+                                message.attachments.length > 0 &&
+                                renderAttachments(message.attachments)}
                             </div>
                             {message.type === "outgoing" && (
                               <img
@@ -836,15 +917,6 @@ function ChatComponent({ type }) {
                               />
                             )}
                           </div>
-                          {/* {message.date && (
-                        <div className="row">
-                          <div className="col-lg-5 mx-auto position-relative">
-                            <h5 className="wrapper-dash-gg dash-date level-8 extra-color-16 secondary-regular-font text-center">
-                              {message.date}
-                            </h5>
-                          </div>
-                        </div>
-                      )} */}
                         </div>
                       ))
                     ) : (
