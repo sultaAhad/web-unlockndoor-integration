@@ -652,9 +652,9 @@ function ChatComponent({ type }) {
                   )}
                 </div>
 
-                <div>
+                <div className="chat___username">
                   <div className="d-flex align-items-start gap-2">
-                    <h4 className="secondary-semibold-font mb-1 text-white level-8 text-capitalize">
+                    <h4 className="username____wrap secondary-semibold-font mb-1 text-white level-8 text-capitalize">
                       {chat.participant_name}
                     </h4>
                     <span

@@ -967,6 +967,10 @@ span.green {
 	color: #fff;
 }
 
+.chat___username .username____wrap {
+    word-break: break-all;
+}
+
 .camera-link-ww {
 	background: #ffffff17;
 	width: fit-content;

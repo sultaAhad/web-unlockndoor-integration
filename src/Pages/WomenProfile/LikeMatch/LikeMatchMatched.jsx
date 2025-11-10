@@ -288,7 +288,7 @@ function LikeMatchMatched() {
 								))
 							) : (
 								<div className="text-center py-5">
-									<p>No members found.</p>
+									<p className="level-6 secondary-medium-font text-white">No members found.</p>
 								</div>
 							)}
 						</div>

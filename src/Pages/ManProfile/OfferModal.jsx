@@ -14,6 +14,8 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
 		comment: 0,
 	});
 
+	console.log(form,"data")
+
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setForm((prev) => ({
