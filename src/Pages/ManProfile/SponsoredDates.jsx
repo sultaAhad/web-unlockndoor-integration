@@ -235,7 +235,7 @@ function SponsoredDates() {
                                       ${sponsorDate.offer_price}
                                     </td>
                                     <td className="secondary-medium-font text-white level-8 text-center">
-                                      <h4
+                                       <h4
                                         className={`${getStatusClass(
                                           sponsorDate.status
                                         )} mb-0 secondary-medium-font level-8 text-capitalize`}
