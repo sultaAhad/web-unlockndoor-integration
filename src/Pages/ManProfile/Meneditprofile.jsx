@@ -303,7 +303,7 @@ function Meneditprofile() {
     if (form.date_of_birth > minAgeDate) {
       errors.date_of_birth = `Date of birth must be minimum ${minAgeDate}`;
     }
-    if (form.phone.lenght < 10 || form.phone.lenght > 15) {
+    if (form?.phone?.length < 10 || form?.phone?.length > 15) {
       errors.phone = "phone number must be between 10 to 15 digits";
     }
 
