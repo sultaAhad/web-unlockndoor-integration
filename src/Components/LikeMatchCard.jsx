@@ -12,26 +12,39 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 	const { user } = useSelector((state) => state.auth);
 	console.log(user);
 
-	// ✅ Detect package slug (for both men & women)
-	const pkgSlug =
-		user?.has_women_package?.slug?.toLowerCase() ||
-		card?.has_men_package?.slug?.toLowerCase() ||
-		"";
+	// ✅ Extract both package slugs
+	const menPkgSlug = card?.has_men_package?.slug?.toLowerCase() || "";
+	const womenPkgSlug = user?.has_women_package?.slug?.toLowerCase() || "";
 
-	console.log("📦 Active Package:", card);
+	// Debug logs
+	console.log("📦 Card ID:", card?.id);
+	console.log("📦 Men Package:", menPkgSlug);
+	console.log("📦 Women Package:", womenPkgSlug);
 
-	// ✅ Access logic based on package slug
+	// ✅ Allowed packages
+	const allowedChatPkgs = [
+		"free-tier",
+		"one-time-payment",
+		"silver-package",
+		"gold-package",
+		"platinum-package",
+	];
+
+	const allowedVideoPkgs = [
+		"one-time-payment",
+		"gold-package",
+		"platinum-package",
+	];
+
+	// ✅ Chat allowed if both are allowed for chat
 	const canChat =
-		pkgSlug.includes("free-tier") ||
-		pkgSlug.includes("one-time-payment") ||
-		pkgSlug.includes("silver-package") ||
-		pkgSlug.includes("gold-package") ||
-		pkgSlug.includes("platinum-package");
+		allowedChatPkgs.includes(menPkgSlug) &&
+		allowedChatPkgs.includes(womenPkgSlug);
 
+	// ✅ Video Call allowed only if BOTH have allowed video packages
 	const canVideoCall =
-		pkgSlug.includes("one-time-payment") ||
-		pkgSlug.includes("gold-package") ||
-		pkgSlug.includes("platinum-package");
+		allowedVideoPkgs.includes(menPkgSlug) &&
+		allowedVideoPkgs.includes(womenPkgSlug);
 
 	const likeMan = async () => {
 		try {
