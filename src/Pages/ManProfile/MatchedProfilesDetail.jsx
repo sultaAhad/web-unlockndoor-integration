@@ -26,6 +26,8 @@ import {
 import { toast } from "react-toastify";
 
 const normalizeMember = (data) => {
+	const pkg = data.has_women_package || {};
+
 	return {
 		id: data.id,
 		name: data.name,
@@ -38,8 +40,10 @@ const normalizeMember = (data) => {
 		relationshipStatus: data.relationship_status ?? "N/A",
 		purpose: data.purpose ?? "N/A",
 		occupation: data.occupation,
-		membershipType: data.package?.slug || "Free",
-		ispaid: data.ispaid || 0, // 0 = Free, 1 = Paid
+		minutes: data.minutes,
+		// 👇 Fix: Correct package source
+		membershipType: pkg.slug?.toLowerCase() || "free",
+		ispaid: pkg.is_paid || 0, // 0 = Free, 1 = Paid
 		profileImage: data.profile_image_url,
 		bannerImage: data.cover_images_url,
 		likes_count: data.likes_count,
@@ -63,7 +67,7 @@ function Womandetails() {
 	const { data: manData } = useGetManDataQuery();
 	const manPackage = manData?.response?.data?.data?.package;
 	const isManPaid = manPackage?.is_paid === 1; // true = Paid user
-	console.log(isManPaid);
+	console.log(manPackage);
 	const likeLimitReached = useRef(false);
 
 	const { id } = useParams();
@@ -72,7 +76,7 @@ function Womandetails() {
 	const [member, setMember] = useState(
 		rawMember ? normalizeMember(rawMember) : null,
 	);
-
+	console.log(rawMember);
 	const [viewMemberProfile] = useViewMemberProfileMutation();
 	const hasViewedRef = useRef(false);
 

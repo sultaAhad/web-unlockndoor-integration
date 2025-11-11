@@ -30,11 +30,13 @@ export const Chat = createApi({
 			}),
 		}),
 		sendMessage: build.mutation({
-			query: (data) => ({
-				url: SEND_CHAT_MESSAGE_API(data?.type),
+			query: ({ formData, type }) =>
+			({
+
+				url: SEND_CHAT_MESSAGE_API(type),
 				method: "POST",
-				body: data,
-			}),
+				body: formData,
+			})
 		}),
 		callAction: build.mutation({
 			query: (data) => ({

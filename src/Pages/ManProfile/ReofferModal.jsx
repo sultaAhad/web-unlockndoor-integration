@@ -4,35 +4,35 @@ import { useReOfferDateMutation } from "../../network/services/ManAuth";
 import { toast } from "react-toastify";
 
 const ReofferModal = ({ offer, showreofferModal, handlereofferClose }) => {
-  const [reOfferDate, requestResponse] = useReOfferDateMutation();
-  const [form, setForm] = useState({
-    date_id: offer?.id,
-    offer_price: 0,
-    comment: null,
-  });
+	const [reOfferDate, requestResponse] = useReOfferDateMutation();
+	const [form, setForm] = useState({
+		date_id: offer?.id,
+		offer_price: 0,
+		comment: null,
+	});
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (parseInt(form.offer_price) <= parseInt(offer.offer_price)) {
-        toast.error("Offer price must be above last offer price");
-        return;
-      }
+	const handleFormSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			if (parseInt(form.offer_price) <= parseInt(offer.offer_price)) {
+				toast.error("Offer price must be above last offer price");
+				return;
+			}
 
-      let response = await reOfferDate(form);
-      if (response.data?.status) {
-        toast.success(response.data?.message);
-      }
-      if (response.error) {
-        toast.error(response.error.data.Message);
-      }
-      handlereofferClose();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+			let response = await reOfferDate(form);
+			if (response.data?.status) {
+				toast.success(response.data?.message);
+			}
+			if (response.error) {
+				toast.error(response.error.data.Message);
+			}
+			handlereofferClose();
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
-  return (
+	return (
 		<>
 			<Modal
 				show={showreofferModal}

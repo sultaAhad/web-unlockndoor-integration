@@ -258,6 +258,7 @@ const FemaleMemberCard = ({ member }) => {
 	const [femaleMember, setFemaleMember] = useState(member);
 	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.auth);
+	console.log(femaleMember);
 
 	// --- Fetch man data (minutes, can_call, etc.) ---
 	const { data: manData, isLoading, refetch } = useGetManDataQuery();
@@ -268,9 +269,9 @@ const FemaleMemberCard = ({ member }) => {
 
 	// --- Feature Access Logic (Silver/Gold/Platinum) ---
 	const checkFeatureAccess = (member, feature) => {
-		const pkg = member?.package?.slug || "";
+		const pkg = member?.has_women_package?.slug || "";
 		if (!pkg) return false;
-		if (user?.package?.slug == "free-tier") {
+		if (user?.has_women_package?.slug == "free-tier") {
 			return false;
 		}
 		if (pkg.includes("silver")) return feature === "chat";
@@ -280,7 +281,7 @@ const FemaleMemberCard = ({ member }) => {
 		return false;
 	};
 
-	const packageTitle = member?.package?.slug
+	const packageTitle = member?.has_women_package?.slug
 		?.replace("-package", "")
 		.toUpperCase();
 

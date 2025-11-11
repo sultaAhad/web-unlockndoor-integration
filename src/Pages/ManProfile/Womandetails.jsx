@@ -40,8 +40,8 @@ const normalizeMember = (data) => {
 		purpose: data.purpose ?? "N/A",
 		occupation: data.occupation,
 		minutes: data.minutes,
-		membershipType: data.package?.slug || "Free",
-		ispaid: data.ispaid || 0, // 0 = Free, 1 = Paid
+		membershipType: data.has_women_package?.slug || "Free",
+		ispaid: data.has_women_package?.is_paid || 0,
 		profileImage: data.profile_image_url,
 		bannerImage: data.cover_images_url,
 		likes_count: data.likes_count,
@@ -65,7 +65,7 @@ function Womandetails() {
 
 	// ✅ Get Man Data
 	const { data: manData } = useGetManDataQuery();
-	const manPackage = manData?.response?.data?.data?.package;
+	const manPackage = manData?.response?.data?.data?.has_women_package;
 	const isManPaid = manPackage?.is_paid === 1; // true = Paid user
 	console.log(isManPaid);
 	const likeLimitReached = useRef(false);

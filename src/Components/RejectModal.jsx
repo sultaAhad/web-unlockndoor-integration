@@ -7,7 +7,7 @@ Modal.setAppElement("#root");
 const RejectModal = ({ sponsor, show, onClose, dateId, onSubmit }) => {
 	const [amount, setAmount] = useState("");
 	const [reason, setReason] = useState("");
-	console.log(sponsor.offer_price);
+	// console.log(sponsor.offer_price);
 
 	const handleSubmit = () => {
 		if (!amount || !reason) {
