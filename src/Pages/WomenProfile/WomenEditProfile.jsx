@@ -21,7 +21,6 @@ import ImageVideo from "../../Components/ImageVideo";
 function WomenEditProfile() {
 	const { data, refetch } = useWomanDataQuery();
 	const user = data?.response?.data?.women;
-	console.log(user);
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -65,16 +64,10 @@ function WomenEditProfile() {
 
 	const [updateProfileImage] = useUpdateProfileImageWomenMutation();
 	const [updateCoverImage] = useUpdateCoverImageWomenMutation();
-	const [editProfile] = useWomenEditProfileMutation();
+	const [editProfile, { isLoading: isEditProfileLoading }] =
+		useWomenEditProfileMutation();
 	const [deleteImageWomen] = useDeleteImageWomanMutation();
 	const [deleteVideoWomen] = useDeleteVideoWomanMutation();
-
-	const today = new Date();
-	const minAgeDate = new Date(
-		today.getFullYear() - 18,
-		today.getMonth(),
-		today.getDate(),
-	);
 
 	// ===== Banner Upload =====
 	const handleBannerChange = async (e) => {
@@ -190,6 +183,7 @@ function WomenEditProfile() {
 		}
 	};
 
+	// ===== Remove Files =====
 	const removeFile = async (index, type) => {
 		try {
 			let formData = new FormData();
@@ -244,23 +238,43 @@ function WomenEditProfile() {
 			});
 		}
 	};
-
+	const today = new Date();
+	const minAgeDate = new Date(
+		today.getFullYear() - 18,
+		today.getMonth(),
+		today.getDate(),
+	);
 	// ===== Validation =====
 	const validateForm = () => {
 		const errors = {};
+
 		if (!form.name?.trim()) errors.name = "Name is required";
-		if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
-		else if (form.date_of_birth >= new Date())
-			errors.date_of_birth = "Date of Birth must be before today";
+		if (!form.phone?.trim()) errors.phone = "Phone Number is required";
+
+		if (!form.date_of_birth) {
+			errors.date_of_birth = "Date of Birth is required";
+		} else {
+			const dob = new Date(form.date_of_birth);
+			if (dob >= today) {
+				errors.date_of_birth = "Date of Birth must be before today";
+			} else if (dob > minAgeDate) {
+				errors.date_of_birth = "You must be at least 18 years old";
+			}
+		}
+
 		if (!form.skills.length) errors.skills = "At least one skill is required";
+
 		if (!form.bannerImage && !bannerInputRef.current?.files[0])
 			errors.bannerImage = "Cover image is required";
+
 		if (!form.profileImage && !profileInputRef.current?.files[0])
 			errors.profileImage = "Profile image is required";
-		if (imageFiles.length + (user?.images_urls?.length || 0) < 5)
-			errors.images = "At least 5 images are required";
-		if (videoFiles.length + (user?.videos_urls?.length || 0) < 2)
-			errors.videos = "At least 2 videos are required";
+
+		const totalImages = (user?.images_urls?.length || 0) + imageFiles.length;
+		const totalVideos = (user?.videos_urls?.length || 0) + videoFiles.length;
+
+		if (totalImages < 5) errors.images = "At least 5 images are required";
+		if (totalVideos < 2) errors.videos = "At least 2 videos are required";
 
 		return errors;
 	};
@@ -270,13 +284,9 @@ function WomenEditProfile() {
 		e.preventDefault();
 		setFormErrors({});
 		const errors = validateForm();
-		if (form.date_of_birth > minAgeDate) {
-			errors.date_of_birth = `Date of birth must be minimum ${minAgeDate}`;
-		}
 
 		if (Object.keys(errors).length > 0) {
 			setFormErrors(errors);
-
 			Swal.fire({
 				icon: "error",
 				title: "Validation Error",
@@ -362,6 +372,7 @@ function WomenEditProfile() {
 	useEffect(() => {
 		Aos.init({ duration: 1000, once: true });
 	}, []);
+
 	return (
 		<>
 			<Header />
@@ -420,10 +431,12 @@ function WomenEditProfile() {
 												/>
 											</div>
 										</figure>
-										<h5>
-											{(form?.name && form.name.length > 20
-												? form.name.slice(0, 20) + "..."
-												: form?.name) || "John Smith"}
+										<h5 title={user?.name}>
+											{user?.name
+												? user.name.length > 20
+													? user.name.slice(0, 20) + "..."
+													: user.name
+												: ""}
 										</h5>
 									</div>
 								</div>
@@ -663,13 +676,17 @@ function WomenEditProfile() {
 													<button
 														type="button"
 														onClick={handleSubmit}
-														className="border radius-8 p-2 ps-3 pe-3 d-flex align-items-center gap-2"
-														disabled={isSubmitting}
+														disabled={isSubmitting || isEditProfileLoading}
+														className="border radius-8 secondary-regular-font"
 													>
-														{isSubmitting && (
-															<i className="fa fa-spinner fa-spin"></i>
+														{isSubmitting || isEditProfileLoading ? (
+															<>
+																<span className="spinner-border spinner-border-sm me-2" />
+																Saving...
+															</>
+														) : (
+															"Save"
 														)}
-														{isSubmitting ? "Saving..." : "Save"}
 													</button>
 												</div>
 											</div>

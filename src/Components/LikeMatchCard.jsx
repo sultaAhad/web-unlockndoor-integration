@@ -10,7 +10,7 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 	const [likeManProfile, { isLoading: isProcessing }] =
 		useLikeManProfileMutation();
 	const { user } = useSelector((state) => state.auth);
-	console.log(user);
+	console.log(card, "active");
 
 	// ✅ Extract both package slugs
 	const menPkgSlug = card?.has_men_package?.slug?.toLowerCase() || "";
