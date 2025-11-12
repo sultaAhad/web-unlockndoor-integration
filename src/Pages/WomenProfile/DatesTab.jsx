@@ -36,13 +36,16 @@ function DatesTab() {
     return <Navigate to={"/women-profiles"}></Navigate>;
   }
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [filterBy, setFilterBy] = useState("upcomming");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [sponsoredDates, setSponsoredDates] = useState([]);
 
-  const { data, isLoading, refetch } =
-    useGetWomanSponsoredDatesQuery(currentPage);
+  const { data, isLoading, refetch } = useGetWomanSponsoredDatesQuery({
+    currentPage,
+    filterBy,
+  });
   const [rejectDateRequest, { isLoading: rejectingRequest }] =
     useRejectDateRequestMutation();
 
@@ -58,7 +61,7 @@ function DatesTab() {
 
   useEffect(() => {
     refetch();
-  }, [currentPage]);
+  }, [currentPage, filterBy]);
 
   const handleRejectSubmit = async (data) => {
     try {
@@ -181,6 +184,24 @@ function DatesTab() {
             </div>
           ) : (
             <div className="row">
+              <div className="col-lg-12 d-flex justify-content-end mb-3">
+                <button
+                  onClick={() => setFilterBy("past")}
+                  className={`"btn btn-bgtransparent p-0 px-5 py-2 text-white ms-3 ${
+                    filterBy == "past" && " bg-ddd"
+                  }`}
+                >
+                  Past
+                </button>
+                <button
+                  onClick={() => setFilterBy("upcomming")}
+                  className={`"btn btn-bgtransparent p-0 px-5 py-2 text-white ms-3 ${
+                    filterBy == "upcomming" && " bg-ddd"
+                  }`}
+                >
+                  Upcomming
+                </button>
+              </div>
               <div className="col-lg-12 ">
                 <div className="row">
                   <div className="col-lg-12 ps-lg-0 pe-lg-0">
@@ -220,58 +241,72 @@ function DatesTab() {
                             </tr>
                           </thead>
                           <tbody>
-                            {sponsoredDates &&
-                              sponsoredDates.map((sponsorDate, index) => (
-                                <tr className="wrapper-table-d" key={index}>
-                                  <td className="secondary-medium-font  level-8 ">
-                                    <Link
-                                      to={"/chat"}
-                                      className="text-decoration-none"
-                                    >
-                                      <div className="d-flex align-items-center gap-3">
-                                        <div className="">
-                                          {" "}
-                                          <img
-                                            src={
-                                              sponsorDate.men?.profile_image_url
-                                            }
-                                            className="img-fluid wrapper-fluid-notification w-25"
-                                            alt=""
-                                          />
+                            {sponsoredDates && sponsoredDates.length > 0 ? (
+                              <>
+                                {sponsoredDates.map((sponsorDate, index) => (
+                                  <tr className="wrapper-table-d" key={index}>
+                                    <td className="secondary-medium-font  level-8 ">
+                                      <Link
+                                        to={"/chat"}
+                                        className="text-decoration-none"
+                                      >
+                                        <div className="d-flex align-items-center gap-3">
+                                          <div className="">
+                                            {" "}
+                                            <img
+                                              src={
+                                                sponsorDate.men
+                                                  ?.profile_image_url
+                                              }
+                                              className="img-fluid wrapper-fluid-notification w-25"
+                                              alt=""
+                                            />
+                                          </div>
+                                          <div className="">
+                                            <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
+                                              {sponsorDate.men?.name}
+                                            </h4>
+                                            <p className="mb-0 text-white text-start">
+                                              {sponsorDate.comment}
+                                            </p>
+                                          </div>
                                         </div>
-                                        <div className="">
-                                          <h4 className="secondary-medium-font mb-1 text-white text-start level-8 ">
-                                            {sponsorDate.men?.name}
-                                          </h4>
-                                          <p className="mb-0 text-white text-start">
-                                            {sponsorDate.comment}
-                                          </p>
-                                        </div>
+                                      </Link>
+                                    </td>
+                                    <td className="secondary-medium-font text-white level-8 text-center">
+                                      {sponsorDate.date}
+                                    </td>
+                                    <td className="secondary-medium-font text-white level-8 text-center">
+                                      ${sponsorDate.offer_price}
+                                    </td>
+                                    <td className="secondary-medium-font text-white level-8 text-center">
+                                      <h4
+                                        className={`${getStatusClass(
+                                          sponsorDate.status
+                                        )} mb-0 secondary-medium-font level-8 text-capitalize`}
+                                      >
+                                        {sponsorDate.status}
+                                      </h4>
+                                    </td>
+                                    <td className="secondary-medium-font level-8 text-center">
+                                      <div className="d-flex align-items-center justify-content-end">
+                                        {Actions(sponsorDate)}
                                       </div>
-                                    </Link>
-                                  </td>
-                                  <td className="secondary-medium-font text-white level-8 text-center">
-                                    {sponsorDate.date}
-                                  </td>
-                                  <td className="secondary-medium-font text-white level-8 text-center">
-                                    ${sponsorDate.offer_price}
-                                  </td>
-                                  <td className="secondary-medium-font text-white level-8 text-center">
-                                    <h4
-                                      className={`${getStatusClass(
-                                        sponsorDate.status
-                                      )} mb-0 secondary-medium-font level-8 text-capitalize`}
-                                    >
-                                      {sponsorDate.status}
-                                    </h4>
-                                  </td>
-                                  <td className="secondary-medium-font level-8 text-center">
-                                    <div className="d-flex align-items-center justify-content-end">
-                                      {Actions(sponsorDate)}
-                                    </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </>
+                            ) : (
+                              <>
+                                <tr>
+                                  <td colSpan={5}>
+                                    <h5 className="text-secondary">
+                                      No data exists{" "}
+                                    </h5>
                                   </td>
                                 </tr>
-                              ))}
+                              </>
+                            )}
                           </tbody>
                         </table>
                       </div>

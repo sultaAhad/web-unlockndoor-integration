@@ -11,7 +11,7 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
     date: 0,
     time: 0,
     offer_price: 0,
-    comment: 0,
+    comment: null,
   });
 
   const handleChange = (e) => {

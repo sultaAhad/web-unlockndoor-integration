@@ -26,8 +26,8 @@ export const SponsoredDates = createApi({
 		// 	}),
 		// }),
 		getWomanSponsoredDates: build.query({
-			query: (page) => ({
-				url: `${WOMAN_SPONSORED_DATES}?page=${page}`,
+			query: (data) => ({
+				url: `${WOMAN_SPONSORED_DATES}?page=${data.currentPage}${data.filterBy === 'past' ? `&key=${data.filterBy}` : ''}`,
 				method: "GET",
 			}),
 		}),
