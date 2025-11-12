@@ -478,6 +478,11 @@ function ChatComponent({ type }) {
           <div className="input-group">
             <input
               type="text"
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  sendMessageHandle();
+                }
+              }}
               name="message"
               value={form.message}
               onChange={(e) =>
