@@ -153,31 +153,32 @@ const Mansettingpassword = () => {
 												errors?.current_password ? "pass___error" : ""
 											}`}
 										>
-											<input
-												type={showOldPassword ? "text" : "password"}
-												className="form-control pe-5 w-100"
-												placeholder="Current Password"
-												name="current_password"
-												value={values.current_password}
-												onChange={handleChange}
-											/>
-											<i
-												className={`fa ${
-													showOldPassword ? "fa-eye-slash" : "fa-eye"
-												} position-absolute text-white`}
-												style={{
-													top: "50%",
-													right: "15px",
-													transform: "translateY(-50%)",
-													cursor: "pointer",
-												}}
-												onClick={() =>
-													togglePasswordVisibility(
-														setShowOldPassword,
-														showOldPassword,
-													)
-												}
-											></i>
+											<div className="position-relative">
+												<input
+													type={showOldPassword ? "text" : "password"}
+													className="form-control pe-5 w-100"
+													placeholder="Current Password"
+													name="current_password"
+													value={values.current_password}
+													onChange={handleChange}
+												/>
+												<i
+													className={`fa ${
+														showOldPassword ? "fa-eye-slash" : "fa-eye"
+													} position-absolute text-white`}
+													style={{
+														top: "17px",
+														right: "15px",
+														cursor: "pointer",
+													}}
+													onClick={() =>
+														togglePasswordVisibility(
+															setShowOldPassword,
+															showOldPassword,
+														)
+													}
+												></i>
+											</div>
 											{errors.current_password && (
 												<small className="text-danger">
 													{errors.current_password[0]}
@@ -190,31 +191,32 @@ const Mansettingpassword = () => {
 											className={`form-group password_input position-relative mb-3"
 										${errors?.password ? "pass___error" : ""}`}
 										>
-											<input
-												type={showNewPassword ? "text" : "password"}
-												className="form-control pe-5 w-100"
-												placeholder="New Password"
-												name="password"
-												value={values.password}
-												onChange={handleChange}
-											/>
-											<i
-												className={`fa ${
-													showNewPassword ? "fa-eye-slash" : "fa-eye"
-												} position-absolute text-white`}
-												style={{
-													top: "50%",
-													right: "15px",
-													transform: "translateY(-50%)",
-													cursor: "pointer",
-												}}
-												onClick={() =>
-													togglePasswordVisibility(
-														setShowNewPassword,
-														showNewPassword,
-													)
-												}
-											></i>
+											<div className="position-relative">
+												<input
+													type={showNewPassword ? "text" : "password"}
+													className="form-control pe-5 w-100"
+													placeholder="New Password"
+													name="password"
+													value={values.password}
+													onChange={handleChange}
+												/>
+												<i
+													className={`fa ${
+														showNewPassword ? "fa-eye-slash" : "fa-eye"
+													} position-absolute text-white`}
+													style={{
+														top: "17px",
+														right: "15px",
+														cursor: "pointer",
+													}}
+													onClick={() =>
+														togglePasswordVisibility(
+															setShowNewPassword,
+															showNewPassword,
+														)
+													}
+												></i>
+											</div>
 											{errors.password && (
 												<small className="text-danger">
 													{errors.password[0]}
@@ -227,31 +229,32 @@ const Mansettingpassword = () => {
 											className={`form-group password_input position-relative mb-3
 											${errors?.confirm_password ? "pass___error" : ""}`}
 										>
-											<input
-												type={showConfirmPassword ? "text" : "password"}
-												className="form-control pe-5 w-100"
-												placeholder="Confirm New Password"
-												name="confirm_password"
-												value={values.confirm_password}
-												onChange={handleChange}
-											/>
-											<i
-												className={`fa ${
-													showConfirmPassword ? "fa-eye-slash" : "fa-eye"
-												} position-absolute text-white`}
-												style={{
-													top: "50%",
-													right: "15px",
-													transform: "translateY(-50%)",
-													cursor: "pointer",
-												}}
-												onClick={() =>
-													togglePasswordVisibility(
-														setShowConfirmPassword,
-														showConfirmPassword,
-													)
-												}
-											></i>
+											<div className="position-relative">
+												<input
+													type={showConfirmPassword ? "text" : "password"}
+													className="form-control pe-5 w-100"
+													placeholder="Confirm New Password"
+													name="confirm_password"
+													value={values.confirm_password}
+													onChange={handleChange}
+												/>
+												<i
+													className={`fa ${
+														showConfirmPassword ? "fa-eye-slash" : "fa-eye"
+													} position-absolute text-white`}
+													style={{
+														top: "17px",
+														right: "15px",
+														cursor: "pointer",
+													}}
+													onClick={() =>
+														togglePasswordVisibility(
+															setShowConfirmPassword,
+															showConfirmPassword,
+														)
+													}
+												></i>
+											</div>
 											{errors.confirm_password && (
 												<small className="text-danger">
 													{errors.confirm_password[0]}
