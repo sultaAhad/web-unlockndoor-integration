@@ -74,7 +74,7 @@ function Header() {
 			countPusher.disconnect();
 		};
 	}, []);
-
+	// ✅ Reject call function ko update karein
 	const rejectCallAction = async (user_id) => {
 		const formData = {
 			channel_name: `reject_call_${user_id}`,
@@ -84,6 +84,17 @@ function Header() {
 		try {
 			let response = await callAction(formData);
 			if (response?.data?.success) {
+				console.log("✅ Call rejected successfully");
+
+				// ✅ Immediately close any open Swal
+				Swal.close();
+
+				// ✅ Stop any playing audio
+				const audioElements = document.querySelectorAll("audio");
+				audioElements.forEach((audio) => {
+					audio.pause();
+					audio.currentTime = 0;
+				});
 			}
 		} catch (error) {
 			console.log(error);
@@ -99,7 +110,7 @@ function Header() {
 	}, [videoCallData]);
 
 	useEffect(() => {
-		if (!user) return; // ✅ Do nothing if logged out
+		if (!user) return;
 
 		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
 			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
@@ -113,19 +124,19 @@ function Header() {
 				: `men-notifications-${user?.id}`;
 
 		const genderNotificationChannel = pusher.subscribe(genderChannelName);
-
 		const videoChannel = pusher.subscribe(`channel_${user?.id}`);
-
 		const notificationChannel = pusher.subscribe(`channel_${user?.id}`);
 
 		let audio = null;
+		let swalInstance = null; // ✅ Store Swal instance
 
 		videoChannel.bind("call.action", (data) => {
 			audio = new Audio("/ring.mp3");
 			audio.loop = true;
 			audio.play();
 
-			Swal.fire({
+			// ✅ Store Swal instance in variable
+			swalInstance = Swal.fire({
 				title: "Incoming Video Call",
 				html: `
         <div style="display: flex; flex-direction: column; align-items: center; padding: 20px 10px;">
@@ -182,42 +193,64 @@ function Header() {
 				}
 			});
 		});
+
+		// ✅ Listen for call rejection/end events
+		const rejectCallChannel = pusher.subscribe(`reject_call_${user?.id}`);
+		rejectCallChannel.bind("call.action", (data) => {
+			console.log("🔕 Call rejection received:", data);
+
+			// ✅ Close Swal if it's open
+			if (swalInstance) {
+				Swal.close();
+				swalInstance = null;
+			}
+
+			// ✅ Stop audio if playing
+			if (audio) {
+				audio.pause();
+				audio.currentTime = 0;
+			}
+
+			// ✅ Show notification
+			if (data?.data?.action === "reject-call") {
+				toast.info("Call was rejected");
+			} else if (data?.data?.action === "end-call") {
+				toast.info("Call has ended");
+			}
+		});
+
 		genderNotificationChannel.bind(genderChannelName, (data) => {
 			console.log("🔔 Gender Notification:", data);
 			toast(data?.message || "You have a new notification!", {
 				theme: "dark",
 			});
-
-			// 🔔 Show popup for real-time alert
-			// Swal.fire({
-			// 	icon: "info",
-			// 	title: "New Notification",
-			// 	text: data?.message || "You have a new update!",
-			// 	timer: 5000,
-			// 	showConfirmButton: false,
-			// 	position: "top-end",
-			// });
-
-			// ✅ Use existing dispatch from top of component
 			dispatch(triggerNotificationRefresh());
 		});
 
-		// 📢 Handle personal notifications (optional)
 		notificationChannel.bind("user.notifications", (data) => {
 			console.log("📩 User Notification:", data);
 		});
+
 		return () => {
+			// ✅ Cleanup: Close Swal and stop audio on unmount
+			if (swalInstance) {
+				Swal.close();
+			}
 			if (audio) {
 				audio.pause();
 				audio.currentTime = 0;
 			}
+
 			videoChannel.unbind_all();
 			notificationChannel.unbind_all();
 			genderNotificationChannel.unbind_all();
-			videoChannel.unsubscribe();
+			rejectCallChannel.unbind_all(); // ✅ Clean reject channel
 
+			videoChannel.unsubscribe();
 			notificationChannel.unsubscribe();
 			genderNotificationChannel.unsubscribe();
+			rejectCallChannel.unsubscribe(); // ✅ Unsubscribe reject channel
+
 			pusher.disconnect();
 		};
 	}, [user]);
