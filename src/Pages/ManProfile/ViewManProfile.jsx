@@ -39,7 +39,7 @@ function ViewManProfile() {
 				<div className="container">
 					<div className="row">
 						{/* ---- Profile Banner ---- */}
-						<div className="col-md-12 pb-5">
+						<div className="col-md-12 pb-sm-5 pb-3">
 							<div className="profile_banner_img">
 								<img
 									src={user?.current?.cover_image_url}

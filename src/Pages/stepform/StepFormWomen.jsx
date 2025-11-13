@@ -26,7 +26,7 @@ const StepFormWomen = () => {
       <Header />
       <section className="registration-man">
         <div className="container">
-          <div className="row mb-5">
+          <div className="row mb-sm-5">
             <div className="col-lg-12">
               <div className="min-h-screen bg-gradient-to-br from-[#150328] to-[#390837] text-white p-sm-4 p-0">
                 <div className="max-w-5xl mx-auto mt-10 bg-[#2d033b] rounded-xl shadow-xl p-6">

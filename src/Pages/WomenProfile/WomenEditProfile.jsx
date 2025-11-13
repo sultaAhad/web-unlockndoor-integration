@@ -380,7 +380,7 @@ function WomenEditProfile() {
 			<section className="profile_sec pt-5 pb-5" data-aos="fade-up">
 				<div className="container">
 					<div className="row">
-						<div className="col-md-12 pb-5">
+						<div className="col-md-12 pb-sm-5 pb-3">
 							<div className="profile_banner_img">
 								<div className="position-relative">
 									<img

@@ -715,4 +715,7 @@ span.step-label.active {
 	.package_card {
 		min-height: 100%;
 	}
+	.register_sec .container {
+		padding: 0;
+	}
 }

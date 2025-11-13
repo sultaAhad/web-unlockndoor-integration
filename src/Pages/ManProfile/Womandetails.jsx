@@ -152,7 +152,7 @@ function Womandetails() {
 				<div className="container">
 					<div className="row">
 						{/* Banner + Profile */}
-						<div className="col-md-12 pb-5">
+						<div className="col-md-12 pb-sm-5 pb-3">
 							<div className="profile_banner_img woman-profile-wrap">
 								<div className="position-relative">
 									<img
@@ -180,7 +180,7 @@ function Womandetails() {
 									</div>
 								</div>
 
-								<div className="profile_img_div">
+								<div className="profile_img_div mt-lg-0 mt-3">
 									<img
 										src={member?.profileImage}
 										className="img-fluid profile_imgg"
@@ -472,6 +472,7 @@ function Womandetails() {
 				onHide={handleVideoClose}
 				centered
 				size="lg"
+				className="disable____modal"
 			>
 				<Modal.Body className="p-0 position-relative">
 					<video
@@ -502,7 +503,7 @@ function Womandetails() {
 
 					{videoModal.disabled && (
 						<div
-							className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center text-white fs-5"
+							className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center text-white fs-5 text-center"
 							style={{ zIndex: 10 }}
 						>
 							<div>

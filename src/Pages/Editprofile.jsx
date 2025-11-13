@@ -49,21 +49,21 @@ function Editprofile() {
 		Aos.init({ duration: 1000, once: true }); // Initialize AOS with options
 	}, []);
 	return (
-    <>
-      <Header />
+		<>
+			<Header />
 
-      <section className="profile_sec pt-5 pb-5" data-aos="fade-up">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12 pb-5">
-              <div className="profile_banner_img">
-                <img src={profilebanner} className="img-fluid banner_img" />
-                <div className="profile_img_div">
-                  <img src={profileimg} className="img-fluid profile_imgg" />
-                  <h5>tina smith</h5>
-                </div>
+			<section className="profile_sec pt-5 pb-5" data-aos="fade-up">
+				<div className="container">
+					<div className="row">
+						<div className="col-md-12 pb-sm-5 pb-3">
+							<div className="profile_banner_img">
+								<img src={profilebanner} className="img-fluid banner_img" />
+								<div className="profile_img_div">
+									<img src={profileimg} className="img-fluid profile_imgg" />
+									<h5>tina smith</h5>
+								</div>
 
-                {/* <div className="account_access_dv">
+								{/* <div className="account_access_dv">
                   <div className="create_btn">
                     <button
                       data-bs-toggle="modal"
@@ -91,22 +91,22 @@ function Editprofile() {
                     </ul>
                   </div>
                 </div> */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      {/* ============================== */}
+			{/* ============================== */}
 
-      <div className="register_sec py-5">
-        <div className="container">
-          <div className="profile_dv">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="edit-profile-form">
-                  <div className="form-container">
-                    {/* <div className="custom-slider-section">
+			<div className="register_sec py-5">
+				<div className="container">
+					<div className="profile_dv">
+						<div className="row">
+							<div className="col-md-12">
+								<div className="edit-profile-form">
+									<div className="form-container">
+										{/* <div className="custom-slider-section">
                       <label className="slider-title">
                         How Much Can She Pay?
                       </label>
@@ -135,87 +135,87 @@ function Editprofile() {
                         <span>100k+</span>
                       </div>
                     </div> */}
-                    <form>
-                      <div className="row form_control_all">
-                        <div className="col-md-4">
-                          <div className="form-group upload-section">
-                            <label>Upload 5 pictures minimum</label>
-                            <div className="uploader py-3 rounded">
-                              <div className="upload_pic d-flex justify-content-center align-items-center text-center">
-                                <div className="content_uploader">
-                                  <img
-                                    src={uploader_icon}
-                                    alt=""
-                                    className="img-fluid"
-                                  />
-                                  <p className="">Upload here</p>
-                                </div>
-                              </div>
+										<form>
+											<div className="row form_control_all">
+												<div className="col-md-4">
+													<div className="form-group upload-section">
+														<label>Upload 5 pictures minimum</label>
+														<div className="uploader py-3 rounded">
+															<div className="upload_pic d-flex justify-content-center align-items-center text-center">
+																<div className="content_uploader">
+																	<img
+																		src={uploader_icon}
+																		alt=""
+																		className="img-fluid"
+																	/>
+																	<p className="">Upload here</p>
+																</div>
+															</div>
 
-                              <input type="file" className="uploader_file" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          <div className="form-group upload-section">
-                            <label>Upload 5 pictures minimum</label>
-                            <div className="uploader py-3 rounded">
-                              <div className="upload_pic d-flex justify-content-center align-items-center text-center">
-                                <div className="content_uploader">
-                                  <img
-                                    src={uploader_icon}
-                                    alt=""
-                                    className="img-fluid"
-                                  />
-                                  <p className="">Upload here</p>
-                                </div>
-                              </div>
+															<input type="file" className="uploader_file" />
+														</div>
+													</div>
+												</div>
+												<div className="col-md-4">
+													<div className="form-group upload-section">
+														<label>Upload 5 pictures minimum</label>
+														<div className="uploader py-3 rounded">
+															<div className="upload_pic d-flex justify-content-center align-items-center text-center">
+																<div className="content_uploader">
+																	<img
+																		src={uploader_icon}
+																		alt=""
+																		className="img-fluid"
+																	/>
+																	<p className="">Upload here</p>
+																</div>
+															</div>
 
-                              <input type="file" className="uploader_file" />
-                            </div>
-                          </div>
-                        </div>
+															<input type="file" className="uploader_file" />
+														</div>
+													</div>
+												</div>
 
-                        <div className="col-md-4">
-                          <label></label>
+												<div className="col-md-4">
+													<label></label>
 
-                          <div className="form-group mb-4">
-                            <input type="text" placeholder="height" required />
-                          </div>
+													<div className="form-group mb-4">
+														<input type="text" placeholder="height" required />
+													</div>
 
-                          {/* Dropdowns */}
-                          {["nationality"].map((placeholder) => (
-                            <div className="form-group" key={placeholder}>
-                              <select required>
-                                <option value="">{placeholder}</option>
-                                <option value="Option 1">Option 1</option>
-                                <option value="Option 2">Option 2</option>
-                              </select>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-md-4">
-                          <div className="form-group upload-section">
-                            <p className="">
-                              Note :make sure you got the best of your
-                              attractiveness and qualities
-                            </p>
-                          </div>
-                        </div>
+													{/* Dropdowns */}
+													{["nationality"].map((placeholder) => (
+														<div className="form-group" key={placeholder}>
+															<select required>
+																<option value="">{placeholder}</option>
+																<option value="Option 1">Option 1</option>
+																<option value="Option 2">Option 2</option>
+															</select>
+														</div>
+													))}
+												</div>
+												<div className="col-md-4">
+													<div className="form-group upload-section">
+														<p className="">
+															Note :make sure you got the best of your
+															attractiveness and qualities
+														</p>
+													</div>
+												</div>
 
-                        <div className="col-md-4"></div>
-                        <div className="col-md-4"></div>
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <input
-                              type="text"
-                              placeholder="Your Name"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          {/* <div className="date_wrapper">
+												<div className="col-md-4"></div>
+												<div className="col-md-4"></div>
+												<div className="col-md-4">
+													<div className="form-group">
+														<input
+															type="text"
+															placeholder="Your Name"
+															required
+														/>
+													</div>
+												</div>
+												<div className="col-md-4">
+													{/* <div className="date_wrapper">
                           <div className="form-group">
                             <input
                               type="date"
@@ -224,138 +224,138 @@ function Editprofile() {
                             />
                           </div>
                           </div> */}
-                          <div className="form-group position-relative">
-                            <DatePicker
-                              selected={dateOfBirth}
-                              onChange={(date) => setDateOfBirth(date)}
-                              placeholderText="Date Of Birth (DOB must match the ID given)"
-                              dateFormat="dd/MM/yyyy"
-                              className="custom_datePicker"
-                            />
-                            <div className="input_icons">
-                              <img src={solar_calendar} alt="" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          {/* <div className="form-group">
+													<div className="form-group position-relative">
+														<DatePicker
+															selected={dateOfBirth}
+															onChange={(date) => setDateOfBirth(date)}
+															placeholderText="Date Of Birth (DOB must match the ID given)"
+															dateFormat="dd/MM/yyyy"
+															className="custom_datePicker"
+														/>
+														<div className="input_icons">
+															<img src={solar_calendar} alt="" />
+														</div>
+													</div>
+												</div>
+												<div className="col-md-4">
+													{/* <div className="form-group">
                             <input
                               type="text"
                               placeholder="'Body Type?"
                               required
                             />
                           </div> */}
-                          {/* Dropdowns */}
-                          {["Body Type?"].map((placeholder) => (
-                            <div className="form-group" key={placeholder}>
-                              <select required>
-                                <option value="">{placeholder}</option>
-                                <option value="Option 1">Option 1</option>
-                                <option value="Option 2">Option 2</option>
-                              </select>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-md-4">
-                          {/* Dropdowns */}
-                          {/* <div className="form-group">
+													{/* Dropdowns */}
+													{["Body Type?"].map((placeholder) => (
+														<div className="form-group" key={placeholder}>
+															<select required>
+																<option value="">{placeholder}</option>
+																<option value="Option 1">Option 1</option>
+																<option value="Option 2">Option 2</option>
+															</select>
+														</div>
+													))}
+												</div>
+												<div className="col-md-4">
+													{/* Dropdowns */}
+													{/* <div className="form-group">
                             <input
                               type="text"
                               placeholder="'Hair Color"
                               required
                             />
                           </div> */}
-                          {["Hair Color"].map((placeholder) => (
-                            <div className="form-group" key={placeholder}>
-                              <select required>
-                                <option value="">{placeholder}</option>
-                                <option value="Option 1">Option 1</option>
-                                <option value="Option 2">Option 2</option>
-                              </select>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-md-4">
-                          {/* Dropdowns */}
-                          {/* <div className="form-group">
+													{["Hair Color"].map((placeholder) => (
+														<div className="form-group" key={placeholder}>
+															<select required>
+																<option value="">{placeholder}</option>
+																<option value="Option 1">Option 1</option>
+																<option value="Option 2">Option 2</option>
+															</select>
+														</div>
+													))}
+												</div>
+												<div className="col-md-4">
+													{/* Dropdowns */}
+													{/* <div className="form-group">
                             <input
                               type="text"
                               placeholder="Eyes Color"
                               required
                             />
                           </div> */}
-                          {["Eyes Color"].map((placeholder) => (
-                            <div className="form-group" key={placeholder}>
-                              <select required>
-                                <option value="">{placeholder}</option>
-                                <option value="Option 1">Option 1</option>
-                                <option value="Option 2">Option 2</option>
-                              </select>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <input
-                              type="email"
-                              placeholder="body type"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          {/* Dropdowns */}
-                          {["what are your talents and skills?"].map(
-                            (placeholder) => (
-                              <div className="form-group" key={placeholder}>
-                                <select required>
-                                  <option value="">{placeholder}</option>
-                                  <option value="Option 1">Option 1</option>
-                                  <option value="Option 2">Option 2</option>
-                                </select>
-                              </div>
-                            )
-                          )}
-                        </div>
-                        <div className="col-md-4">
-                          {/* Dropdowns */}
-                          {["What is your Profession?"].map((placeholder) => (
-                            <div className="form-group" key={placeholder}>
-                              <select required>
-                                <option value="">{placeholder}</option>
-                                <option value="Option 1">Option 1</option>
-                                <option value="Option 2">Option 2</option>
-                              </select>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-md-4">
-                          {/* Dropdowns */}
-                          {["Realtionship Stattus"].map((placeholder) => (
-                            <div className="form-group" key={placeholder}>
-                              <select required>
-                                <option value="">{placeholder}</option>
-                                <option value="Option 1">Option 1</option>
-                                <option value="Option 2">Option 2</option>
-                              </select>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-md-4">
-                          {" "}
-                          <div className="form-group">
-                            {/* <label>What are your talents and skills?</label> */}
-                            <div className="chips">
-                              {chips.map((chip) => (
-                                <div key={chip} className="chip">
-                                  {chip}
-                                  <span onClick={() => handleRemoveChip(chip)}>
-                                    &times;
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                            {/* <input
+													{["Eyes Color"].map((placeholder) => (
+														<div className="form-group" key={placeholder}>
+															<select required>
+																<option value="">{placeholder}</option>
+																<option value="Option 1">Option 1</option>
+																<option value="Option 2">Option 2</option>
+															</select>
+														</div>
+													))}
+												</div>
+												<div className="col-md-4">
+													<div className="form-group">
+														<input
+															type="email"
+															placeholder="body type"
+															required
+														/>
+													</div>
+												</div>
+												<div className="col-md-4">
+													{/* Dropdowns */}
+													{["what are your talents and skills?"].map(
+														(placeholder) => (
+															<div className="form-group" key={placeholder}>
+																<select required>
+																	<option value="">{placeholder}</option>
+																	<option value="Option 1">Option 1</option>
+																	<option value="Option 2">Option 2</option>
+																</select>
+															</div>
+														),
+													)}
+												</div>
+												<div className="col-md-4">
+													{/* Dropdowns */}
+													{["What is your Profession?"].map((placeholder) => (
+														<div className="form-group" key={placeholder}>
+															<select required>
+																<option value="">{placeholder}</option>
+																<option value="Option 1">Option 1</option>
+																<option value="Option 2">Option 2</option>
+															</select>
+														</div>
+													))}
+												</div>
+												<div className="col-md-4">
+													{/* Dropdowns */}
+													{["Realtionship Stattus"].map((placeholder) => (
+														<div className="form-group" key={placeholder}>
+															<select required>
+																<option value="">{placeholder}</option>
+																<option value="Option 1">Option 1</option>
+																<option value="Option 2">Option 2</option>
+															</select>
+														</div>
+													))}
+												</div>
+												<div className="col-md-4">
+													{" "}
+													<div className="form-group">
+														{/* <label>What are your talents and skills?</label> */}
+														<div className="chips">
+															{chips.map((chip) => (
+																<div key={chip} className="chip">
+																	{chip}
+																	<span onClick={() => handleRemoveChip(chip)}>
+																		&times;
+																	</span>
+																</div>
+															))}
+														</div>
+														{/* <input
                               type="text"
                               placeholder="Add skill"
                               onKeyDown={(e) => {
@@ -366,30 +366,30 @@ function Editprofile() {
                                 }
                               }}
                             /> */}
-                          </div>
-                        </div>
-                        <div className="col-md-4"></div>
-                        <div className="col-md-4">
-                          <Link to="/profile">
-                            {" "}
-                            <button type="submit" className=" border">
-                              Save
-                            </button>
-                          </Link>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+													</div>
+												</div>
+												<div className="col-md-4"></div>
+												<div className="col-md-4">
+													<Link to="/profile">
+														{" "}
+														<button type="submit" className=" border">
+															Save
+														</button>
+													</Link>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default Editprofile;

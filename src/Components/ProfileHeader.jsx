@@ -10,7 +10,7 @@ function ProfileHeader({ showButtons = true, visibility = true }) {
 
 	const gender = localStorage.getItem("gender");
 	return (
-		<div className="col-md-12 pb-5">
+		<div className="col-md-12 pb-sm-5 pb-3">
 			<div className="profile_banner_img">
 				<img
 					src={user?.cover_image_url || user?.cover_images_url}

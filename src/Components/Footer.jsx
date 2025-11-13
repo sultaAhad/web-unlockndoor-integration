@@ -15,7 +15,7 @@ function Footer() {
 			<section className="footer_sec">
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-3 col-md-6">
+						<div className="col-lg-3 col-md-6 mb-lg-0 mb-3">
 							<div className="footer_widget widget1">
 								<div className="footer_logo">
 									{/* {settingPageData?.logo_url && (
@@ -41,7 +41,7 @@ function Footer() {
 							</div>
 						</div>
 						<div className="col-lg-1 d-lg-flex d-none"></div>
-						<div className="col-lg-2 col-md-6">
+						<div className="col-lg-2 col-md-6 col-sm-6 col-6">
 							<div className="footer_widget widget2">
 								<div className="footer_head">
 									<h3>quick links</h3>
@@ -61,7 +61,7 @@ function Footer() {
 								</div>
 							</div>
 						</div>
-						<div className="col-lg-2 col-md-6 mt-lg-0 mt-4">
+						<div className="col-lg-2 col-md-6 col-sm-6 col-6 mt-0">
 							<div className="footer_widget widget2">
 								<div className="footer_head">
 									<h3>Help & Support</h3>
@@ -83,7 +83,7 @@ function Footer() {
 						</div>
 						<div className="col-lg-1 d-lg-flex d-none"></div>
 
-						<div className="col-lg-3 col-md-6 mt-lg-0 mt-4">
+						<div className="col-lg-3 col-md-6 mt-lg-0 mt-3">
 							<div className="footer_widget widget2">
 								<div className="footer_head">
 									<h3>Contact Info</h3>
@@ -127,7 +127,7 @@ function Footer() {
 							</div>
 						</div>
 					</div>
-					<div className="row pt-5">
+					<div className="row pt-sm-5 pt-4">
 						<div className="col-md-12">
 							<div className="dv_copy_right">
 								<p>{settingPageData?.copyright}</p>{" "}

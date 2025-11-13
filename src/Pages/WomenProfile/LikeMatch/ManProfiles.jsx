@@ -50,7 +50,7 @@ function ManProfiles() {
 			<section className="profile_sec">
 				<div className="container">
 					<div className="row">
-						<div className="col-md-12 pb-5">
+						<div className="col-md-12 pb-sm-5 pb-3">
 							<div className="profile_banner_img">
 								<img
 									src={user?.current?.cover_image_url}
@@ -242,7 +242,7 @@ function ManProfiles() {
 			<section className="videos_sec">
 				<div className="container">
 					{user?.current?.videos_urls?.length > 0 && (
-						<div className="col-md-12 mt-5">
+						<div className="col-md-12 mt-lg-5 mt-2">
 							<div className="pic_head d-flex justify-content-between">
 								<h3>Videos</h3>
 							</div>

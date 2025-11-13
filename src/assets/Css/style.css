@@ -3635,12 +3635,43 @@ button.btn-custom.btn-custom1 {
 	}
 
 	.footer_sec {
-		padding: 50px 0px;
+		padding: 40px 0px 0px;
+	}
+
+	.footer_map_text a {
+		font-size: 12px;
+	}
+
+	.map_text p {
+		font-size: 12px;
+	}
+
+	.footer_ul ul li a {
+		font-size: 12px;
+	}
+
+	.footer_head h3 {
+		font-size: 16px;
+		margin-bottom: 10px;
+	}
+
+	.footer_sec .text_wrapper p {
+		font-size: 12px;
+	}
+
+	.map_text {
+		padding-left: 14px;
+	}
+
+	.dv_copy_right p {
+		font-size: 12px;
 	}
 
 	.profile_img_div {
 		/* left: 10px; */
 		position: unset;
+		margin: auto;
+		margin-top: 20px;
 		margin-bottom: 30px;
 	}
 
@@ -3686,6 +3717,42 @@ button.btn-custom.btn-custom1 {
 	}
 	.pricing_modal .modal-content {
 		max-width: 100%;
+	}
+	.del_icon img.img-fluid.wrapper-deletetrash {
+		max-width: 20px;
+	}
+	.category_modal .modal-content {
+		max-width: 100%;
+	}
+	.wrapper-centered .modal-content {
+		width: 100%;
+	}
+	.my_header_button {
+		width: 45%;
+		height: 110px;
+	}
+	.login_modal_all {
+		padding: 0px;
+	}
+	.forgot_pass a {
+		font-size: 12px;
+	}
+	.remeber label {
+		font-size: 12px;
+	}
+	.header_button_wrapper {
+		flex-direction: column;
+		margin: 0px 10px;
+		align-items: center;
+	}
+	.header_button_wrapper button {
+		width: 100%;
+	}
+	.header_modal_all p {
+		font-size: 13px;
+		width: 80%;
+		line-height: 1.7;
+		margin-top: 5px;
 	}
 }
 
