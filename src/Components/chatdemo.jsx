@@ -3,6 +3,7 @@ import {
 	useGetChatMessagesQuery,
 	useGetChatsQuery,
 	useSendMessageMutation,
+	// useGetMessagesQuery,
 } from "../network/services/Chat";
 import {
 	camerachat,
@@ -58,9 +59,10 @@ function ChatComponent({ type }) {
 		console.log("From Package:", fromPackage);
 		console.log("To Package:", toPackage);
 
-		const blockedKeywords = ["silver", "free-tier"];
+		const blockedKeywords = ["silver", "free-tier"]; // use includes
 		const allowedKeywords = ["gold", "platinum", "one-time-payment"];
 
+		// ✅ Step 1: Block if either package contains blocked keyword
 		if (
 			blockedKeywords.some(
 				(keyword) =>
@@ -71,6 +73,7 @@ function ChatComponent({ type }) {
 			return false;
 		}
 
+		// ✅ Step 2: Allow if either package contains allowed keyword
 		if (
 			allowedKeywords.some(
 				(keyword) =>
@@ -81,6 +84,7 @@ function ChatComponent({ type }) {
 			return true;
 		}
 
+		// ✅ Step 3: Otherwise hide
 		console.log("Video Call Not Allowed - package not in allowed list.");
 		return false;
 	})();
@@ -122,12 +126,14 @@ function ChatComponent({ type }) {
 
 			if (response?.status || response?.success) {
 				toast.success("Chat deleted successfully!");
+				// Remove deleted chat from list
 				setChats((prev) =>
 					prev.filter((chat) => chat.chat_id !== selectedChat.chat_id),
 				);
 				setFilteredChats((prev) =>
 					prev.filter((chat) => chat.chat_id !== selectedChat.chat_id),
 				);
+				// Reset chat view
 				setSelectedChat({ chat_id: 0 });
 				setMessages([]);
 			} else {
@@ -164,20 +170,17 @@ function ChatComponent({ type }) {
 		to_id: 0,
 		to_type: type === "women" ? "Men" : "Women",
 		message: "",
-		files: [],
+		files: [], // This will now store File objects
 	});
 
-	// FIXED: Properly handle the API response
 	const {
-		data: chatsData,
+		data,
 		isLoading: isChatLoading,
 		refetch,
 	} = useGetChatsQuery(type, {
 		refetchOnMountOrArgChange: true,
 	});
-
-	console.log("Chats API Response:", chatsData);
-
+	console.log(data);
 	const getChatMessages = async () => {
 		const token = localStorage.getItem("token");
 		const response = await fetch(
@@ -202,18 +205,12 @@ function ChatComponent({ type }) {
 
 	const [sendMessage, sendMessageResponse] = useSendMessageMutation();
 
-	// FIXED: Properly handle the chats data with error checking
 	useEffect(() => {
-		if (chatsData?.status === true && chatsData?.chats) {
-			setChats(chatsData.chats);
-			setFilteredChats(chatsData.chats);
-		} else if (chatsData?.status === false) {
-			// Handle no chats found scenario
-			setChats([]);
-			setFilteredChats([]);
-			console.log("No chats found:", chatsData.message);
+		if (data?.chats) {
+			setChats(data.chats);
+			setFilteredChats(data.chats);
 		}
-	}, [chatsData]);
+	}, [data]);
 
 	useEffect(() => {
 		if (selectedChat?.chat_id != undefined && selectedChat?.chat_id > 0) {
@@ -224,19 +221,24 @@ function ChatComponent({ type }) {
 
 	const sendMessageHandle = async () => {
 		try {
+			// Validation - check if both message and files are empty
 			if (form.message.trim().length === 0 && form.files.length === 0) {
 				toast.error("Neither text message nor any file to send to user");
 				return;
 			}
 
+			// Create FormData object
 			const formData = new FormData();
+
+			// Add text fields
 			formData.append("type", form.type);
 			formData.append("to_id", form.to_id.toString());
 			formData.append("to_type", form.to_type);
 			formData.append("message", form.message);
 
+			// Add files
 			form.files.forEach((fileObj, index) => {
-				formData.append(`files[${index}]`, fileObj.file);
+				formData.append(`files[${index}]`, fileObj.file); // Append the actual File object
 			});
 
 			let response = await sendMessage({ formData, type }).unwrap();
@@ -271,10 +273,12 @@ function ChatComponent({ type }) {
 
 	const handleFileChange = async (e) => {
 		const selectedFiles = Array.from(e.target.files);
+
+		// Create file objects with metadata
 		const mappedFiles = selectedFiles.map((file) => ({
-			file: file,
+			file: file, // Store the actual File object
 			type: file.type.startsWith("video") ? "video" : "image",
-			preview: URL.createObjectURL(file),
+			preview: URL.createObjectURL(file), // Create preview URL for display
 			name: file.name,
 			size: file.size,
 		}));
@@ -284,10 +288,12 @@ function ChatComponent({ type }) {
 			files: [...prev.files, ...mappedFiles],
 		}));
 
+		// Clear the input to allow selecting same files again
 		e.target.value = "";
 	};
 
 	const removeFile = (index) => {
+		// Revoke the object URL to prevent memory leaks
 		if (form.files[index].preview) {
 			URL.revokeObjectURL(form.files[index].preview);
 		}
@@ -347,6 +353,7 @@ function ChatComponent({ type }) {
 		};
 	}, [selectedChat?.chat_id]);
 
+	// Clean up object URLs when component unmounts or files change
 	useEffect(() => {
 		return () => {
 			form.files.forEach((file) => {
@@ -409,7 +416,7 @@ function ChatComponent({ type }) {
 							<div className="position-relative" key={index}>
 								{item.type === "image" ? (
 									<img
-										src={item.preview}
+										src={item.preview} // Use the preview URL
 										className="img-fluid "
 										style={{
 											width: "60px",
@@ -423,7 +430,7 @@ function ChatComponent({ type }) {
 								) : (
 									<div style={{ position: "relative" }}>
 										<img
-											src={chatimgg}
+											src={chatimgg} // Use your video placeholder
 											className="img-fluid"
 											style={{
 												width: "80px",
@@ -514,7 +521,6 @@ function ChatComponent({ type }) {
 			</div>
 		);
 	};
-
 	const renderAttachments = (attachments) => {
 		const getFileType = (url) => {
 			const extension = url.split(".").pop().toLowerCase();
@@ -608,89 +614,86 @@ function ChatComponent({ type }) {
 			);
 		}
 
-		// FIXED: Check if filteredChats is empty
-		if (filteredChats.length === 0) {
-			return (
-				<p className="py-5 secondary-medium-font text-capitalize text-center text-white">
-					No chats found
-				</p>
-			);
-		}
-
 		return (
 			<ul className="p-0 wrapper-chat-b">
-				{filteredChats.map((chat) => (
-					<li
-						key={chat.chat_id}
-						onClick={() => {
-							setSelectedChat(chat);
-							setForm((pre) => ({
-								...pre,
-								to_id: chat.participant_id,
-							}));
-							setChats((prevChats) =>
-								prevChats.map((c) =>
-									c.chat_id === chat.chat_id ? { ...c, unread_count: 0 } : c,
-								),
-							);
-						}}
-						className={`d-flex align-items-start border-bottom justify-content-between py-3 px-3 
-							${chat.chat_id == selectedChat?.chat_id ? "bg-massage" : ""}
-							`}
-					>
-						<div className="d-flex align-items-center gap-3">
-							<div className="wrapper-navigate-main1 position-relative">
-								<img
-									src={chat.participant_profile}
-									className="img-fluid chat-users rounded-circle"
-									alt={chat.participant_name}
-								/>
-								{chat.unread_count > 0 && (
-									<span
-										className="unread-badge"
-										style={{
-											position: "absolute",
-											top: "-4px",
-											right: "-2px",
-											backgroundColor: "#ff4757",
-											color: "#fff",
-											fontSize: "10px",
-											fontWeight: "600",
-											borderRadius: "50%",
-											minWidth: "18px",
-											height: "18px",
-											display: "flex",
-											alignItems: "center",
-											justifyContent: "center",
-											boxShadow: "0 0 4px rgba(0,0,0,0.3)",
-										}}
-									>
-										{chat.unread_count}
-									</span>
-								)}
-							</div>
-
-							<div>
-								<div className="d-flex align-items-start gap-2">
-									<h4 className="secondary-semibold-font mb-1 text-white level-8 text-capitalize">
-										{chat.participant_name}
-									</h4>
-									<span
-										className={chat.active ? "green active" : "green"}
-									></span>
+				{filteredChats.length > 0 ? (
+					filteredChats.map((chat) => (
+						<li
+							key={chat.chat_id}
+							onClick={() => {
+								setSelectedChat(chat);
+								setForm((pre) => ({
+									...pre,
+									to_id: chat.participant_id,
+								}));
+								setChats((prevChats) =>
+									prevChats.map((c) =>
+										c.chat_id === chat.chat_id ? { ...c, unread_count: 0 } : c,
+									),
+								);
+							}}
+							className={`d-flex align-items-start border-bottom justify-content-between py-3 px-3 
+                ${chat.chat_id == selectedChat?.chat_id ? "bg-massage" : ""}
+                `}
+						>
+							<div className="d-flex align-items-center gap-3">
+								<div className="wrapper-navigate-main1 position-relative">
+									<img
+										src={chat.participant_profile}
+										className="img-fluid chat-users rounded-circle"
+										alt={chat.participant_name}
+									/>
+									{chat.unread_count > 0 && (
+										<span
+											className="unread-badge"
+											style={{
+												position: "absolute",
+												top: "-4px",
+												right: "-2px",
+												backgroundColor: "#ff4757",
+												color: "#fff",
+												fontSize: "10px",
+												fontWeight: "600",
+												borderRadius: "50%",
+												minWidth: "18px",
+												height: "18px",
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												boxShadow: "0 0 4px rgba(0,0,0,0.3)",
+											}}
+										>
+											{chat.unread_count}
+										</span>
+									)}
 								</div>
-								<p className="mb-0 level-8 extra-color-13 secondary-light-font">
-									{setLimit(chat.last_message)}
-								</p>
+
+								<div>
+									<div className="d-flex align-items-start gap-2">
+										<h4 className="secondary-semibold-font mb-1 text-white level-8 text-capitalize">
+											{chat.participant_name}
+										</h4>
+										<span
+											className={chat.active ? "green active" : "green"}
+										></span>
+									</div>
+									<p className="mb-0 level-8 extra-color-13 secondary-light-font">
+										{setLimit(chat.last_message)}
+									</p>
+								</div>
 							</div>
-						</div>
-						{chat.last_message_time && (
-							<h4 className="secondary-medium-font text-white level-8">
-								{formatDate(chat.last_message_time)}
-							</h4>
-						)}
-					</li>
-				))}
+							{chat.last_message_time && (
+								<h4 className="secondary-medium-font text-white level-8">
+									{formatDate(chat.last_message_time)}
+								</h4>
+							)}
+						</li>
+					))
+				) : (
+					<p className="py-5 secondary-medium-font text-capitalize text-center text-white">
+						No Chat found
+					</p>
+				)}
 			</ul>
 		);
 	};
@@ -724,7 +727,6 @@ function ChatComponent({ type }) {
 
 										if (minutes > 0) {
 											console.log("Starting video call...");
-											console.log(selectedChat?.minutes, "asdas");
 											document.getElementById("videoCallButton")?.click();
 										} else {
 											console.log("Opening price modal...");
@@ -794,12 +796,12 @@ function ChatComponent({ type }) {
 			<ToastContainer />
 			<style>
 				{`
-					.selected_chat img {
-						height: 55px;
-						width: 55px;
-						object-fit:cover;
-					}
-				`}
+          .selected_chat img {
+            height: 55px;
+            width: 55px;
+            object-fit:cover;
+          }
+        `}
 			</style>
 			<div className="chat-wrapper">
 				<div className="row">

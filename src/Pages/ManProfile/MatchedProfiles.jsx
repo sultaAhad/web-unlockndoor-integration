@@ -41,14 +41,16 @@ function MatchedProfiles() {
 	const [profiles, setProfiles] = useState([]);
 
 	const { data, isLoading, refetch } = useGetMatchedProfilesQuery(currentPage);
+	console.log(data);
 
 	useEffect(() => {
-		if (data?.data?.data) {
-			let responseData = data?.data;
+		const profilesArray = data?.data?.data || data?.data || []; // handle both API formats
+
+		if (profilesArray.length > 0) {
 			setProfiles((prev) =>
-				currentPage == 1 ? responseData.data : [...prev, ...responseData.data],
+				currentPage === 1 ? profilesArray : [...prev, ...profilesArray],
 			);
-			setLastPage(responseData?.last_page);
+			setLastPage(data?.data?.last_page || 1);
 		}
 	}, [data]);
 
@@ -80,7 +82,7 @@ function MatchedProfiles() {
 		<>
 			<Header />
 
-			<section className="profile_sec mt-5" data-aos="fade-up">
+			<section className="profile_sec mt-5">
 				<div className="container">
 					<div className="row">
 						<ProfileHeader />
@@ -92,7 +94,7 @@ function MatchedProfiles() {
 				</div>
 			</section>
 
-			<section className="videos_sec" data-aos="fade-right">
+			<section className="videos_sec">
 				<div className="container">
 					{isLoading ? (
 						<div className="row justify-content-center">
@@ -109,7 +111,7 @@ function MatchedProfiles() {
 									/>
 								))
 							) : (
-								<h3 className="col-12 text-center text-secondary">
+								<h3 className="col-12 text-center text-white">
 									No matched profiles found.
 								</h3>
 							)}

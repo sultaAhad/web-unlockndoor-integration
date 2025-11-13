@@ -2005,8 +2005,17 @@ li.bullet_Wrapper.wrapper-bullet {
 	color: #ffffff;
 	font-family: "TomatoGrotesk-SemiBold";
 }
-
-.terms_para p {
+.rotate-wrapper {
+	transform: rotate(180deg);
+	top: 28px !important;
+}
+.login_input .login_email input:focus {
+	color: #fff !important;
+}
+.login_input .login_password input:focus {
+	color: #fff !important;
+}
+.login_password .terms_para p {
 	font-size: 16px;
 	color: #ffffff !important;
 	font-family: "FontAwesome";

@@ -9,360 +9,371 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { setUser } from "../../network/reducers/AuthReducer";
 import {
-  useDeleteImageWomanMutation,
-  useDeleteVideoWomanMutation,
-  useUpdateCoverImageWomenMutation,
-  useUpdateProfileImageWomenMutation,
-  useWomanDataQuery,
-  useWomenEditProfileMutation,
+	useDeleteImageWomanMutation,
+	useDeleteVideoWomanMutation,
+	useUpdateCoverImageWomenMutation,
+	useUpdateProfileImageWomenMutation,
+	useWomanDataQuery,
+	useWomenEditProfileMutation,
 } from "../../network/services/WomanAuth";
 import ImageVideo from "../../Components/ImageVideo";
 
 function WomenEditProfile() {
-  const { data, refetch } = useWomanDataQuery();
-  const user = data?.response?.data?.women;
-  console.log(user);
+	const { data, refetch } = useWomanDataQuery();
+	const user = data?.response?.data?.women;
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-  const bannerInputRef = useRef(null);
-  const profileInputRef = useRef(null);
-  const imagesInputRef = useRef(null);
-  const videosInputRef = useRef(null);
+	const bannerInputRef = useRef(null);
+	const profileInputRef = useRef(null);
+	const imagesInputRef = useRef(null);
+	const videosInputRef = useRef(null);
 
-  const parseValidDate = (dateString) => {
-    const date = new Date(dateString);
-    return isNaN(date.getTime()) ? null : date;
-  };
+	const parseValidDate = (dateString) => {
+		const date = new Date(dateString);
+		return isNaN(date.getTime()) ? null : date;
+	};
 
-  const parsedSkills = user?.skills
-    ? Array.isArray(user.skills)
-      ? user.skills
-      : user.skills.split(",").map((s) => s.trim())
-    : [];
+	const parsedSkills = user?.skills
+		? Array.isArray(user.skills)
+			? user.skills
+			: user.skills.split(",").map((s) => s.trim())
+		: [];
 
-  const [form, setForm] = useState({
-    name: user?.name || "",
-    phone: user?.phone || "",
-    date_of_birth: parseValidDate(user?.date_of_birth) || null,
-    height: user?.height || "",
-    body_type: user?.body_type || "",
-    address: user?.address || "",
-    hair_color: user?.hair_color || "",
-    nationality: user?.nationality || "",
-    skills: parsedSkills || [],
-    bannerImage: user?.cover_images_url || "",
-    profileImage: user?.profile_image_url || "",
-    images: user?.images_urls || [],
-    videos: user?.videos_urls || [],
-  });
+	const [form, setForm] = useState({
+		name: user?.name || "",
+		phone: user?.phone || "",
+		date_of_birth: parseValidDate(user?.date_of_birth) || null,
+		height: user?.height || "",
+		body_type: user?.body_type || "",
+		address: user?.address || "",
+		hair_color: user?.hair_color || "",
+		nationality: user?.nationality || "",
+		skills: parsedSkills || [],
+		bannerImage: user?.cover_images_url || "",
+		profileImage: user?.profile_image_url || "",
+		images: user?.images_urls || [],
+		videos: user?.videos_urls || [],
+	});
 
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageFiles, setImageFiles] = useState([]);
-  const [videoFiles, setVideoFiles] = useState([]);
+	const [formErrors, setFormErrors] = useState({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [imageFiles, setImageFiles] = useState([]);
+	const [videoFiles, setVideoFiles] = useState([]);
 
-  const [updateProfileImage] = useUpdateProfileImageWomenMutation();
-  const [updateCoverImage] = useUpdateCoverImageWomenMutation();
-  const [editProfile] = useWomenEditProfileMutation();
-  const [deleteImageWomen] = useDeleteImageWomanMutation();
-  const [deleteVideoWomen] = useDeleteVideoWomanMutation();
+	const [updateProfileImage] = useUpdateProfileImageWomenMutation();
+	const [updateCoverImage] = useUpdateCoverImageWomenMutation();
+	const [editProfile, { isLoading: isEditProfileLoading }] =
+		useWomenEditProfileMutation();
+	const [deleteImageWomen] = useDeleteImageWomanMutation();
+	const [deleteVideoWomen] = useDeleteVideoWomanMutation();
 
-  const today = new Date();
-  const minAgeDate = new Date(
-    today.getFullYear() - 18,
-    today.getMonth(),
-    today.getDate()
-  );
+	// ===== Banner Upload =====
+	const handleBannerChange = async (e) => {
+		const file = e.target.files[0];
+		if (!file) return;
 
-  // ===== Banner Upload =====
-  const handleBannerChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+		const localPreview = URL.createObjectURL(file);
+		setForm((prev) => ({ ...prev, bannerImage: localPreview }));
 
-    const localPreview = URL.createObjectURL(file);
-    setForm((prev) => ({ ...prev, bannerImage: localPreview }));
+		try {
+			const formData = new FormData();
+			formData.append("cover_images", file);
 
-    try {
-      const formData = new FormData();
-      formData.append("cover_images", file);
+			const response = await updateCoverImage(formData).unwrap();
+			if (response.data?.cover_images_url) {
+				setForm((prev) => ({
+					...prev,
+					bannerImage: response.data.cover_images_url,
+				}));
+				dispatch(
+					setUser({ ...user, cover_images_url: response.data.cover_image_url }),
+				);
+				refetch();
+				Swal.fire({
+					icon: "success",
+					title: "Success!",
+					text: "Cover image updated successfully!",
+					timer: 2000,
+					showConfirmButton: false,
+				});
+			}
+		} catch (error) {
+			console.error("Failed to update cover image:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Upload Failed",
+				text:
+					error.data?.message ||
+					"Failed to update cover image. Please try again.",
+			});
+		}
+	};
 
-      const response = await updateCoverImage(formData).unwrap();
-      if (response.data?.cover_images_url) {
-        setForm((prev) => ({
-          ...prev,
-          bannerImage: response.data.cover_images_url,
-        }));
-        dispatch(
-          setUser({ ...user, cover_images_url: response.data.cover_image_url })
-        );
-        refetch();
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Cover image updated successfully!",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      }
-    } catch (error) {
-      console.error("Failed to update cover image:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Upload Failed",
-        text:
-          error.data?.message ||
-          "Failed to update cover image. Please try again.",
-      });
-    }
-  };
+	// ===== Profile Upload =====
+	const handleProfileChange = async (e) => {
+		const file = e.target.files[0];
+		if (!file) return;
 
-  // ===== Profile Upload =====
-  const handleProfileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+		const localPreview = URL.createObjectURL(file);
+		setForm((prev) => ({ ...prev, profileImage: localPreview }));
 
-    const localPreview = URL.createObjectURL(file);
-    setForm((prev) => ({ ...prev, profileImage: localPreview }));
+		try {
+			const formData = new FormData();
+			formData.append("profile_image", file);
 
-    try {
-      const formData = new FormData();
-      formData.append("profile_image", file);
+			const response = await updateProfileImage(formData).unwrap();
+			if (response.data?.profile_image_url) {
+				setForm((prev) => ({
+					...prev,
+					profileImage: response.data.profile_image_url,
+				}));
+				dispatch(
+					setUser({
+						...user,
+						profile_image_url: response.data.profile_image_url,
+					}),
+				);
+				refetch();
+				Swal.fire({
+					icon: "success",
+					title: "Success!",
+					text: "Profile image updated successfully!",
+					timer: 2000,
+					showConfirmButton: false,
+				});
+			}
+		} catch (error) {
+			console.error("Failed to update profile image:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Upload Failed",
+				text:
+					error.data?.message ||
+					"Failed to update profile image. Please try again.",
+			});
+		}
+	};
 
-      const response = await updateProfileImage(formData).unwrap();
-      if (response.data?.profile_image_url) {
-        setForm((prev) => ({
-          ...prev,
-          profileImage: response.data.profile_image_url,
-        }));
-        dispatch(
-          setUser({
-            ...user,
-            profile_image_url: response.data.profile_image_url,
-          })
-        );
-        refetch();
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Profile image updated successfully!",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      }
-    } catch (error) {
-      console.error("Failed to update profile image:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Upload Failed",
-        text:
-          error.data?.message ||
-          "Failed to update profile image. Please try again.",
-      });
-    }
-  };
+	// ===== Skills =====
+	const handleAddChip = (chip) => {
+		if (chip && !form.skills.includes(chip)) {
+			setForm((prev) => ({ ...prev, skills: [...prev.skills, chip] }));
+		}
+	};
+	const handleRemoveChip = (chip) => {
+		setForm((prev) => ({
+			...prev,
+			skills: prev.skills.filter((c) => c !== chip),
+		}));
+	};
 
-  // ===== Skills =====
-  const handleAddChip = (chip) => {
-    if (chip && !form.skills.includes(chip)) {
-      setForm((prev) => ({ ...prev, skills: [...prev.skills, chip] }));
-    }
-  };
-  const handleRemoveChip = (chip) => {
-    setForm((prev) => ({
-      ...prev,
-      skills: prev.skills.filter((c) => c !== chip),
-    }));
-  };
+	// ===== Upload files =====
+	const handleFileChange = (e, type) => {
+		const selectedFiles = Array.from(e.target.files);
+		const urls = selectedFiles.map((file) => URL.createObjectURL(file));
 
-  // ===== Upload files =====
-  const handleFileChange = (e, type) => {
-    const selectedFiles = Array.from(e.target.files);
-    const urls = selectedFiles.map((file) => URL.createObjectURL(file));
+		if (type === "images") {
+			setImageFiles((prev) => [...prev, ...selectedFiles]);
+			setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
+		} else if (type === "videos") {
+			setVideoFiles((prev) => [...prev, ...selectedFiles]);
+			setForm((prev) => ({ ...prev, videos: [...prev.videos, ...urls] }));
+		}
+	};
 
-    if (type === "images") {
-      setImageFiles((prev) => [...prev, ...selectedFiles]);
-      setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
-    } else if (type === "videos") {
-      setVideoFiles((prev) => [...prev, ...selectedFiles]);
-      setForm((prev) => ({ ...prev, videos: [...prev.videos, ...urls] }));
-    }
-  };
+	// ===== Remove Files =====
+	const removeFile = async (index, type) => {
+		try {
+			let formData = new FormData();
 
-  const removeFile = async (index, type) => {
-    try {
-      let formData = new FormData();
+			if (type === "images") {
+				const fileUrl = form.images[index];
+				const fileName = fileUrl.split("/").pop();
+				formData.append("image", fileName);
 
-      if (type === "images") {
-        const fileUrl = form.images[index];
-        const fileName = fileUrl.split("/").pop();
-        formData.append("image", fileName);
+				const response = await deleteImageWomen(formData).unwrap();
+				if (response.status === 200) {
+					setForm((prev) => ({
+						...prev,
+						images: prev.images.filter((_, i) => i !== index),
+					}));
+					Swal.fire({
+						icon: "success",
+						title: "Deleted!",
+						text: "Image deleted successfully.",
+						timer: 1500,
+						showConfirmButton: false,
+					});
+				}
+			} else if (type === "videos") {
+				const fileUrl = form.videos[index];
+				const fileName = fileUrl.split("/").pop();
+				formData.append("video", fileName);
 
-        const response = await deleteImageWomen(formData).unwrap();
-        if (response.status === 200) {
-          setForm((prev) => ({
-            ...prev,
-            images: prev.images.filter((_, i) => i !== index),
-          }));
-          Swal.fire({
-            icon: "success",
-            title: "Deleted!",
-            text: "Image deleted successfully.",
-            timer: 1500,
-            showConfirmButton: false,
-          });
-        }
-      } else if (type === "videos") {
-        const fileUrl = form.videos[index];
-        const fileName = fileUrl.split("/").pop();
-        formData.append("video", fileName);
+				const response = await deleteVideoWomen(formData).unwrap();
+				if (response.status === 200) {
+					setForm((prev) => ({
+						...prev,
+						videos: prev.videos.filter((_, i) => i !== index),
+					}));
+					Swal.fire({
+						icon: "success",
+						title: "Deleted!",
+						text: "Video deleted successfully.",
+						timer: 1500,
+						showConfirmButton: false,
+					});
+				}
+			}
+			refetch();
+		} catch (error) {
+			console.error("Failed to remove file:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: error.data?.message || "Could not delete, please try again.",
+				confirmButtonText: "OK",
+			});
+		}
+	};
+	const today = new Date();
+	const minAgeDate = new Date(
+		today.getFullYear() - 18,
+		today.getMonth(),
+		today.getDate(),
+	);
+	// ===== Validation =====
+	const validateForm = () => {
+		const errors = {};
 
-        const response = await deleteVideoWomen(formData).unwrap();
-        if (response.status === 200) {
-          setForm((prev) => ({
-            ...prev,
-            videos: prev.videos.filter((_, i) => i !== index),
-          }));
-          Swal.fire({
-            icon: "success",
-            title: "Deleted!",
-            text: "Video deleted successfully.",
-            timer: 1500,
-            showConfirmButton: false,
-          });
-        }
-      }
-      refetch();
-    } catch (error) {
-      console.error("Failed to remove file:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.data?.message || "Could not delete, please try again.",
-        confirmButtonText: "OK",
-      });
-    }
-  };
+		if (!form.name?.trim()) errors.name = "Name is required";
+		if (!form.phone?.trim()) errors.phone = "Phone Number is required";
 
-  // ===== Validation =====
-  const validateForm = () => {
-    const errors = {};
-    if (!form.name?.trim()) errors.name = "Name is required";
-    if (!form.date_of_birth) errors.date_of_birth = "Date of Birth is required";
-    else if (form.date_of_birth >= new Date())
-      errors.date_of_birth = "Date of Birth must be before today";
-    if (!form.skills.length) errors.skills = "At least one skill is required";
-    if (!form.bannerImage && !bannerInputRef.current?.files[0])
-      errors.bannerImage = "Cover image is required";
-    if (!form.profileImage && !profileInputRef.current?.files[0])
-      errors.profileImage = "Profile image is required";
-    if (imageFiles.length + (user?.images_urls?.length || 0) < 5)
-      errors.images = "At least 5 images are required";
-    if (videoFiles.length + (user?.videos_urls?.length || 0) < 2)
-      errors.videos = "At least 2 videos are required";
+		if (!form.date_of_birth) {
+			errors.date_of_birth = "Date of Birth is required";
+		} else {
+			const dob = new Date(form.date_of_birth);
+			if (dob >= today) {
+				errors.date_of_birth = "Date of Birth must be before today";
+			} else if (dob > minAgeDate) {
+				errors.date_of_birth = "You must be at least 18 years old";
+			}
+		}
 
-    return errors;
-  };
+		if (!form.skills.length) errors.skills = "At least one skill is required";
 
-  // ===== Submit =====
-  const handleSubmit = async (e) => {
-	  e.preventDefault();
-	  setFormErrors({});
-    const errors = validateForm();
-    if (form.date_of_birth > minAgeDate) {
-      errors.date_of_birth = `Date of birth must be minimum ${minAgeDate}`;
-    }
+		if (!form.bannerImage && !bannerInputRef.current?.files[0])
+			errors.bannerImage = "Cover image is required";
 
-    if (Object.keys(errors).length > 0) {
-		setFormErrors(errors);
-		
-      Swal.fire({
-        icon: "error",
-        title: "Validation Error",
-        text: "Please fill all required fields correctly",
-      });
-      return;
-    }
+		if (!form.profileImage && !profileInputRef.current?.files[0])
+			errors.profileImage = "Profile image is required";
 
-    setIsSubmitting(true);
-    try {
-      const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("phone", form.phone);
-      formData.append(
-        "date_of_birth",
-        form.date_of_birth.toISOString().split("T")[0]
-      );
-      formData.append("skills", form.skills.join(","));
+		const totalImages = (user?.images_urls?.length || 0) + imageFiles.length;
+		const totalVideos = (user?.videos_urls?.length || 0) + videoFiles.length;
 
-      if (profileInputRef.current?.files[0])
-        formData.append("profile_image", profileInputRef.current.files[0]);
-      if (bannerInputRef.current?.files[0])
-        formData.append("cover_images", bannerInputRef.current.files[0]);
+		if (totalImages < 5) errors.images = "At least 5 images are required";
+		if (totalVideos < 2) errors.videos = "At least 2 videos are required";
 
-      imageFiles.forEach((file) => formData.append("images[]", file));
-      videoFiles.forEach((file) => formData.append("videos[]", file));
+		return errors;
+	};
 
-      const response = await editProfile(formData).unwrap();
+	// ===== Submit =====
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setFormErrors({});
+		const errors = validateForm();
 
-      if (response.status === 200) {
-        const updatedData = response.response.data;
-        dispatch(setUser(updatedData));
-        refetch();
-        setForm((prev) => ({
-          ...prev,
-          images: updatedData.images_urls,
-          videos: updatedData.videos_urls,
-        }));
+		if (Object.keys(errors).length > 0) {
+			setFormErrors(errors);
+			Swal.fire({
+				icon: "error",
+				title: "Validation Error",
+				text: "Please fill all required fields correctly",
+			});
+			return;
+		}
 
-        Swal.fire({
-          icon: "success",
-          title: "Profile Updated!",
-          showConfirmButton: false,
-          timer: 2000,
-        }).then(() => navigate("/women-profiles"));
-      }
-    } catch (error) {
-      console.error("Failed to update profile:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Update Failed",
-        text:
-          error.data?.message || "Failed to update profile. Please try again.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+		setIsSubmitting(true);
+		try {
+			const formData = new FormData();
+			formData.append("name", form.name);
+			formData.append("phone", form.phone);
+			formData.append(
+				"date_of_birth",
+				form.date_of_birth.toISOString().split("T")[0],
+			);
+			formData.append("skills", form.skills.join(","));
 
-  // ===== Sync user data =====
-  useEffect(() => {
-    if (user) {
-      setForm({
-        name: user.name || "",
-        phone: user.phone || "",
-        date_of_birth: parseValidDate(user.date_of_birth),
-        height: user.height || "",
-        body_type: user.body_type || "",
-        address: user.address || "",
-        hair_color: user.hair_color || "",
-        nationality: user.nationality || "",
-        skills: Array.isArray(user.skills)
-          ? user.skills
-          : user.skills?.split(",") || [],
-        bannerImage: user.cover_images_url || "",
-        profileImage: user.profile_image_url || "",
-        images: user.images_urls || [],
-        videos: user.videos_urls || [],
-      });
-    }
-  }, [user]);
+			if (profileInputRef.current?.files[0])
+				formData.append("profile_image", profileInputRef.current.files[0]);
+			if (bannerInputRef.current?.files[0])
+				formData.append("cover_images", bannerInputRef.current.files[0]);
 
-  useEffect(() => {
-    Aos.init({ duration: 1000, once: true });
-  }, []);
-  return (
+			imageFiles.forEach((file) => formData.append("images[]", file));
+			videoFiles.forEach((file) => formData.append("videos[]", file));
+
+			const response = await editProfile(formData).unwrap();
+
+			if (response.status === 200) {
+				const updatedData = response.response.data;
+				dispatch(setUser(updatedData));
+				refetch();
+				setForm((prev) => ({
+					...prev,
+					images: updatedData.images_urls,
+					videos: updatedData.videos_urls,
+				}));
+
+				Swal.fire({
+					icon: "success",
+					title: "Profile Updated!",
+					showConfirmButton: false,
+					timer: 2000,
+				}).then(() => navigate("/women-profiles"));
+			}
+		} catch (error) {
+			console.error("Failed to update profile:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Update Failed",
+				text:
+					error.data?.message || "Failed to update profile. Please try again.",
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	// ===== Sync user data =====
+	useEffect(() => {
+		if (user) {
+			setForm({
+				name: user.name || "",
+				phone: user.phone || "",
+				date_of_birth: parseValidDate(user.date_of_birth),
+				height: user.height || "",
+				body_type: user.body_type || "",
+				address: user.address || "",
+				hair_color: user.hair_color || "",
+				nationality: user.nationality || "",
+				skills: Array.isArray(user.skills)
+					? user.skills
+					: user.skills?.split(",") || [],
+				bannerImage: user.cover_images_url || "",
+				profileImage: user.profile_image_url || "",
+				images: user.images_urls || [],
+				videos: user.videos_urls || [],
+			});
+		}
+	}, [user]);
+
+	useEffect(() => {
+		Aos.init({ duration: 1000, once: true });
+	}, []);
+
+	return (
 		<>
 			<Header />
 
@@ -665,9 +676,17 @@ function WomenEditProfile() {
 													<button
 														type="button"
 														onClick={handleSubmit}
-														className="border radius-8 p-2 ps-3 pe-3"
+														disabled={isSubmitting || isEditProfileLoading}
+														className="border radius-8 secondary-regular-font"
 													>
-														Save
+														{isSubmitting || isEditProfileLoading ? (
+															<>
+																<span className="spinner-border spinner-border-sm me-2" />
+																Saving...
+															</>
+														) : (
+															"Save"
+														)}
 													</button>
 												</div>
 											</div>

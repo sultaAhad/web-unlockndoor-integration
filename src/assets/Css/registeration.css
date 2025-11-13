@@ -84,6 +84,13 @@ form select:focus {
 	background: #413959 !important;
 }
 
+form input:focus,
+form select:focus {
+	outline: none !important;
+	border: 1px solid #cf1090 !important;
+	background: #413959 !important;
+}
+
 .form-group.input-wrapper textarea.form_input-2:focus {
 	outline: none;
 	border: 1px solid #cf1090;
@@ -254,7 +261,7 @@ form select:focus {
 
 .custom-slider-section {
 	color: #fff;
-	margin: 50px 0px 20px auto;
+	margin: 30px 0px 20px auto;
 }
 
 .slider-wrapper {
@@ -312,8 +319,20 @@ form select:focus {
 	background: linear-gradient(to right, #ff4684, #c471ed);
 	border-radius: 5px;
 	outline: none;
+	padding: 5px 0px;
 }
-
+span.left-k1 {
+	position: relative;
+	left: 10px;
+}
+span.left-k2 {
+	position: relative;
+	left: 20px;
+}
+span.left-k3 {
+	position: relative;
+	left: 22px;
+}
 .custom-slider::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	appearance: none;
@@ -377,9 +396,10 @@ form select:focus {
 .slider-labels {
 	display: flex;
 	justify-content: space-between;
-	margin-top: 15px;
+	margin-top: 10px;
 	font-size: 1rem;
 	font-weight: 500;
+	padding: 0px 10px;
 }
 
 .slider-labels span {
@@ -395,7 +415,7 @@ input.custom-slider:before {
 	background: #fff;
 	border-radius: 50%;
 	left: 0px;
-	top: 2px;
+	top: 1px;
 }
 
 input.custom-slider:after {
@@ -407,7 +427,7 @@ input.custom-slider:after {
 	background: #fff;
 	border-radius: 50%;
 	right: 0px;
-	top: 2px;
+	top: 1px;
 }
 
 /* .user_img3 img{
@@ -607,8 +627,8 @@ span.step-label.active {
 }
 
 .pass___error i {
-    top: 37% !important;
-    bottom: 0;
+	top: 37% !important;
+	bottom: 0;
 	height: fit-content;
 }
 

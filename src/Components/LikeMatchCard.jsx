@@ -9,28 +9,49 @@ import { useSelector } from "react-redux";
 const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 	const [likeManProfile, { isLoading: isProcessing }] =
 		useLikeManProfileMutation();
-	const { user, userToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
+	console.log(card, "active");
 
-	console.log("Logged-in user:", user);
+	// ✅ Extract both package slugs
+	const menPkgSlug = card?.has_men_package?.slug?.toLowerCase() || "";
+	const womenPkgSlug = user?.has_women_package?.slug?.toLowerCase() || "";
 
-	// ✅ Extract package slug safely
-	const pkgSlug = user?.has_women_package?.slug?.toLowerCase() || "";
-	console.log("📦 Card Data:", card);
+	// Debug logs
+	console.log("📦 Card ID:", card?.id);
+	console.log("📦 Men Package:", menPkgSlug);
+	console.log("📦 Women Package:", womenPkgSlug);
 
-	// ✅ Access logic
+	// ✅ Allowed packages
+	const allowedChatPkgs = [
+		"free-tier",
+		"one-time-payment",
+		"silver-package",
+		"gold-package",
+		"platinum-package",
+	];
+
+	const allowedVideoPkgs = [
+		"one-time-payment",
+		"gold-package",
+		"platinum-package",
+	];
+
+	// ✅ Chat allowed if both are allowed for chat
 	const canChat =
-		pkgSlug.includes("silver") ||
-		pkgSlug.includes("gold") ||
-		pkgSlug.includes("platinum");
+		allowedChatPkgs.includes(menPkgSlug) &&
+		allowedChatPkgs.includes(womenPkgSlug);
 
-	const canVideoCall = pkgSlug.includes("gold") || pkgSlug.includes("platinum");
+	// ✅ Video Call allowed only if BOTH have allowed video packages
+	const canVideoCall =
+		allowedVideoPkgs.includes(menPkgSlug) &&
+		allowedVideoPkgs.includes(womenPkgSlug);
 
 	const likeMan = async () => {
 		try {
 			const response = await likeManProfile({ liked_id: card?.id }).unwrap();
 			if (response.status) {
 				toast.success(response?.message);
-				responseAction("matched"); // 🔥 trigger parent update
+				responseAction("matched");
 			}
 		} catch (error) {
 			toast.error(error?.data?.message || "Something went wrong.");
@@ -39,7 +60,7 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 
 	const MatchedAction = () => (
 		<div className="card-left-icons">
-			{/* ✅ Chat visible for Silver, Gold, Platinum */}
+			{/* ✅ Chat visible for all plans (except none) */}
 			{canChat && (
 				<div className="icon-circle iconwra1">
 					<Link to={`/chat-women`} state={card}>
@@ -48,7 +69,7 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 				</div>
 			)}
 
-			{/* ✅ Video Call only for Gold & Platinum */}
+			{/* ✅ Video Call only for One-Time, Gold, and Platinum */}
 			{canVideoCall && (
 				<VideoCallButton member={card} gender={gender} type="icon" />
 			)}
@@ -72,8 +93,9 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 		<div className="col-lg-4 col-md-6 mb-4" key={index}>
 			<div className="profile-card">
 				<p className="bg-massage ms-3 mt-3 position-absolute ps-3 rounded-2 w-75 text-capitalize">
-					<span className="gradient-text"> {card.name}</span>
+					<span className="gradient-text">{card.name}</span>
 				</p>
+
 				<img
 					src={card?.profile_image_url}
 					alt="profile"

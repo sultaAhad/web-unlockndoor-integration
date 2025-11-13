@@ -201,13 +201,16 @@ import ProfileHeader from "../../Components/ProfileHeader";
 import FemaleMemberCard from "../../Components/FemaleMemberCard";
 import { ToastContainer } from "react-toastify";
 import { useGetFemaleMembershipQuery } from "../../network/services/ManAuth";
+import { useLocation } from "react-router-dom";
 
 function Femalemembers() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [lastPage, setLastPage] = useState(1);
 	const [members, setMembers] = useState([]);
+	const location = useLocation();
 
 	const { data, isLoading } = useGetFemaleMembershipQuery(currentPage);
+	console.log(data);
 
 	// ✅ Load new paginated data
 	useEffect(() => {

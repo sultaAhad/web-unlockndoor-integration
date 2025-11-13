@@ -9,18 +9,6 @@ function ProfileHeader({ showButtons = true, visibility = true }) {
 		useSelector((state) => state.auth);
 
 	const gender = localStorage.getItem("gender");
-
-	// useEffect(() => {
-	//   const savedCounts = localStorage.getItem("user_counts");
-	//   if (savedCounts) {
-	//     setCounts(JSON.parse(savedCounts));
-	//   }
-	// }, []);
-
-	// useEffect(() => {
-	//   localStorage.setItem("user_counts", JSON.stringify(counts));
-	// }, [counts]);
-
 	return (
 		<div className="col-md-12 pb-5">
 			<div className="profile_banner_img">
