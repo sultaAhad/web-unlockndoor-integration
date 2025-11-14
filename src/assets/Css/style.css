@@ -3361,14 +3361,6 @@ div#swal2-html-container {
 	align-items: center;
 }
 
-.captured-selfie {
-	width: 200px;
-	height: auto;
-	border-radius: 12px;
-	border: 3px solid #9e42e6;
-	margin-bottom: 12px;
-}
-
 .action-buttons {
 	display: flex;
 	justify-content: center;

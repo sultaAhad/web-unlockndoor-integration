@@ -23,7 +23,6 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 
 	// ✅ Allowed packages
 	const allowedChatPkgs = [
-		"free-tier",
 		"one-time-payment",
 		"silver-package",
 		"gold-package",

@@ -21,10 +21,10 @@ const Subscriptionwomen = () => {
 
 	useEffect(() => {
 		if (initialSelected) {
-      setSelectedPackage(initialSelected);
-    } else {
-      navigate("/");
-    }
+			setSelectedPackage(initialSelected);
+		} else {
+			navigate("/");
+		}
 	}, [initialSelected, navigate]);
 
 	useEffect(() => {
@@ -77,7 +77,7 @@ const Subscriptionwomen = () => {
 							{selectedPackage && (
 								<div className="col-md-6 px-lg-2">
 									<div className="sub_pack d-flex justify-content-center flex-column align-items-center">
-										<div className="sub_pack_wrapper mb-3 border border-warning w-100">
+										<div className="sub_pack_wrapper mb-3  border-warning w-100">
 											<div className="pack_heading text-center px-3 border-bottom py-3 border-white">
 												<h3 className="text-white font_semibold level-5">
 													{selectedPackage.title}

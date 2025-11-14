@@ -4,11 +4,32 @@ import { resolve } from "path";
 
 export default defineConfig({
 	plugins: [react()],
-	// 👇 serve src/assets as public
 	publicDir: "src/assets",
 	resolve: {
 		alias: {
-			"@": resolve(__dirname, "src"), // optional, for cleaner imports
+			"@": resolve(__dirname, "src"),
+		},
+	},
+	server: {
+		proxy: {
+			// Proxy for API calls
+			"/api": {
+				target: "https://unlock-n-door-api-web.developer-ourbase-camp.com",
+				changeOrigin: true,
+				secure: false,
+				rewrite: (path) => path.replace(/^\/api/, ""),
+			},
+			// Proxy for uploads/images
+			"/uploads": {
+				target: "https://unlock-n-door-api-web.developer-ourbase-camp.com",
+				changeOrigin: true,
+				secure: false,
+			},
+		},
+	},
+	build: {
+		rollupOptions: {
+			external: [],
 		},
 	},
 });
