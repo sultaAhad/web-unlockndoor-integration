@@ -89,8 +89,7 @@ const CategoryModal = ({
 			<Modal.Header
 				closeButton
 				className="justify-content-center border-bottom-0 pb-0"
-			>
-			</Modal.Header>
+			></Modal.Header>
 			<Modal.Body className="text-center p-4">
 				<form onSubmit={handleSubmit}>
 					<div className="form-group mb-3">
@@ -131,7 +130,10 @@ const CategoryModal = ({
 							maxLength={15}
 							name="phone"
 							value={values.phone}
-							onChange={handleChange}
+							onChange={(e) => {
+								const digitsOnly = e.target.value.replace(/\D/g, ""); // remove non-digits
+								setValues({ ...values, phone: digitsOnly });
+							}}
 							placeholder="Contact Number"
 							className="form-control"
 						/>
