@@ -6,6 +6,7 @@ import { useWomanDataQuery } from "../network/services/WomanAuth";
 import FaceVerification from "./FaceVerification";
 
 const SelfieModal = ({ isOpen, onClose, onVerified }) => {
+	// const { user, userToken } = useSelector((state) => state.auth);
 	const gender = localStorage.getItem("gender");
 	const navigate = useNavigate();
 	const [verificationStatus, setVerificationStatus] = useState(null);
@@ -18,7 +19,6 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 		undefined,
 		{ skip: gender !== "women" },
 	);
-
 	let user = null;
 	if (gender === "men") user = manData?.response?.data?.data;
 	else if (gender === "women") user = womanData?.response?.data?.women;
@@ -35,6 +35,11 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 		console.log("🟡 SelfieModal opened");
 		console.log("📸 profileImageUrl:", profileImageUrl);
 	}, [isOpen, profileImageUrl]);
+	useEffect(() => {
+		if (user?.selfie_verified === 1) {
+			localStorage.setItem("selfieVerified", "true");
+		}
+	}, [user]);
 
 	if (!isOpen || isAlreadyVerified) return null;
 

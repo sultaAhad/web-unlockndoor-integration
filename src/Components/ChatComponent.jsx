@@ -30,6 +30,7 @@ import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
 	const [showPriceModal, setShowPriceModal] = useState(false);
+	console.log(user);
 
 	const [deleteManChat] = useChatDeleteManMutation();
 	const [deleteWomenChat] = useChatDeleteWomenMutation();
