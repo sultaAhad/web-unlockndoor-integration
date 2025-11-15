@@ -54,29 +54,100 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 	const [scanAnimation, setScanAnimation] = useState(false);
 	const [usingFallback, setUsingFallback] = useState(false);
 
-	// Helper to load image via <img> for no-cors
-	const loadImageViaImageElement = (url) => {
+	// XHR-based image loader for better CORS handling
+	const loadImageViaXHR = (url) => {
 		return new Promise((resolve, reject) => {
-			const img = new Image();
-			img.crossOrigin = "Anonymous";
-			img.src = url;
-			img.onload = async () => {
-				try {
-					const canvas = document.createElement("canvas");
-					canvas.width = img.width;
-					canvas.height = img.height;
-					const ctx = canvas.getContext("2d");
-					ctx.drawImage(img, 0, 0);
-					canvas.toBlob((blob) => {
-						if (blob) resolve(blob);
-						else reject("Blob conversion failed");
-					}, "image/jpeg");
-				} catch (err) {
-					reject(err);
+			const xhr = new XMLHttpRequest();
+			xhr.open("GET", url, true);
+			xhr.responseType = "blob";
+			xhr.onload = function () {
+				if (this.status === 200) {
+					resolve(this.response);
+				} else {
+					reject(new Error(`XHR failed: ${this.status}`));
 				}
 			};
-			img.onerror = reject;
+			xhr.onerror = function () {
+				reject(new Error("XHR network error"));
+			};
+			xhr.send();
 		});
+	};
+
+	// Separate image processing logic
+	const processImageWithFaceAPI = async (imageBlob) => {
+		try {
+			// Validate blob
+			if (!imageBlob || imageBlob.size === 0) {
+				throw new Error("Invalid image blob");
+			}
+
+			// Convert blob to image
+			const img = await faceapi.bufferToImage(imageBlob);
+
+			// Create canvas for processing
+			const canvas = document.createElement("canvas");
+			const ctx = canvas.getContext("2d");
+
+			// Set reasonable dimensions for face detection
+			const maxDimension = 400;
+			let { width, height } = img;
+
+			// Maintain aspect ratio while resizing
+			if (width > height && width > maxDimension) {
+				height = (height * maxDimension) / width;
+				width = maxDimension;
+			} else if (height > maxDimension) {
+				width = (width * maxDimension) / height;
+				height = maxDimension;
+			}
+
+			canvas.width = width;
+			canvas.height = height;
+
+			// Draw image on canvas
+			ctx.drawImage(img, 0, 0, width, height);
+
+			console.log("🔍 Detecting face in profile image...");
+
+			// Detect face with multiple attempts
+			let desc = await faceapi
+				.detectSingleFace(canvas)
+				.withFaceLandmarks()
+				.withFaceDescriptor();
+
+			// If no face detected, try with different settings
+			if (!desc) {
+				console.log("🔄 Trying alternate face detection settings...");
+				desc = await faceapi
+					.detectSingleFace(
+						canvas,
+						new faceapi.SsdMobilenetv1Options({
+							minConfidence: 0.5,
+						}),
+					)
+					.withFaceLandmarks()
+					.withFaceDescriptor();
+			}
+
+			if (desc) {
+				setProfileDescriptors([desc.descriptor]);
+				setUsingFallback(false);
+				console.log("🟢 Face detected in profile image!");
+			} else {
+				setProfileDescriptors([]);
+				console.warn("⚠️ No face detected in profile image");
+				await Swal.fire({
+					icon: "error",
+					title: "No Face Detected",
+					text: "We couldn't detect a face in your profile image. Please upload a clear photo where your face is visible.",
+					confirmButtonText: "OK",
+				});
+			}
+		} catch (error) {
+			console.error("❌ Face detection processing error:", error);
+			throw error;
+		}
 	};
 
 	const generateProfileDescriptor = async (imageUrl) => {
@@ -86,71 +157,74 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			console.log("🔄 Processing profile image:", imageUrl);
 			let imageBlob = null;
 
-			// Method 1: Backend fetch
+			// Method 1: Backend proxy fetch
 			try {
 				const imageName = imageUrl.split("/").pop();
 				const backendImageUrl = `/api/get-profile-image/${imageName}`;
 				const response = await fetch(backendImageUrl, {
-					headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
 				});
-				if (!response.ok) throw new Error("Backend fetch failed");
-				imageBlob = await response.blob();
-				console.log("✅ Image loaded via backend");
-			} catch (backendError) {
-				console.warn("Backend fetch failed:", backendError);
 
-				// Method 2: Direct load via <img>
+				if (!response.ok)
+					throw new Error(`Backend fetch failed: ${response.status}`);
+
+				imageBlob = await response.blob();
+				console.log("✅ Image loaded via backend proxy");
+			} catch (backendError) {
+				console.warn("Backend proxy fetch failed:", backendError);
+
+				// Method 2: Try direct fetch with CORS handling
 				try {
-					imageBlob = await loadImageViaImageElement(imageUrl);
-					console.log("✅ Image loaded via <img> fallback");
-				} catch (imgError) {
-					console.error("Fallback load failed:", imgError);
-					setUsingFallback(true);
-					Swal.fire({
-						icon: "info",
-						title: "Image Loading Issue",
-						html: `
-            <p>Browser security prevents loading this image.</p>
-            <p><strong>Please upload a new profile image.</strong></p>
-          `,
-						confirmButtonText: "Ok",
+					const response = await fetch(imageUrl, {
+						mode: "cors",
+						credentials: "omit",
+						headers: {
+							Accept: "image/webp,image/*,*/*",
+						},
 					});
-					setProfileDescriptors([]); // Ensure empty if failed
-					return;
+
+					if (response.ok) {
+						imageBlob = await response.blob();
+						console.log("✅ Image loaded via direct fetch");
+					} else {
+						throw new Error(`Direct fetch failed: ${response.status}`);
+					}
+				} catch (directError) {
+					console.warn("Direct fetch failed:", directError);
+
+					// Method 3: Use XMLHttpRequest for better error handling
+					try {
+						imageBlob = await loadImageViaXHR(imageUrl);
+						console.log("✅ Image loaded via XHR fallback");
+					} catch (xhrError) {
+						console.error("XHR fallback failed:", xhrError);
+						setUsingFallback(true);
+						await Swal.fire({
+							icon: "info",
+							title: "Image Loading Issue",
+							html: `
+								<p>Unable to load your profile image due to browser security restrictions.</p>
+								<p><strong>Please upload a new profile image using the camera button below.</strong></p>
+							`,
+							confirmButtonText: "Upload New Image",
+						});
+						setProfileDescriptors([]);
+						return;
+					}
 				}
 			}
 
-			// Convert to image for face-api
-			const img = await faceapi.bufferToImage(imageBlob);
-			const canvas = document.createElement("canvas");
-			const scale = 0.5;
-			canvas.width = img.width * scale;
-			canvas.height = img.height * scale;
-			const ctx = canvas.getContext("2d");
-			ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-			const desc = await faceapi
-				.detectSingleFace(canvas)
-				.withFaceLandmarks()
-				.withFaceDescriptor();
-
-			if (desc) {
-				setProfileDescriptors([desc.descriptor]);
-				setUsingFallback(false);
-				console.log("🟢 Face detected!");
-			} else {
-				setProfileDescriptors([]);
-				Swal.fire(
-					"Error",
-					"No face detected in the profile image. Please upload a clear face photo.",
-					"error",
-				);
-			}
+			// Process the image with face-api.js
+			await processImageWithFaceAPI(imageBlob);
 		} catch (err) {
 			console.error("❌ generateProfileDescriptor error:", err);
 			setProfileDescriptors([]);
 			setUsingFallback(true);
-			Swal.fire({
+			await Swal.fire({
 				icon: "warning",
 				title: "Processing Failed",
 				text: "Please upload your profile image again using the camera button.",
@@ -202,51 +276,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		return () => clearTimeout(timer);
 	}, [form.profileImage, modelsLoaded]);
 
-	// Generate descriptor
-	// const generateProfileDescriptor = async (imageUrl) => {
-	// 	try {
-	// 		if (!imageUrl) return;
-
-	// 		let blob;
-	// 		if (imageUrl.startsWith("blob:") || imageUrl.startsWith("data:")) {
-	// 			const res = await fetch(imageUrl);
-	// 			blob = await res.blob();
-	// 		} else {
-	// 			const response = await fetch(imageUrl, { mode: "cors" }).catch(
-	// 				() => null,
-	// 			);
-	// 			if (!response || !response.ok) throw new Error("Image fetch failed");
-	// 			blob = await response.blob();
-	// 		}
-
-	// 		const img = await faceapi.bufferToImage(blob);
-
-	// 		const canvas = document.createElement("canvas");
-	// 		const scale = 0.5;
-	// 		canvas.width = img.width * scale;
-	// 		canvas.height = img.height * scale;
-	// 		const ctx = canvas.getContext("2d");
-	// 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-	// 		const desc = await faceapi
-	// 			.detectSingleFace(canvas)
-	// 			.withFaceLandmarks()
-	// 			.withFaceDescriptor();
-
-	// 		if (desc) {
-	// 			setProfileDescriptors([desc.descriptor]);
-	// 			console.log("🟢 Face detected in profile image!");
-	// 		} else {
-	// 			setProfileDescriptors([]);
-	// 			console.warn("⚠️ No face detected in profile image!");
-	// 			Swal.fire("Error", "No face detected in profile image!", "error");
-	// 		}
-	// 	} catch (err) {
-	// 		console.error("❌ Error generating profile descriptor:", err);
-	// 		Swal.fire("Error", "Failed to process profile image", "error");
-	// 	}
-	// };
-
 	// On profile image select
 	const handleProfileChange = (e) => {
 		const file = e.target.files[0];
@@ -269,6 +298,14 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			profileImage: localPreview,
 			profileFile: file,
 		}));
+
+		// Immediately process the new image for face detection
+		if (modelsLoaded) {
+			// Use a small delay to ensure state is updated
+			setTimeout(() => {
+				generateProfileDescriptor(localPreview);
+			}, 100);
+		}
 	};
 
 	// Upload profile image API
@@ -319,6 +356,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			setScanAnimation(false);
 		}, 1500);
 	};
+
 	// Compress selfie
 	const compressImage = async (dataUrl) => {
 		const img = new Image();
@@ -410,14 +448,18 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 
 	return (
 		<div className="face-verification-container">
-			{/* Header Section */}
 			{/* Profile Image Section */}
 			<div className="profile-section">
 				<div>
 					<div className="section-title">
 						<i className="fas fa-user-circle"></i>
-						<div className="text-start">
+						<div className="text-start using-flex">
 							<span className="mb-0">Profile Image</span>
+							{usingFallback && (
+								<small className="text-warning level-10 ">
+									⚠️ Using fallback mode please upload new image
+								</small>
+							)}
 						</div>
 					</div>
 				</div>
@@ -433,6 +475,10 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 									className="profile-image"
 									alt="Profile"
 									onLoad={() => setPulseAnimation(false)}
+									onError={(e) => {
+										console.error("❌ Image load error");
+										setUsingFallback(true);
+									}}
 								/>
 							) : (
 								<div className="profile-placeholder">

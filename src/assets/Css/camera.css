@@ -817,6 +817,12 @@ button:disabled {
 	overflow: hidden;
 	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
+.text-start.using-flex {
+	display: flex;
+	align-items: start;
+	flex-direction: column;
+	justify-content: start;
+}
 
 .modal-header {
 	backdrop-filter: blur(10px);
