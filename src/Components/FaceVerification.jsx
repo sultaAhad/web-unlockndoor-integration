@@ -83,7 +83,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			}
 
 			// Convert blob to image
-			const img = await faceapi.bufferToImage(imageBlob);
+			const img = await safeDecodeImage(imageBlob);
 
 			// Create canvas for processing
 			const canvas = document.createElement("canvas");
@@ -439,6 +439,21 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 		} finally {
 			setIsVerifying(false);
 		}
+	};
+	const safeDecodeImage = (blob) => {
+		return new Promise((resolve, reject) => {
+			const url = URL.createObjectURL(blob);
+			const img = new Image();
+			img.onload = () => {
+				URL.revokeObjectURL(url);
+				resolve(img);
+			};
+			img.onerror = (err) => {
+				URL.revokeObjectURL(url);
+				reject(new Error("Image decode failed — invalid blob"));
+			};
+			img.src = url;
+		});
 	};
 
 	const handleRetake = () => {
