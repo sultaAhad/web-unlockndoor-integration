@@ -155,75 +155,68 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			if (!imageUrl) return;
 
 			console.log("🔄 Processing profile image:", imageUrl);
-			let imageBlob = null;
 
-			// Method 1: Backend proxy fetch
+			let img = null;
+
 			try {
-				const imageName = imageUrl.split("/").pop();
-				const backendImageUrl = `/api/get-profile-image/${imageName}`;
-				const response = await fetch(backendImageUrl, {
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "application/json",
-					},
-					credentials: "include",
-				});
+				// Direct fetch (OLD WORKING METHOD)
+				img = await faceapi.fetchImage(imageUrl);
+				console.log("✅ Direct fetch successful");
+			} catch (directError) {
+				console.warn("⚠️ Direct fetch failed:", directError);
 
-				if (!response.ok)
-					throw new Error(`Backend fetch failed: ${response.status}`);
-
-				imageBlob = await response.blob();
-				console.log("✅ Image loaded via backend proxy");
-			} catch (backendError) {
-				console.warn("Backend proxy fetch failed:", backendError);
-
-				// Method 2: Try direct fetch with CORS handling
+				// XHR fallback (ONLY this part added)
 				try {
-					const response = await fetch(imageUrl, {
-						mode: "cors",
-						credentials: "omit",
-						headers: {
-							Accept: "image/webp,image/*,*/*",
-						},
+					const blob = await loadImageViaXHR(imageUrl);
+					img = await faceapi.bufferToImage(blob);
+					console.log("✅ XHR fallback successful");
+				} catch (xhrError) {
+					console.error("❌ XHR fallback failed:", xhrError);
+
+					setUsingFallback(true);
+
+					await Swal.fire({
+						icon: "info",
+						title: "Image Loading Issue",
+						html: `
+                        <p>Unable to load your profile image due to browser security restrictions.</p>
+                        <p><strong>Please upload a new profile image using the camera button below.</strong></p>
+                    `,
+						confirmButtonText: "Upload New Image",
 					});
 
-					if (response.ok) {
-						imageBlob = await response.blob();
-						console.log("✅ Image loaded via direct fetch");
-					} else {
-						throw new Error(`Direct fetch failed: ${response.status}`);
-					}
-				} catch (directError) {
-					console.warn("Direct fetch failed:", directError);
-
-					// Method 3: Use XMLHttpRequest for better error handling
-					try {
-						imageBlob = await loadImageViaXHR(imageUrl);
-						console.log("✅ Image loaded via XHR fallback");
-					} catch (xhrError) {
-						console.error("XHR fallback failed:", xhrError);
-						setUsingFallback(true);
-						await Swal.fire({
-							icon: "info",
-							title: "Image Loading Issue",
-							html: `
-								<p>Unable to load your profile image due to browser security restrictions.</p>
-								<p><strong>Please upload a new profile image using the camera button below.</strong></p>
-							`,
-							confirmButtonText: "Upload New Image",
-						});
-						setProfileDescriptors([]);
-						return;
-					}
+					setProfileDescriptors([]);
+					return;
 				}
 			}
 
-			// Process the image with face-api.js
-			await processImageWithFaceAPI(imageBlob);
+			// FACE DETECTION (same as old)
+			console.log("🔍 Detecting face in profile image...");
+			const desc = await faceapi
+				.detectSingleFace(img)
+				.withFaceLandmarks()
+				.withFaceDescriptor();
+
+			if (desc) {
+				setProfileDescriptors([desc.descriptor]);
+				setUsingFallback(false);
+				console.log("🟢 Face detected in profile image!");
+			} else {
+				console.warn("⚠️ No face detected in profile image");
+				setProfileDescriptors([]);
+
+				await Swal.fire({
+					icon: "error",
+					title: "No Face Detected",
+					text: "Your profile image does not contain a detectable face.",
+				});
+			}
 		} catch (err) {
-			console.error("❌ generateProfileDescriptor error:", err);
+			console.error("❌ Error processing image:", err);
+
 			setProfileDescriptors([]);
 			setUsingFallback(true);
+
 			await Swal.fire({
 				icon: "warning",
 				title: "Processing Failed",
