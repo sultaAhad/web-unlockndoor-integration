@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
 
@@ -7,27 +7,42 @@ Modal.setAppElement("#root");
 const RejectModal = ({ sponsor, show, onClose, dateId, onSubmit }) => {
 	const [amount, setAmount] = useState("");
 	const [reason, setReason] = useState("");
-	// console.log(sponsor.offer_price);
+
+	// Reset fields when modal opens
+	useEffect(() => {
+		if (show) {
+			setAmount("");
+			setReason("");
+		}
+	}, [show]);
 
 	const handleSubmit = () => {
 		if (!amount || !reason) {
-			alert("Please fill all fields");
+			toast.error("Please fill all fields");
 			return;
 		}
 
-		if (parseInt(sponsor.offer_price) <= parseInt(amount)) {
-			toast.warning("Desired amount must be greater then offer ammount.");
+		// ensure numeric values
+		const offerPrice = Number(sponsor?.offer_price || 0);
+		const counterAmount = Number(amount);
+
+		if (isNaN(counterAmount) || counterAmount <= 0) {
+			toast.error("Enter a valid amount");
+			return;
+		}
+
+		if (counterAmount <= offerPrice) {
+			toast.warning("Desired amount must be GREATER than offer amount.");
 			return;
 		}
 
 		onSubmit({
 			counter_price: amount,
-			reason: reason,
+			reason,
 			date_id: dateId,
 			status: "rejected",
 		});
-		setAmount("");
-		setReason("");
+
 		onClose();
 	};
 
@@ -41,6 +56,7 @@ const RejectModal = ({ sponsor, show, onClose, dateId, onSubmit }) => {
 			<h4 className="text-danger text-center extra-color-1 mb-2 secondary-medium-font">
 				Reject Offer
 			</h4>
+
 			<p className="text-center mb-3 secondary-secondmedium-font secondary-medium-font level-7">
 				Are you sure you want to Reject?
 			</p>
@@ -48,6 +64,7 @@ const RejectModal = ({ sponsor, show, onClose, dateId, onSubmit }) => {
 			<label className="secondary-secondmedium-font level-8 dark-color mb-2">
 				Enter Desired Amount
 			</label>
+
 			<input
 				type="number"
 				placeholder="$200 to $2,000"
@@ -56,9 +73,10 @@ const RejectModal = ({ sponsor, show, onClose, dateId, onSubmit }) => {
 				onChange={(e) => setAmount(e.target.value)}
 			/>
 
-			<label className="secondary-secondmedium-font level-8  dark-color mb-2">
+			<label className="secondary-secondmedium-font level-8 dark-color mb-2">
 				Reason
 			</label>
+
 			<textarea
 				className="form-control mb-4 wra-texterea-resize wt-wpsd"
 				placeholder="Write here......"
@@ -94,7 +112,7 @@ const customStyles = {
 	overlay: {
 		backgroundColor: "#35353596",
 		zIndex: 1000,
-		backdropFilter: "blur(1px)", // <-- this is your blur
-		WebkitBackdropFilter: "blur(1px)", // for Safari support
+		backdropFilter: "blur(1px)",
+		WebkitBackdropFilter: "blur(1px)",
 	},
 };

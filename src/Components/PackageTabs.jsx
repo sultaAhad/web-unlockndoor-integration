@@ -243,7 +243,17 @@ const PackageTabs = () => {
 															/* Different package → show Upgrade button */
 															<button
 																className="btn rounded-pill text-white py-2 px-4 mb-3 dark-bg font_reg text-capitalize font_level wrapper-bg-eere"
-																onClick={() => upgradePackage(pkg?.id)}
+																onClick={() => {
+																	if (!userToken) {
+																		return Swal.fire({
+																			icon: "error",
+																			title: "Login Required",
+																			text: "Please login to continue.",
+																		});
+																	}
+																	setSelectedPackage(pkg);
+																	setShowPackageModal(true); // open Stripe modal
+																}}
 																disabled={isUpgrading}
 															>
 																{isUpgrading

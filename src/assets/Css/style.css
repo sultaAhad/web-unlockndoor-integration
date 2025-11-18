@@ -1029,7 +1029,9 @@ button.main-wrapper-btn-wrap {
 		rgba(156, 22, 72, 1) 100%
 	);
 }
-
+.modal-body.wrapper-text-dd {
+	background: #000;
+}
 .sub__pricing.sub__pricing_wrapper .ElementsApp,
 .ElementsApp .InputElement {
 	font-size: 16px;
