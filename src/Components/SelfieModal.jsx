@@ -88,50 +88,52 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 	};
 
 	return (
-		<div className="modal-overlay">
-			<div className="modal-container">
-				<div className="modal-header">
-					<h2 className="modal-title">
-						<i className="fas fa-fingerprint"></i> Identity Verification
-						Required
-					</h2>
-					<button className="modal-close" onClick={handleClose}>
-						<i className="fas fa-times"></i>
-					</button>
-				</div>
+		<div className="selfiedev">
+			<div className="modal-overlay ">
+				<div className="modal-container">
+					<div className="modal-header">
+						<h2 className="modal-title">
+							<i className="fas fa-fingerprint"></i> Identity Verification
+							Required
+						</h2>
+						<button className="modal-close" onClick={handleClose}>
+							<i className="fas fa-times"></i>
+						</button>
+					</div>
 
-				<div className="modal-body">
-					{verificationStatus === "success" ? (
-						<div className="verification-success">
-							<div className="success-icon">✅</div>
-							<h3>Verification Complete!</h3>
-							<p>Redirecting you to your profile...</p>
-						</div>
-					) : verificationStatus === "failed" ? (
-						<div className="verification-failed">
-							<div className="failed-icon">❌</div>
-							<h3>Verification Failed</h3>
-							<p>Please try again with better lighting and a clear face.</p>
-							<button
-								className="btn btn-primary"
-								onClick={() => setVerificationStatus(null)}
-							>
-								Try Again
-							</button>
-						</div>
-					) : profileImageUrl ? (
-						<FaceVerification
-							profileImageUrl={profileImageUrl}
-							refetch={gender === "men" ? manDataRefetch : womanDataRefetch}
-							onVerified={handleVerified}
-						/>
-					) : (
-						<div className="loading-state">
-							<div className="loading-spinner"></div>
-							<p>Loading your profile information...</p>
-							<small>If this takes too long, please refresh the page.</small>
-						</div>
-					)}
+					<div className="modal-body">
+						{verificationStatus === "success" ? (
+							<div className="verification-success">
+								<div className="success-icon">✅</div>
+								<h3>Verification Complete!</h3>
+								<p>Redirecting you to your profile...</p>
+							</div>
+						) : verificationStatus === "failed" ? (
+							<div className="verification-failed">
+								<div className="failed-icon">❌</div>
+								<h3>Verification Failed</h3>
+								<p>Please try again with better lighting and a clear face.</p>
+								<button
+									className="btn btn-primary"
+									onClick={() => setVerificationStatus(null)}
+								>
+									Try Again
+								</button>
+							</div>
+						) : profileImageUrl ? (
+							<FaceVerification
+								profileImageUrl={profileImageUrl}
+								refetch={gender === "men" ? manDataRefetch : womanDataRefetch}
+								onVerified={handleVerified}
+							/>
+						) : (
+							<div className="loading-state">
+								<div className="loading-spinner"></div>
+								<p>Loading your profile information...</p>
+								<small>If this takes too long, please refresh the page.</small>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>
