@@ -88,14 +88,16 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 	}, [channel]);
 
 	const startCallAction = async () => {
+		const { date: start_date, time: start_time } = formatDateTime();
+
 		const formData = {
 			channel_name: channel,
 			action: "start-call",
-			start_date: null,
-			start_time: null,
+			start_date,
+			start_time,
 			end_date: null,
 			end_time: null,
-			charges_transaction_id: 0,
+			charges_transaction_id: videoCallData?.data?.transaction_id || 0,
 			remark: "Video call started",
 			caller_type: userGender,
 			calling_user: {
@@ -134,11 +136,11 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		const formData = {
 			channel_name: `reject_call_${videoCallData?.data?.caller_user?.id}`,
 			action: "end-call",
-			start_date: videoCallData?.data?.start_date,
-			start_time: videoCallData?.data?.start_time,
-			end_date: end_date,
-			end_time: end_time,
-			charges_transaction_id: videoCallData?.data?.charges_transaction_id,
+			start_date: videoCallData?.data?.start_date, // comes from backend
+			start_time: videoCallData?.data?.start_time, // comes from backend
+			end_date,
+			end_time,
+			charges_transaction_id: videoCallData?.data?.transaction_id || 0,
 			remark: reason,
 			calling_user: {},
 			caller_user: {},

@@ -6,9 +6,9 @@ import AgoraVideoCall from "./AgoraVideoCall";
 import { useSelector } from "react-redux";
 
 const VideoChatModal = ({ showVideoChatModal, handleVideoChatClose }) => {
-  const { user, videoCallData } = useSelector((state) => state.auth);
+	const { user, videoCallData } = useSelector((state) => state.auth);
 
-  return (
+	return (
 		<>
 			<style>{`.chat_modal   .modal-content {
     background: transparent;

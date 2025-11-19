@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
-  Elements,
-  useStripe,
-  useElements,
-  CardElement,
+	Elements,
+	useStripe,
+	useElements,
+	CardElement,
 } from "@stripe/react-stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import Alert from "../SweetAlert/Alert";
@@ -15,103 +15,103 @@ import { useVideoManPurchaseCallMutation } from "../../network/services/ManAuth"
 const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_KEY);
 
 const CheckoutForm = ({
-  checkedTerm,
-  showSuccessModal,
-  setShowSuccessModal,
-  memberId,
-  videoPurchaseCallResponse,
+	checkedTerm,
+	showSuccessModal,
+	setShowSuccessModal,
+	memberId,
+	videoPurchaseCallResponse,
 }) => {
-  const dispatch = useDispatch();
-  const { userToken } = useSelector((state) => state.auth);
-  const stripe = useStripe();
-  const elements = useElements();
+	const dispatch = useDispatch();
+	const { userToken } = useSelector((state) => state.auth);
+	const stripe = useStripe();
+	const elements = useElements();
 
-  const [cardError, setCardError] = useState("");
-  const [payButton, setPayButton] = useState(true);
+	const [cardError, setCardError] = useState("");
+	const [payButton, setPayButton] = useState(true);
 
-  const [purchaseCall, response] = useVideoManPurchaseCallMutation();
+	const [purchaseCall, response] = useVideoManPurchaseCallMutation();
 
-  useEffect(() => {
-    if (response?.data?.status) {
-      setShowSuccessModal(true);
-      videoPurchaseCallResponse({
-        minutes: response?.data?.minutes,
-        transaction_id: response?.data?.transaction_id,
-      });
-    }
-  }, [
-    response?.isSuccess,
-    response?.data,
-    dispatch,
-    userToken,
-    setShowSuccessModal,
-    memberId,
-  ]);
+	useEffect(() => {
+		if (response?.data?.status) {
+			setShowSuccessModal(true);
+			videoPurchaseCallResponse({
+				minutes: response?.data?.minutes,
+				transaction_id: response?.data?.transaction_id,
+			});
+		}
+	}, [
+		response?.isSuccess,
+		response?.data,
+		dispatch,
+		userToken,
+		setShowSuccessModal,
+		memberId,
+	]);
 
-  // ✅ error handle
-  useEffect(() => {
-    if (response?.isError) {
-      if (response?.error?.data?.statusCode === 409) {
-        Alert({
-          icon: "error",
-          title: "Already Upgraded",
-          text:
-            response?.error?.data?.message ||
-            "You already purchased this package.",
-          iconStyle: "error",
-        });
-        return;
-      }
+	// ✅ error handle
+	useEffect(() => {
+		if (response?.isError) {
+			if (response?.error?.data?.statusCode === 409) {
+				Alert({
+					icon: "error",
+					title: "Already Upgraded",
+					text:
+						response?.error?.data?.message ||
+						"You already purchased this package.",
+					iconStyle: "error",
+				});
+				return;
+			}
 
-      Alert({
-        icon: "error",
-        title: "Error",
-        text:
-          response?.error?.data?.message ||
-          "Subscription Failed. Please try again.",
-        iconStyle: "error",
-      });
-    }
-  }, [response?.isError, response?.error]);
+			Alert({
+				icon: "error",
+				title: "Error",
+				text:
+					response?.error?.data?.message ||
+					"Subscription Failed. Please try again.",
+				iconStyle: "error",
+			});
+		}
+	}, [response?.isError, response?.error]);
 
-  // ✅ handle stripe payment
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
+	// ✅ handle stripe payment
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (!stripe || !elements) return;
 
-    if (!checkedTerm?.id) {
-      Alert({
-        iconStyle: "error",
-        title: "Error",
-        text: "No package selected. Please choose a package before checkout.",
-        icon: "error",
-      });
-      return;
-    }
+		if (!checkedTerm?.id) {
+			Alert({
+				iconStyle: "error",
+				title: "Error",
+				text: "No package selected. Please choose a package before checkout.",
+				icon: "error",
+			});
+			return;
+		}
 
-    const cardElement = elements.getElement(CardElement);
-    const payload = await stripe.createToken(cardElement);
+		const cardElement = elements.getElement(CardElement);
+		const payload = await stripe.createToken(cardElement);
 
-    if (payload.error) {
-      setCardError(payload.error.message);
-      cardElement.clear();
-      return;
-    }
+		if (payload.error) {
+			setCardError(payload.error.message);
+			cardElement.clear();
+			return;
+		}
 
-    if (payload?.token?.id) {
-      setCardError("");
+		if (payload?.token?.id) {
+			setCardError("");
 
-      const formData = new FormData();
-      formData.set("token", payload.token.id);
-      formData.set("charges_id", checkedTerm.id);
-      formData.set("women_id", memberId); // ✅ send women_id
+			const formData = new FormData();
+			formData.set("token", payload.token.id);
+			formData.set("charges_id", checkedTerm.id);
+			formData.set("women_id", memberId); // ✅ send women_id
 
-      purchaseCall(formData);
-      cardElement.clear();
-    }
-  };
+			purchaseCall(formData);
+			cardElement.clear();
+		}
+	};
 
-  return (
+	return (
 		<form onSubmit={handleSubmit}>
 			<CardElement
 				options={{
@@ -150,23 +150,23 @@ const CheckoutForm = ({
 
 // ✅ Wrapper
 const Stripwrapper = ({
-  checkedTerm,
-  showSuccessModal,
-  setShowSuccessModal,
-  memberId,
-  checkoutFormResponse,
+	checkedTerm,
+	showSuccessModal,
+	setShowSuccessModal,
+	memberId,
+	checkoutFormResponse,
 }) => (
-  <Elements stripe={stripePromise}>
-    <CheckoutForm
-      checkedTerm={checkedTerm}
-      showSuccessModal={showSuccessModal}
-      setShowSuccessModal={setShowSuccessModal}
-      memberId={memberId}
-      videoPurchaseCallResponse={(response) => {
-        checkoutFormResponse(response);
-      }}
-    />
-  </Elements>
+	<Elements stripe={stripePromise}>
+		<CheckoutForm
+			checkedTerm={checkedTerm}
+			showSuccessModal={showSuccessModal}
+			setShowSuccessModal={setShowSuccessModal}
+			memberId={memberId}
+			videoPurchaseCallResponse={(response) => {
+				checkoutFormResponse(response);
+			}}
+		/>
+	</Elements>
 );
 
 export default Stripwrapper;

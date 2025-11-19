@@ -159,13 +159,11 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			let img = null;
 
 			try {
-				// Direct fetch (OLD WORKING METHOD)
 				img = await faceapi.fetchImage(imageUrl);
 				console.log("✅ Direct fetch successful");
 			} catch (directError) {
 				console.warn("⚠️ Direct fetch failed:", directError);
 
-				// XHR fallback (ONLY this part added)
 				try {
 					const blob = await loadImageViaXHR(imageUrl);
 					img = await faceapi.bufferToImage(blob);
@@ -179,8 +177,8 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 						icon: "info",
 						title: "Image Loading Issue",
 						html: `
-                        <p>Unable to load your profile image due to browser security restrictions.</p>
-                        <p><strong>Please upload a new profile image using the camera button below.</strong></p>
+                        <p>Unable to load your profile image.</p>
+                        <p><strong>Please upload a new one.</strong></p>
                     `,
 						confirmButtonText: "Upload New Image",
 					});
@@ -190,29 +188,35 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 				}
 			}
 
-			// FACE DETECTION (same as old)
-			console.log("🔍 Detecting face in profile image...");
+			// 🎯 FINAL: REAL WORKING FACE DETECTION (TinyFaceDetector)
+			console.log("🔍 Detecting face with TinyFaceDetector...");
 			const desc = await faceapi
-				.detectSingleFace(img)
+				.detectSingleFace(
+					img,
+					new faceapi.TinyFaceDetectorOptions({
+						inputSize: 256,
+						scoreThreshold: 0.4,
+					}),
+				)
 				.withFaceLandmarks()
 				.withFaceDescriptor();
 
 			if (desc) {
+				console.log("🟢 FACE FOUND in profile image!");
 				setProfileDescriptors([desc.descriptor]);
 				setUsingFallback(false);
-				console.log("🟢 Face detected in profile image!");
 			} else {
-				console.warn("⚠️ No face detected in profile image");
+				console.warn("❌ No face detected in this image!");
 				setProfileDescriptors([]);
 
 				await Swal.fire({
 					icon: "error",
 					title: "No Face Detected",
-					text: "Your profile image does not contain a detectable face.",
+					text: "Please upload a clear image where your face is visible.",
 				});
 			}
 		} catch (err) {
-			console.error("❌ Error processing image:", err);
+			console.error("❌ Error processing profile image:", err);
 
 			setProfileDescriptors([]);
 			setUsingFallback(true);
@@ -220,8 +224,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			await Swal.fire({
 				icon: "warning",
 				title: "Processing Failed",
-				text: "Please upload your profile image again using the camera button.",
-				confirmButtonText: "Upload Now",
+				text: "Please upload your profile image again.",
 			});
 		}
 	};
@@ -232,7 +235,9 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			try {
 				setPulseAnimation(true);
 				await Promise.all([
-					faceapi.nets.ssdMobilenetv1.loadFromUri("/models/ssd_mobilenetv1"),
+					faceapi.nets.tinyFaceDetector.loadFromUri(
+						"/models/tiny_face_detector",
+					), // ✔ NEW & FAST
 					faceapi.nets.faceLandmark68Net.loadFromUri(
 						"/models/face_landmark_68",
 					),
@@ -381,7 +386,13 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			const selfieImg = await faceapi.fetchImage(selfie);
 
 			const selfieDesc = await faceapi
-				.detectSingleFace(selfieImg)
+				.detectSingleFace(
+					selfieImg,
+					new faceapi.TinyFaceDetectorOptions({
+						inputSize: 256,
+						scoreThreshold: 0.4,
+					}),
+				)
 				.withFaceLandmarks()
 				.withFaceDescriptor();
 

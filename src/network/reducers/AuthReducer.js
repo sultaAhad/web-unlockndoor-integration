@@ -41,8 +41,9 @@ const AuthReducer = createSlice({
 			if (user?.profile_image_url) {
 				user = {
 					...user,
-					profile_image_url: `${user.profile_image_url
-						}?t=${new Date().getTime()}`,
+					profile_image_url: `${
+						user.profile_image_url
+					}?t=${new Date().getTime()}`,
 				};
 			}
 			state.user = user;
@@ -50,8 +51,8 @@ const AuthReducer = createSlice({
 		},
 		setCount: (state, action) => {
 			const count = action.payload;
-			state.unread_messages_count = count.unread_messages_count
-			state.unread_notification_count = count.unread_notification_count
+			state.unread_messages_count = count.unread_messages_count;
+			state.unread_notification_count = count.unread_notification_count;
 		},
 
 		setLogoutUser: (state) => {
@@ -87,7 +88,7 @@ export const {
 	handleVideoCallModal,
 	triggerNotificationRefresh,
 	resetStore,
-	setCount
+	setCount,
 } = AuthReducer.actions;
 
 export default AuthReducer.reducer;

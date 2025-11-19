@@ -14,8 +14,8 @@ const PricingModal = ({
 	const { data, isLoading } = useGetManVideoChargesQuery();
 	const [selectedId, setSelectedId] = useState(null);
 
-  // ✅ FIXED: Convert is_paid to number before comparing
-  const isPaid = Number(user?.package?.is_paid) === 1;
+	// ✅ FIXED: Convert is_paid to number before comparing
+	const isPaid = Number(user?.package?.is_paid) === 1;
 
 	const handlePayNowOpen = () => {
 		if (!selectedId) {
