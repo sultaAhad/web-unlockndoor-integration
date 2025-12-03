@@ -33,7 +33,7 @@ const WomenselfieModel = ({ isOpen, onClose, user, onVerified }) => {
 	const handleVerify = async () => {
 		if (!preview) return Swal.fire("Error", "Capture selfie first", "error");
 		try {
-			const selfieFile = base64ToFile(preview, "selfie.jpg");
+			const selfieFile = base64ToFile(preview, "selfie.webp");
 			const formData = new FormData();
 			formData.append("selfie", selfieFile);
 

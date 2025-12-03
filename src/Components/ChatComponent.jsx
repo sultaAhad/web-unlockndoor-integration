@@ -521,7 +521,7 @@ function ChatComponent({ type }) {
 			const extension = url.split(".").pop().toLowerCase();
 			if (["mp4", "mov", "avi", "webm", "ogg"].includes(extension))
 				return "video";
-			if (["png", "jpg", "jpeg", "gif", "webp", "bmp"].includes(extension))
+			if (["webp", "webp", "jpeg", "gif", "webp", "bmp"].includes(extension))
 				return "image";
 			return "other";
 		};

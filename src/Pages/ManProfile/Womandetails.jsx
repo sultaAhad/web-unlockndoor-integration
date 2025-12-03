@@ -51,7 +51,7 @@ const normalizeMember = (data) => {
 		pictures: data.images_urls || [],
 		videos: (data.videos_urls || []).map((url, i) => ({
 			url,
-			thumbnail: data.images_urls?.[i] || "/assets/video-placeholder.jpg",
+			thumbnail: data.images_urls?.[i] || "/assets/video-placeholder.webp",
 		})),
 	};
 };

@@ -45,10 +45,10 @@ const PaymentMethodCard = ({ card, defaultCardId, onAction }) => {
 					<img
 						src={
 							card?.card?.brand === "mastercard"
-								? "https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png"
+								? "https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.webp"
 								: card?.card?.brand === "visa"
-								? "https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png"
-								: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Credit-card.png"
+								? "https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.webp"
+								: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Credit-card.webp"
 						}
 						alt={card?.card?.brand}
 						className="brand-logo"

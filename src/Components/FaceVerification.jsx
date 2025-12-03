@@ -422,7 +422,7 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 					const formData = new FormData();
 					formData.append("selfie_verified", 1);
 					const selfieBlob = await compressImage(selfie);
-					formData.append("selfie", selfieBlob, "selfie.jpg");
+					formData.append("selfie", selfieBlob, "selfie.webp");
 					await verifySelfieWomen(formData).unwrap();
 				}
 

@@ -128,7 +128,7 @@ input[type="number"] {
 /* background.css */
 
 .inner-bg {
-	background-image: url("/src/assets/img/innerpages1.png");
+	background-image: url("/src/assets/img/innerpages1.webp");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -604,7 +604,7 @@ button.main-wrapper-btn-wrap {
 }
 
 .connect_with_me_sec {
-	background-image: url("/src/assets/img/sec_back.png");
+	background-image: url("/src/assets/img/sec_back.webp");
 	background-repeat: no-repeat;
 	background-position: 100% 100%;
 	background-size: cover;
@@ -1119,7 +1119,7 @@ img.img-fluid.mb-3.wrapperlogo {
 }
 
 .packages_sec .ul_wrapper ul li::before {
-	content: url("../img/correct.png");
+	content: url("../img/correct.webp");
 	position: absolute;
 	left: -30px;
 	top: 4px;
@@ -1331,7 +1331,7 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 .specialist_Sec {
-	background-image: url("/src/assets/img/specialistimg.png");
+	background-image: url("/src/assets/img/specialistimg.webp");
 	width: 100%;
 	background-repeat: no-repeat;
 	background-position: 100% 100%;
@@ -2279,7 +2279,7 @@ li.bullet_Wrapper.wrapper-bullet {
 	font-size: 14px;
 	font-family: "TomatoGrotesk-SemiBold";
 	padding: 10px;
-	background-image: url(../img/select_arrow.png) !important;
+	background-image: url(../img/select_arrow.webp) !important;
 	background-size: auto;
 }
 
@@ -2592,7 +2592,7 @@ li.bullet_Wrapper.wrapper-bullet {
 }
 
 select.form-select.form-control.custom-select-arrow {
-	background-image: url(../img/pinkarrow.png);
+	background-image: url(../img/pinkarrow.webp);
 	background-repeat: no-repeat;
 	background-size: unset;
 }
