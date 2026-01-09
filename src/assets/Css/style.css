@@ -114,7 +114,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .wrapper-deletetrash {
-	width: 100%;
+	width: 18px !important;
 	height: unset !important;
 	object-fit: fill !important;
 	border-radius: unset !important;

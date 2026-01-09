@@ -90,7 +90,8 @@
 
 .pic_dv img {
 	width: 100%;
-	height: 600px;
+	/* height: 600px; */
+	height: 245px;
 	object-fit: cover;
 	margin: 10px 0p;
 	margin: 10px 0px;
@@ -99,7 +100,8 @@
 
 .pic_dv video {
 	width: 100%;
-	height: 600px;
+	/* height: 600px; */
+	height: 245px;
 	object-fit: cover;
 	margin: 10px 0px;
 	border-radius: 20px;
@@ -449,8 +451,10 @@
 	position: absolute;
 	right: 22px;
 	top: 30px;
-	width: 50px;
-	height: 50px;
+	width: 35px;
+	height: 35px;
+	/* width: 50px;
+	height: 50px; */
 	background: #9c1648;
 	border-radius: 20%;
 	color: white;

@@ -148,7 +148,7 @@ const ImageVideo = ({
 	// Render video
 	if (type === "video") {
 		return (
-			<div className="col-md-6">
+			<div className="col-md-3">
 				<div className="pictures_dv">
 					<div className="pic_dv position-relative">
 						<div className="del_icon d-flex align-items-center justify-content-center">
@@ -181,7 +181,7 @@ const ImageVideo = ({
 	// Render image
 	if (type === "image") {
 		return (
-			<div className="col-md-6">
+			<div className="col-md-3">
 				<div className="pictures_dv">
 					<div className="pic_dv position-relative">
 						<div className="del_icon d-flex align-items-center justify-content-center">
