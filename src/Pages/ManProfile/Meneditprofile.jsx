@@ -558,6 +558,9 @@ function Meneditprofile() {
 											dateFormat="dd/MM/yyyy"
 											maxDate={minAgeDate}
 											className="custom_datePicker"
+											yearDropdownItemNumber={100}
+											showYearDropdown
+											scrollableYearDropdown
 										/>
 										<div className="input_icons">
 											<img src={calenderwrapper1} alt="" />

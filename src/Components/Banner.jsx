@@ -125,6 +125,8 @@ function Banner() {
 											src={HomePageData?.image_url}
 											alt="banner_one__img"
 											className="img-fluid"
+											loading="lazy"
+											decoding="async"
 										/>
 									)}
 								</motion.div>
@@ -159,7 +161,12 @@ function Banner() {
 									)}
 									{!isLoading && (
 										<div className="back_dots_img">
-											<img src={dotsimg} alt="dots_img" />
+											<img
+												src={dotsimg}
+												alt="dots_img"
+												loading="lazy"
+												decoding="async"
+											/>
 										</div>
 									)}
 								</motion.div>

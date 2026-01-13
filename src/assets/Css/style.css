@@ -7,46 +7,55 @@
 @font-face {
 	font-family: "TomatoGrotesk-Regular";
 	src: url("/Fonts/TomatoGrotesk-Regular.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-Medium";
 	src: url("/Fonts/TomatoGrotesk-Medium.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "tomato-gostek-black";
 	src: url("/Fonts/TomatoGrotesk-Black.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-BlackSlanted";
 	src: url("/Fonts/TomatoGrotesk-BlackSlanted.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-Bold";
 	src: url("/Fonts/TomatoGrotesk-Bold.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-BoldSlanted";
 	src: url("/Fonts/TomatoGrotesk-BoldSlanted.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-Light";
 	src: url("/Fonts/TomatoGrotesk-Light.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "TomatoGrotesk-SemiBold";
 	src: url("/Fonts/TomatoGrotesk-SemiBold.otf");
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "Montserrat-Regular";
 	src: url("/Fonts/Montserrat-Regular.ttf");
+	font-display: swap;
 }
 
 /* ===================== */
@@ -87,6 +96,15 @@ body {
 	text-decoration: unset;
 	padding: 0px 25px;
 	text-align: center;
+}
+/* Fix blank space under year dropdown */
+.react-datepicker__year-dropdown {
+	max-height: 180px !important;
+	overflow-y: auto !important;
+}
+
+.react-datepicker__year-option:last-child {
+	display: none !important;
 }
 
 /* For Chrome, Safari, Edge, Opera */
