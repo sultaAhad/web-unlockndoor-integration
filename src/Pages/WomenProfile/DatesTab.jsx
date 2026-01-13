@@ -147,6 +147,7 @@ function DatesTab() {
 		if (sponsor?.status == "accepted") {
 			return (
 				<Link
+					className="text-white text-decoration-none secondary-medium-font  level-8 "
 					to="/chat-women"
 					state={{
 						partner_id: sponsor?.men?.id,
@@ -231,11 +232,6 @@ function DatesTab() {
 																	Offer
 																</h4>
 															</th>
-															{/* <th className="position-relative">
-                                <h4 className="secondary-medium-font text-white level-8 mb-0">
-                                  Action
-                                </h4>
-                              </th> */}
 															<th className="position-relative">
 																<h4 className="secondary-medium-font text-white level-8 mb-0">
 																	Action
@@ -285,7 +281,7 @@ function DatesTab() {
 																		<td className="secondary-medium-font text-white level-8 text-center">
 																			${sponsorDate.offer_price}
 																		</td>
-																		<td className="secondary-medium-font text-white level-8 text-center">
+																		<td className="secondary-medium-font text-white level-8 text-center ">
 																			<h4
 																				className={`${getStatusClass(
 																					sponsorDate.status,
@@ -295,7 +291,7 @@ function DatesTab() {
 																			</h4>
 																		</td>
 																		<td className="secondary-medium-font level-8 text-center">
-																			<div className="d-flex align-items-center justify-content-end">
+																			<div className="d-flex align-items-center justify-content-end text-white">
 																				{Actions(sponsorDate)}
 																			</div>
 																		</td>

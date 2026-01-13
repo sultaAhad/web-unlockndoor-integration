@@ -503,13 +503,19 @@ function Womandetails() {
 
 					{videoModal.disabled && (
 						<div
-							className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center text-white fs-5 text-center"
+							className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center flex-column align-items-center text-white fs-5 text-center"
 							style={{ zIndex: 10 }}
 						>
 							<div>
 								<i className="fa-solid fa-lock me-2"></i>
 								Video Disabled — Upgrade to Premium
 							</div>
+							<Link
+								className="btn mt-3 rounded-2 loadmore____btn"
+								to="/my-membership"
+							>
+								Upgrade Package
+							</Link>
 						</div>
 					)}
 				</Modal.Body>

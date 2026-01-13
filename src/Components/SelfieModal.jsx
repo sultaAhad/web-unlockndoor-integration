@@ -85,6 +85,9 @@ const SelfieModal = ({ isOpen, onClose, onVerified }) => {
 	const handleClose = () => {
 		console.log("❌ Modal manually closed");
 		onClose();
+
+		// 👉 Home page par redirect
+		navigate("/");
 	};
 
 	return (
