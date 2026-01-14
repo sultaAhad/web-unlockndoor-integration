@@ -307,7 +307,7 @@ function DatesTab() {
 																<tr>
 																	<td colSpan={5}>
 																		<h5 className="text-secondary">
-																			No data exists{" "}
+																					No Sponsor date found
 																		</h5>
 																	</td>
 																</tr>

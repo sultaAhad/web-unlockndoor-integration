@@ -142,7 +142,10 @@ export const WomenAuth = createApi({
 				url: `${WOMAN_MATCHED_PRIFILE}?page=${page}&filter_by=${filterBy}`,
 				method: "GET",
 			}),
+			refetchOnMountOrArgChange: true,
+			keepUnusedDataFor: 0, // important
 		}),
+
 		// ✅ Profile Image Update
 		updateProfileImageWomen: build.mutation({
 			query: (formData) => ({
@@ -243,7 +246,7 @@ export const {
 	useWomenSendOtpMutation,
 	useWomenVerifyOtpMutation,
 	useResetPasswordWomenMutation,
-	useGetWomanMatchProfilesQuery,
+	useLazyGetWomanMatchProfilesQuery,
 	useLikeManProfileMutation,
 	useLazyCancelWomenPackageQuery,
 	useUpgradeWomenPackageMutation,

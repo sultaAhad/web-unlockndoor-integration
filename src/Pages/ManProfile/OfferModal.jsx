@@ -26,8 +26,7 @@ const OfferModal = ({ showofferModal, handleofferClose, womenId }) => {
     e.preventDefault();
     try {
       if (
-        parseInt(form.offer_price) < 200 ||
-        parseInt(form.offer_price) > 2000
+        parseInt(form.offer_price) < 200 || parseInt(form.offer_price) > 2000
       ) {
         toast.error("Offer price must be between $200 to $2000.");
         return;
