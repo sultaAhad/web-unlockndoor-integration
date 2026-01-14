@@ -158,7 +158,7 @@ function Profile() {
 														</div>
 													</div>
 												</li>
-												<li>
+												{/* <li>
 													<div className="dv_for_flex">
 														<div className="img_dv">
 															<LuTimer size={22} color="#fff" />
@@ -172,7 +172,7 @@ function Profile() {
 															</h5>
 														</div>
 													</div>
-												</li>
+												</li> */}
 											</ul>
 										</div>
 									</div>
