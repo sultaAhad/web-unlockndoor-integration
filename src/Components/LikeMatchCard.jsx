@@ -10,16 +10,10 @@ const LikeMatchCard = ({ card, type, index, responseAction, gender }) => {
 	const [likeManProfile, { isLoading: isProcessing }] =
 		useLikeManProfileMutation();
 	const { user } = useSelector((state) => state.auth);
-	console.log(card, "active");
 
 	// ✅ Extract both package slugs
 	const menPkgSlug = card?.has_men_package?.slug?.toLowerCase() || "";
 	const womenPkgSlug = user?.has_women_package?.slug?.toLowerCase() || "";
-
-	// Debug logs
-	console.log("📦 Card ID:", card?.id);
-	console.log("📦 Men Package:", menPkgSlug);
-	console.log("📦 Women Package:", womenPkgSlug);
 
 	// ✅ Allowed packages
 	const allowedChatPkgs = [

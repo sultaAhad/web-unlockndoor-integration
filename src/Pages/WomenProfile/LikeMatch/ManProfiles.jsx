@@ -25,23 +25,9 @@ import ProfileNavbartwo from "../../../Components/ProfileNavbartwo";
 import Header from "../../../Components/Header/Header";
 import Footer from "../../../Components/Footer";
 function ManProfiles() {
-	// useEffect(() => {
-	//   AOS.init({ duration: 1000, once: true }); // Initialize AOS with options
-	// }, []);
-	// useEffect(() => {
-	//   document.body.style.backgroundImage = `url(${innerpages})`;
-	//   document.body.style.backgroundSize = "cover";
-	//   document.body.style.backgroundPosition = "center";
-	//   document.body.style.minHeight = "100vh";
-
-	//   return () => {
-	//     document.body.style.backgroundImage = "";
-	//   };
-	// }, []);
 
 	const location = useLocation();
 	const user = useRef(location?.state);
-	console.log(user);
 
 	return (
 		<>

@@ -6,7 +6,6 @@ import VideoCallButton from "./VideoCallButton";
 function MatchedProfileCard({ card, index }) {
 	// ✅ Extract the slug safely
 	const pkgSlug = card?.has_women_package?.slug?.toLowerCase() || "";
-	console.log(pkgSlug, "assd");
 
 	// ✅ Determine access
 	const canChat =

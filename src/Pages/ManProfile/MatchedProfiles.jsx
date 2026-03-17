@@ -41,7 +41,6 @@ function MatchedProfiles() {
 	const [profiles, setProfiles] = useState([]);
 
 	const { data, isLoading, refetch } = useGetMatchedProfilesQuery(currentPage);
-	console.log(data);
 
 	useEffect(() => {
 		const profilesArray = data?.data?.data || data?.data || []; // handle both API formats

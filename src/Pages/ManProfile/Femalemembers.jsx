@@ -210,7 +210,6 @@ function Femalemembers() {
 	const location = useLocation();
 
 	const { data, isLoading } = useGetFemaleMembershipQuery(currentPage);
-	console.log(data);
 
 	// ✅ Load new paginated data
 	useEffect(() => {

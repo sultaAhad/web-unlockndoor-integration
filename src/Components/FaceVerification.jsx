@@ -108,7 +108,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 			// Draw image on canvas
 			ctx.drawImage(img, 0, 0, width, height);
 
-			console.log("🔍 Detecting face in profile image...");
 
 			// Detect face with multiple attempts
 			let desc = await faceapi
@@ -118,7 +117,6 @@ const FaceVerification = ({ profileImageUrl, onVerified, refetch }) => {
 
 			// If no face detected, try with different settings
 			if (!desc) {
-				console.log("🔄 Trying alternate face detection settings...");
 				desc = await faceapi
 					.detectSingleFace(
 						canvas,

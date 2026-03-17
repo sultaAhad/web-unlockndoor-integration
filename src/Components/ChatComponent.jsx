@@ -26,11 +26,11 @@ import {
 	useGetMatchedProfilesQuery,
 } from "../network/services/ManAuth";
 import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
+import limit_text from "../utils/helper";
 
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
 	const [showPriceModal, setShowPriceModal] = useState(false);
-	console.log(user);
 
 	const [deleteManChat] = useChatDeleteManMutation();
 	const [deleteWomenChat] = useChatDeleteWomenMutation();
@@ -54,10 +54,6 @@ function ChatComponent({ type }) {
 
 		const fromPackage = (packageSlug.from_package || "").toLowerCase();
 		const toPackage = (packageSlug.to_package || "").toLowerCase();
-
-		console.log("Selected Chat ID:", selectedChat.chat_id);
-		console.log("From Package:", fromPackage);
-		console.log("To Package:", toPackage);
 
 		const blockedKeywords = ["silver", "free-tier"];
 		const allowedKeywords = ["gold", "platinum", "one-time-payment"];
@@ -177,7 +173,6 @@ function ChatComponent({ type }) {
 		refetchOnMountOrArgChange: true,
 	});
 
-	console.log("Chats API Response:", chatsData);
 
 	const getChatMessages = async () => {
 		const token = localStorage.getItem("token");
@@ -674,7 +669,7 @@ function ChatComponent({ type }) {
 							<div>
 								<div className="d-flex align-items-start gap-2">
 									<h4 className="secondary-semibold-font mb-1 text-white level-8 text-capitalize">
-										{chat.participant_name}
+										{limit_text(chat.participant_name)}
 									</h4>
 									<span
 										className={chat.active ? "green active" : "green"}
@@ -708,7 +703,7 @@ function ChatComponent({ type }) {
 							alt="User"
 						/>
 						<h4 className="secondary-regular-font mb-0 text-white level-7 text-capitalize">
-							{selectedChat?.participant_name}
+							{limit_text(selectedChat?.participant_name)}
 						</h4>
 					</div>
 				</div>

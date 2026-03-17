@@ -139,7 +139,6 @@
 
 // 			if (isManPaid) {
 // 				// Optional: no need to show "unlimited" toast on every click
-// 				console.log("Paid user — no limit");
 // 			}
 
 // 			toast.error(errorMsg || "Something went wrong!");

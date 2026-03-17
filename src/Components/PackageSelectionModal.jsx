@@ -15,7 +15,6 @@ const PackageSelectionModal = ({
 	action = "purchase",
 }) => {
 	const { user } = useSelector((state) => state.auth);
-	console.log(user);
 
 	const navigate = useNavigate();
 	const { data, isLoading, error } = useGetMenPackagesQuery();
@@ -41,9 +40,7 @@ const PackageSelectionModal = ({
 				navigate("/women-profiles");
 			});
 		} catch (error) {
-			console.log(error);
 
-			// ✅ Show error SweetAlert
 			Swal.fire({
 				title: "Error",
 				text: error?.data?.message || "Something went wrong during upgrade.",

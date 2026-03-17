@@ -67,7 +67,6 @@ function Womandetails() {
 	const { data: manData } = useGetManDataQuery();
 	const manPackage = manData?.response?.data?.data?.has_women_package;
 	const isManPaid = manPackage?.is_paid === 1; // true = Paid user
-	console.log(isManPaid);
 	const likeLimitReached = useRef(false);
 
 	const { id } = useParams();
@@ -76,7 +75,6 @@ function Womandetails() {
 	const [member, setMember] = useState(
 		rawMember ? normalizeMember(rawMember) : null,
 	);
-	console.log(member, "asdds");
 	const [viewMemberProfile] = useViewMemberProfileMutation();
 	const hasViewedRef = useRef(false);
 

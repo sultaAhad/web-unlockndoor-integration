@@ -58,13 +58,9 @@ const PackageTabs = () => {
 			// ✅ Redirect based on active tab
 			navigate(activeTab === "women" ? "/women-profiles" : "/men-profiles");
 		} catch (error) {
-			console.log("Upgrade Error:", error);
-
-			// ✅ Extract readable message
 			const msg =
 				error?.data?.message || "Something went wrong. Please try again.";
 
-			// ✅ Handle known responses gracefully
 			if (
 				msg === "You already have an active package." ||
 				msg === "You already have the most upgraded package."

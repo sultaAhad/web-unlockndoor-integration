@@ -55,9 +55,6 @@ function ChatComponent({ type }) {
 		const fromPackage = (packageSlug.from_package || "").toLowerCase();
 		const toPackage = (packageSlug.to_package || "").toLowerCase();
 
-		console.log("Selected Chat ID:", selectedChat.chat_id);
-		console.log("From Package:", fromPackage);
-		console.log("To Package:", toPackage);
 
 		const blockedKeywords = ["silver", "free-tier"]; // use includes
 		const allowedKeywords = ["gold", "platinum", "one-time-payment"];
@@ -180,7 +177,6 @@ function ChatComponent({ type }) {
 	} = useGetChatsQuery(type, {
 		refetchOnMountOrArgChange: true,
 	});
-	console.log(data);
 	const getChatMessages = async () => {
 		const token = localStorage.getItem("token");
 		const response = await fetch(
