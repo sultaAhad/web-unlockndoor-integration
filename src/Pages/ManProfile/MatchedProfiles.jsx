@@ -43,7 +43,7 @@ function MatchedProfiles() {
 	const { data, isLoading, refetch } = useGetMatchedProfilesQuery(currentPage);
 
 	useEffect(() => {
-		const profilesArray = data?.data?.data || data?.data || []; // handle both API formats
+		const profilesArray = data?.data?.data || data?.data || []; 
 
 		if (profilesArray.length > 0) {
 			setProfiles((prev) =>

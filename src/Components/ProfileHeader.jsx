@@ -39,7 +39,7 @@ function ProfileHeader({ showButtons = true, visibility = true }) {
 					<div className="account_access_dv">
 						<div className="notify_edit_dv">
 							<ul>
-								{user?.package?.slug != "free-tier" && (
+								{/* {user?.package?.slug != "free-tier" && (
 									<Link
 										className="text-decoration-none text-white secondary-secondregular-font"
 										to={`${gender === "men" ? "/chat" : "/chat-women"}`}
@@ -71,9 +71,8 @@ function ProfileHeader({ showButtons = true, visibility = true }) {
 											</span>
 										)}
 									</li>
-								</Link>
+								</Link> */}
 
-								{/* Edit Button */}
 								<Link to={`/${gender === "men" ? "man" : "women"}-settings`}>
 									<li>
 										<img src={edit} alt="edit" />

@@ -10,6 +10,7 @@ import "../src/assets/Css/reactdatepicker.css";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Publicroutes from "./Routes/Publicroutes";
+import VideoCallManager from "./Components/ChatModals/VideoCallManager";
 import { web_new_logo } from "./Constant/Index";
 import { Link, Links } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -50,6 +51,7 @@ function App() {
         draggable
         theme="light"
       />
+      <VideoCallManager />
       <ToastContainer />
       <Publicroutes />
       <div className="main_modal">

@@ -358,20 +358,33 @@
 	font-family: "TomatoGrotesk-Regular" !important;
 }
 
-.number_move_dv {
+/* .number_move_dv {
 	font-size: 12px;
 	background-color: #9c1648;
 	width: 25px;
 	height: 25px;
-	/* padding: 4px 6px; */
 	border-radius: 50px;
 	text-decoration: unset;
 	position: absolute;
 	top: -4px;
 	right: 0;
-	/* left: 0; */
 	line-height: 27px;
 	color: #ffffff;
+} */
+
+
+.number_move_dv {
+    font-size: 12px;
+    background-color: #e9e9e9;
+    height: 100%;
+    padding: 4px 6px !important;
+    border-radius: 50px;
+    position: absolute;
+    top: -10px;
+    border: 1px solid #0000005c;
+    right: -9px;
+    line-height: 11px;
+    color: #080000;
 }
 
 .address-section a {

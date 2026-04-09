@@ -7,6 +7,8 @@ import {
 	outline2,
 	person_img,
 	men_profile,
+	massagewrapper,
+	notification,
 } from "../../Constant/Index";
 import RoleSelectionModal from "./RoleSelectionModal";
 import LoginModal from "./LoginModal";
@@ -41,26 +43,52 @@ function Header() {
 	const [selectedGender, setSelectedGender] = useState("");
 	const [userEmail, setUserEmail] = useState("");
 
-	const { user, videoCallData } = useSelector((state) => state.auth);
+	const { user, videoCallData, unread_messages_count, unread_notification_count } = useSelector((state) => state.auth);
 	const [showVideoChatModal, setShowVideoChatModal] = useState(false);
 	const [pageLoaded, setPageLoaded] = useState(false);
 	const { data: checkAuthData } = useCheckAuthQuery();
 	const [callAction] = useCallActionMutation();
 	const dispatch = useDispatch();
+	const gender = localStorage.getItem("gender");
+
+	// useEffect(() => {
+	// 	if (!user) return;
+	// 	const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
+	// 		cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
+	// 		encrypted: false,
+	// 	});
+	// 	const genderChannelName = `${user?.gender}_unread_count_${user?.id}`;
+	// 	console.log(genderChannelName);
+		
+	// 	const countPusher = pusher.subscribe(genderChannelName);
+	// 	countPusher.bind('unread-count.updated', (data) => {
+	// 		console.log('Notification_date',data);
+	// 		dispatch(
+	// 			setCount({
+	// 				unread_messages_count: data?.unread_messages_count,
+	// 				unread_notification_count: data.unread_notification_count,
+	// 			}),
+	// 		);
+	// 	});
+	// 	return () => {
+	// 		countPusher.unbind_all();
+	// 		countPusher.unsubscribe();
+	// 		countPusher.disconnect();
+	// 	};
+	// }, []);
 
 	useEffect(() => {
 		if (!user) return;
+
 		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
 			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
 			encrypted: false,
 		});
-		const genderChannelName =
-			user?.gender === "women"
-				? `women-unread_count-${user?.id}`
-				: `men-unread_count-${user?.id}`;
 
+		const genderChannelName = `${user?.gender}_unread_count_${user?.id}`;
 		const countPusher = pusher.subscribe(genderChannelName);
-		countPusher.bind(genderChannelName, (data) => {
+		countPusher.bind('unread-count.updated', (data) => {
+			console.log('notification_data', data);
 			dispatch(
 				setCount({
 					unread_messages_count: data?.unread_messages_count,
@@ -68,12 +96,23 @@ function Header() {
 				}),
 			);
 		});
+
+		// Also listen for connection errors
+		countPusher.bind('pusher:subscription_error', (status) => {
+			console.error('Pusher subscription error:', status);
+		});
+
+		countPusher.bind('pusher:subscription_succeeded', () => {
+			console.log('Successfully subscribed to channel:', genderChannelName);
+		});
+
 		return () => {
 			countPusher.unbind_all();
 			countPusher.unsubscribe();
-			countPusher.disconnect();
+			// Don't disconnect here as it might affect other channels
+			// pusher.disconnect(); // Only if this is the only channel
 		};
-	}, []);
+	}, [user]); // Add user as dependency
 	// ✅ Reject call function ko update karein
 	const rejectCallAction = async (user_id) => {
 		const formData = {
@@ -251,7 +290,7 @@ function Header() {
 			genderNotificationChannel.unsubscribe();
 			rejectCallChannel.unsubscribe(); // ✅ Unsubscribe reject channel
 
-			pusher.disconnect();
+			// pusher.disconnect();
 		};
 	}, [user]);
 
@@ -310,9 +349,24 @@ function Header() {
 		}
 	}, [checkAuthData]);
 
+
 	return (
 		<>
-			{/* Header Section */}
+			<style>{`
+				
+			.header_links {
+				height: 100%;
+				background: transparent;
+				padding: 12px 13px;
+				border-radius: 27px;
+				border: 1px solid #9c1648;
+			}
+				.header_links img {
+				height: 20px;
+				width: 21px;
+			}
+
+			` }</style>
 			<section className="header_sec pt-2">
 				<div className="container">
 					<div className="row align-items-center">
@@ -355,47 +409,79 @@ function Header() {
 						</div>
 						<div className="col-lg-4 d-lg-block d-none">
 							<div className="header_button_wrapper d-flex gap-2">
-								{/* Men Button */}
-								<button
-									onClick={() => handleCategoryShow("men")}
-									className="btn-bgtransparent under-line"
-								>
-									<img src={outline1} alt="Men" className="img-fluid pe-2" />
-									Men
-								</button>
 
-								{/* Women Button */}
-								<button
-									onClick={() => handleCategoryShow("women")}
-									className="border wrapper-anchor"
-								>
-									<img src={outline2} alt="Women" className="img-fluid pe-2" />
-									Women
-								</button>
 
-								{/* Profile / Login */}
+
 								{!user ? (
-									<Link
-										className="border only_for_img wrapper-anchor"
-										onClick={() => setShowModal1(true)}
-									>
-										<span>
-											<img src={person_img} alt="Profile" />
-										</span>
-									</Link>
+									<>
+										<button
+											onClick={() => handleCategoryShow("men")}
+											className="btn-bgtransparent under-line"
+										>
+											<img src={outline1} alt="Men" className="img-fluid pe-2" />
+											Men
+										</button>
+
+										<button
+											onClick={() => handleCategoryShow("women")}
+											className="border wrapper-anchor"
+										>
+											<img src={outline2} alt="Women" className="img-fluid pe-2" />
+											Women
+										</button>
+										< Link
+											className="border only_for_img wrapper-anchor"
+											onClick={() => setShowModal1(true)}
+										>
+											<span>
+												<img src={person_img} alt="Profile" />
+											</span>
+										</Link>
+									</>
+
+
 								) : (
-									<Link
-										className="only_for_img"
-										to={user.gender === "men" ? "/profile" : "/women-profiles"}
-									>
-										<span>
-											<img
-												src={user.profile_image_url || men_profile}
-												alt="Profile"
-												className="wrapper-bug"
-											/>
-										</span>
-									</Link>
+									<>
+										{user?.package?.slug != "free-tier" && (
+											<Link
+												className="header_links"
+												to={`${gender === "men" ? "/chat" : "/chat-women"}`}
+											>
+												<span className="position-relative">
+													<img src={massagewrapper} alt="msg" />{" "}
+													<span className="number_move_dv">
+														{unread_messages_count ?? 0}
+													</span>
+												</span>
+											</Link>
+										)}
+										<Link
+											to={`${gender === "men"
+													? "/men-notifications"
+													: "/women-notification"
+												}`}
+											className="header_links"
+										>
+											<span className="position-relative">
+												<img src={notification} alt="notification" />
+												<span className="number_move_dv">
+													{unread_notification_count ?? 0}
+												</span>
+											</span>
+										</Link>
+										<Link
+											className="only_for_img"
+											to={user.gender === "men" ? "/profile" : "/women-profiles"}
+										>
+											<span>
+												<img
+													src={user.profile_image_url || men_profile}
+													alt="Profile"
+													className="wrapper-bug"
+												/>
+											</span>
+										</Link>
+									</>
 								)}
 							</div>
 						</div>
@@ -419,28 +505,24 @@ function Header() {
 									<Link to="/#contactus">Contact Us</Link>
 								</li>
 							</ul>
-							<div className="header_button_wrapper d-flex justify-content-center gap-2 pt-4">
-								{/* Men Button */}
+							<div className="d-flex justify-content-center gap-2 pt-4">
 								<button
 									onClick={() => handleCategoryShow("men")}
-									className="btn-bgtransparent under-line"
+									className="btn-bgtransparent w-25 under-line"
 								>
 									<img src={outline1} alt="Men" className="img-fluid pe-2" />
 									Men
 								</button>
 
-								{/* Women Button */}
 								<button
 									onClick={() => handleCategoryShow("women")}
-									className="border wrapper-anchor"
+									className="border w-25 wrapper-anchor"
 								>
 									<img src={outline2} alt="Women" className="img-fluid pe-2" />
 									Women
 								</button>
 
-								{/* Profile / Login */}
-								{/* Profile / Login */}
-								{!user ? (
+								{!user && (
 									<Link
 										className="border only_for_img wrapper-anchor"
 										onClick={() => setShowModal1(true)}
@@ -449,22 +531,53 @@ function Header() {
 											<img src={person_img} alt="Profile" />
 										</span>
 									</Link>
-								) : (
-									<Link
-										className="only_for_img"
-										to={user.gender === "men" ? "/profile" : "/women-profiles"} // ✅ fixed
-									>
-										<span>
-											{console.log("👉 Logged user gender:", user.gender)}
-											<img
-												src={user.profile_image_url || men_profile}
-												alt="Profile"
-												className="wrapper-bug"
-											/>
-										</span>
-									</Link>
 								)}
 							</div>
+
+								{user && (<>
+								<div className="d-flex gap-3 justify-content-center mb-2 mt-4">
+										{user?.package?.slug != "free-tier" && (
+											<Link
+												className="header_links"
+												to={`${gender === "men" ? "/chat" : "/chat-women"}`}
+											>
+												<span className="position-relative">
+													<img src={massagewrapper} alt="msg" />{" "}
+													<span className="number_move_dv">
+														{unread_messages_count ?? 0}
+													</span>
+												</span>
+											</Link>
+										)}
+										<Link
+											to={`${gender === "men"
+												? "/men-notifications"
+												: "/women-notification"
+												}`}
+											className="header_links"
+										>
+											<span className="position-relative">
+												<img src={notification} alt="notification" />
+												<span className="number_move_dv">
+													{unread_notification_count ?? 0}
+												</span>
+											</span>
+										</Link>
+										<Link
+											className="only_for_img"
+											to={user.gender === "men" ? "/profile" : "/women-profiles"}
+										>
+											<span>
+												<img
+													src={user.profile_image_url || men_profile}
+													alt="Profile"
+													className="wrapper-bug"
+												/>
+											</span>
+										</Link>
+									</div>
+								</>)}
+							
 						</div>
 					</div>
 				)}

@@ -29,6 +29,7 @@ import {
 
 export const WomenAuth = createApi({
 	reducerPath: "WomenAuth",
+	refetchOnMountOrArgChange: true, 
 	baseQuery: fetchBaseQuery({
 		baseUrl: BASE_URL,
 		prepareHeaders: (headers, { getState }) => {

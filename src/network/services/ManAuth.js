@@ -39,6 +39,7 @@ import {
 // ✅ Main API
 export const ManAuth = createApi({
 	reducerPath: "ManAuth",
+	refetchOnMountOrArgChange: true, 
 	baseQuery: fetchBaseQuery({
 		baseUrl: BASE_URL,
 		prepareHeaders: (headers, { getState }) => {
