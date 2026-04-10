@@ -10,8 +10,6 @@
  * transactionId  {number}   - billing transaction ID
  * currentUser    {object}   - { id, name, gender, profile_image_url }
  * remoteUser     {object}   - { id, name, gender, profile_image_url }
- * pusherKey      {string}   - Pusher app key
- * pusherCluster  {string}   - Pusher cluster
  * onCallEnd      {Function} - called when the call ends for any reason
  *
  * Usage example (inside a Redux-connected parent):
@@ -23,19 +21,21 @@
  *     transactionId={videoCallData.data.transaction_id}
  *     currentUser={user}
  *     remoteUser={videoCallData.data.calling_user}
- *     pusherKey={import.meta.env.VITE_APP_PUSHER_APP_KEY}
- *     pusherCluster={import.meta.env.VITE_APP_PUSHER_APP_CLUSTER}
  *     onCallEnd={() => dispatch(handleVideoCallModal({ status: false, data: {} }))}
  *   />
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Pusher from "pusher-js";
 import { Button } from "react-bootstrap";
 import { formatDateTime, formatTime } from "../../Constant/HelperFunction";
 import { useCallActionMutation } from "../../network/services/Chat";
 import "../../assets/Css/AgoraVideoCall.css";
 import useAgoraCall from "../../utils/useAgoraCall";
+import {
+	cleanupPusherClient,
+	createPusherClient,
+	getRejectCallChannelName,
+} from "../../utils/pusher";
 
 // ─── Gender helper ────────────────────────────────────────────────────────────
 const resolveGender = (user) =>
@@ -57,8 +57,6 @@ const AgoraVideoCall = ({
 	transactionId = 0,
 	currentUser,
 	remoteUser,
-	pusherKey,
-	pusherCluster,
 	onCallEnd,
 }) => {
 	const [callAction] = useCallActionMutation();
@@ -253,13 +251,10 @@ const AgoraVideoCall = ({
 
 	// ─── Pusher subscription ──────────────────────────────────────────────────
 	useEffect(() => {
-		const pusher = new Pusher(pusherKey, {
-			cluster: pusherCluster,
-			encrypted: false,
-		});
+		const pusher = createPusherClient({ encrypted: false });
 
 		// Listen on our OWN userId channel so we receive events the remote sends us
-		const psChannel = pusher.subscribe(`reject_call_${currentUser?.id}`);
+		const psChannel = pusher.subscribe(getRejectCallChannelName(currentUser?.id));
 
 		psChannel.bind("call.action", (data) => {
 			const action = data?.data?.action;
@@ -273,9 +268,7 @@ const AgoraVideoCall = ({
 		});
 
 		return () => {
-			psChannel.unbind_all();
-			psChannel.unsubscribe();
-			pusher.disconnect();
+			cleanupPusherClient(pusher, [psChannel]);
 		};
 		// Dependencies are stable env values — only run once
 		// eslint-disable-next-line react-hooks/exhaustive-deps

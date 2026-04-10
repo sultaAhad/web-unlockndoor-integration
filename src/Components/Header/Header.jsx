@@ -26,11 +26,18 @@ import {
 	setUserToken,
 	triggerNotificationRefresh,
 } from "../../network/reducers/AuthReducer";
-import Pusher from "pusher-js";
 import { useCallActionMutation } from "../../network/services/Chat";
 import { formatDateTime } from "../../Constant/HelperFunction";
 import { toast } from "react-toastify";
 import { useCheckAuthQuery } from "../../network/services/AuthServices";
+import {
+	cleanupPusherClient,
+	createPusherClient,
+	getNotificationChannelName,
+	getRejectCallChannelName,
+	getUnreadCountChannelName,
+	getUserChannelName,
+} from "../../utils/pusher";
 
 function Header() {
 	const [showModal1, setShowModal1] = useState(false); // Role selection
@@ -51,41 +58,11 @@ function Header() {
 	const dispatch = useDispatch();
 	const gender = localStorage.getItem("gender");
 
-	// useEffect(() => {
-	// 	if (!user) return;
-	// 	const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-	// 		cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-	// 		encrypted: false,
-	// 	});
-	// 	const genderChannelName = `${user?.gender}_unread_count_${user?.id}`;
-	// 	console.log(genderChannelName);
-		
-	// 	const countPusher = pusher.subscribe(genderChannelName);
-	// 	countPusher.bind('unread-count.updated', (data) => {
-	// 		console.log('Notification_date',data);
-	// 		dispatch(
-	// 			setCount({
-	// 				unread_messages_count: data?.unread_messages_count,
-	// 				unread_notification_count: data.unread_notification_count,
-	// 			}),
-	// 		);
-	// 	});
-	// 	return () => {
-	// 		countPusher.unbind_all();
-	// 		countPusher.unsubscribe();
-	// 		countPusher.disconnect();
-	// 	};
-	// }, []);
-
 	useEffect(() => {
 		if (!user) return;
 
-		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-			encrypted: false,
-		});
-
-		const genderChannelName = `${user?.gender}_unread_count_${user?.id}`;
+		const pusher = createPusherClient({ encrypted: false });
+		const genderChannelName = getUnreadCountChannelName(user);
 		const countPusher = pusher.subscribe(genderChannelName);
 		countPusher.bind('unread-count.updated', (data) => {
 			console.log('notification_data', data);
@@ -107,10 +84,7 @@ function Header() {
 		});
 
 		return () => {
-			countPusher.unbind_all();
-			countPusher.unsubscribe();
-			// Don't disconnect here as it might affect other channels
-			// pusher.disconnect(); // Only if this is the only channel
+			cleanupPusherClient(pusher, [countPusher]);
 		};
 	}, [user]); // Add user as dependency
 	// ✅ Reject call function ko update karein
@@ -151,20 +125,11 @@ function Header() {
 	useEffect(() => {
 		if (!user) return;
 
-		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-			encrypted: false,
-		});
-
-		// 🟣 Dynamic gender-based notification channel
-		const genderChannelName =
-			user.gender === "women"
-				? `women-notifications-${user?.id}`
-				: `men-notifications-${user?.id}`;
-
+		const pusher = createPusherClient({ encrypted: false });
+		const genderChannelName = getNotificationChannelName(user);
 		const genderNotificationChannel = pusher.subscribe(genderChannelName);
-		const videoChannel = pusher.subscribe(`channel_${user?.id}`);
-		const notificationChannel = pusher.subscribe(`channel_${user?.id}`);
+		const videoChannel = pusher.subscribe(getUserChannelName(user?.id));
+		const notificationChannel = pusher.subscribe(getUserChannelName(user?.id));
 
 		let audio = null;
 		let swalInstance = null; // ✅ Store Swal instance
@@ -234,7 +199,7 @@ function Header() {
 		});
 
 		// ✅ Listen for call rejection/end events
-		const rejectCallChannel = pusher.subscribe(`reject_call_${user?.id}`);
+		const rejectCallChannel = pusher.subscribe(getRejectCallChannelName(user?.id));
 		rejectCallChannel.bind("call.action", (data) => {
 			console.log("🔕 Call rejection received:", data);
 
@@ -280,17 +245,12 @@ function Header() {
 				audio.currentTime = 0;
 			}
 
-			videoChannel.unbind_all();
-			notificationChannel.unbind_all();
-			genderNotificationChannel.unbind_all();
-			rejectCallChannel.unbind_all(); // ✅ Clean reject channel
-
-			videoChannel.unsubscribe();
-			notificationChannel.unsubscribe();
-			genderNotificationChannel.unsubscribe();
-			rejectCallChannel.unsubscribe(); // ✅ Unsubscribe reject channel
-
-			// pusher.disconnect();
+			cleanupPusherClient(pusher, [
+				videoChannel,
+				notificationChannel,
+				genderNotificationChannel,
+				rejectCallChannel,
+			]);
 		};
 	}, [user]);
 

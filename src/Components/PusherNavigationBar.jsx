@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
+import {
+	cleanupPusherClient,
+	createPusherClient,
+	getNotificationChannelName,
+} from "../utils/pusher";
 
 const PusherNavigationBar = ({ onNotificationUpdate }) => {
 	const { user } = useSelector((state) => state.auth);
@@ -18,14 +22,9 @@ const PusherNavigationBar = ({ onNotificationUpdate }) => {
 		}
 
 		console.log("🚀 Initializing fresh Pusher for:", user.id, user.gender);
-		pusherRef.current = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-		});
+		pusherRef.current = createPusherClient();
 
-		const channelName =
-			user.gender === "women"
-				? `women-notifications-${user.id}`
-				: `men-notifications-${user.id}`;
+		const channelName = getNotificationChannelName(user);
 
 		console.log("📡 Subscribing to channel:", channelName);
 		channelRef.current = pusherRef.current.subscribe(channelName);
@@ -46,8 +45,9 @@ const PusherNavigationBar = ({ onNotificationUpdate }) => {
 
 		return () => {
 			console.log("🧹 Cleaning up Pusher listener");
-			if (channelRef.current) channelRef.current.unbind_all();
-			if (pusherRef.current) pusherRef.current.disconnect();
+			if (pusherRef.current) {
+				cleanupPusherClient(pusherRef.current, [channelRef.current]);
+			}
 		};
 	}, [user?.id, user?.gender]);
 

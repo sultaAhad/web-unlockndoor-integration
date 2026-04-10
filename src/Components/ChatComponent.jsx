@@ -14,7 +14,6 @@ import {
 } from "../Constant/Index";
 import { Link, useLocation } from "react-router-dom";
 import gsap from "gsap";
-import Pusher from "pusher-js";
 import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO, isToday, isYesterday } from "date-fns";
 import { toast, ToastContainer } from "react-toastify";
@@ -27,6 +26,11 @@ import {
 } from "../network/services/ManAuth";
 import { useChatDeleteWomenMutation } from "../network/services/WomanAuth";
 import limit_text from "../utils/helper";
+import {
+	cleanupPusherClient,
+	createPusherClient,
+	getChatChannelName,
+} from "../utils/pusher";
 
 function ChatComponent({ type }) {
 	const { user, userToken } = useSelector((state) => state.auth);
@@ -312,12 +316,8 @@ function ChatComponent({ type }) {
 
 	useEffect(() => {
 		if (!selectedChat?.chat_id) return;
-		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-			encrypted: true,
-		});
-
-		const channel = pusher.subscribe(`chat.${selectedChat.chat_id}`);
+		const pusher = createPusherClient({ encrypted: true });
+		const channel = pusher.subscribe(getChatChannelName(selectedChat.chat_id));
 		channel.bind("message.sent", (data) => {
 			const newMsg = data?.message;
 			setMessages((prev) => [...prev, formateMessage(newMsg)]);
@@ -337,9 +337,7 @@ function ChatComponent({ type }) {
 		});
 
 		return () => {
-			channel.unbind_all();
-			channel.unsubscribe();
-			pusher.disconnect();
+			cleanupPusherClient(pusher, [channel]);
 		};
 	}, [selectedChat?.chat_id]);
 

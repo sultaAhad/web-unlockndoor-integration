@@ -11,15 +11,17 @@
  *   channelName     {string}   - Agora channel to join on accept
  *   onAccept        {Function} - parent mounts <AgoraVideoCall />
  *   onReject        {Function} - parent dismisses the notification
- *   pusherKey       {string}
- *   pusherCluster   {string}
  *   currentUserId   {number|string}
  */
 
 import React, { useEffect, useRef } from "react";
-import Pusher from "pusher-js";
 import { useCallActionMutation } from "../../network/services/Chat";
 import { formatDateTime } from "../../Constant/HelperFunction";
+import {
+	cleanupPusherClient,
+	createPusherClient,
+	getRejectCallChannelName,
+} from "../../utils/pusher";
 
 const CallNotification = ({
     callerUser,
@@ -27,8 +29,6 @@ const CallNotification = ({
     channelName,
     onAccept,
     onReject,
-    pusherKey,
-    pusherCluster,
     currentUserId,
 }) => {
     const [callAction] = useCallActionMutation();
@@ -36,8 +36,8 @@ const CallNotification = ({
 
     // ─── If the caller cancels before we answer ─────────────────────────────
     useEffect(() => {
-        const pusher = new Pusher(pusherKey, { cluster: pusherCluster, encrypted: false });
-        const channel = pusher.subscribe(`reject_call_${currentUserId}`);
+        const pusher = createPusherClient({ encrypted: false });
+        const channel = pusher.subscribe(getRejectCallChannelName(currentUserId));
 
         channel.bind("call.action", (data) => {
             if (
@@ -50,9 +50,7 @@ const CallNotification = ({
         });
 
         return () => {
-            channel.unbind_all();
-            channel.unsubscribe();
-            pusher.disconnect();
+            cleanupPusherClient(pusher, [channel]);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

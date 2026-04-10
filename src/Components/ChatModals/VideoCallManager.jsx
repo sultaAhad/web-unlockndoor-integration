@@ -12,8 +12,6 @@ import CallNotification from "./CallNotification";
 import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
 
 const APP_ID = import.meta.env.VITE_APP_AGORA_APP_ID;
-const PUSHER_KEY = import.meta.env.VITE_APP_PUSHER_APP_KEY;
-const PUSHER_CLUSTER = import.meta.env.VITE_APP_PUSHER_APP_CLUSTER;
 
 const VideoCallManager = () => {
     const dispatch = useDispatch();
@@ -42,8 +40,6 @@ const VideoCallManager = () => {
         transactionId,
         currentUser: user,
         remoteUser,
-        pusherKey: PUSHER_KEY,
-        pusherCluster: PUSHER_CLUSTER,
     };
 
     // ── Incoming: show notification banner until accepted ─────────────────
@@ -54,8 +50,6 @@ const VideoCallManager = () => {
                 transactionId={transactionId}
                 channelName={channelName}
                 currentUserId={user?.id}
-                pusherKey={PUSHER_KEY}
-                pusherCluster={PUSHER_CLUSTER}
                 onAccept={() => setAccepted(true)}
                 onReject={closeModal}
             />

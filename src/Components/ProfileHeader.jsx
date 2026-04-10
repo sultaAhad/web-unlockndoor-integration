@@ -1,12 +1,9 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { edit, massagewrapper, notification } from "../Constant/Index";
-import { useEffect, useState } from "react";
-import Pusher from "pusher-js";
+import { edit } from "../Constant/Index";
 
 function ProfileHeader({ showButtons = true, visibility = true }) {
-	const { user, unread_messages_count, unread_notification_count } =
-		useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	const gender = localStorage.getItem("gender");
 	return (

@@ -9,9 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import { handleVideoCallModal } from "../../network/reducers/AuthReducer";
 import { useCallActionMutation } from "../../network/services/Chat";
-import Pusher from "pusher-js";
 import { toast } from "react-toastify";
 import { formatDateTime, formatTime } from "../../Constant/HelperFunction";
+import {
+	cleanupPusherClient,
+	createPusherClient,
+	getRejectCallChannelName,
+} from "../../utils/pusher";
 
 const AgoraVideoCall = ({ onCallEnd }) => {
 	const [callAction] = useCallActionMutation();
@@ -381,12 +385,8 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 	// PUSHER FIXED
 	// ---------------------------
 	useEffect(() => {
-		const pusher = new Pusher(import.meta.env.VITE_APP_PUSHER_APP_KEY, {
-			cluster: import.meta.env.VITE_APP_PUSHER_APP_CLUSTER,
-			encrypted: false,
-		});
-
-		const videoChannel = pusher.subscribe(`reject_call_${user.id}`);
+		const pusher = createPusherClient({ encrypted: false });
+		const videoChannel = pusher.subscribe(getRejectCallChannelName(user.id));
 
 		videoChannel.bind("call.action", (data) => {
 			if (data?.data?.action === "reject-call") {
@@ -399,9 +399,7 @@ const AgoraVideoCall = ({ onCallEnd }) => {
 		});
 
 		return () => {
-			videoChannel.unbind_all();
-			videoChannel.unsubscribe();
-			pusher.disconnect();
+			cleanupPusherClient(pusher, [videoChannel]);
 		};
 	}, []);
 
