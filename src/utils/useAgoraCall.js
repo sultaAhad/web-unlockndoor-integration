@@ -55,12 +55,13 @@ const useAgoraCall = ({
                 setRemoteUsers((prev) =>
                     prev.find((u) => u.uid === remoteUser.uid) ? prev : [...prev, remoteUser]
                 );
-                // slight delay to let the DOM element mount
-                setTimeout(() => remoteUser.videoTrack?.play("remote-video"), 200);
+                // Increased delay to 500ms to allow DOM element mount
+                setTimeout(() => remoteUser.videoTrack?.play("remote-video"), 500);
                 onRemoteJoinRef.current?.(remoteUser);
             }
             if (mediaType === "audio") {
-                remoteUser.audioTrack?.play();
+                // Ensure remote audio plays reliably
+                setTimeout(() => remoteUser.audioTrack?.play(), 100);
             }
         };
 
