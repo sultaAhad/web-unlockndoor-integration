@@ -316,10 +316,15 @@ function ChatComponent({ type }) {
 
 	useEffect(() => {
 		if (!selectedChat?.chat_id) return;
+
 		const pusher = createPusherClient({ encrypted: true });
-		const channel = pusher.subscribe(getChatChannelName(selectedChat.chat_id));
+		const channelName = getChatChannelName(selectedChat.chat_id);
+		const channel = pusher.subscribe(channelName);
+
 		channel.bind("message.sent", (data) => {
 			const newMsg = data?.message;
+			if (!newMsg) return;
+
 			setMessages((prev) => [...prev, formateMessage(newMsg)]);
 			refetch();
 
@@ -337,7 +342,11 @@ function ChatComponent({ type }) {
 		});
 
 		return () => {
-			cleanupPusherClient(pusher, [channel]);
+			if (channel) {
+				channel.unbind_all();
+				pusher.unsubscribe(channelName);
+			}
+			pusher.disconnect();
 		};
 	}, [selectedChat?.chat_id]);
 

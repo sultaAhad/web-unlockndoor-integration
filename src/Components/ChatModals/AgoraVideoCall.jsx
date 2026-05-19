@@ -251,15 +251,14 @@ const AgoraVideoCall = ({
 
 	// ─── Pusher subscription ──────────────────────────────────────────────────
 	useEffect(() => {
-		const pusher = createPusherClient({ encrypted: false });
+		if (!currentUser?.id) return;
 
-		// Listen on our OWN userId channel so we receive events the remote sends us
-		const psChannel = pusher.subscribe(getRejectCallChannelName(currentUser?.id));
+		const pusher = createPusherClient({ encrypted: false });
+		const psChannel = pusher.subscribe(getRejectCallChannelName(currentUser.id));
 
 		psChannel.bind("call.action", (data) => {
 			const action = data?.data?.action;
 			if (action === "reject-call") {
-				// FIX: use endCallRef.current so we always get the latest closure
 				endCallRef.current?.("Call rejected by other user");
 			}
 			if (action === "end-call") {
@@ -268,11 +267,13 @@ const AgoraVideoCall = ({
 		});
 
 		return () => {
-			cleanupPusherClient(pusher, [psChannel]);
+			if (psChannel) {
+				psChannel.unbind_all();
+				pusher.unsubscribe(getRejectCallChannelName(currentUser.id));
+			}
+			pusher.disconnect();
 		};
-		// Dependencies are stable env values — only run once
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [currentUser?.id]);
 
 	// ─── Replay remote video when user list updates ───────────────────────────
 	useEffect(() => {
